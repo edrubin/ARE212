@@ -1,0 +1,60 @@
+---
+title: Section 1: Getting started with R
+---
+
+In this section, we will make sure your R and RStudio installations work, start working in R, and discuss the course more generally.
+
+## Installation
+
+1. [Download R](https://cran.r-project.org).
+2. [Download RStudio](https://www.rstudio.com/products/rstudio/). RStudio is a super helpful IDE (integrated development environment) for R. Very helpful for learning and using R.
+
+This two items are the main technical tools that you need for this course. I would also recommend making sure you have a working installation of [LaTeX](https://www.latex-project.org/get/).
+
+##
+
+## Advice on trouble shooting
+
+- You will learn a lot more if you Google your problems.
+- Use [StackOverflow](http://stackoverflow.com)!
+- R documentation can be confusing… but also very helpful—particularly vignettes or GitHub README files.
+
+Management
+
+- Set directory
+- Loading files
+
+Introductory guides
+
+- [CRAN's introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
+- [OnePageR](http://togaware.com/onepager/)
+- [The R Guide](https://cran.r-project.org/doc/contrib/Owen-TheRGuide.pdf)
+- [Swirl: Learn R in R](http://swirlstats.com/)
+- [Hadley Wickham's Advanced R](http://adv-r.had.co.nz/)
+- [The Pirate's Guide to R](http://nathanieldphillips.com/thepiratesguidetor/)
+- [A Newcomer's (Angry) Guide to R](http://arrgh.tim-smith.us/)
+- [A guide to the Hadley-verse](https://barryrowlingson.github.io/hadleyverse/#1)
+- [The Undergraduate Guide to R](http://www.biostat.jhsph.edu/~ajaffe/docs/undergradguidetoR.pdf)
+- [Econometrics in R (old)](https://cran.r-project.org/doc/contrib/Farnsworth-EconometricsInR.pdf)
+- [ROpenSci's Guidelines to Writing Code](https://ropensci.github.io/reproducibility-guide/sections/writingCode/)
+
+Cheat sheets
+
+- [RStudio, Data wrangling](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+- [RStudio, Data visualization](http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf)
+- [RStudio, IDE](http://www.rstudio.com/wp-content/uploads/2016/01/rstudio-IDE-cheatsheet.pdf)
+- [RStudio, many cheatsheets](https://www.rstudio.com/resources/cheatsheets/)
+
+Style guides
+
+- [Hadley Wickham's style guide](http://adv-r.had.co.nz/Style.html)
+- [Google's R style guide](https://google.github.io/styleguide/Rguide.xml)
+- [Hands on Data Science](http://handsondatascience.com/StyleO.pdf)
+- [R Style. An Rchaeological Commentary](https://cran.r-project.org/web/packages/rockchalk/vignettes/Rstyle.pdf)
+- [The State of Naming Conventions in R](https://journal.r-project.org/archive/2012-2/RJournal_2012-2_Baaaath.pdf)
+
+General advice on code, data, and research
+
+- [Gentzkow and Shapiro on code and data](https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf)
+- [A lot of links from Charles Martineau](http://www.charlesmartineau.com/research-advice)
+- [Advice I've archived](https://github.com/edrubin/Advice)
