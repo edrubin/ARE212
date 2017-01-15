@@ -1,21 +1,18 @@
 ---
-title: Resources for R
+title: "Resources for R"
 ---
 
-## Resources for R
+I've compiled some general advice and a lot of resources for R, programming, and general research. Hopefully they will be of some use to you.
 
 ## Advice on trouble shooting
 
-- You will learn a lot more if you Google your problems.
-- Use [StackOverflow](http://stackoverflow.com)!
-- R documentation can be confusing… but also very helpful—particularly vignettes or GitHub README files.
+- You will learn a lot more if you Google your problems. Please try Google before emailing anyone.
+- Use [StackOverflow](http://stackoverflow.com)! You don't have to directly search StackOverflow, but don't be intimidated. Some of the threads sound (or are) really complicated, but I often find that the answer is out there if I'm willing to slow down and read.
+- R documentation can be confusing, but it also very helpful—particularly if you can find packages' vignettes or GitHub README files.
 
-Management
+## Guides for R
 
-- Set directory
-- Loading files
-
-Introductory guides
+R is a very popular language, and there are lots of introductory (or advanced) guides to R floating around the internet. Here are a few.
 
 - [CRAN's introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
 - [OnePageR](http://togaware.com/onepager/)
@@ -29,14 +26,16 @@ Introductory guides
 - [Econometrics in R (old)](https://cran.r-project.org/doc/contrib/Farnsworth-EconometricsInR.pdf)
 - [ROpenSci's Guidelines to Writing Code](https://ropensci.github.io/reproducibility-guide/sections/writingCode/)
 
-Cheat sheets
+## Cheat sheets
 
 - [RStudio, Data wrangling](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 - [RStudio, Data visualization](http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf)
 - [RStudio, IDE](http://www.rstudio.com/wp-content/uploads/2016/01/rstudio-IDE-cheatsheet.pdf)
 - [RStudio, many cheatsheets](https://www.rstudio.com/resources/cheatsheets/)
 
-Style guides
+## Style guides
+
+Style matters. It helps with collaboration. It helps with getting better feedback from me. And it helps your future self judge your current self less harshly when you return to old R scripts.
 
 - [Hadley Wickham's style guide](http://adv-r.had.co.nz/Style.html)
 - [Google's R style guide](https://google.github.io/styleguide/Rguide.xml)
@@ -44,8 +43,10 @@ Style guides
 - [R Style. An Rchaeological Commentary](https://cran.r-project.org/web/packages/rockchalk/vignettes/Rstyle.pdf)
 - [The State of Naming Conventions in R](https://journal.r-project.org/archive/2012-2/RJournal_2012-2_Baaaath.pdf)
 
-General advice on code, data, and research
+## General advice on code, data, and research
+
+Here are some other resources on research, writing, presenting, and other activities relevant to (academic) research.
 
 - [Gentzkow and Shapiro on code and data](https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf)
 - [A lot of links from Charles Martineau](http://www.charlesmartineau.com/research-advice)
-- [Advice I've archived](https://github.com/edrubin/Advice)
+- [More advice I've archived (lots of stuff from Chris Blattman)](https://github.com/edrubin/Advice)

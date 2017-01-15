@@ -1,0 +1,16 @@
+---
+title: "Section notes"
+---
+
+Links to section notes and relevant files.
+<br><br>
+
+#### [__Section 0__](section00.html): Setting up R
+
+pdf/zip
+<br><br>
+
+#### [__Section 1__](section01.html): Getting started with R
+
+pdf/zip
+<br><br>

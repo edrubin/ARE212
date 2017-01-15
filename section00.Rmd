@@ -1,0 +1,27 @@
+---
+title: "Section 0: Setting up R"
+---
+
+Before our first section, please run make sure you have working and up-to-date installations of R and RStudio. We will make use both extensively in this course/section, so it is definitely worth doing right.
+
+## Installation
+
+If you do not already have R and RStudio running on your computer, then you should install them both:
+
+1. [Download R](https://cran.r-project.org).
+2. [Download RStudio](https://www.rstudio.com/products/rstudio/). RStudio is a super helpful IDE (integrated development environment) for R. Very helpful for learning and using R.
+
+If you already have R and RStudio on your computer, then you should make sure they are up to date. The [current R version](https://cran.r-project.org) is 3.3.2 (a.k.a. _Sincere Pumpkin Patch_). You can check your version of R by typing `version` into the R console. The [current version](https://www.rstudio.com/products/rstudio/download/) of RStudio is 1.0.136.
+
+I would also recommend making sure you have a working installation of [LaTeX](https://www.latex-project.org/get/) ([ShareLaTeX](https://www.sharelatex.com) is another nice tool that also has a lot of LaTeX help/tutorials). [Pandoc](http://pandoc.org) is also also helpful.
+
+## Resources for R
+
+I've compiled a pretty large set of [resources for R](resources.html).
+
+## Basic suggestions
+
+1. Comment your code.
+2. Be consistent with your coding conventions (especially naming).
+3. Be smart when naming files, folders, _etc._.
+4. Make your life easier by organizing your files, directories, and using R's `paste0()` (or `paste()`). See examples in Section 1.
