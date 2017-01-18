@@ -13,7 +13,7 @@ navbar:
           href: section00.html
         - text: "Section 1"
           href: section01.html
-    - text: "Resources"
+    - text: "R Resources"
       href: resources.html
     - text: "Syllabi"
       href: syllabi.html
