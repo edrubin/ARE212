@@ -15,9 +15,13 @@ If you already have R and RStudio on your computer, then you should make sure th
 
 I would also recommend making sure you have a working installation of [LaTeX](https://www.latex-project.org/get/) ([ShareLaTeX](https://www.sharelatex.com) is another nice tool that also has a lot of LaTeX help/tutorials). [Pandoc](http://pandoc.org) is also also helpful.
 
+## Does it work?
+
+Open RStudio. Type `1 + 1` in the console. Do you get `2`? If so, it looks like things are working.
+
 ## Resources for R
 
-I've compiled a pretty large set of [resources for R](resources.html).
+I've compiled a pretty large set of [resources for R](resources.html). You probably don't need them right now, but know they are there.
 
 ## Basic suggestions
 

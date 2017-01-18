@@ -5,7 +5,6 @@ navbar:
   type: inverse
   left:
     - text: "Section notes"
-      href: notes.html
       menu:
         - text: "Table of Contents"
           href: notes.html
@@ -13,10 +12,12 @@ navbar:
           href: section00.html
         - text: "Section 1"
           href: section01.html
-    - text: "R Resources"
-      href: resources.html
+    - text: "Course Info"
+      href: courseInfo.html
     - text: "Syllabi"
       href: syllabi.html
+    - text: "R Resources"
+      href: resources.html
   right:
     - icon: fa-envelope-o fa-lg
       href: contact.html
