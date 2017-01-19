@@ -9,7 +9,7 @@ Links to section notes and relevant files.
 
 Install R, RStudio, and other relevant programs; resources for R; general suggestions for coding.
 
-pdf/zip
+[pdf](Section00/section00.pdf)
 <br><br>
 
 #### [__Section 1__](section01.html): Getting started with R
