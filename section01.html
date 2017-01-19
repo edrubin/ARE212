@@ -405,8 +405,16 @@ div.tocify {
 <h2>Loading packages</h2>
 <p>To check that the installations were successful, we will load the packages that we installed above.</p>
 <p>R uses the <code>library()</code> function to load a package (we give the name of the package as the argument to the function).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(haven)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(haven)
 <span class="kw">library</span>(readr)</code></pre></div>
 <p>Notice that we did not need to call the packages with quotations around their names (though it would still work).</p>
 </div>
