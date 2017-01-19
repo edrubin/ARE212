@@ -122,7 +122,11 @@ dir(dir_section1)
 
 You can see there are a few files of interest in the section 1 folder—specifically, auto.csv and auto.dta.^[The files are apparently [classic Stata tutorial files](http://www.stata-press.com/data/r9/u.html).]
 
-Recall that `dir_section1` is an object that holds the value "/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/". We get the same result if we feed `dir()` object's name or its value, since R is evaluating the object:
+Recall that `dir_section1` is an object that holds a value representing a file path, _i.e._,
+```{r}
+dir_section1
+```
+Notice that we get the same result if we feed `dir()` object's name or its value, since R is evaluating the object:
 
 ```{r}
 # The object
@@ -360,13 +364,18 @@ This indexing works with data objects, as well. We just have one more dimension 
 To grab the first row of `car_sub`, we put a 1 for the row index and leave the column blank.
 
 ```{r}
-car_sub[1,]
+car_sub[1, ]
 ```
 
 To grab the first column of `car_sub`, we
 
 ```{r}
-car_sub[,1]
+car_sub[, 1]
+```
+
+You can also use the name of a column as its index
+```{r}
+car_sub[, "price"]
 ```
 
 We'll do a lot more of this indexing stuff in the future.

@@ -16,5 +16,5 @@ pdf/zip
 
 Learning the basics of R: installing and loading packages; loading various data types (`haven` and `readr`); basic data summarization and manipulation (introduction to `dplyr`).
 
-pdf/zip
+[pdf](Section01/section01.pdf)/[R script](Section01/section01.R)/[zip](Section01.zip)
 <br><br>

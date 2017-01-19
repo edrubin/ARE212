@@ -1,0 +1,29 @@
+---
+title: "Section 2: R and matrix madness"
+output:
+  html_document:
+    toc: true
+    number_sections: false
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+---
+
+# What you will need
+
+<!-- TODO -->
+
+# Summary of last time
+
+- Installing and loading packages
+- File paths (finding, changing, defining)
+- Loading data (.dta and .csv)
+
+__Follow up:__
+
+- We had issues downloading files straight from GitHub. To avoid future issues, I am creating links to download files within the notes. Sorry!
+- Someone asked about creating folders in R. To create a folder, use the `dir.create()` function. _E.g._ `dir.create("TestFolder")` should create a new folder named "TestFolder" in your current directory. To see if it worked, type `dir()`. You can also check whether a folder already exists using the `dir.exists()` function, _e.g._ `dir.exists("TestFolder")`.
+
+# Summary of this section
+
+<!-- TODO -->

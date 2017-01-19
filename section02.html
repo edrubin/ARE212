@@ -11,7 +11,7 @@
 
 
 
-<title>Section notes</title>
+<title>Section 2: R and matrix madness</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
@@ -147,6 +150,107 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
@@ -217,21 +321,31 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Section notes</h1>
+<h1 class="title toc-ignore">Section 2: R and matrix madness</h1>
 
 </div>
 
 
-<p>Links to section notes and relevant files. <br><br></p>
-<div id="section-0-setting-up-r" class="section level4">
-<h4><a href="section00.html"><strong>Section 0</strong></a>: Setting up R</h4>
-<p>Install R, RStudio, and other relevant programs; resources for R; general suggestions for coding.</p>
-<p>pdf/zip <br><br></p>
+<div id="what-you-will-need" class="section level1">
+<h1>What you will need</h1>
+<!-- TODO -->
 </div>
-<div id="section-1-getting-started-with-r" class="section level4">
-<h4><a href="section01.html"><strong>Section 1</strong></a>: Getting started with R</h4>
-<p>Learning the basics of R: installing and loading packages; loading various data types (<code>haven</code> and <code>readr</code>); basic data summarization and manipulation (introduction to <code>dplyr</code>).</p>
-<p><a href="Section01/section01.pdf">pdf</a>/<a href="Section01/section01.R">R script</a>/<a href="Section01.zip">zip</a> <br><br></p>
+<div id="summary-of-last-time" class="section level1">
+<h1>Summary of last time</h1>
+<ul>
+<li>Installing and loading packages</li>
+<li>File paths (finding, changing, defining)</li>
+<li>Loading data (.dta and .csv)</li>
+</ul>
+<p><strong>Follow up:</strong></p>
+<ul>
+<li>We had issues downloading files straight from GitHub. To avoid future issues, I am creating links to download files within the notes. Sorry!</li>
+<li>Someone asked about creating folders in R. To create a folder, use the <code>dir.create()</code> function. <em>E.g.</em> <code>dir.create(&quot;TestFolder&quot;)</code> should create a new folder named “TestFolder” in your current directory. To see if it worked, type <code>dir()</code>. You can also check whether a folder already exists using the <code>dir.exists()</code> function, <em>e.g.</em> <code>dir.exists(&quot;TestFolder&quot;)</code>.</li>
+</ul>
+</div>
+<div id="summary-of-this-section" class="section level1">
+<h1>Summary of this section</h1>
+<!-- TODO -->
 </div>
 
 <!-- <?php include_once("analyticstracking.php") ?> -->
@@ -250,6 +364,8 @@ $(document).ready(function () {
 </script>
 
 
+</div>
+</div>
 
 </div>
 

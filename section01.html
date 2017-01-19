@@ -405,16 +405,8 @@ div.tocify {
 <h2>Loading packages</h2>
 <p>To check that the installations were successful, we will load the packages that we installed above.</p>
 <p>R uses the <code>library()</code> function to load a package (we give the name of the package as the argument to the function).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(haven)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(haven)
 <span class="kw">library</span>(readr)</code></pre></div>
 <p>Notice that we did not need to call the packages with quotations around their names (though it would still work).</p>
 </div>
@@ -467,24 +459,28 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 ##  [5] &quot;courseInfo.html&quot;       &quot;courseInfo.Rmd&quot;       
 ##  [7] &quot;footer.html&quot;           &quot;index.html&quot;           
 ##  [9] &quot;index.Rmd&quot;             &quot;notes.html&quot;           
-## [11] &quot;notes.Rmd&quot;             &quot;resources.html&quot;       
-## [13] &quot;resources.Rmd&quot;         &quot;section00.html&quot;       
-## [15] &quot;section00.Rmd&quot;         &quot;Section01&quot;            
-## [17] &quot;section01_files&quot;       &quot;section01.html&quot;       
-## [19] &quot;section01.Rmd&quot;         &quot;Section01.zip&quot;        
-## [21] &quot;site_libs&quot;             &quot;syllabi.html&quot;         
-## [23] &quot;syllabi.Rmd&quot;</code></pre>
+## [11] &quot;notes.Rmd&quot;             &quot;pdfScript.R&quot;          
+## [13] &quot;resources.html&quot;        &quot;resources.Rmd&quot;        
+## [15] &quot;section00.html&quot;        &quot;section00.Rmd&quot;        
+## [17] &quot;Section01&quot;             &quot;section01_files&quot;      
+## [19] &quot;section01.html&quot;        &quot;section01.Rmd&quot;        
+## [21] &quot;Section01.zip&quot;         &quot;section02.html&quot;       
+## [23] &quot;section02.Rmd&quot;         &quot;site_libs&quot;            
+## [25] &quot;syllabi.html&quot;          &quot;syllabi.Rmd&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my section 1 folder (dir_section1 stores the path)</span>
 <span class="kw">dir</span>(dir_section1)</code></pre></div>
-<pre><code>## [1] &quot;auto.csv&quot; &quot;auto.dta&quot;</code></pre>
+<pre><code>## [1] &quot;auto.csv&quot;      &quot;auto.dta&quot;      &quot;section01.pdf&quot; &quot;section01.R&quot;</code></pre>
 <p>You can see there are a few files of interest in the section 1 folder—specifically, auto.csv and auto.dta.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
-<p>Recall that <code>dir_section1</code> is an object that holds the value “/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/”. We get the same result if we feed <code>dir()</code> object’s name or its value, since R is evaluating the object:</p>
+<p>Recall that <code>dir_section1</code> is an object that holds a value representing a file path, <em>i.e.</em>,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dir_section1</code></pre></div>
+<pre><code>## [1] &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/&quot;</code></pre>
+<p>Notice that we get the same result if we feed <code>dir()</code> object’s name or its value, since R is evaluating the object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The object</span>
 <span class="kw">dir</span>(dir_section1)</code></pre></div>
-<pre><code>## [1] &quot;auto.csv&quot; &quot;auto.dta&quot;</code></pre>
+<pre><code>## [1] &quot;auto.csv&quot;      &quot;auto.dta&quot;      &quot;section01.pdf&quot; &quot;section01.R&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The object&#39;s value</span>
 <span class="kw">dir</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/&quot;</span>)</code></pre></div>
-<pre><code>## [1] &quot;auto.csv&quot; &quot;auto.dta&quot;</code></pre>
+<pre><code>## [1] &quot;auto.csv&quot;      &quot;auto.dta&quot;      &quot;section01.pdf&quot; &quot;section01.R&quot;</code></pre>
 </div>
 <div id="functions-to-load-files" class="section level2">
 <h2>Functions to load files</h2>
@@ -821,7 +817,7 @@ car_sub</code></pre></div>
 <p>Let’s create a histogram of the cars’ milages. R’s <code>hist()</code> function works perfectly here. It only needs the variable of interest, but we can provide more parameters to make it pretty.</p>
 <p>First, the plan-vanilla plot</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(car_sub$mpg)</code></pre></div>
-<p><img src="section01_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><img src="section01_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <p>Now, a bit prettier. And let’s add a blue line for the median MPG (using the <code>abline()</code> function).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The histogram function</span>
 <span class="kw">hist</span>(
@@ -833,14 +829,14 @@ car_sub</code></pre></div>
   <span class="dt">xlab =</span> <span class="st">&quot;MPG (miles per gallon)&quot;</span>)
 <span class="co"># The blue vertical line at the median MPG (lwd is line width)</span>
 <span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">median</span>(car_sub$mpg), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)</code></pre></div>
-<p><img src="section01_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><img src="section01_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <p>Now let’s plot price and mileage. A scatterplot will work here, and R’s base <code>plot()</code> function will do just fine with a scatter plot. We will give it an x variable, a y variable, and the axis titles.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(
   <span class="dt">x =</span> car_sub$mpg,
   <span class="dt">y =</span> car_sub$price,
   <span class="dt">xlab =</span> <span class="st">&quot;Fuel economy (MPG)&quot;</span>,
   <span class="dt">ylab =</span> <span class="st">&quot;Price&quot;</span>)</code></pre></div>
-<p><img src="section01_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="section01_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 <p>Note: I really like clearly defining the arguments of functions. And I recommend it. I find it helps keep things straight, as order matters when you are not naming each argument.</p>
 </div>
 </div>
@@ -863,13 +859,29 @@ x[<span class="dv">2</span>:<span class="dv">3</span>]</code></pre></div>
 <pre><code>## [1] 2 3</code></pre>
 <p>This indexing works with data objects, as well. We just have one more dimension to consider—we have rows and columns. Rows before columns, <em>i.e.</em>, <code>[row, column]</code> (but we don’t actually use the words).</p>
 <p>To grab the first row of <code>car_sub</code>, we put a 1 for the row index and leave the column blank.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[<span class="dv">1</span>,]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[<span class="dv">1</span>, ]</code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##   price   mpg weight length
 ##   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1  4099    22   2930    186</code></pre>
 <p>To grab the first column of <code>car_sub</code>, we</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[,<span class="dv">1</span>]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[, <span class="dv">1</span>]</code></pre></div>
+<pre><code>## # A tibble: 74 x 1
+##    price
+##    &lt;dbl&gt;
+## 1   4099
+## 2   4749
+## 3   3799
+## 4   4816
+## 5   7827
+## 6   5788
+## 7   4453
+## 8   5189
+## 9  10372
+## 10  4082
+## # ... with 64 more rows</code></pre>
+<p>You can also use the name of a column as its index</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[, <span class="st">&quot;price&quot;</span>]</code></pre></div>
 <pre><code>## # A tibble: 74 x 1
 ##    price
 ##    &lt;dbl&gt;
