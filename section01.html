@@ -370,15 +370,15 @@ div.tocify {
 
 
 <div id="summary" class="section level1">
-<h1><span class="header-section-number">1</span> Summary</h1>
+<h1>Summary</h1>
 <p>In this section…</p>
 </div>
 <div id="packages-in-r" class="section level1">
-<h1><span class="header-section-number">2</span> Packages in R</h1>
+<h1>Packages in R</h1>
 <p>Open RStudio.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <p>While the base R installation helpful/powerful, R’s true potential comes from combining combining the core installation with its many packages generated through collaboration (see <a href="https://cran.r-project.org/web/packages/available_packages_by_name.html">CRAN’s list of packages</a><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>).</p>
 <div id="installing-packages" class="section level2">
-<h2><span class="header-section-number">2.1</span> Installing packages</h2>
+<h2>Installing packages</h2>
 <p>Now, let’s install a few packages that will prove useful this semester…</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install the package named &quot;dplyr&quot;</span>
 <span class="kw">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>)
@@ -393,7 +393,7 @@ div.tocify {
 </ol>
 </div>
 <div id="loading-packages" class="section level2">
-<h2><span class="header-section-number">2.2</span> Loading packages</h2>
+<h2>Loading packages</h2>
 <p>To check that the installations were successful, we will load the packages that we installed above.</p>
 <p>R uses the <code>library()</code> function to load a package (we give the name of the package as the argument to the function).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
@@ -403,7 +403,7 @@ div.tocify {
 </div>
 </div>
 <div id="loading-data" class="section level1">
-<h1><span class="header-section-number">3</span> Loading data</h1>
+<h1>Loading data</h1>
 <p>Loading a dataset in R requires three things:</p>
 <ol style="list-style-type: decimal">
 <li>The path of the data file (where the data exist on your computer)</li>
@@ -411,8 +411,8 @@ div.tocify {
 <li>The proper function for the type of dataset (<em>e.g.</em> different function for .csv and .dta files)</li>
 </ol>
 <div id="file-paths" class="section level2">
-<h2><span class="header-section-number">3.1</span> File paths</h2>
-<p>R wants file paths as character vectors (<em>i.e.</em> the file path surrounded by quotations). For example, <code>&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code> is the path to my folder for this course (on my computer).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<h2>File paths</h2>
+<p>R wants file paths as character vectors (<em>i.e.</em> the file path surrounded by quotations). For example, <code>&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code> is the path to my folder for this course (on my computer).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 <p>To change the directory in R, use the <code>setwd()</code>. For instance, to change R’s directory to my course folder</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</span>)</code></pre></div>
 <p>To find R’s current working directory, simply type <code>getwd()</code>:</p>
@@ -424,9 +424,24 @@ div.tocify {
 dir_class &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/&quot;</span>
 <span class="co"># The path to my section 1 folder (Section01), which is inside my ARE 212 folder</span>
 dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_class, <span class="st">&quot;Section01/&quot;</span>)</code></pre></div>
+<p>Notice the use of the <code>paste0()</code> function here: we pasting together the value of the object <code>dir_class</code> and the string <code>&quot;Section01&quot;</code>. The function <code>paste0()</code> by default pastes without any spaces in between the objects, while the function <code>paste()</code> defaults to including a single space (you can feed the functions additional parameters to change these behaviors).</p>
+<p>As a quick example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Default use of paste0()</span>
+<span class="kw">paste0</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
+<pre><code>## [1] &quot;123&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Default use of paste()</span>
+<span class="kw">paste</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
+<pre><code>## [1] &quot;1 2 3&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Setting the separation parameter to &quot; &quot; (the default)</span>
+<span class="kw">paste</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;1 2 3&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Changing the separation parameter to &quot;+&quot;</span>
+<span class="kw">paste</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dt">sep =</span> <span class="st">&quot;+&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;1+2+3&quot;</code></pre>
+<p>Finally, notice that RStudio assists you with completing file paths (begin typing and press tab). This completion can be super useful.</p>
 </div>
 <div id="dir" class="section level2">
-<h2><span class="header-section-number">3.2</span> <code>dir()</code></h2>
+<h2><code>dir()</code></h2>
 <p>The function <code>dir()</code> allows you to see contents of a folder. <code>dir()</code> can help when you forget the name of the file you want. To see the contents of a folder, give the folder’s file path to <code>dir()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my ARE212 folder (dir_class stores the path)</span>
 <span class="kw">dir</span>(dir_class)</code></pre></div>
@@ -437,17 +452,390 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 ##  [9] &quot;index.Rmd&quot;             &quot;notes.html&quot;           
 ## [11] &quot;notes.Rmd&quot;             &quot;resources.html&quot;       
 ## [13] &quot;resources.Rmd&quot;         &quot;section00.html&quot;       
-## [15] &quot;section00.Rmd&quot;         &quot;section01.html&quot;       
-## [17] &quot;section01.Rmd&quot;         &quot;site_libs&quot;            
-## [19] &quot;syllabi.html&quot;          &quot;syllabi.Rmd&quot;</code></pre>
+## [15] &quot;section00.Rmd&quot;         &quot;Section01&quot;            
+## [17] &quot;section01_files&quot;       &quot;section01.html&quot;       
+## [19] &quot;section01.Rmd&quot;         &quot;site_libs&quot;            
+## [21] &quot;syllabi.html&quot;          &quot;syllabi.Rmd&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my section 1 folder (dir_section1 stores the path)</span>
 <span class="kw">dir</span>(dir_section1)</code></pre></div>
-<pre><code>## character(0)</code></pre>
+<pre><code>## [1] &quot;auto.csv&quot; &quot;auto.dta&quot;</code></pre>
+<p>You can see there are a few files of interest in the section 1 folder—specifically, auto.csv and auto.dta.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>Recall that <code>dir_section1</code> is an object that holds the value “/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/”. We get the same result if we feed <code>dir()</code> object’s name or its value, since R is evaluating the object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The object</span>
+<span class="kw">dir</span>(dir_section1)</code></pre></div>
+<pre><code>## [1] &quot;auto.csv&quot; &quot;auto.dta&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The object&#39;s value</span>
+<span class="kw">dir</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;auto.csv&quot; &quot;auto.dta&quot;</code></pre>
 </div>
 <div id="functions-to-load-files" class="section level2">
-<h2><span class="header-section-number">3.3</span> Functions to load files</h2>
-<p>Blah blah blah</p>
+<h2>Functions to load files</h2>
+<p>There are a lot of ways to load (data) files in R. In this class, we will mostly stick to the packages <code>readr</code> and <code>haven</code>—in addition to R’s base functions. The <code>readr</code> package offers functions for mostly for reading delimited data files like CSVs, TSVs, and fixed-width files. The <code>haven</code> package offers functions for reading data files outputted from other statistical software like Stata, SPSS (or PSPP), and SAS.</p>
+<p>Let’s start by reading the data stored in the auto.dta file. For this task, we’ll use the <code>read_dta()</code> funtion from the <code>haven</code> package. The <code>read_dta()</code> function needs only one argument: the file (including the path necessary to reach the file).</p>
+<p><strong>Note:</strong> To learn more about a function and the arguments it accepts, you can</p>
+<ol style="list-style-type: decimal">
+<li>Press tab (in RStudio) after typing the function’s name.</li>
+<li>Type a question mark and the function’s name into the console, <em>e.g.</em> <code>?read_dta</code>.</li>
+</ol>
+<p>Enough talk. Let’s finally load the file.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the .dta file</span>
+car_data &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="kw">paste0</span>(dir_section1, <span class="st">&quot;auto.dta&quot;</span>))</code></pre></div>
+<p>The <code>&lt;-</code> operator is central to everything you do in R. It assigns the value(s) on the right-hand side of the arrow to the name on the left-hand side. When reading R code aloud, people often replace the arrow with “gets”. The main thing to understand is that the contents of “auto.dta” are now assigned to the name <code>car_data</code>. To see this, simply type the name into the console (a bad idea with really big datasets, but this dataset is not big).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_data</code></pre></div>
+<pre><code>## # A tibble: 74 × 12
+##             make price   mpg rep78 headroom trunk weight length  turn
+##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
+## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
+## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
+## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
+## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
+## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
+## # ... with 64 more rows, and 3 more variables: displacement &lt;dbl&gt;,
+## #   gear_ratio &lt;dbl&gt;, foreign &lt;dbl+lbl&gt;</code></pre>
+<p>If we instead had a CSV file—which we do—we could use the function <code>read_csv()</code> from the package <code>readr</code> to load the file.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the .csv file</span>
+car_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">paste0</span>(dir_section1, <span class="st">&quot;auto.csv&quot;</span>))</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   make = col_character(),
+##   price = col_double(),
+##   mpg = col_double(),
+##   rep78 = col_double(),
+##   headroom = col_double(),
+##   trunk = col_double(),
+##   weight = col_double(),
+##   length = col_double(),
+##   turn = col_double(),
+##   displacement = col_double(),
+##   gear_ratio = col_double(),
+##   foreign = col_integer()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># See that it looks the same as above</span>
+car_data</code></pre></div>
+<pre><code>## # A tibble: 74 × 12
+##             make price   mpg rep78 headroom trunk weight length  turn
+##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
+## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
+## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
+## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
+## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
+## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
+## # ... with 64 more rows, and 3 more variables: displacement &lt;dbl&gt;,
+## #   gear_ratio &lt;dbl&gt;, foreign &lt;int&gt;</code></pre>
+<p>Note that you do not have to paste the directory onto the file name if you are already in the file’s directory (R reasonably defaults to looking in the current directory). In my case, I just need to tell R to go to the Section01 folder, where my auto.csv file lives.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read_csv</span>(<span class="st">&quot;Section01/auto.csv&quot;</span>)</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   make = col_character(),
+##   price = col_double(),
+##   mpg = col_double(),
+##   rep78 = col_double(),
+##   headroom = col_double(),
+##   trunk = col_double(),
+##   weight = col_double(),
+##   length = col_double(),
+##   turn = col_double(),
+##   displacement = col_double(),
+##   gear_ratio = col_double(),
+##   foreign = col_integer()
+## )</code></pre>
+<pre><code>## # A tibble: 74 × 12
+##             make price   mpg rep78 headroom trunk weight length  turn
+##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
+## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
+## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
+## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
+## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
+## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
+## # ... with 64 more rows, and 3 more variables: displacement &lt;dbl&gt;,
+## #   gear_ratio &lt;dbl&gt;, foreign &lt;int&gt;</code></pre>
 </div>
+</div>
+<div id="playing-with-data" class="section level1">
+<h1>Playing with data</h1>
+<p>You now know how to navigate your computer and load data. You might want to do something with those data.</p>
+<div id="exploring-the-data" class="section level2">
+<h2>Exploring the data</h2>
+<p>Let’s print the data into the console again.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_data</code></pre></div>
+<pre><code>## # A tibble: 74 × 12
+##             make price   mpg rep78 headroom trunk weight length  turn
+##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
+## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
+## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
+## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
+## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
+## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
+## # ... with 64 more rows, and 3 more variables: displacement &lt;dbl&gt;,
+## #   gear_ratio &lt;dbl&gt;, foreign &lt;int&gt;</code></pre>
+<p>Not bad. We can see a few interesting things in this view of the dataset.</p>
+<ol style="list-style-type: decimal">
+<li>The dataset’s is of the class <code>tibble</code> (it’s like a table but with a few rules—see <code>?tibble::tibble</code>).</li>
+<li>The dataset’s dimensions are 74 by 12, meaning we have 74 rows and 12 columns.</li>
+<li>We can also see the class of each of the columns: the make column is of “character” class, and the rest of the columns are of class “double”, with the exception of the foreign variable, which is of class “integer”.</li>
+<li>We get a snapshot of the dataset.</li>
+</ol>
+<p>What if we just want the names of the dataset? Use the <code>names()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(car_data)</code></pre></div>
+<pre><code>##  [1] &quot;make&quot;         &quot;price&quot;        &quot;mpg&quot;          &quot;rep78&quot;       
+##  [5] &quot;headroom&quot;     &quot;trunk&quot;        &quot;weight&quot;       &quot;length&quot;      
+##  [9] &quot;turn&quot;         &quot;displacement&quot; &quot;gear_ratio&quot;   &quot;foreign&quot;</code></pre>
+<p>And what if we want to see the first six rows of the dataset? Use the <code>head()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(car_data)</code></pre></div>
+<pre><code>## # A tibble: 6 × 12
+##            make price   mpg rep78 headroom trunk weight length  turn
+##           &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1   AMC Concord  4099    22     3      2.5    11   2930    186    40
+## 2     AMC Pacer  4749    17     3      3.0    11   3350    173    40
+## 3    AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+## 4 Buick Century  4816    20     3      4.5    16   3250    196    40
+## 5 Buick Electra  7827    15     4      4.0    20   4080    222    43
+## 6 Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+## # ... with 3 more variables: displacement &lt;dbl&gt;, gear_ratio &lt;dbl&gt;,
+## #   foreign &lt;int&gt;</code></pre>
+<p>What if we want to see the first 11 rows of the dataset? Use the <code>head()</code> function with its <code>n</code> argument.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(car_data, <span class="dt">n =</span> <span class="dv">11</span>)</code></pre></div>
+<pre><code>## # A tibble: 11 × 12
+##             make price   mpg rep78 headroom trunk weight length  turn
+##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
+## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
+## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
+## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
+## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
+## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
+## 11  Cad. Deville 11385    14     3      4.0    20   4330    221    44
+## # ... with 3 more variables: displacement &lt;dbl&gt;, gear_ratio &lt;dbl&gt;,
+## #   foreign &lt;int&gt;</code></pre>
+<p>And for the last 7 rows of the dataset? Use the <code>tail()</code> function with its <code>n</code> argument.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tail</span>(car_data, <span class="dt">n =</span> <span class="dv">7</span>)</code></pre></div>
+<pre><code>## # A tibble: 7 × 12
+##             make price   mpg rep78 headroom trunk weight length  turn
+##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 Toyota Corolla  3748    31     5      3.0     9   2200    165    35
+## 2  Toyota Corona  5719    18     5      2.0    11   2670    175    36
+## 3      VW Dasher  7140    23     4      2.5    12   2160    172    36
+## 4      VW Diesel  5397    41     5      3.0    15   2040    155    35
+## 5      VW Rabbit  4697    25     4      3.0    15   1930    155    35
+## 6    VW Scirocco  6850    25     4      2.0    16   1990    156    36
+## 7      Volvo 260 11995    17     5      2.5    14   3170    193    37
+## # ... with 3 more variables: displacement &lt;dbl&gt;, gear_ratio &lt;dbl&gt;,
+## #   foreign &lt;int&gt;</code></pre>
+<p>RStudio also has a nice—though sometimes slow—data viewer. You can access the data viewer through the RStudi GUI or through the <code>View()</code> function, <em>e.g.</em> <code>View(car_data)</code>.</p>
+</div>
+<div id="summarizing-the-data" class="section level2">
+<h2>Summarizing the data</h2>
+<p>To make a quick summary of your dataset, you can use the <code>summary()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(car_data)</code></pre></div>
+<pre><code>##      make               price            mpg            rep78      
+##  Length:74          Min.   : 3291   Min.   :12.00   Min.   :1.000  
+##  Class :character   1st Qu.: 4220   1st Qu.:18.00   1st Qu.:3.000  
+##  Mode  :character   Median : 5006   Median :20.00   Median :3.000  
+##                     Mean   : 6165   Mean   :21.30   Mean   :3.406  
+##                     3rd Qu.: 6332   3rd Qu.:24.75   3rd Qu.:4.000  
+##                     Max.   :15906   Max.   :41.00   Max.   :5.000  
+##                                                     NA&#39;s   :5      
+##     headroom         trunk           weight         length     
+##  Min.   :1.500   Min.   : 5.00   Min.   :1760   Min.   :142.0  
+##  1st Qu.:2.500   1st Qu.:10.25   1st Qu.:2250   1st Qu.:170.0  
+##  Median :3.000   Median :14.00   Median :3190   Median :192.5  
+##  Mean   :2.993   Mean   :13.76   Mean   :3019   Mean   :187.9  
+##  3rd Qu.:3.500   3rd Qu.:16.75   3rd Qu.:3600   3rd Qu.:203.8  
+##  Max.   :5.000   Max.   :23.00   Max.   :4840   Max.   :233.0  
+##                                                                
+##       turn        displacement     gear_ratio       foreign      
+##  Min.   :31.00   Min.   : 79.0   Min.   :2.190   Min.   :0.0000  
+##  1st Qu.:36.00   1st Qu.:119.0   1st Qu.:2.730   1st Qu.:0.0000  
+##  Median :40.00   Median :196.0   Median :2.955   Median :0.0000  
+##  Mean   :39.65   Mean   :197.3   Mean   :3.015   Mean   :0.2973  
+##  3rd Qu.:43.00   3rd Qu.:245.2   3rd Qu.:3.353   3rd Qu.:1.0000  
+##  Max.   :51.00   Max.   :425.0   Max.   :3.890   Max.   :1.0000  
+## </code></pre>
+<p>However, we often just want to know about one variable. How do you grab a single variable in R? Use the <code>$</code>, of course. Specifically, type the name of the dataset, followed by <code>$</code>, followed by the name of the variable. Again, RStudio’s autocompletion using tab is your best friend here.</p>
+<p>To grab the price variable (named <code>price</code>) from the <code>car_data</code> dataset, we type <code>car_data$price</code>. And to summarize the price variable:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(car_data$price)</code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    3291    4220    5006    6165    6332   15910</code></pre>
+</div>
+<div id="manipulating-the-data" class="section level2">
+<h2>Manipulating the data</h2>
+<div id="select" class="section level3">
+<h3><code>select()</code></h3>
+<p>Now let’s move on to manipulating our dataset. The package <code>dplyr</code> offers a lot of help in manipulating data. <code>dplyr</code> is built on the paradigm of using verbs as actions on the data—for instance, <code>select()</code> variables and then <code>summarize()</code> them.</p>
+<p>First, let’s say we only care about a subset of the variables (<em>e.g</em> price, mpg, weight, and length) and don’t feel like hanging on to the others. You could complete this task with R’s built-in <code>subset()</code> function, but let’s instead use the <code>select()</code> function from <code>dplyr</code>. All you need to do is give <code>select()</code> the name of the dataset (<code>car_data</code>) and the names of the variables that we want to keep. <code>dplyr</code> (and some other functions in R) uses what is called non-standard evaluation, which means you do not need to put quotes around the variable names.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Select our desired variables; define as car_sub</span>
+car_sub &lt;-<span class="st"> </span><span class="kw">select</span>(car_data, price, mpg, weight, length)
+<span class="co"># Print the dataset</span>
+car_sub</code></pre></div>
+<pre><code>## # A tibble: 74 × 4
+##    price   mpg weight length
+##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1   4099    22   2930    186
+## 2   4749    17   3350    173
+## 3   3799    22   2640    168
+## 4   4816    20   3250    196
+## 5   7827    15   4080    222
+## 6   5788    18   3670    218
+## 7   4453    26   2230    170
+## 8   5189    20   3280    200
+## 9  10372    16   3880    207
+## 10  4082    19   3400    200
+## # ... with 64 more rows</code></pre>
+<p>You can see that we still have 74 rows but only four columns.</p>
+<p>Alternatively, you can choose which variables you would like to exclude from a dataset by placing a negative sign (dash) in front of the name</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(car_data, -price, -mpg, -weight, -length)</code></pre></div>
+<pre><code>## # A tibble: 74 × 8
+##             make rep78 headroom trunk  turn displacement gear_ratio
+##            &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+## 1    AMC Concord     3      2.5    11    40          121       3.58
+## 2      AMC Pacer     3      3.0    11    40          258       2.53
+## 3     AMC Spirit   NaN      3.0    12    35          121       3.08
+## 4  Buick Century     3      4.5    16    40          196       2.93
+## 5  Buick Electra     4      4.0    20    43          350       2.41
+## 6  Buick LeSabre     3      4.0    21    43          231       2.73
+## 7     Buick Opel   NaN      3.0    10    34          304       2.87
+## 8    Buick Regal     3      2.0    16    42          196       2.93
+## 9  Buick Riviera     3      3.5    17    43          231       2.93
+## 10 Buick Skylark     3      3.5    13    42          231       3.08
+## # ... with 64 more rows, and 1 more variables: foreign &lt;int&gt;</code></pre>
+</div>
+<div id="arrange" class="section level3">
+<h3><code>arrange()</code></h3>
+<p>We often want to arrange our dataset by one or more columns. For this task, <code>dplyr</code> offers the <code>arrange()</code> function. The notation is similar to that of select: the data object’s name followed by the variables with with you would like to arrange the object. Let’s arrange by price and mpg. The second dimension of sorting here is only for demonstration (it’s pointless in the actually arrangement).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(car_sub, price, mpg)</code></pre></div>
+<pre><code>## # A tibble: 74 × 4
+##    price   mpg weight length
+##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1   3291    20   2830    195
+## 2   3299    29   2110    163
+## 3   3667    24   2750    179
+## 4   3748    31   2200    165
+## 5   3798    35   2050    164
+## 6   3799    22   2640    168
+## 7   3829    22   2580    169
+## 8   3895    26   1830    142
+## 9   3955    19   3430    197
+## 10  3984    30   2120    163
+## # ... with 64 more rows</code></pre>
+<p>Having used the <code>arrange()</code> function on our data, what happens if we view the dataset now?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub</code></pre></div>
+<pre><code>## # A tibble: 74 × 4
+##    price   mpg weight length
+##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1   4099    22   2930    186
+## 2   4749    17   3350    173
+## 3   3799    22   2640    168
+## 4   4816    20   3250    196
+## 5   7827    15   4080    222
+## 6   5788    18   3670    218
+## 7   4453    26   2230    170
+## 8   5189    20   3280    200
+## 9  10372    16   3880    207
+## 10  4082    19   3400    200
+## # ... with 64 more rows</code></pre>
+<p>It is no longer arranged. This point is important. With nearly every function in R, you must assign the output of a function to an object if you want anything to change. Otherwise, you are simply printing your results to the console.</p>
+<p><code>arrange()</code> defaults to ascending ordering; if you would like descending ordering, use the <code>desc()</code> function on the variables that you would like to be descending.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(car_sub, <span class="kw">desc</span>(price), mpg)</code></pre></div>
+<pre><code>## # A tibble: 74 × 4
+##    price   mpg weight length
+##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1  15906    21   4290    204
+## 2  14500    14   3900    204
+## 3  13594    12   4720    230
+## 4  13466    14   3830    201
+## 5  12990    14   3420    192
+## 6  11995    17   3170    193
+## 7  11497    12   4840    233
+## 8  11385    14   4330    221
+## 9  10372    16   3880    207
+## 10 10371    16   4030    206
+## # ... with 64 more rows</code></pre>
+</div>
+<div id="summarize" class="section level3">
+<h3><code>summarize()</code></h3>
+<p>To create more specific summaries of your data, <code>dplyr</code> offers the <code>summarize()</code> and <code>summarize_each()</code> functions.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> These functions are really more useful when you have grouped data, but it may be helpful to first see them here in a simpler setting.</p>
+<p>Imaging we want the mean and standard deviation of the price variable, we use the functions <code>mean()</code> and <code>sd()</code> in conjunction with <code>summarize()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(car_sub, <span class="kw">mean</span>(price), <span class="kw">sd</span>(price))</code></pre></div>
+<pre><code>## # A tibble: 1 × 2
+##   `mean(price)` `sd(price)`
+##           &lt;dbl&gt;       &lt;dbl&gt;
+## 1      6165.257    2949.496</code></pre>
+<p>You can even provide names for the newly created summaries.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(car_sub, <span class="dt">price_mean =</span> <span class="kw">mean</span>(price), <span class="dt">price_sd =</span> <span class="kw">sd</span>(price))</code></pre></div>
+<pre><code>## # A tibble: 1 × 2
+##   price_mean price_sd
+##        &lt;dbl&gt;    &lt;dbl&gt;
+## 1   6165.257 2949.496</code></pre>
+<p>Because these summaries were relatively simple, we could have just typed them out…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(car_sub$price)</code></pre></div>
+<pre><code>## [1] 6165.257</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(car_sub$price)</code></pre></div>
+<pre><code>## [1] 2949.496</code></pre>
+</div>
+</div>
+<div id="plotting-the-data" class="section level2">
+<h2>Plotting the data</h2>
+<p>A final way we often play with data is by making plots. R’s default plot functions are quite simple but leave a bit to be desired with respect to aesthetics. We will cover <code>ggplot()</code> later in the semester, but for now, let’s make a few quick plots.</p>
+<p>Let’s create a histogram of the cars’ milages. R’s <code>hist()</code> function works perfectly here. It only needs the variable of interest, but we can provide more parameters to make it pretty.</p>
+<p>First, the plan-vanilla plot</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(car_sub$mpg)</code></pre></div>
+<p><img src="section01_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>Now, a bit prettier. And let’s add a blue line for the median MPG (using the <code>abline()</code> function).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The histogram function</span>
+<span class="kw">hist</span>(
+  <span class="co"># The variable for the histogram</span>
+  <span class="dt">x =</span> car_sub$mpg,
+  <span class="co"># The main title</span>
+  <span class="dt">main =</span> <span class="st">&quot;Distribution of fuel economy&quot;</span>,
+  <span class="co"># The x-axis label</span>
+  <span class="dt">xlab =</span> <span class="st">&quot;MPG (miles per gallon)&quot;</span>)
+<span class="co"># The blue vertical line at the median MPG (lwd is line width)</span>
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">median</span>(car_sub$mpg), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)</code></pre></div>
+<p><img src="section01_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>Now let’s plot price and mileage. A scatterplot will work here, and R’s base <code>plot()</code> function will do just fine with a scatter plot. We will give it an x variable, a y variable, and the axis titles.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(
+  <span class="dt">x =</span> car_sub$mpg,
+  <span class="dt">y =</span> car_sub$price,
+  <span class="dt">xlab =</span> <span class="st">&quot;Fuel economy (MPG)&quot;</span>,
+  <span class="dt">ylab =</span> <span class="st">&quot;Price&quot;</span>)</code></pre></div>
+<p><img src="section01_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>Note: I really like clearly defining the arguments of functions. And I recommend it. I find it helps keep things straight, as order matters when you are not naming each argument.</p>
+</div>
+</div>
+<div id="linear-algebra-puzzles" class="section level1">
+<h1>Linear algebra puzzles</h1>
+<p>Some <em>classic</em><a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> R-meets-linear algebra puzzles for your enjoyment. They may use some R concepts that we have not yet covered.</p>
+<ol style="list-style-type: decimal">
+<li>Let <strong>I</strong><sub>5</sub> be a 5 <span class="math inline">\(\times\)</span> 5 identity matrix. Demonstrate that <strong>I</strong><sub>5</sub> is symmetric and idempotent using simple functions in R.</li>
+<li>Generate a 2 <span class="math inline">\(\times\)</span> 2 idempotent matrix <strong>X</strong>, where <strong>X</strong> is not the identity matrix. Demonstrate that <strong>X</strong> = <strong>XX</strong>.</li>
+<li>Generate two random variables, <strong>x</strong> and <strong>e</strong>, of dimension n = 100 such that <strong>x</strong>, <strong>e</strong> ∼ N(0, 1). Generate a random variable <strong>y</strong> according to the data generating process <span class="math inline">\(y_i = x_i + e_i\)</span>. Show that if you regress <strong>y</strong> on <strong>x</strong> using the canned linear regression routine <code>lm()</code>, then you will get an estimate of the intercept <span class="math inline">\(\beta_0\)</span> and the coefficient on <strong>x</strong>, <span class="math inline">\(\beta_1\)</span>, such that <span class="math inline">\(\beta_0 = 0\)</span> and <span class="math inline">\(\beta_1 = 1\)</span>.</li>
+<li>Show that if <span class="math inline">\(\lambda_1, \lambda_2, \ldots, \lambda_5\)</span> are the eigenvectors of a 5 <span class="math inline">\(\times\)</span> 5 matrix <strong>A</strong>, then tr(<strong>A</strong>) = <span class="math inline">\(\sum_{i=1}^5 \lambda_i\)</span>.</li>
+</ol>
+<p><br><br><br></p>
 </div>
 <div class="footnotes">
 <hr />
@@ -455,6 +843,12 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 <li id="fn1"><p>If you do not have the most recent versions of R (3.3.2, a.k.a. <em>Sincere Pumpkin Patch</em>) and RStudio (1.0.136), then please check out the directions in <a href="section00.html">Section 0</a>.<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>CRAN stands for [the] Comprehensive R Archive Network<a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>Windows users beware: when you copy the path from File Explorer, the slashes between folders may be in the wrong direction for R: you will need to either change the direction (from <code>\</code> to <code>/</code>) or double them (from <code>/</code> to <code>//</code>).<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Note: Mac (OSX) directories tend to start with “/Users/”, while Windows paths start with the name of the drive, for instance, “C:/”. If you’re using Linux, you probably don’t need my help here.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>The files are apparently <a href="http://www.stata-press.com/data/r9/u.html">classic Stata tutorial files</a>.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>If you have <em>really</em> big delimited files (csv, tsv, fixed, width, <em>etc.</em>), I recommend the <code>fread()</code> (fast read) function from the <code>data.table</code> package. The whole <code>data.table</code> package is awesome and fast—it’s just a bit less beginner friendly than <code>dplyr</code>.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>If leaving off the quotation marks makes you uncomfortable—or is actually inhibiting your programming—each <code>dplyr</code> function has a clone that uses standard evaluation. These standard evaluation clones have the same names as their counterparts but with an added underscore (<code>_</code>) at their ends (<em>e.g.</em> <code>select_()</code>).<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>If you are more comfortable with British English, you will be happy to know you can use the functions <code>summarise()</code> and <code>summarise_each()</code>.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>By classic, I mean they’ve shown up in this class’s section notes for several years.<a href="#fnref9">↩</a></p></li>
 </ol>
 </div>
 

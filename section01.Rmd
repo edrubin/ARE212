@@ -3,7 +3,7 @@ title: "Section 1: Getting started with R"
 output:
   html_document:
     toc: true
-    number_sections: true
+    number_sections: false
     toc_float:
       collapsed: false
       smooth_scroll: true
@@ -43,7 +43,7 @@ To check that the installations were successful, we will load the packages that 
 
 R uses the `library()` function to load a package (we give the name of the package as the argument to the function).
 
-```{r, eval = F}
+```{r}
 library(dplyr)
 library(haven)
 library(readr)
@@ -61,7 +61,7 @@ Loading a dataset in R requires three things:
 
 ## File paths
 
-R wants file paths as character vectors (_i.e._ the file path surrounded by quotations). For example, `"/Users/edwardarubin/Dropbox/Teaching/ARE212"` is the path to my folder for this course (on my computer).^[Windows users beware: when you copy the path from File Explorer, the slashes between folders may be in the wrong direction for R: you will need to either change the direction (from `\` to `/`) or double them (from `/` to `//`).]
+R wants file paths as character vectors (_i.e._ the file path surrounded by quotations). For example, `"/Users/edwardarubin/Dropbox/Teaching/ARE212"` is the path to my folder for this course (on my computer).^[Windows users beware: when you copy the path from File Explorer, the slashes between folders may be in the wrong direction for R: you will need to either change the direction (from `\` to `/`) or double them (from `/` to `//`).] ^[Note: Mac (OSX) directories tend to start with "/Users/", while Windows paths start with the name of the drive, for instance, "C:/". If you're using Linux, you probably don't need my help here.]
 
 To change the directory in R, use the `setwd()`. For instance, to change R's directory to my course folder
 
@@ -86,6 +86,22 @@ dir_class <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/"
 dir_section1 <- paste0(dir_class, "Section01/")
 ```
 
+Notice the use of the `paste0()` function here: we pasting together the value of the object `dir_class` and the string `"Section01"`. The function `paste0()` by default pastes without any spaces in between the objects, while the function `paste()` defaults to including a single space (you can feed the functions additional parameters to change these behaviors).
+
+As a quick example:
+```{r}
+# Default use of paste0()
+paste0(1, 2, 3)
+# Default use of paste()
+paste(1, 2, 3)
+# Setting the separation parameter to " " (the default)
+paste(1, 2, 3, sep = " ")
+# Changing the separation parameter to "+"
+paste(1, 2, 3, sep = "+")
+```
+
+Finally, notice that RStudio assists you with completing file paths (begin typing and press tab). This completion can be super useful.
+
 ## `dir()`
 
 The function `dir()` allows you to see contents of a folder. `dir()` can help when you forget the name of the file you want. To see the contents of a folder, give the folder's file path to `dir()`:
@@ -97,6 +113,232 @@ dir(dir_class)
 dir(dir_section1)
 ```
 
+You can see there are a few files of interest in the section 1 folder—specifically, auto.csv and auto.dta.^[The files are apparently [classic Stata tutorial files](http://www.stata-press.com/data/r9/u.html).]
+
+Recall that `dir_section1` is an object that holds the value "/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/". We get the same result if we feed `dir()` object's name or its value, since R is evaluating the object:
+
+```{r}
+# The object
+dir(dir_section1)
+# The object's value
+dir("/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/")
+```
+
 ## Functions to load files
 
-Blah blah blah
+There are a lot of ways to load (data) files in R. In this class, we will mostly stick to the packages `readr` and `haven`—in addition to R's base functions. The `readr` package offers functions for mostly for reading delimited data files like CSVs, TSVs, and fixed-width files. The `haven` package offers functions for reading data files outputted from other statistical software like Stata, SPSS (or PSPP), and SAS.
+
+Let's start by reading the data stored in the auto.dta file. For this task, we'll use the `read_dta()` funtion from the `haven` package. The `read_dta()` function needs only one argument: the file (including the path necessary to reach the file).
+
+__Note:__ To learn more about a function and the arguments it accepts, you can
+
+1. Press tab (in RStudio) after typing the function's name.
+2. Type a question mark and the function's name into the console, _e.g._ `?read_dta`.
+
+Enough talk. Let's finally load the file.
+
+```{r}
+# Load the .dta file
+car_data <- read_dta(paste0(dir_section1, "auto.dta"))
+```
+
+The `<-` operator is central to everything you do in R. It assigns the value(s) on the right-hand side of the arrow to the name on the left-hand side. When reading R code aloud, people often replace the arrow with "gets". The main thing to understand is that the contents of "auto.dta" are now assigned to the name `car_data`. To see this, simply type the name into the console (a bad idea with really big datasets, but this dataset is not big).
+
+```{r}
+car_data
+```
+
+If we instead had a CSV file—which we do—we could use the function `read_csv()` from the package `readr` to load the file.^[If you have _really_ big delimited files (csv, tsv, fixed, width, _etc._), I recommend the `fread()` (fast read) function from the `data.table` package. The whole `data.table` package is awesome and fast—it's just a bit less beginner friendly than `dplyr`.]
+
+```{r}
+# Load the .csv file
+car_data <- read_csv(paste0(dir_section1, "auto.csv"))
+# See that it looks the same as above
+car_data
+```
+
+Note that you do not have to paste the directory onto the file name if you are already in the file's directory (R reasonably defaults to looking in the current directory). In my case, I just need to tell R to go to the Section01 folder, where my auto.csv file lives.
+
+```{r}
+read_csv("Section01/auto.csv")
+```
+
+# Playing with data
+
+You now know how to navigate your computer and load data. You might want to do something with those data.
+
+## Exploring the data
+
+Let's print the data into the console again.
+
+```{r}
+car_data
+```
+
+Not bad. We can see a few interesting things in this view of the dataset.
+
+1. The dataset's is of the class `tibble` (it's like a table but with a few rules—see `?tibble::tibble`).
+2. The dataset's dimensions are 74 by 12, meaning we have 74 rows and 12 columns.
+3. We can also see the class of each of the columns: the make column is of "character" class, and the rest of the columns are of class "double", with the exception of the foreign variable, which is of class "integer".
+4. We get a snapshot of the dataset.
+
+What if we just want the names of the dataset? Use the `names()` function.
+
+```{r}
+names(car_data)
+```
+
+And what if we want to see the first six rows of the dataset? Use the `head()` function.
+
+```{r}
+head(car_data)
+```
+
+What if we want to see the first 11 rows of the dataset? Use the `head()` function with its `n` argument.
+
+```{r}
+head(car_data, n = 11)
+```
+
+And for the last 7 rows of the dataset? Use the `tail()` function with its `n` argument.
+
+```{r}
+tail(car_data, n = 7)
+```
+
+RStudio also has a nice—though sometimes slow—data viewer. You can access the data viewer through the RStudi GUI or through the `View()` function, _e.g._ `View(car_data)`.
+
+## Summarizing the data
+
+To make a quick summary of your dataset, you can use the `summary()` function.
+
+```{r}
+summary(car_data)
+```
+
+However, we often just want to know about one variable. How do you grab a single variable in R? Use the `$`, of course. Specifically, type the name of the dataset, followed by `$`, followed by the name of the variable. Again, RStudio's autocompletion using tab is your best friend here.
+
+To grab the price variable (named `price`) from the `car_data` dataset, we type `car_data$price`. And to summarize the price variable:
+
+```{r}
+summary(car_data$price)
+```
+
+## Manipulating the data
+
+### `select()`
+
+Now let's move on to manipulating our dataset. The package `dplyr` offers a lot of help in manipulating data. `dplyr` is built on the paradigm of using verbs as actions on the data—for instance, `select()` variables and then `summarize()` them.
+
+First, let's say we only care about a subset of the variables (_e.g_ price, mpg, weight, and length) and don't feel like hanging on to the others. You could complete this task with R's built-in `subset()` function, but let's instead use the `select()` function from `dplyr`. All you need to do is give `select()` the name of the dataset (`car_data`) and the names of the variables that we want to keep. `dplyr` (and some other functions in R) uses what is called non-standard evaluation, which means you do not need to put quotes around the variable names.^[If leaving off the quotation marks makes you uncomfortable—or is actually inhibiting your programming—each `dplyr` function has a clone that uses standard evaluation. These standard evaluation clones have the same names as their counterparts but with an added underscore (`_`) at their ends (_e.g._ `select_()`).]
+
+```{r}
+# Select our desired variables; define as car_sub
+car_sub <- select(car_data, price, mpg, weight, length)
+# Print the dataset
+car_sub
+```
+
+You can see that we still have 74 rows but only four columns.
+
+Alternatively, you can choose which variables you would like to exclude from a dataset by placing a negative sign (dash) in front of the name
+
+```{r}
+select(car_data, -price, -mpg, -weight, -length)
+```
+
+### `arrange()`
+
+We often want to arrange our dataset by one or more columns. For this task, `dplyr` offers the `arrange()` function. The notation is similar to that of select: the data object's name followed by the variables with with you would like to arrange the object. Let's arrange by price and mpg. The second dimension of sorting here is only for demonstration (it's pointless in the actually arrangement).
+
+```{r}
+arrange(car_sub, price, mpg)
+```
+
+Having used the `arrange()` function on our data, what happens if we view the dataset now?
+
+```{r}
+car_sub
+```
+
+It is no longer arranged. This point is important. With nearly every function in R, you must assign the output of a function to an object if you want anything to change. Otherwise, you are simply printing your results to the console.
+
+`arrange()` defaults to ascending ordering; if you would like descending ordering, use the `desc()` function on the variables that you would like to be descending.
+
+```{r}
+arrange(car_sub, desc(price), mpg)
+```
+
+### `summarize()`
+
+To create more specific summaries of your data, `dplyr` offers the `summarize()` and `summarize_each()` functions.^[If you are more comfortable with British English, you will be happy to know you can use the functions `summarise()` and `summarise_each()`.] These functions are really more useful when you have grouped data, but it may be helpful to first see them here in a simpler setting.
+
+Imaging we want the mean and standard deviation of the price variable, we use the functions `mean()` and `sd()` in conjunction with `summarize()`:
+
+```{r}
+summarize(car_sub, mean(price), sd(price))
+```
+
+You can even provide names for the newly created summaries.
+
+```{r}
+summarize(car_sub, price_mean = mean(price), price_sd = sd(price))
+```
+
+Because these summaries were relatively simple, we could have just typed them out...
+
+```{r}
+mean(car_sub$price)
+sd(car_sub$price)
+```
+
+## Plotting the data
+
+A final way we often play with data is by making plots. R's default plot functions are quite simple but leave a bit to be desired with respect to aesthetics. We will cover `ggplot()` later in the semester, but for now, let's make a few quick plots.
+
+Let's create a histogram of the cars' milages. R's `hist()` function works perfectly here. It only needs the variable of interest, but we can provide more parameters to make it pretty.
+
+First, the plan-vanilla plot
+
+```{r}
+hist(car_sub$mpg)
+```
+
+Now, a bit prettier. And let's add a blue line for the median MPG (using the `abline()` function).
+
+```{r}
+# The histogram function
+hist(
+  # The variable for the histogram
+  x = car_sub$mpg,
+  # The main title
+  main = "Distribution of fuel economy",
+  # The x-axis label
+  xlab = "MPG (miles per gallon)")
+# The blue vertical line at the median MPG (lwd is line width)
+abline(v = median(car_sub$mpg), col = "blue", lwd = 3)
+```
+
+Now let's plot price and mileage. A scatterplot will work here, and R's base `plot()` function will do just fine with a scatter plot. We will give it an x variable, a y variable, and the axis titles.
+
+```{r}
+plot(
+  x = car_sub$mpg,
+  y = car_sub$price,
+  xlab = "Fuel economy (MPG)",
+  ylab = "Price")
+```
+
+Note: I really like clearly defining the arguments of functions. And I recommend it. I find it helps keep things straight, as order matters when you are not naming each argument.
+
+# Linear algebra puzzles
+
+Some _classic_^[By classic, I mean they've shown up in this class's section notes for several years.] R-meets-linear algebra puzzles for your enjoyment. They may use some R concepts that we have not yet covered.
+
+1. Let __I__~5~ be a 5 $\times$ 5 identity matrix. Demonstrate that __I__~5~ is symmetric and idempotent using simple functions in R.
+2. Generate a 2 $\times$ 2 idempotent matrix __X__, where __X__ is not the identity matrix. Demonstrate that __X__ = __XX__.
+3. Generate two random variables, __x__ and __e__, of dimension n = 100 such that __x__, __e__ ∼ N(0, 1). Generate a random variable __y__ according to the data generating process $y_i = x_i + e_i$. Show that if you regress __y__ on __x__ using the canned linear regression routine `lm()`, then you will get an estimate of the intercept $\beta_0$ and the coefficient on __x__, $\beta_1$, such that $\beta_0 = 0$ and $\beta_1 = 1$.
+4. Show that if $\lambda_1, \lambda_2, \ldots, \lambda_5$ are the eigenvectors of a 5 $\times$ 5 matrix __A__, then tr(__A__) = $\sum_{i=1}^5 \lambda_i$.
+
+
+<br><br><br>
