@@ -3,8 +3,100 @@ title: "Section 1: Getting started with R"
 output:
   html_document:
     toc: true
-    number_sections: false
+    number_sections: true
     toc_float:
-      collapsed: true
+      collapsed: false
       smooth_scroll: true
 ---
+
+# Summary
+
+In this section...
+
+# Packages in R
+
+Open RStudio.^[If you do not have the most recent versions of R (3.3.2, a.k.a. _Sincere Pumpkin Patch_) and RStudio (1.0.136), then please check out the directions in [Section 0](section00.html).]
+
+While the base R installation helpful/powerful, R's true potential comes from combining combining the core installation with its many packages generated through collaboration (see [CRAN's list of packages](https://cran.r-project.org/web/packages/available_packages_by_name.html)^[CRAN stands for [the] Comprehensive R Archive Network]).
+
+## Installing packages
+
+Now, let's install a few packages that will prove useful this semester...
+
+```{r, eval = F}
+# Install the package named "dplyr"
+install.packages("dplyr")
+# Install the packages named "haven" and "readr"
+install.packages(c("haven", "readr"))
+```
+
+A few things to notice here:
+
+1. The name of the function `install.packages()` is plural regardless of the number of packages.
+2. Each package's name is surrounded by quotes (_e.g._ `"haven"`). These quotation marks are how R knows the difference between characters/strings and objects (object hold values). R generally does not care whether you use single quote (`''`) or double quotes (`""`), but you should be consistent.
+3. We can create a vector of packages using the combine function `c()`. Example: `c(1, 2, 3)` is a three-element vector whose elements are `1`, `2`, and `3`. Similarly, `c("haven", "readr")` is a two-element vector whose elements are the `"haven"` and `"readr"`. Vectors are a big deal in R.
+4. The hashtag (`#`) is the symbol that creates comments in R.
+
+## Loading packages
+
+To check that the installations were successful, we will load the packages that we installed above.
+
+R uses the `library()` function to load a package (we give the name of the package as the argument to the function).
+
+```{r, eval = F}
+library(dplyr)
+library(haven)
+library(readr)
+```
+
+Notice that we did not need to call the packages with quotations around their names (though it would still work).
+
+# Loading data
+
+Loading a dataset in R requires three things:
+
+1. The path of the data file (where the data exist on your computer)
+2. The name of the data file
+3. The proper function for the type of dataset (_e.g._ different function for .csv and .dta files)
+
+## File paths
+
+R wants file paths as character vectors (_i.e._ the file path surrounded by quotations). For example, `"/Users/edwardarubin/Dropbox/Teaching/ARE212"` is the path to my folder for this course (on my computer).^[Windows users beware: when you copy the path from File Explorer, the slashes between folders may be in the wrong direction for R: you will need to either change the direction (from `\` to `/`) or double them (from `/` to `//`).]
+
+To change the directory in R, use the `setwd()`. For instance, to change R's directory to my course folder
+
+```{r}
+setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212")
+```
+
+To find R's current working directory, simply type `getwd()`:
+
+```{r}
+getwd()
+```
+
+There are a few ways to deal with file paths and directories. One common way is to use `setwd()` at the top of your script (or invoke the function whenever you need to change directories).
+
+I find clearer to store the paths that I will use—at the start of my R script, I define the paths relevant to the files I use within the script. I prefer this method because it allows me to quickly update paths and easily access subfolders.
+
+```{r}
+# The path to my ARE 212 folder (ARE212)
+dir_class <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/"
+# The path to my section 1 folder (Section01), which is inside my ARE 212 folder
+dir_section1 <- paste0(dir_class, "Section01/")
+```
+
+## `dir()`
+
+The function `dir()` allows you to see contents of a folder. `dir()` can help when you forget the name of the file you want. To see the contents of a folder, give the folder's file path to `dir()`:
+
+```{r}
+# Look inside my ARE212 folder (dir_class stores the path)
+dir(dir_class)
+# Look inside my section 1 folder (dir_section1 stores the path)
+dir(dir_section1)
+```
+
+## Functions to load files
+
+Blah blah blah

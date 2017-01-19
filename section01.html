@@ -26,6 +26,49 @@
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -169,7 +212,7 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = true;
+    options.showAndHide = false;
     options.smoothScroll = true;
 
     // tocify
@@ -232,6 +275,12 @@ div.tocify {
   border-radius: 0px;
 }
 
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
 
 </style>
 
@@ -320,7 +369,94 @@ div.tocify {
 </div>
 
 
-
+<div id="summary" class="section level1">
+<h1><span class="header-section-number">1</span> Summary</h1>
+<p>In this section…</p>
+</div>
+<div id="packages-in-r" class="section level1">
+<h1><span class="header-section-number">2</span> Packages in R</h1>
+<p>Open RStudio.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>While the base R installation helpful/powerful, R’s true potential comes from combining combining the core installation with its many packages generated through collaboration (see <a href="https://cran.r-project.org/web/packages/available_packages_by_name.html">CRAN’s list of packages</a><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>).</p>
+<div id="installing-packages" class="section level2">
+<h2><span class="header-section-number">2.1</span> Installing packages</h2>
+<p>Now, let’s install a few packages that will prove useful this semester…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install the package named &quot;dplyr&quot;</span>
+<span class="kw">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>)
+<span class="co"># Install the packages named &quot;haven&quot; and &quot;readr&quot;</span>
+<span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;haven&quot;</span>, <span class="st">&quot;readr&quot;</span>))</code></pre></div>
+<p>A few things to notice here:</p>
+<ol style="list-style-type: decimal">
+<li>The name of the function <code>install.packages()</code> is plural regardless of the number of packages.</li>
+<li>Each package’s name is surrounded by quotes (<em>e.g.</em> <code>&quot;haven&quot;</code>). These quotation marks are how R knows the difference between characters/strings and objects (object hold values). R generally does not care whether you use single quote (<code>''</code>) or double quotes (<code>&quot;&quot;</code>), but you should be consistent.</li>
+<li>We can create a vector of packages using the combine function <code>c()</code>. Example: <code>c(1, 2, 3)</code> is a three-element vector whose elements are <code>1</code>, <code>2</code>, and <code>3</code>. Similarly, <code>c(&quot;haven&quot;, &quot;readr&quot;)</code> is a two-element vector whose elements are the <code>&quot;haven&quot;</code> and <code>&quot;readr&quot;</code>. Vectors are a big deal in R.</li>
+<li>The hashtag (<code>#</code>) is the symbol that creates comments in R.</li>
+</ol>
+</div>
+<div id="loading-packages" class="section level2">
+<h2><span class="header-section-number">2.2</span> Loading packages</h2>
+<p>To check that the installations were successful, we will load the packages that we installed above.</p>
+<p>R uses the <code>library()</code> function to load a package (we give the name of the package as the argument to the function).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(haven)
+<span class="kw">library</span>(readr)</code></pre></div>
+<p>Notice that we did not need to call the packages with quotations around their names (though it would still work).</p>
+</div>
+</div>
+<div id="loading-data" class="section level1">
+<h1><span class="header-section-number">3</span> Loading data</h1>
+<p>Loading a dataset in R requires three things:</p>
+<ol style="list-style-type: decimal">
+<li>The path of the data file (where the data exist on your computer)</li>
+<li>The name of the data file</li>
+<li>The proper function for the type of dataset (<em>e.g.</em> different function for .csv and .dta files)</li>
+</ol>
+<div id="file-paths" class="section level2">
+<h2><span class="header-section-number">3.1</span> File paths</h2>
+<p>R wants file paths as character vectors (<em>i.e.</em> the file path surrounded by quotations). For example, <code>&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code> is the path to my folder for this course (on my computer).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>To change the directory in R, use the <code>setwd()</code>. For instance, to change R’s directory to my course folder</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</span>)</code></pre></div>
+<p>To find R’s current working directory, simply type <code>getwd()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()</code></pre></div>
+<pre><code>## [1] &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code></pre>
+<p>There are a few ways to deal with file paths and directories. One common way is to use <code>setwd()</code> at the top of your script (or invoke the function whenever you need to change directories).</p>
+<p>I find clearer to store the paths that I will use—at the start of my R script, I define the paths relevant to the files I use within the script. I prefer this method because it allows me to quickly update paths and easily access subfolders.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The path to my ARE 212 folder (ARE212)</span>
+dir_class &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/&quot;</span>
+<span class="co"># The path to my section 1 folder (Section01), which is inside my ARE 212 folder</span>
+dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_class, <span class="st">&quot;Section01/&quot;</span>)</code></pre></div>
+</div>
+<div id="dir" class="section level2">
+<h2><span class="header-section-number">3.2</span> <code>dir()</code></h2>
+<p>The function <code>dir()</code> allows you to see contents of a folder. <code>dir()</code> can help when you forget the name of the file you want. To see the contents of a folder, give the folder’s file path to <code>dir()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my ARE212 folder (dir_class stores the path)</span>
+<span class="kw">dir</span>(dir_class)</code></pre></div>
+<pre><code>##  [1] &quot;_site.yml&quot;             &quot;analyticstracking.php&quot;
+##  [3] &quot;contact.html&quot;          &quot;contact.Rmd&quot;          
+##  [5] &quot;courseInfo.html&quot;       &quot;courseInfo.Rmd&quot;       
+##  [7] &quot;footer.html&quot;           &quot;index.html&quot;           
+##  [9] &quot;index.Rmd&quot;             &quot;notes.html&quot;           
+## [11] &quot;notes.Rmd&quot;             &quot;resources.html&quot;       
+## [13] &quot;resources.Rmd&quot;         &quot;section00.html&quot;       
+## [15] &quot;section00.Rmd&quot;         &quot;section01.html&quot;       
+## [17] &quot;section01.Rmd&quot;         &quot;site_libs&quot;            
+## [19] &quot;syllabi.html&quot;          &quot;syllabi.Rmd&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my section 1 folder (dir_section1 stores the path)</span>
+<span class="kw">dir</span>(dir_section1)</code></pre></div>
+<pre><code>## character(0)</code></pre>
+</div>
+<div id="functions-to-load-files" class="section level2">
+<h2><span class="header-section-number">3.3</span> Functions to load files</h2>
+<p>Blah blah blah</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>If you do not have the most recent versions of R (3.3.2, a.k.a. <em>Sincere Pumpkin Patch</em>) and RStudio (1.0.136), then please check out the directions in <a href="section00.html">Section 0</a>.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>CRAN stands for [the] Comprehensive R Archive Network<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Windows users beware: when you copy the path from File Explorer, the slashes between folders may be in the wrong direction for R: you will need to either change the direction (from <code>\</code> to <code>/</code>) or double them (from <code>/</code> to <code>//</code>).<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
 
 <!-- <?php include_once("analyticstracking.php") ?> -->
 

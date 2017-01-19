@@ -25,6 +25,7 @@ I've compiled a pretty large set of [resources for R](resources.html). You proba
 
 ## Basic suggestions
 
+0. Nearly everything you do should be in an R script, as opposed to the command line. You will want to return to your code at some point, an R script makes this possible (plus you have to turn in your R script with your assignments).
 1. Comment your code.
 2. Be consistent with your coding conventions (especially naming).
 3. Be smart when naming files, folders, _etc._.
