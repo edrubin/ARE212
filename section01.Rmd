@@ -12,7 +12,7 @@ output:
 # What you will need
 
 1. Working and up-to-date installations of R and RStudio
-2. Data files "auto.csv" and "auto.dta". Download them from [my GitHub repo for section 1 of this course](https://github.com/edrubin/ARE212/tree/master/Section01).^[The url for this section is https://github.com/edrubin/ARE212/tree/master/Section01]
+2. Data files "auto.csv" and "auto.dta". Download a zipped folder [here](Section01.zip).
 3. An internet connection
 4. _Optional:_ A healthy source of caffeine
 
