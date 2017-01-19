@@ -9,9 +9,16 @@ output:
       smooth_scroll: true
 ---
 
+# What you will need
+
+1. Working and up-to-date installations of R and RStudio
+2. Data files "auto.csv" and "auto.dta". Download them from [my GitHub repo for section 1 of this course](https://github.com/edrubin/ARE212/tree/master/Section01).^[The url for this section is https://github.com/edrubin/ARE212/tree/master/Section01]
+3. An internet connection
+4. _Optional:_ A healthy source of caffeine
+
 # Summary
 
-In this section...
+In this section we will dive into R. We start by installing and loading three useful packages (`dplyr`, `haven`, and `readr`). We then load two datasets and begin summarizing and manipulating them. Finally, we'll make our first plots.
 
 # Packages in R
 
@@ -33,7 +40,7 @@ install.packages(c("haven", "readr"))
 A few things to notice here:
 
 1. The name of the function `install.packages()` is plural regardless of the number of packages.
-2. Each package's name is surrounded by quotes (_e.g._ `"haven"`). These quotation marks are how R knows the difference between characters/strings and objects (object hold values). R generally does not care whether you use single quote (`''`) or double quotes (`""`), but you should be consistent.
+2. Each package's name is surrounded by quotes (_e.g._ `"haven"`). These quotation marks are how R knows the difference between characters/strings and objects (objects hold values). R generally does not care whether you use single quote (`''`) or double quotes (`""`), but you should be consistent.
 3. We can create a vector of packages using the combine function `c()`. Example: `c(1, 2, 3)` is a three-element vector whose elements are `1`, `2`, and `3`. Similarly, `c("haven", "readr")` is a two-element vector whose elements are the `"haven"` and `"readr"`. Vectors are a big deal in R.
 4. The hashtag (`#`) is the symbol that creates comments in R.
 
@@ -41,7 +48,7 @@ A few things to notice here:
 
 To check that the installations were successful, we will load the packages that we installed above.
 
-R uses the `library()` function to load a package (we give the name of the package as the argument to the function).
+R uses the `library()` function to load a package (we give the name of the package as the argument to the function).^[You can also access functions within a package without loading the whole package. Let's say we want to load the `happy()` function from the `fake` package without loading the whole `fake` package. Just type `fake::happy()`. The double colon `::` is the key here. (_Note:_ Not all functions from a package can be accessed this way.) This method also works well when packages overlap in the names that they use for functions.]
 
 ```{r}
 library(dplyr)
@@ -57,7 +64,7 @@ Loading a dataset in R requires three things:
 
 1. The path of the data file (where the data exist on your computer)
 2. The name of the data file
-3. The proper function for the type of dataset (_e.g._ different function for .csv and .dta files)
+3. The proper function for the type of dataset (_e.g._ we use different functions for .csv and .dta files)
 
 ## File paths
 
@@ -86,7 +93,7 @@ dir_class <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/"
 dir_section1 <- paste0(dir_class, "Section01/")
 ```
 
-Notice the use of the `paste0()` function here: we pasting together the value of the object `dir_class` and the string `"Section01"`. The function `paste0()` by default pastes without any spaces in between the objects, while the function `paste()` defaults to including a single space (you can feed the functions additional parameters to change these behaviors).
+Notice the use of the `paste0()` function here: we paste together the value of the object `dir_class` and the string `"Section01"`. The function `paste0()`, by default, pastes without any spaces in between the objects. The function `paste()` defaults to including a single space (you can feed the functions additional parameters to change these behaviors).
 
 As a quick example:
 ```{r}
@@ -330,6 +337,39 @@ plot(
 ```
 
 Note: I really like clearly defining the arguments of functions. And I recommend it. I find it helps keep things straight, as order matters when you are not naming each argument.
+
+# Indexing
+
+Nearly everything in R is numerically indexed. For instance, when we create a vector of numbers, as we did earlier, each element of the vector gets a numerical index (1, 2, 3, ...). You can generally access the individual elements of objects using these indexes and square brackets behind the name of the object (_e.g._ `test[2]` grabs that second element of the object `test`).
+
+```{r}
+# Create a vector
+x <- c(3, 5, 7, 9)
+# Grab the second element of x
+x[2]
+# Grab the second and third elements of x
+x[c(2, 3)]
+# Grab the second and third elements of x
+x[2:3]
+# See what 2:3 does
+2:3
+```
+
+This indexing works with data objects, as well. We just have one more dimension to consider—we have rows and columns. Rows before columns, _i.e._, `[row, column]` (but we don't actually use the words).
+
+To grab the first row of `car_sub`, we put a 1 for the row index and leave the column blank.
+
+```{r}
+car_sub[1,]
+```
+
+To grab the first column of `car_sub`, we
+
+```{r}
+car_sub[,1]
+```
+
+We'll do a lot more of this indexing stuff in the future.
 
 # Linear algebra puzzles
 
