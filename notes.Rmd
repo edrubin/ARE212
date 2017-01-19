@@ -14,7 +14,7 @@ pdf/zip
 
 #### [__Section 1__](section01.html): Getting started with R
 
-Learning the basics of R: installing and loading packages; loading various data types; basic computation.
+Learning the basics of R: installing and loading packages; loading various data types (`haven` and `readr`); basic data summarization and manipulation (introduction to `dplyr`).
 
 pdf/zip
 <br><br>
