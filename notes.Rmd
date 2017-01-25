@@ -16,5 +16,12 @@ Install R, RStudio, and other relevant programs; resources for R; general sugges
 
 Learning the basics of R: installing and loading packages; loading various data types (`haven` and `readr`); basic data summarization and manipulation (introduction to `dplyr`).
 
-[pdf](Section01/section01.pdf)/[R script](Section01/section01.R)/[zip](Section01.zip)
+[pdf](Section01/section01.pdf) | [R script](Section01/section01.R) | [zip](Section01.zip)
+<br><br>
+
+#### [__Section 2__](section02.html): Matrix madness
+
+Vectors, matrices, lists, and general mathematical uses of R.
+
+[pdf](Section02/section02.pdf) | R script | zip
 <br><br>

@@ -16,6 +16,7 @@ R is a very popular language, and there are lots of introductory (or advanced) g
 
 - [RStudio tutorial](http://web.cs.ucla.edu/~gulzar/rstudio/basic-tutorial.html)
 - [CRAN's A (very) short introduction to R](https://cran.r-project.org/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf)
+- [Dan Nguyen's shortlist of R resources](http://blog.danwin.com/best-and-free-r-language-resources)
 - [CRAN's introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
 - [OnePageR](http://togaware.com/onepager/)
 - [The R Guide](https://cran.r-project.org/doc/contrib/Owen-TheRGuide.pdf)

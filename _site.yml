@@ -12,6 +12,8 @@ navbar:
           href: section00.html
         - text: "Section 1"
           href: section01.html
+        - text: "Section 2"
+          href: section02.html
     - text: "Course Info"
       href: courseInfo.html
     - text: "Syllabi"
