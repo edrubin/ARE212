@@ -43,7 +43,7 @@ As we discussed previously, when you load or create data in R, you create object
 
 1. __vectors__
 2. __matrices__
-3. data frames (or similar objects, like last lectures `tibble`)
+3. data frames (or similar objects, like last lecture's `tibble`)
 4. lists
 
 Each of these objects are simply ways of storing data. They can take numbers or characters. And you can generally change the type of an object fairly easily. Plus, they all follow similar indexing rules, which is quite nice.
