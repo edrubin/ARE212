@@ -408,8 +408,16 @@ div.tocify {
 <h2>Loading packages</h2>
 <p>To check that the installations were successful, we will load the packages that we installed above.</p>
 <p>R uses the <code>library()</code> function to load a package (we give the name of the package as the argument to the function).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(haven)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(haven)
 <span class="kw">library</span>(readr)</code></pre></div>
 <p>Notice that we did not need to call the packages with quotations around their names (though it would still work).</p>
 </div>
@@ -469,9 +477,9 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 ## [19] &quot;section01_files&quot;       &quot;section01.html&quot;       
 ## [21] &quot;section01.Rmd&quot;         &quot;Section01.zip&quot;        
 ## [23] &quot;Section02&quot;             &quot;section02.html&quot;       
-## [25] &quot;section02.Rmd&quot;         &quot;site_libs&quot;            
-## [27] &quot;syllabi.html&quot;          &quot;syllabi.Rmd&quot;          
-## [29] &quot;syllabusARE212.pdf&quot;</code></pre>
+## [25] &quot;section02.Rmd&quot;         &quot;Section02.zip&quot;        
+## [27] &quot;site_libs&quot;             &quot;syllabi.html&quot;         
+## [29] &quot;syllabi.Rmd&quot;           &quot;syllabusARE212.pdf&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my section 1 folder (dir_section1 stores the path)</span>
 <span class="kw">dir</span>(dir_section1)</code></pre></div>
 <pre><code>## [1] &quot;auto.csv&quot;      &quot;auto.dta&quot;      &quot;README.md&quot;     &quot;section01.pdf&quot;

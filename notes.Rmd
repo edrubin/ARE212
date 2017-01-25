@@ -21,7 +21,7 @@ Learning the basics of R: installing and loading packages; loading various data 
 
 #### [__Section 2__](section02.html): Matrix madness
 
-Vectors, matrices, lists, and general mathematical uses of R.
+Vectors, matrices, and general mathematical usage of R.
 
-[pdf](Section02/section02.pdf) | R script | zip
+[pdf](Section02/section02.pdf) | [R script](Section02/section02.R) | [zip](Section02.zip)
 <br><br>
