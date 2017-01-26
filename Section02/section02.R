@@ -46,6 +46,8 @@ vec23
 
 # The class function
 class(vec23)
+# The is.vector function
+is.vector(vec23)
 # The dimension function
 dim(vec23)
 # The length function
@@ -60,6 +62,10 @@ vec23[7]
 str_vec <- c("Aren't", "vectors", "exciting", "?")
 # Print it
 str_vec
+# Check its class
+class(str_vec)
+# Check if it is a vector
+is.vector(str_vec)
 # Grab the third element
 str_vec[3]
 

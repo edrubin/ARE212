@@ -415,7 +415,7 @@ div.tocify {
 <li>data frames (or similar objects, like last lecture’s <code>tibble</code>)</li>
 <li>lists</li>
 </ol>
-<p>Each of these objects are simply ways of storing data. They can take numbers or characters. And you can generally change the type of an object fairly easily. Plus, they all follow similar indexing rules, which is quite nice.</p>
+<p>Each of these object types is a different way to store data. Each can take numbers or characters. And you can generally change the type of an object fairly easily. Plus, they all follow similar indexing rules, which is quite nice.</p>
 <p>While these object types have much in common, they each act slightly differently, so it is important to keep track of your object types. Luckily, R provides us with the <code>class()</code> function, as well as <code>dim()</code> and <code>length()</code>, which both help us figure out the type of data object we have.</p>
 <p>First, check the class of a number</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(<span class="dv">2</span>)</code></pre></div>
@@ -471,6 +471,9 @@ vec23</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The class function</span>
 <span class="kw">class</span>(vec23)</code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The is.vector function</span>
+<span class="kw">is.vector</span>(vec23)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The dimension function</span>
 <span class="kw">dim</span>(vec23)</code></pre></div>
 <pre><code>## NULL</code></pre>
@@ -489,6 +492,12 @@ str_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st"
 <span class="co"># Print it</span>
 str_vec</code></pre></div>
 <pre><code>## [1] &quot;Aren&#39;t&quot;   &quot;vectors&quot;  &quot;exciting&quot; &quot;?&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check its class</span>
+<span class="kw">class</span>(str_vec)</code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check if it is a vector</span>
+<span class="kw">is.vector</span>(str_vec)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Grab the third element</span>
 str_vec[<span class="dv">3</span>]</code></pre></div>
 <pre><code>## [1] &quot;exciting&quot;</code></pre>
@@ -742,7 +751,7 @@ C %*%<span class="st"> </span><span class="kw">solve</span>(C)</code></pre></div
 <li id="fn3"><p>You can also use the <code>identical()</code> function, which is probably more appropriate, but beware: it is <em>very</em> picky. For instance, try <code>as.integer(1) == as.numeric(1)</code> and <code>all.equal(as.integer(1), as.numeric(1))</code> compare the results to <code>identical(as.integer(1), as.numeric(1))</code>. Picky! Might not always get you what you want.<a href="#fnref3">↩</a></p></li>
 <li id="fn4"><p>Most object types/classes have an associated function like the <code>is.vector()</code> function. For example, <code>is.numeric()</code>, <code>is.integer()</code>, <code>is.character()</code>, <code>is.matrix()</code>, and <code>is.data.frame()</code>, to name a few.<a href="#fnref4">↩</a></p></li>
 <li id="fn5"><p>Recall that we use quotation marks to create string/character vectors.<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>Alternatively, you can use <code>nrow</code> and omit <code>ncol</code>.<a href="#fnref6">↩</a></p></li>
+<li id="fn6"><p>Alternatively, you can use <code>nrow</code> and omit <code>ncol</code>. Or use both.<a href="#fnref6">↩</a></p></li>
 </ol>
 </div>
 

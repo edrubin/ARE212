@@ -46,7 +46,7 @@ As we discussed previously, when you load or create data in R, you create object
 3. data frames (or similar objects, like last lecture's `tibble`)
 4. lists
 
-Each of these objects are simply ways of storing data. They can take numbers or characters. And you can generally change the type of an object fairly easily. Plus, they all follow similar indexing rules, which is quite nice.
+Each of these object types is a different way to store data. Each can take numbers or characters. And you can generally change the type of an object fairly easily. Plus, they all follow similar indexing rules, which is quite nice.
 
 While these object types have much in common, they each act slightly differently, so it is important to keep track of your object types. Luckily, R provides us with the `class()` function, as well as `dim()` and `length()`, which both help us figure out the type of data object we have.
 
@@ -109,6 +109,8 @@ Recall that vectors are one-dimensional. Let's explore our vector a bit using th
 ```{r}
 # The class function
 class(vec23)
+# The is.vector function
+is.vector(vec23)
 # The dimension function
 dim(vec23)
 # The length function
@@ -127,6 +129,10 @@ Finally, we can also create vectors of characters.^[Recall that we use quotation
 str_vec <- c("Aren't", "vectors", "exciting", "?")
 # Print it
 str_vec
+# Check its class
+class(str_vec)
+# Check if it is a vector
+is.vector(str_vec)
 # Grab the third element
 str_vec[3]
 ```
@@ -150,7 +156,7 @@ It's matrix time.
 R's matrix function is aptly named `matrix()`. The matrix function requires two arguments:
 
 1. `data`: the _stuff_ inside the matrix
-2. `ncol`: the number of columns^[Alternatively, you can use `nrow` and omit `ncol`.]
+2. `ncol`: the number of columns^[Alternatively, you can use `nrow` and omit `ncol`. Or use both.]
 
 To learn more about the matrix function, type `?matrix` in your console (or in the "Help" tab of RStudio). This help searching works for all loaded functions. If you do not find what you are looking for, try using two question marks, `??matrix`, which will perform a fuzzy search for the word.
 
