@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>LaTeX and Knitr</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">LaTeX and Knitr</h1>
+
+</div>
+
+
+<p><br></p>
+<div id="description" class="section level1">
+<h1>Description</h1>
+<p>My goal here is to get you up and running with LaTeX and <code>knitr</code>. Because <em>up and running</em> is my goal, there are many topics related to LaTeX and <code>knitr</code> (especially LaTeX) that I do not cover here—for instance: tables and figures. However, I think this guide should get you pretty well along your track. If you run into issues, try the resources I’ve provided, try Google, and don’t be afraid to ask questions. Also, let me know if you think there is something that definitely should be added to these notes.</p>
+</div>
+<div id="installation" class="section level1">
+<h1>Installation</h1>
+<div id="latex" class="section level2">
+<h2>LaTeX</h2>
+<p>The very first thing you need to do is <a href="https://www.latex-project.org/get/">download a LaTeX distribution</a> for your operating system:</p>
+<ul>
+<li>The standard distribution for Macs (OSX) is MacTex.</li>
+<li>Windows users can choose between MiKTeX or TeX Live (or proTeXt). I don’t think it really matters which one you choose. I used MiKTeX in the past and was quite happy.</li>
+<li>Linux users probably already know what they are doing.</li>
+</ul>
+<p><strong>Note:</strong> There are several solid online services available, but please install a LaTeX distribution on your machine.</p>
+<p><strong>Another note:</strong> You might be tempted by the simplicity of the LyX world. Try to resist the temptation. LyX is a nice program, but you will inevitably want more customization than it offers, and then you will regret you didn’t spend some time learning LaTeX. Give yourself some credit and go big.</p>
+</div>
+<div id="knitr" class="section level2">
+<h2><code>knitr</code></h2>
+<p>Next, head back over to RStudio and install the <code>knitr</code> package.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+</div>
+<div id="knitr-in-rstudio" class="section level2">
+<h2><code>knitr</code> in RStudio</h2>
+<p>Now we will tell RStudio to use <code>knitr</code> to build PDF documents. Open the settings in RStudio (Menu bar » Tools » Global Options<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>). Go to the “Sweave” tab.</p>
+<ol style="list-style-type: decimal">
+<li>Set the option “Weave Rnw files using” to “knitr”.</li>
+<li>Uncheck the box next to “Always enable Rnw concordance…”.</li>
+</ol>
+</div>
+</div>
+<div id="getting-started-with-latex" class="section level1">
+<h1>Getting started with LaTeX</h1>
+<div id="pronunciation" class="section level2">
+<h2>Pronunciation</h2>
+<p>First things first: how do you pronounce <em>LaTeX</em>? According to the <a href="https://www.latex-project.org/about/">LaTeX project website</a> and to the founders of <a href="https://tex.stackexchange.com/questions/17502/what-is-the-correct-pronunciation-of-tex-and-latex">LaTeX</a>, there are two “preferred” pronunciations: «lah-tech» or «lay-tech».</p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>I’m going to walk you through a few LaTeX examples, but there is <strong>a lot</strong> more out there. Besides your normal resources (Google + StackExchange/Overflow), here are a few handy resources:</p>
+<ul>
+<li><a href="https://www.sharelatex.com/learn/">ShareLaTeX</a> has a great resources section. A great place to start learning LaTeX or refresh on LaTeX specifics.</li>
+<li><a href="https://en.wikibooks.org/wiki/LaTeX">A LaTeX wiki book</a> with some helpful sections. Not always the easiest place to find what you want, but still a nice compilation of information.</li>
+<li><a href="https://www.latex-project.org/help/links/">The LaTeX Project</a> has links to other resources. The LaTeX Project also has a <a href="https://www.latex-project.org/about/">brief introduction to LaTeX</a>.</li>
+</ul>
+</div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>LaTeX is essentially two things:</p>
+<ol style="list-style-type: decimal">
+<li>a mark-up language that allows you to specify the formatting you desire;</li>
+<li>an engine that typesets a .tex document and creates a (beautiful) .pdf.</li>
+</ol>
+<p>It is particularly good for creating large documents with tables and figures—three things with which other word processors often struggle.</p>
+<p>To create a PDF from your .tex document, you need to open the .tex file in a program that can compile. When you installed LaTeX, it probably installed a program to edit and compile (<em>e.g.</em>, Gummi, TeXShop, Texmaker, TeXstudio, or TeXworks).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> Or… use RStudio!</p>
+</div>
+<div id="bare-bones-example" class="section level2">
+<h2>Bare bones example</h2>
+<p>Assuming you have properly installed LaTeX and an editor/compiler (again, you can use RStudio), you can now create your first LaTeX document.</p>
+<p>A LaTeX document needs <em>at least</em> the following three lines of text:</p>
+<pre class="asis"><code>\documentclass{article}
+\begin{document}
+\end{document}</code></pre>
+<p>However, these three lines of text will produce an empty document, so don’t try to compile just yet.</p>
+<p>The first line (<code>\documentclass{article}</code>) tells LaTeX which type of document you want to create (similar to selecting templates in Word). For class, papers, and publications, you will generally use <code>article</code>. Other options include <code>report</code>, <code>book</code>, <code>letter</code>, and <code>beamer</code>. The <code>beamer</code> option creates the slides you often see in seminars. There are many other options you can change by including them in square brackets before the curly brackets, <em>i.e.</em></p>
+<pre class="asis"><code>\documentclass[option1, option2, ...]{article}</code></pre>
+<p>Among these options are the language and the default font size (the default is 10pt).</p>
+<pre class="asis"><code>\documentclass[english, 12pt]{article}</code></pre>
+<p>Everything between the <code>\documentclass</code> declaration and the beginning of the document (<code>\begin{document}</code>) is known as the <em>preamble</em>—it is where you load packages, change options/settings, <em>etc.</em> You write your text (paragraphs, equations, figures, tables) in between the calls of <code>\begin{document}</code> and <code>\end{document}</code> (in the document).</p>
+<p>Let’s use a package called <code>inputenc</code>. We need to load the package, similar to the way we load a package in R. It’s pretty standard to use <code>\usepackage[utf8]{inputenc}</code> for the document’s encoding, so we will insert this line of code into our preamble.</p>
+<pre class="asis"><code>\documentclass{article}
+\usepackage[utf8]{inputenc}
+\begin{document}
+\end{document}</code></pre>
+<p>Finally, we should probably have some text in our document.</p>
+<pre class="asis"><code>\documentclass{article}
+\usepackage[utf8]{inputenc}
+\begin{document}
+What a beautiful PDF.
+\end{document}</code></pre>
+<p>Now, let’s finally compile the document.</p>
+<ol style="list-style-type: decimal">
+<li>Open a new R script in RStudio (ctrl/cmd+shift+N).</li>
+<li>Paste the 5 lines of code from the block above into your new R script.</li>
+<li>Save the script (ctrl/cmd+s) with these five lines of code as a .tex document (<em>e.g.</em> example.tex). RStudio will probably ask if you really want to use “.tex” rather than “.R”. You do: say yes.</li>
+<li>In the toolbar above your .tex file, you should see the words “Compile PDF”. You can also use the menu via “File » Compile PDF” or the keyboard shortcut ctrl/cmd+shift+K.</li>
+</ol>
+<p>You should now have a stunning PDF.</p>
+</div>
+</div>
+<div id="latex-basics" class="section level1">
+<h1>LaTeX basics</h1>
+<p>You will probably want a little more out of LaTeX than we have done so far.</p>
+<div id="title-author-date" class="section level2">
+<h2>Title, author, date</h2>
+<p>You add the title, author(s), and date to a LaTeX document inside of the preamble (think of them as settings for the whole document) and then tell LaTeX to print them inside the document with the <code>\maketitle</code> command (see below). LaTeX provides functions for each of these items, so we can insert them straight into our preamble:</p>
+<pre class="asis"><code>\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+
+\title{My beautiful PDF document}
+\author{Ed Rubin}
+\date{February 2017}
+
+\begin{document}
+
+\maketitle
+
+What a beautiful PDF.
+
+\end{document}</code></pre>
+<p>Update your .tex document and compile again. What happens when you leave <code>date{}</code> empty?<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> What if you leave <code>\date{}</code> off completely?<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>Let’s pretend our beautiful document is supposed to have a title page. Easy:</p>
+<pre class="asis"><code>\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+
+\title{My beautiful PDF document}
+\author{Ed Rubin}
+\date{February 2017}
+
+\begin{document}
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+What a beautiful PDF.
+
+\end{document}</code></pre>
+<p>As you are likely beginning to see, there are many commands in the LaTeX <em>language</em> that make use of this <code>\begin{command}</code> and <code>\end{command}</code> convention.</p>
+</div>
+<div id="text" class="section level2">
+<h2>Text</h2>
+<p>While writing, within the document you have access to a bunch of options for text.</p>
+<ul>
+<li><code>\textbf{blah}</code> will print the word “blah” as <strong>bold</strong> text.</li>
+<li><code>\textit{bleh}</code> will print the word “bleh” as <em>italic</em> text.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></li>
+<li><code>\underline{blih}</code> will print the word “blih” underlined.</li>
+<li>For quotations, you need to use double backticks (<code>``</code>) at the start and double quotations marks at the end of the quote (<code>''</code>). Example: <code>``This is a quote.''</code> It is a little annoying—especially when you copy and paste from another source—but if you don’t do it, your qutoation marks will be backwards half of the time.</li>
+<li>Skipping a line between lines of text will start a new paragraph. The command <code>\par</code> will also start a new paragraph.</li>
+<li>The characters <code>\\</code> will start a new line but <strong>not</strong> a new paragraph (no indentation).</li>
+<li>If you start a new line of text (in your editor) without <code>\\</code> or without <code>\par</code>, LaTeX will ignore the new line and keep the text going where the last line ended.</li>
+<li>You can tell an individual paragraph not to indent by using the <code>\noindent</code> command at the beginning of the paragraph. You can tell LaTeX to never indent paragraphs by placing the command <code>\setlength\parindent{0pt}</code> into the preamble.</li>
+<li><p>To change the line spacing (the default is single spacing), you can use the <code>setspace</code> package and its functions <code>\singlespacing</code>, <code>\one­half­s­pac­ing</code>, or <code>\doublespacing</code>, <em>e.g.</em> add the following lines to your preamble:</p>
+<pre class="asis"><code>\usepackage{setspace}
+\onehalfspacing</code></pre></li>
+</ul>
+</div>
+<div id="headings" class="section level2">
+<h2>Headings</h2>
+<p>To create headings, use the built-it commands:</p>
+<ul>
+<li><code>\section{}</code>, <code>\subsection{}</code>, <code>\subsubsection{}</code>, <code>\paragraph{}</code>, <code>\subparagraph{}</code></li>
+<li>Put text in the curly brackets so your headings have text.</li>
+<li>Add an asterisk (<code>*</code>) before the first curly bracket to preven LaTeX from numbering the section, <em>e.g.</em> <code>\section{Introduction}</code> will have a number, while <code>section*{Introduction}</code> will not have a number.</li>
+</ul>
+</div>
+<div id="lists" class="section level2">
+<h2>Lists</h2>
+<p>LaTeX provides a pretty straightforward way to make lists—numbered or unnumbered. For numbered lists, the command is <code>enumerate</code>. You combine it with <code>\begin{enumerate}</code> and <code>\end{enumerate}</code>, and in between, you use <code>\item</code> to create the individual text entries in your list.</p>
+<pre class="asis"><code>\begin{enumerate}
+  \item Raspberry
+  \item Cherry
+  \item Kiwi
+  \item Apple
+\end{enumerate}</code></pre>
+<p>Unnumbered lists work in exactly the same way, except they use the command <code>itemize</code> rather than <code>enumerate</code>.</p>
+<pre class="asis"><code>\begin{itemize}
+  \item Raspberry
+  \item Cherry
+  \item Kiwi
+  \item Apple
+\end{itemize}</code></pre>
+<p>Let’s put everything we have learned so far together in our .tex document.</p>
+<pre class="asis"><code>\documentclass[english, 11pt]{article}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{setspace}
+\onehalfspacing
+
+\title{My beautiful PDF document}
+\author{Ed Rubin}
+\date{February 2017}
+
+\begin{document}
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+\noindent What a beautiful PDF!
+
+\section{Paragraphs, text, and lists}
+
+\subsection{Paragraphs}
+
+\textit{An excerpt from \underline{The War of the Worlds} (Book I), by H. G. Wells}
+
+For the main road was a boiling stream of people, a torrent of human beings rushing
+northward, one pressing on another. A great bank of dust, white and luminous in the
+blaze of the sun, made everything within twenty feet of the ground grey and
+indistinct and was perpetually renewed by the hurrying feet of a dense crowd of
+horses and of men and women on foot, and by the wheels of vehicles of every description.
+
+``Way!&#39;&#39; my brother heard voices crying. ``Make way!&#39;&#39;
+
+It was like riding into the smoke of a fire to approach the meeting point of the lane
+and road; the crowd roared like a fire, and the dust was hot and pungent. And, indeed,
+a little way up the road a villa was burning and sending rolling masses of black smoke
+across the road to add to the confusion.
+
+\subsection{Lists}
+
+Let&#39;s make a list!
+
+\subsubsection*{An unnumbered list of random things}
+
+\begin{itemize}
+  \item Econometrics
+  \item Pastrami
+  \item Garden gnomes
+  \item Redwoods
+\end{itemize}
+
+\subsubsection*{A numbered list}
+
+\noindent The hierarchy of fruit deliciousness
+
+\begin{itemize}
+  \item Raspberry
+  \item Cherry
+  \item Kiwi
+  \item \ldots
+  \item Apple
+\end{itemize}
+
+\textbf{Note:} This hierarchy does not pertain to pies.
+
+\end{document}</code></pre>
+</div>
+<div id="math" class="section level2">
+<h2>Math</h2>
+<p>LaTeX does math really well. However, there is some amount of learning required up front. For instance, if you want to see <span class="math inline">\(\widehat{\beta} = \left(\mathbf{X}&#39;\mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{y}\)</span>, then you need to type</p>
+<pre class="asis"><code>$\widehat{\beta} = \left(\mathbf{X}&#39;\mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{y}$</code></pre>
+<p><a href="https://www.sharelatex.com/learn/Mathematical_expressions">ShareLaTeX has great resources</a> on mathematical expressions in LaTeX, so I am going to cover the basics here and leave the rest to them.</p>
+<p>There are two main ways (modes) in which you will want use mathematical expressions in LaTeX: inline (in sentence or paragraph) and display mode (the math gets its own line). The two modes use the same code/language to generate the mathematical expressions; the main difference is how you introduce expression to LaTeX in your document.</p>
+<p>For instance, if you write <code>$y = 2^\alpha + \beta \mathbf{x}$</code>, LaTeX will display the equation <strong>inline</strong>. It will then show up in a sentence like:</p>
+<p>My favorite formula today is <span class="math inline">\(y = 2^\alpha + \beta \mathbf{x}\)</span>.</p>
+<p>If we change the dollar signs to brackets with backslashes (<em>e.g.</em> change <code>$</code> and <code>$</code> to <code>\[</code> and <code>\]</code>), yielding <code>\[y = 2^\alpha + \beta \mathbf{x}\]</code>, then LaTeX uses display mode:</p>
+<p>My favorite formula today is <span class="math display">\[y = 2^\alpha + \beta \mathbf{x}\]</span></p>
+</div>
+</div>
+<div id="knitr-1" class="section level1">
+<h1><code>knitr</code></h1>
+<p>Finally. Let’s talk about <code>knitr</code>.</p>
+<div id="description-1" class="section level2">
+<h2>Description</h2>
+<p>As you have already seen, <code>knitr</code> is a package in R. Specifically, <code>knitr</code> provides a way to create dynamic and reproducible documents that combine the typesetting aesthetics of LaTeX with the computing resources of R. LaTeX is great at producing documents but not great for statistical computations. R, without <code>knitr</code>, is great at statistics but struggles to create a report. <code>knitr</code> gives us a link between the two programs that builds beautiful PDFs whose graphs, tables, and general results dynamically update using R.</p>
+<p>Because <code>knitr</code> builds upon LaTeX, everything you know and use in LaTeX carries over to <code>knitr</code>—<code>knitr</code> just adds a few new items.</p>
+</div>
+<div id="first-steps" class="section level2">
+<h2>First steps</h2>
+<p>If you were able to compile the .tex files above, you should be set up for <code>knitr</code>.</p>
+<p>Let’s start a new document in RStudio (new R script—ctrl/cmd+shift+N).</p>
+<p>Add the standard LaTeX preamble, document setup, and some filler text:</p>
+<pre class="asis"><code>\documentclass[english, 11pt]{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+Clever text.
+
+\end{document}</code></pre>
+<p>Now save the document. Instead of saving this file as a “.tex”, we are now going to save it as “.Rnw” (<em>e.g.</em> example.Rnw).<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> Your average LaTeX editor/compiler will not be able to work with .Rnw files, but RStudio loves them<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>.</p>
+</div>
+<div id="latex-meets-knitr" class="section level2">
+<h2>LaTeX meets <code>knitr</code></h2>
+<p>As I said above, you can integrate everything you know about LaTeX into <code>knitr</code>—mathematical expressions, text formatting, whatever.</p>
+<p>Compile the following set of text in your current .Rnw document just to check that LaTeX and <code>knitr</code> play nicely.</p>
+<pre class="asis"><code>\documentclass[english, 11pt]{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\noindent Clever text.
+
+\section{Some math}
+In this section, we will write some Greek letters with impressive subscripts.
+For instance, check out $\alpha_{i,j,k,\ell}$ and $\beta_{p,q,r,s,t,u,v,w}$.
+Or, perhaps you prefer
+\[
+  \gamma_{12345} + \pi_0
+\]
+
+\end{document}</code></pre>
+<p>Okay, so you see that you can write whatever you like in LaTeX and <code>knitr</code> will comply/compile. Let’s see what <code>knitr</code> actually brings.</p>
+</div>
+<div id="chunks" class="section level2">
+<h2>Chunks</h2>
+<p>One big change in <code>knitr</code>, relative to LaTeX, is the <em>chunk</em> (their choice of words—not mine). You put R code into a chunk, and R will evaluate the code.</p>
+<p>A chunk in <code>knitr</code> starts with the characters <code>&lt;&lt;&gt;&gt;=</code> on the top line and ends with an ampersat (<code>@</code>) on the last line, for instance,</p>
+<pre class="asis"><code>&lt;&lt;&gt;&gt;=
+# Let&#39;s add 2 and 2
+2 + 2
+@</code></pre>
+<p>Add the chunk above to your .Rnw file so that it now looks like</p>
+<pre class="asis"><code>\documentclass[english, 11pt]{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\noindent Clever text.
+
+&lt;&lt;&gt;&gt;=
+# Let&#39;s add 2 and 2
+2 + 2
+@
+
+\end{document}</code></pre>
+<p>and compile the PDF. You should now see the R code (and its comment) followed by the result of the R code (the number 4).</p>
+<p>This simple example should give you a sense of what <code>knitr</code> can do: you can integrate your R code straight into your papers, assignments, diary entries, <em>etc.</em></p>
+</div>
+<div id="chunk-options" class="section level2">
+<h2>Chunk options</h2>
+<p>Inside of the <code>&lt;&lt;&gt;&gt;=</code>, you can specify options for the chunk. We will cover a few of the options now, and <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">this reference guide</a> published by the ever-helpful folks at RStudio (pages 2–3) provides more information on the many options available for your chunks.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
+<p>The chunk options that I use most often (and coincidentally, the chunk options we will cover below) are:</p>
+<ul>
+<li><code>engine</code></li>
+<li><code>eval</code></li>
+<li><code>include</code></li>
+<li><code>echo</code></li>
+</ul>
+<div id="the-engine-chunk-option" class="section level3">
+<h3>The <code>engine</code> chunk option</h3>
+<p>I’m only covering this option because you will often see people write chunks that start with <code>&lt;&lt;R&gt;&gt;=</code>. The <code>R</code> here denotes the <em>engine</em> (language), since you can use <code>knitr</code> for many programming/scripting languages. We will stick with <code>R</code> in our class. The following three chunks are equivalent because <code>knitr</code> defaults to the R engine.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&lt;<span class="er">&lt;&gt;&gt;=</span>
+<span class="dv">2</span> +<span class="st"> </span><span class="dv">2</span>
+@</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&lt;<span class="er">&lt;</span>R&gt;<span class="er">&gt;=</span>
+<span class="dv">2</span> +<span class="st"> </span><span class="dv">2</span>
+@</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&lt;<span class="er">&lt;</span>engine =<span class="st"> </span>R&gt;<span class="er">&gt;=</span>
+<span class="dv">2</span> +<span class="st"> </span><span class="dv">2</span>
+@</code></pre></div>
+</div>
+<div id="a-quick-aside" class="section level3">
+<h3>A quick aside</h3>
+<p>I going to start a new chunk of code that we will test with various chunk options. Here’s the chunk</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&lt;<span class="er">&lt;&gt;&gt;=</span>
+<span class="co"># Add two and two</span>
+<span class="dv">2</span> +<span class="st"> </span><span class="dv">2</span>
+<span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Generate two vectors of 100 N(0,1) random numbers</span>
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+<span class="co"># Create a plot of x and y</span>
+<span class="kw">plot</span>(x, y)
+@</code></pre></div>
+<p>which should produce the following output if you paste it into your .Rnw file and compile a PDF.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add two and two</span>
+<span class="dv">2</span> +<span class="st"> </span><span class="dv">2</span>
+## [1] 4
+<span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Generate two vectors of 100 N(0,1) random numbers</span>
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+<span class="co"># Create a plot of x and y</span>
+<span class="kw">plot</span>(x, y)</code></pre></div>
+<p><img src="latexKnitr_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="the-eval-chunk-option" class="section level3">
+<h3>The <code>eval</code> chunk option</h3>
+<p>Now let’s check out the <code>eval</code> chunk option. Like many chunk options, you either set <code>eval</code> to <code>TRUE</code> or <code>FALSE</code> (for fans of minimalism: you can get away with <code>T</code> or <code>F</code>).</p>
+<ul>
+<li><code>eval = TRUE</code> (the default) means R will evaluate the code in the chunk.</li>
+<li><code>eval = FALSE</code> means R will not run the code in the chunk (it will still display the code).</li>
+</ul>
+<p>The <code>eval = FALSE</code> option is a nice way to dispaly a lot of code without having to run it.</p>
+<p>Since <code>eval = TRUE</code> is the default, we have already seen what it does. Now let’s try <code>eval = FALSE</code> as an chunk option. Change the chunk’s option to <code>&lt;&lt;eval = FALSE&gt;&gt;=</code> so that the chunk now looks like</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&lt;<span class="er">&lt;</span>eval =<span class="st"> </span>T&gt;<span class="er">&gt;=</span>
+<span class="co"># Add two and two</span>
+<span class="dv">2</span> +<span class="st"> </span><span class="dv">2</span>
+<span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Generate two vectors of 100 N(0,1) random numbers</span>
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+<span class="co"># Create a plot of x and y</span>
+<span class="kw">plot</span>(x, y)
+@</code></pre></div>
+</div>
+<div id="the-include-chunk-option" class="section level3">
+<h3>The <code>include</code> chunk option</h3>
+<p>The <code>include</code> chunk option determines whether or not the chunk shows up in the final document.</p>
+<ul>
+<li><code>include = TRUE</code> (the default) means the chunk will show up in the final document (PDF in our case)</li>
+<li><code>include = FALSE</code> means the chunk will <strong>not</strong> show up in the final document</li>
+</ul>
+<p>Either way, R will evaluate the code in the chunk. The <code>include</code> option only determines what is <em>displayed</em>—not what is run (<code>eval</code> does that part).</p>
+<p>Change the chunk option to <code>&lt;&lt;include = FALSE&gt;&gt;=</code>. The chunk’s code and output should disappear from your screen.</p>
+<p><code>include</code> is helpful when you have a lot of intermediate steps that the reader does not need/want to see.</p>
+</div>
+<div id="the-echo-chunk-option" class="section level3">
+<h3>The <code>echo</code> chunk option</h3>
+<p>The <code>echo</code> chunk option tells <code>knitr</code> whether you would like the code displayed above the output.</p>
+<ul>
+<li><code>echo = TRUE</code> (the default) means the chunk’s code will appear above its output.</li>
+<li><code>echo = FALSE</code> means the chunk’s code will not appear above its output, <em>i.e.</em> you will only see the output.</li>
+</ul>
+<p>Try changing the code options in the chunk to <code>&lt;&lt;echo = FALSE&gt;&gt;=</code>. You should now only see the output without any preceding code, <em>i.e.</em>,</p>
+<pre><code>## [1] 4</code></pre>
+<p><img src="latexKnitr_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The <code>echo = FALSE</code> option is helpful for writing papers/reports, since most people generally only care about results and do not want to see huge blocks of code between graphics.</p>
+</div>
+</div>
+<div id="combining-options" class="section level2">
+<h2>Combining options</h2>
+<p>To combine multiple options, separate the options with a comma, <em>e.g.</em>,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&lt;<span class="er">&lt;</span>R, eval =<span class="st"> </span><span class="ot">TRUE</span>, echo =<span class="st"> </span><span class="ot">FALSE</span>&gt;<span class="er">&gt;=</span></code></pre></div>
+<p>This use is a unnecessary, since two of the options are defaults, but you get the point.</p>
+</div>
+<div id="naming-your-chunks" class="section level2">
+<h2>Naming your chunks</h2>
+<p>You can also name your chunks. In addition to strengthening your relationship with your chunks, naming them also helps you reference the figures and assists with troubleshooting. Place the chunk’s name before you call any other chunk options.</p>
+<p>You can also use the <code>fig.cap</code> option to place a caption below your figure. You need a non-empty argument to <code>fig.cap</code> in order for figure referencing to work.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&lt;<span class="er">&lt;</span>myLittleChunk, fig.cap =<span class="st"> &quot;Plotting x and y&quot;</span>, eval =<span class="st"> </span><span class="ot">TRUE</span>, echo =<span class="st"> </span><span class="ot">FALSE</span>&gt;<span class="er">&gt;=</span>
+<span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Generate two vectors of 100 N(0,1) random numbers</span>
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+<span class="co"># Create a plot of x and y</span>
+<span class="kw">plot</span>(x,y)
+@
+Notice that Figure~\ref{fig:myLittleChunk} displays the relationship between $x$<span class="st"> </span>and $y$.</code></pre></div>
+<p>I named my chunk <code>myLittleChunk</code> and gave the figure a caption <code>Plotting x and y</code>. After the chunk, I then referenced the figure using LaTeX’s referencing function <code>\ref{}</code> and the chunk’s name.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
+</div>
+<div id="inline-referencing" class="section level2">
+<h2>Inline referencing</h2>
+<p><code>knitr</code> has a pretty cool function called <code>\Sexpr{}</code>. So far everything we’ve done with <code>knitr</code> has been in a code chunk. <code>\Sexpr{}</code> lives outside of code chunks and allows you to access results/data in your text. This feature is useful (1) because code chunks break up the continuity of your document and (2) because you might want a simple number (<em>e.g.</em> the of households in your sample) that does not need a huge code block or a new paragraph.</p>
+<p>We already have two objects called <code>x</code> and <code>y</code> lurking in our computers’ memories. Did you know the means of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are appoximately 0.245 and 0.045, respectively? Do you know how I know the means? <code>\Sexpr{}</code> told me.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a></p>
+<p>To use <code>\Sexpr{}</code>, you simply include <code>\Sexpr{}</code> in your text and write your R code inside of <code>\Sexpr{}</code>’s curly brackets. R and <code>knitr</code> do the rest.</p>
+<p>For instance, to talk about the means of <code>x</code> and <code>y</code>, add the following line of code to your .Rnw file (somewhere below the chunk where we generate <code>x</code> and <code>y</code>) and recompile the PDF.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Throughout history, many people have wondered about the means of $x$<span class="st"> </span>and $y$.
+Today we can provide some answers. The mean of $x$<span class="st"> </span>is approximately
+\Sexpr{<span class="kw">round</span>(<span class="kw">mean</span>(x), <span class="dv">3</span>)}. The mean of $y$<span class="st"> </span>is approximately \Sexpr{<span class="kw">round</span>(<span class="kw">mean</span>(y), <span class="dv">3</span>)}.</code></pre></div>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>You have several options for managing your references and making bibliographies in LaTeX (<em>e.g.</em>, biber,<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> bibtex and biblatex). ShareLaTeX has a <a href="https://www.sharelatex.com/learn/Bibliography_management_in_LaTeX">very helpful discussion</a> of your options and how to use them.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><code>install.packages(&quot;knitr&quot;)</code><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>or command + comma (⌘+,) on a Mac<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>There are a lot of options. I really like <a href="https://atom.io">Atom</a>, but it requires more setting up. Three guides for setting up Atom with LaTeX: <a href="https://rolflekang.com/writing-latex-in-atom/">1</a>, <a href="http://economistry.com/2016/02/create-first-pdf-latex-atom-mac/">2</a>, <a href="(http://blog.matteomerola.me/2016/02/atom-for-latex)">3</a>.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Answer: There will be no date printed.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Answer: LaTeX prints today’s date.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Some people use the command <code>\emph{}</code> to get italics, which is not a great idea. Depending on the packages and document class, <code>\emph{}</code> can produce different styles (italic, bold, <em>etc.</em>).<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>In case you are wondering, the suffix “.Rnw” <a href="http://kbroman.org/knitr_knutshell/pages/latex.html">apparently</a> stands for “R noweb”<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>To the extent that a computer program can love anything<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>A very strange sentence.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>LaTeX also offers a function called <code>\pageref{}</code> that gives you the page number, rather than the figure number.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>100% transparency: I’m using Rmarkdown, which actually uses a different literal expression that <code>\Sexpr{}</code>. Same idea.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>Not Justin.<a href="#fnref12">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

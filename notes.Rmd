@@ -25,3 +25,10 @@ Vectors, matrices, and general mathematical usage of R.
 
 [pdf](Section02/section02.pdf) | [R script](Section02/section02.R) | [zip](Section02.zip)
 <br><br>
+
+#### [__Supplement 1__](latexKnitr.html): LaTeX and `knitr`
+
+Introductions to and resources for LaTeX and `knitr`.
+
+[pdf](LatexKnitr/latexKnitr.pdf)
+<br><br>

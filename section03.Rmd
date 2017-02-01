@@ -1,0 +1,9 @@
+TODO
+
+Question from last time:
+
+- Double vs. numeric? See http://faculty.nps.edu/sebuttre/home/R/data.html
+
+Another thing from last time:
+
+- Vectorized arithmetic.

@@ -1,5 +1,5 @@
 library(rmarkdown)
-render("section02.Rmd",
+render("latexKnitr.Rmd",
   pdf_document(
     latex_engine = "xelatex",
     toc = T,
@@ -8,8 +8,9 @@ render("section02.Rmd",
     pandoc_args = c(
       "--metadata=author:\"Ed Rubin\"",
       pandoc_variable_arg("mainfont", "Charter"),
-      pandoc_variable_arg("monofont", "Fira Code"),
+      # pandoc_variable_arg("monofont", "Fira Code"),
+      pandoc_variable_arg("monofont", "Hack"),
       pandoc_variable_arg("fontsize", "11pt")
       )
     ),
-  output_dir = "Section02")
+  output_dir = "LatexKnitr")

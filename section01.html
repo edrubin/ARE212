@@ -327,6 +327,9 @@ div.tocify {
     <li>
       <a href="section02.html">Section 2</a>
     </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -469,15 +472,20 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 ##  [3] &quot;contact.html&quot;          &quot;contact.Rmd&quot;          
 ##  [5] &quot;courseInfo.html&quot;       &quot;courseInfo.Rmd&quot;       
 ##  [7] &quot;footer.html&quot;           &quot;index.html&quot;           
-##  [9] &quot;index.Rmd&quot;             &quot;notes.html&quot;           
-## [11] &quot;notes.Rmd&quot;             &quot;pdfScript.R&quot;          
-## [13] &quot;resources.html&quot;        &quot;resources.Rmd&quot;        
-## [15] &quot;Section00&quot;             &quot;section00.html&quot;       
-## [17] &quot;section00.Rmd&quot;         &quot;Section01&quot;            
-## [19] &quot;section01.Rmd&quot;         &quot;Section01.zip&quot;        
-## [21] &quot;Section02&quot;             &quot;section02.Rmd&quot;        
-## [23] &quot;Section02.zip&quot;         &quot;site_libs&quot;            
-## [25] &quot;syllabi.Rmd&quot;           &quot;syllabusARE212.pdf&quot;</code></pre>
+##  [9] &quot;index.Rmd&quot;             &quot;LatexKnitr&quot;           
+## [11] &quot;latexKnitr_files&quot;      &quot;latexKnitr.html&quot;      
+## [13] &quot;latexKnitr.Rmd&quot;        &quot;notes.html&quot;           
+## [15] &quot;notes.Rmd&quot;             &quot;pdfScript.R&quot;          
+## [17] &quot;resources.html&quot;        &quot;resources.Rmd&quot;        
+## [19] &quot;Section00&quot;             &quot;section00.html&quot;       
+## [21] &quot;section00.Rmd&quot;         &quot;Section01&quot;            
+## [23] &quot;section01_files&quot;       &quot;section01.html&quot;       
+## [25] &quot;section01.Rmd&quot;         &quot;Section01.zip&quot;        
+## [27] &quot;Section02&quot;             &quot;section02.html&quot;       
+## [29] &quot;section02.Rmd&quot;         &quot;Section02.zip&quot;        
+## [31] &quot;section03.html&quot;        &quot;section03.Rmd&quot;        
+## [33] &quot;site_libs&quot;             &quot;syllabi.html&quot;         
+## [35] &quot;syllabi.Rmd&quot;           &quot;syllabusARE212.pdf&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my section 1 folder (dir_section1 stores the path)</span>
 <span class="kw">dir</span>(dir_section1)</code></pre></div>
 <pre><code>## [1] &quot;auto.csv&quot;      &quot;auto.dta&quot;      &quot;README.md&quot;     &quot;section01.pdf&quot;
@@ -510,7 +518,7 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 car_data &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="kw">paste0</span>(dir_section1, <span class="st">&quot;auto.dta&quot;</span>))</code></pre></div>
 <p>The <code>&lt;-</code> operator is central to everything you do in R. It assigns the value(s) on the right-hand side of the arrow to the name on the left-hand side. When reading R code aloud, people often replace the arrow with “gets”. The main thing to understand is that the contents of “auto.dta” are now assigned to the name <code>car_data</code>. To see this, simply type the name into the console (a bad idea with really big datasets, but this dataset is not big).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_data</code></pre></div>
-<pre><code>## # A tibble: 74 x 12
+<pre><code>## # A tibble: 74 × 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
@@ -545,7 +553,7 @@ car_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span cl
 ## )</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># See that it looks the same as above</span>
 car_data</code></pre></div>
-<pre><code>## # A tibble: 74 x 12
+<pre><code>## # A tibble: 74 × 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
@@ -577,7 +585,7 @@ car_data</code></pre></div>
 ##   gear_ratio = col_double(),
 ##   foreign = col_integer()
 ## )</code></pre>
-<pre><code>## # A tibble: 74 x 12
+<pre><code>## # A tibble: 74 × 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
@@ -601,7 +609,7 @@ car_data</code></pre></div>
 <h2>Exploring the data</h2>
 <p>Let’s print the data into the console again.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_data</code></pre></div>
-<pre><code>## # A tibble: 74 x 12
+<pre><code>## # A tibble: 74 × 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
@@ -630,7 +638,7 @@ car_data</code></pre></div>
 ##  [9] &quot;turn&quot;         &quot;displacement&quot; &quot;gear_ratio&quot;   &quot;foreign&quot;</code></pre>
 <p>And what if we want to see the first six rows of the dataset? Use the <code>head()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(car_data)</code></pre></div>
-<pre><code>## # A tibble: 6 x 12
+<pre><code>## # A tibble: 6 × 12
 ##            make price   mpg rep78 headroom trunk weight length  turn
 ##           &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1   AMC Concord  4099    22     3      2.5    11   2930    186    40
@@ -643,7 +651,7 @@ car_data</code></pre></div>
 ## #   foreign &lt;int&gt;</code></pre>
 <p>What if we want to see the first 11 rows of the dataset? Use the <code>head()</code> function with its <code>n</code> argument.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(car_data, <span class="dt">n =</span> <span class="dv">11</span>)</code></pre></div>
-<pre><code>## # A tibble: 11 x 12
+<pre><code>## # A tibble: 11 × 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
@@ -661,7 +669,7 @@ car_data</code></pre></div>
 ## #   foreign &lt;int&gt;</code></pre>
 <p>And for the last 7 rows of the dataset? Use the <code>tail()</code> function with its <code>n</code> argument.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tail</span>(car_data, <span class="dt">n =</span> <span class="dv">7</span>)</code></pre></div>
-<pre><code>## # A tibble: 7 x 12
+<pre><code>## # A tibble: 7 × 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Toyota Corolla  3748    31     5      3.0     9   2200    165    35
@@ -719,7 +727,7 @@ car_data</code></pre></div>
 car_sub &lt;-<span class="st"> </span><span class="kw">select</span>(car_data, price, mpg, weight, length)
 <span class="co"># Print the dataset</span>
 car_sub</code></pre></div>
-<pre><code>## # A tibble: 74 x 4
+<pre><code>## # A tibble: 74 × 4
 ##    price   mpg weight length
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   4099    22   2930    186
@@ -736,7 +744,7 @@ car_sub</code></pre></div>
 <p>You can see that we still have 74 rows but only four columns.</p>
 <p>Alternatively, you can choose which variables you would like to exclude from a dataset by placing a negative sign (dash) in front of the name</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(car_data, -price, -mpg, -weight, -length)</code></pre></div>
-<pre><code>## # A tibble: 74 x 8
+<pre><code>## # A tibble: 74 × 8
 ##             make rep78 headroom trunk  turn displacement gear_ratio
 ##            &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ## 1    AMC Concord     3      2.5    11    40          121       3.58
@@ -755,7 +763,7 @@ car_sub</code></pre></div>
 <h3><code>arrange()</code></h3>
 <p>We often want to arrange our dataset by one or more columns. For this task, <code>dplyr</code> offers the <code>arrange()</code> function. The notation is similar to that of select: the data object’s name followed by the variables with with you would like to arrange the object. Let’s arrange by price and mpg. The second dimension of sorting here is only for demonstration (it’s pointless in the actually arrangement).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(car_sub, price, mpg)</code></pre></div>
-<pre><code>## # A tibble: 74 x 4
+<pre><code>## # A tibble: 74 × 4
 ##    price   mpg weight length
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   3291    20   2830    195
@@ -771,7 +779,7 @@ car_sub</code></pre></div>
 ## # ... with 64 more rows</code></pre>
 <p>Having used the <code>arrange()</code> function on our data, what happens if we view the dataset now?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub</code></pre></div>
-<pre><code>## # A tibble: 74 x 4
+<pre><code>## # A tibble: 74 × 4
 ##    price   mpg weight length
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   4099    22   2930    186
@@ -788,7 +796,7 @@ car_sub</code></pre></div>
 <p>It is no longer arranged. This point is important. With nearly every function in R, you must assign the output of a function to an object if you want anything to change. Otherwise, you are simply printing your results to the console.</p>
 <p><code>arrange()</code> defaults to ascending ordering; if you would like descending ordering, use the <code>desc()</code> function on the variables that you would like to be descending.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(car_sub, <span class="kw">desc</span>(price), mpg)</code></pre></div>
-<pre><code>## # A tibble: 74 x 4
+<pre><code>## # A tibble: 74 × 4
 ##    price   mpg weight length
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1  15906    21   4290    204
@@ -808,13 +816,13 @@ car_sub</code></pre></div>
 <p>To create more specific summaries of your data, <code>dplyr</code> offers the <code>summarize()</code> and <code>summarize_each()</code> functions.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> These functions are really more useful when you have grouped data, but it may be helpful to first see them here in a simpler setting.</p>
 <p>Imaging we want the mean and standard deviation of the price variable, we use the functions <code>mean()</code> and <code>sd()</code> in conjunction with <code>summarize()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(car_sub, <span class="kw">mean</span>(price), <span class="kw">sd</span>(price))</code></pre></div>
-<pre><code>## # A tibble: 1 x 2
-##   mean(price) sd(price)
-##         &lt;dbl&gt;     &lt;dbl&gt;
-## 1    6165.257  2949.496</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   `mean(price)` `sd(price)`
+##           &lt;dbl&gt;       &lt;dbl&gt;
+## 1      6165.257    2949.496</code></pre>
 <p>You can even provide names for the newly created summaries.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(car_sub, <span class="dt">price_mean =</span> <span class="kw">mean</span>(price), <span class="dt">price_sd =</span> <span class="kw">sd</span>(price))</code></pre></div>
-<pre><code>## # A tibble: 1 x 2
+<pre><code>## # A tibble: 1 × 2
 ##   price_mean price_sd
 ##        &lt;dbl&gt;    &lt;dbl&gt;
 ## 1   6165.257 2949.496</code></pre>
@@ -874,13 +882,13 @@ x[<span class="dv">2</span>:<span class="dv">3</span>]</code></pre></div>
 <p>This indexing works with data objects, as well. We just have one more dimension to consider—we have rows and columns. Rows before columns, <em>i.e.</em>, <code>[row, column]</code> (but we don’t actually use the words).</p>
 <p>To grab the first row of <code>car_sub</code>, we put a 1 for the row index and leave the column blank.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[<span class="dv">1</span>, ]</code></pre></div>
-<pre><code>## # A tibble: 1 x 4
+<pre><code>## # A tibble: 1 × 4
 ##   price   mpg weight length
 ##   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1  4099    22   2930    186</code></pre>
 <p>To grab the first column of <code>car_sub</code>, we</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[, <span class="dv">1</span>]</code></pre></div>
-<pre><code>## # A tibble: 74 x 1
+<pre><code>## # A tibble: 74 × 1
 ##    price
 ##    &lt;dbl&gt;
 ## 1   4099
@@ -896,7 +904,7 @@ x[<span class="dv">2</span>:<span class="dv">3</span>]</code></pre></div>
 ## # ... with 64 more rows</code></pre>
 <p>You can also use the name of a column as its index</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[, <span class="st">&quot;price&quot;</span>]</code></pre></div>
-<pre><code>## # A tibble: 74 x 1
+<pre><code>## # A tibble: 74 × 1
 ##    price
 ##    &lt;dbl&gt;
 ## 1   4099
