@@ -26,6 +26,13 @@ Vectors, matrices, and general mathematical usage of R.
 [pdf](Section02/section02.pdf) | [R script](Section02/section02.R) | [zip](Section02.zip)
 <br><br>
 
+#### [__Section 3__](section03.html): Functions and loops
+
+Writing your own (OLS) functions, using loops, and running simulations in R.
+
+[pdf](Section03/section03.pdf) | [R script](Section03/section03.R) | [zip](Section03.zip)
+<br><br>
+
 #### [__Supplement 1__](latexKnitr.html): LaTeX and `knitr`
 
 Introductions to and resources for LaTeX and `knitr`.
