@@ -61,6 +61,21 @@ vec2
 
 This section covers functions, loops, and some simulation. We will take what you have been covering in lecture—the ordinary least squares (OLS) estimator—and create our very own OLS function.^[Max has probably mentioned that you have to write your own functions in this class. While relying upon the canned R functions is prohibited, you can use them to check your work.] Then we will play around with our OLS function.
 
+# Cleaning up
+
+You will occasionally need to clear up some space for memory in R (or just tidy up your environment). To see the objects you are currently storing in memory, you can either (1) look in the "Environment" pane of RStudio or (2) use the `ls()` function (the function does not need any inputs).
+
+If you decide to clean up, the function `rm()` is your friend. Here are three uses:
+```{R, eval = F}
+# Remove a single object from memory
+rm(item1)
+# Remove to (or more) objects from memory
+rm(list = c("item2", "item3"))
+# Remove everything from memory
+rm(list = ls())
+```
+You also can use the garbage control (`gc()`) function if you've loaded and removed several large datasets. It is not the same as `rm()`; `gc()` has more to do with space allocated for objects than the space actually used.^[Sorry if this garbage control function is not clear: I'm not a computer scientist.]
+
 # Custom functions
 
 Up to this point, we have written some lines of R code that rely upon already-defined functions. We are now going to try writing our own function.
@@ -202,7 +217,7 @@ We have a few tasks left:
 2. Convert the data objects to matrices
 3. Calculate $\widehat{\boldsymbol{\beta}}_{ols}$ via matrix operations
 
-First, let's add a column of ones to `X_data`. We will use `mutate_()`.^[You could use `mutate()` too.] The `mutate()` and `mutate_()` functions allow us to add new columns/variables to an existing data object. Often the new variables will be a combination of existing variables, but in our case, we just want a column of ones, so all we need to do is write `mutate(X_data, "ones" = 1)`.
+First, let's add a column of ones to `X_data`. We will use `mutate_()`.^[You could use `mutate()` too.] The `mutate()` and `mutate_()` functions allow us to add new columns/variables to an existing data object. Often the new variables will be a combination of existing variables, but in our case, we just want a column of ones, so all we need to do is write `mutate_(X_data, "ones" = 1)`.
 
 It is customary to have the intercept column be the first column in the matrix. We can use `select_()` again to change the order of the columns: `select_(X_data, "ones", .dots = X)`.
 

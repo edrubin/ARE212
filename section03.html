@@ -427,6 +427,18 @@ vec2
 <p>This section covers functions, loops, and some simulation. We will take what you have been covering in lecture—the ordinary least squares (OLS) estimator—and create our very own OLS function.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Then we will play around with our OLS function.</p>
 </div>
 </div>
+<div id="cleaning-up" class="section level1">
+<h1>Cleaning up</h1>
+<p>You will occasionally need to clear up some space for memory in R (or just tidy up your environment). To see the objects you are currently storing in memory, you can either (1) look in the “Environment” pane of RStudio or (2) use the <code>ls()</code> function (the function does not need any inputs).</p>
+<p>If you decide to clean up, the function <code>rm()</code> is your friend. Here are three uses:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Remove a single object from memory</span>
+<span class="kw">rm</span>(item1)
+<span class="co"># Remove to (or more) objects from memory</span>
+<span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">c</span>(<span class="st">&quot;item2&quot;</span>, <span class="st">&quot;item3&quot;</span>))
+<span class="co"># Remove everything from memory</span>
+<span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">ls</span>())</code></pre></div>
+<p>You also can use the garbage control (<code>gc()</code>) function if you’ve loaded and removed several large datasets. It is not the same as <code>rm()</code>; <code>gc()</code> has more to do with space allocated for objects than the space actually used.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+</div>
 <div id="custom-functions" class="section level1">
 <h1>Custom functions</h1>
 <p>Up to this point, we have written some lines of R code that rely upon already-defined functions. We are now going to try writing our own function.</p>
@@ -439,12 +451,12 @@ vec2
 <p>More simply: if you need to do the same task more than twice, you should probably write a function for that task, rather than copying and pasting the code dozens of times.</p>
 <div id="custom-function-basics" class="section level2">
 <h2>Custom function basics</h2>
-<p>To write a custom function in R, you use a function named <code>function()</code>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> The specific syntax for defining a function looks like</p>
+<p>To write a custom function in R, you use a function named <code>function()</code>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The specific syntax for defining a function looks like</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">foo &lt;-<span class="st"> </span>function(arg1, arg2) {
   ...
   <span class="kw">return</span>(final_stuff)
 }</code></pre></div>
-<p>which says that we are defining a new function named <code>foo</code> that takes the arguments <code>arg1</code> and <code>arg2</code> (your function can take as many or as few arguments as you like). The function then completes some tasks (you would have actual code where you currently see <code>...</code>), and then the function returns a value of <code>final_stuff</code> using the <code>return()</code> function.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> Notice that after you define the function’s arguments, you open a curly bracket and immediately start a new line. You end function’s definition by closing the curly bracket (on a line by itself).</p>
+<p>which says that we are defining a new function named <code>foo</code> that takes the arguments <code>arg1</code> and <code>arg2</code> (your function can take as many or as few arguments as you like). The function then completes some tasks (you would have actual code where you currently see <code>...</code>), and then the function returns a value of <code>final_stuff</code> using the <code>return()</code> function.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> Notice that after you define the function’s arguments, you open a curly bracket and immediately start a new line. You end function’s definition by closing the curly bracket (on a line by itself).</p>
 <p>For a quick example of a custom function, let’s define a function that accepts three arguments and returns the product of the three arguments.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define the function (named &#39;triple_prod&#39;)</span>
 triple_prod &lt;-<span class="st"> </span>function(x, y, z) {
@@ -460,7 +472,7 @@ triple_prod &lt;-<span class="st"> </span>function(x, y, z) {
 </div>
 <div id="an-ols-function" class="section level2">
 <h2>An OLS function</h2>
-<p>As discussed above, functions are very helpful when you have a task that you want to repeat many times. In this class,<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> you will estimate <span class="math inline">\(\widehat{\boldsymbol{\beta}}_{ols}\)</span> <strong>many</strong> times. So let’s write a function that calculates the OLS estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
+<p>As discussed above, functions are very helpful when you have a task that you want to repeat many times. In this class,<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> you will estimate <span class="math inline">\(\widehat{\boldsymbol{\beta}}_{ols}\)</span> <strong>many</strong> times. So let’s write a function that calculates the OLS estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
 <p>Recall that for an outcome (dependent) variable <span class="math inline">\(\mathbf{y}\)</span> and a matrix of independent variables <span class="math inline">\(\mathbf{X}\)</span> (including a column of ones for the intercept), the OLS estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span> in the equation</p>
 <p><span class="math display">\[ \mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon} \]</span></p>
 <p>is</p>
@@ -499,7 +511,7 @@ cars &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class=
 </div>
 <div id="select_ing-variables" class="section level3">
 <h3><code>select_</code>ing variables</h3>
-<p>Let’s take an inventory of which objects we have, once we are inside the function. We have <code>data</code>, which is a tibble with columns that represent various variables. We have <code>y</code>, the name of our outcome variable (<em>e.g.</em>, <code>weight</code>). And we have <code>X</code>, a vector of the names of our independent variables (<em>e.g.</em> <code>c(&quot;mpg&quot;, &quot;weight&quot;)</code>).<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>Let’s take an inventory of which objects we have, once we are inside the function. We have <code>data</code>, which is a tibble with columns that represent various variables. We have <code>y</code>, the name of our outcome variable (<em>e.g.</em>, <code>weight</code>). And we have <code>X</code>, a vector of the names of our independent variables (<em>e.g.</em> <code>c(&quot;mpg&quot;, &quot;weight&quot;)</code>).<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
 <p>The first step for our function is to grab the data for <code>y</code> and <code>X</code> from <code>data</code>. For this task, we will use a variation of the <code>select()</code> function introduced in <a href="section01.html">Section 1</a>: <code>select_()</code>. The difference between <code>select()</code> and <code>select_()</code> (besides the underscore) is that <code>select()</code> wants the variable names without quotes (<em>non-standard evaluation</em>), <em>e.g.</em> <code>select(cars, mpg, weight)</code>. This notation is pretty convenient except when you are writing your own function. Generally, you will have variable/column names in a character vector, and <code>select(cars, &quot;mpg&quot;, &quot;weight&quot;)</code> does not work. Here is where <code>select_()</code> comes in: it <em>wants</em> you to use characters (<em>standard evaluation</em>). There is one more complexity: while <code>select_(cars, &quot;mpg&quot;, &quot;weight&quot;)</code> works, <code>select_(cars, c(&quot;mpg&quot;, &quot;weight&quot;))</code> does not. So if you have a vector of variable names, like our <code>X</code>, you need a slightly different way to use <code>select_()</code>. The solution is the <code>.dots</code> argument in <code>select_()</code>: <code>select_(cars, .dots = c(&quot;mpg&quot;, &quot;weight&quot;))</code> works!</p>
 <p>So… we now want to select the <code>y</code> and <code>X</code> variables from <code>data</code>. Let’s do it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Select y variable data from &#39;data&#39;</span>
@@ -539,7 +551,7 @@ X_data &lt;-<span class="st"> </span><span class="kw">select_</span>(data, <span
 <li>Convert the data objects to matrices</li>
 <li>Calculate <span class="math inline">\(\widehat{\boldsymbol{\beta}}_{ols}\)</span> via matrix operations</li>
 </ol>
-<p>First, let’s add a column of ones to <code>X_data</code>. We will use <code>mutate_()</code>.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> The <code>mutate()</code> and <code>mutate_()</code> functions allow us to add new columns/variables to an existing data object. Often the new variables will be a combination of existing variables, but in our case, we just want a column of ones, so all we need to do is write <code>mutate(X_data, &quot;ones&quot; = 1)</code>.</p>
+<p>First, let’s add a column of ones to <code>X_data</code>. We will use <code>mutate_()</code>.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> The <code>mutate()</code> and <code>mutate_()</code> functions allow us to add new columns/variables to an existing data object. Often the new variables will be a combination of existing variables, but in our case, we just want a column of ones, so all we need to do is write <code>mutate_(X_data, &quot;ones&quot; = 1)</code>.</p>
 <p>It is customary to have the intercept column be the first column in the matrix. We can use <code>select_()</code> again to change the order of the columns: <code>select_(X_data, &quot;ones&quot;, .dots = X)</code>.</p>
 <p>We will use the <code>as.matrix()</code> function to convert our tibbles to matrices.</p>
 <p>Finally, once we have our matrices, we can use the basic matrix functions discussed in <a href="section02.html">Section 2</a>—namely <code>%*%</code>, <code>t()</code>, and <code>solve()</code>—to calculate <span class="math inline">\(\widehat{\boldsymbol{\beta}}_{ols} = \left(\mathbf{X}&#39;\mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{y}\)</span>.</p>
@@ -573,7 +585,7 @@ X_data &lt;-<span class="st"> </span><span class="kw">select_</span>(data, <span
 </div>
 <div id="piping" class="section level2">
 <h2>Piping</h2>
-<p>Our OLS function is nice, but we redefined <code>y_data</code> and <code>X_data</code> a number of times. There’s nothing wrong with these intermediate steps, but <code>dplyr</code> provides a fantastic tool <code>%&gt;%</code> for bypassing these steps to clean up your code. The operator is known as the pipe or chain command.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
+<p>Our OLS function is nice, but we redefined <code>y_data</code> and <code>X_data</code> a number of times. There’s nothing wrong with these intermediate steps, but <code>dplyr</code> provides a fantastic tool <code>%&gt;%</code> for bypassing these steps to clean up your code. The operator is known as the pipe or chain command.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
 <p>The way the pipe (<code>%&gt;%</code>) works is by taking the output from one expression and plugging it into the next expression (defaulting to the first argument in the second expression). For example, rather than writing the two lines of code</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Select the variables</span>
 tmp_data &lt;-<span class="st"> </span><span class="kw">select</span>(cars, price, mpg, weight)
@@ -597,7 +609,7 @@ tmp_data &lt;-<span class="st"> </span><span class="kw">select</span>(cars, pric
 ##  Max.   :15906   Max.   :41.00   Max.   :4840</code></pre></div>
 <p>What is going on here? We’re plugging <code>cars</code> into the first argument of the <code>select()</code> expression, and then plugging the output from <code>select()</code> into <code>summary()</code>. If you want to save the result from the <strong>last</strong> expression (<code>summary()</code> here), use the normal method, <em>e.g.</em></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">some_summaries &lt;-<span class="st"> </span>cars %&gt;%<span class="st"> </span><span class="kw">select</span>(price, mpg, weight) %&gt;%<span class="st"> </span><span class="kw">summary</span>()</code></pre></div>
-<p>If it helps you remember what a pipe is doing, you can use a period with a comma:<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
+<p>If it helps you remember what a pipe is doing, you can use a period with a comma:<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Four equivalent expressions</span>
 cars %&gt;%<span class="st"> </span><span class="kw">select</span>(price, mpg) %&gt;%<span class="st"> </span><span class="kw">summary</span>()
 cars %&gt;%<span class="st"> </span><span class="kw">select</span>(., price, mpg) %&gt;%<span class="st"> </span><span class="kw">summary</span>()
@@ -642,7 +654,7 @@ cars %&gt;%<span class="st"> </span><span class="kw">select</span>(., price, mpg
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;lfe&quot;</span>)</code></pre></div>
 <p>Load it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lfe)</code></pre></div>
-<p>Run the relevant regression with <code>felm()</code>:<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
+<p>Run the relevant regression with <code>felm()</code>:<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run the regression with &#39;felm&#39;</span>
 canned_ols &lt;-<span class="st"> </span><span class="kw">felm</span>(<span class="dt">formula =</span> price ~<span class="st"> </span>mpg +<span class="st"> </span>weight, <span class="dt">data =</span> cars)
 <span class="co"># Summary of the regression</span>
@@ -701,7 +713,7 @@ canned_ols %&gt;%<span class="st"> </span><span class="kw">summary</span>()
 </div>
 <div id="lapply" class="section level2">
 <h2><code>lapply()</code></h2>
-<p>The <code>lapply()</code> function is part of a family of <code>apply()</code> functions in R (<code>apply()</code>, <code>lapply()</code>, <code>sapply()</code>, <code>mapply()</code>, <em>etc.</em>). Each function takes slightly different inputs and/or generates slightly different outputs, but the idea is generally the same. And the idea if very similar to that of a loop: you give <code>lapply()</code> a list or vector <code>X</code> and a function <code>FUN</code>, and <code>lapply()</code> with then apply the function <code>FUN</code> to each of the elements in <code>X</code>. <code>lapply()</code> returns a <em>list</em><a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> of the results generated by <code>FUN</code> for each of the elements of <code>X</code>.</p>
+<p>The <code>lapply()</code> function is part of a family of <code>apply()</code> functions in R (<code>apply()</code>, <code>lapply()</code>, <code>sapply()</code>, <code>mapply()</code>, <em>etc.</em>). Each function takes slightly different inputs and/or generates slightly different outputs, but the idea is generally the same. And the idea if very similar to that of a loop: you give <code>lapply()</code> a list or vector <code>X</code> and a function <code>FUN</code>, and <code>lapply()</code> with then apply the function <code>FUN</code> to each of the elements in <code>X</code>. <code>lapply()</code> returns a <em>list</em><a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> of the results generated by <code>FUN</code> for each of the elements of <code>X</code>.</p>
 <p>Finally, it is worth noting that <code>lapply()</code> sticks the elements of <code>X</code> into the first argument of the function <code>FUN</code> (you can still define other arguments of <code>FUN</code>) in a way very similar to the pipe operator (<code>%&gt;%</code>).</p>
 <p>Here is a simplistic example of <code>lapply()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lapply</span>(<span class="dt">X =</span> <span class="dv">0</span>:<span class="dv">4</span>, <span class="dt">FUN =</span> sqrt)</code></pre></div>
@@ -784,7 +796,7 @@ results_list</code></pre></div>
 ## intercept  2.1235056112
 ## mpg       -0.0194295266
 ## weight    -0.0004677698</code></pre>
-<p>These results are a bit of a mess. Let’s change the list into a more legible data structure. We will use <code>lapply()</code> to apply the function <code>data.frame()</code> to each of the results (each of the elements of <code>results_list</code>). Finally, we will use the <code>bind_cols()</code> function from <code>dplyr</code> to bind all of the results together (so we don’t end up with another list).<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a></p>
+<p>These results are a bit of a mess. Let’s change the list into a more legible data structure. We will use <code>lapply()</code> to apply the function <code>data.frame()</code> to each of the results (each of the elements of <code>results_list</code>). Finally, we will use the <code>bind_cols()</code> function from <code>dplyr</code> to bind all of the results together (so we don’t end up with another list).<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Cleaning up the results list</span>
 results_df &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dt">X =</span> results_list, <span class="dt">FUN =</span> data.frame) %&gt;%<span class="st"> </span><span class="kw">bind_cols</span>()
 <span class="co"># We lose the row names in the process; add them back</span>
@@ -808,7 +820,7 @@ results_df</code></pre></div>
 </div>
 <div id="simulation" class="section level1">
 <h1>Simulation</h1>
-<p>One of the main reasons to learn the <code>apply()</code> family of functions is that they are very flexible (and easily parallelized).<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> This flexibility lends them to use in simulation, which basically means we want to generate random numbers and to test/observe properties of estimators. And repeat many times.</p>
+<p>One of the main reasons to learn the <code>apply()</code> family of functions is that they are very flexible (and easily parallelized).<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a> This flexibility lends them to use in simulation, which basically means we want to generate random numbers and to test/observe properties of estimators. And repeat many times.</p>
 <div id="examining-bias-in-one-sample" class="section level2">
 <h2>Examining bias in one sample</h2>
 <p>We often examine the (finite-sample) properties of estimators through simulation.</p>
@@ -847,7 +859,7 @@ data_baker &lt;-<span class="st"> </span>function(sample_n, true_beta) {
 </div>
 <div id="examining-bias-in-many-samples" class="section level2">
 <h2>Examining bias in many samples</h2>
-<p>But what if you want to run 10,000 simulations? Should you just copy and paste 10,000 times? Probably not.<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a> Use <code>lapply()</code> (or <code>replicate()</code>). And let’s write one more function wrapped around <code>data_baker()</code>.</p>
+<p>But what if you want to run 10,000 simulations? Should you just copy and paste 10,000 times? Probably not.<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> Use <code>lapply()</code> (or <code>replicate()</code>). And let’s write one more function wrapped around <code>data_baker()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># A function to run the simulation</span>
 bias_simulator &lt;-<span class="st"> </span>function(n_sims, sample_n, true_beta) {
 
@@ -898,7 +910,7 @@ sim_dt &lt;-<span class="st"> </span><span class="kw">bias_simulator</span>(<spa
   <span class="dt">xlab =</span> <span class="st">&quot;Bias&quot;</span>)
 <span class="co"># Emphasize the zero line</span>
 <span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">0</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)</code></pre></div>
-<p><img src="section03_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="section03_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 <p>Next section we’ll talk a bit about parallelization, which can greatly reduce the time of your simulations.</p>
 </div>
 </div>
@@ -914,18 +926,19 @@ sim_dt &lt;-<span class="st"> </span><span class="kw">bias_simulator</span>(<spa
 <hr />
 <ol>
 <li id="fn1"><p>Max has probably mentioned that you have to write your own functions in this class. While relying upon the canned R functions is prohibited, you can use them to check your work.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>So meta, right?<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>You can get away with not using the <code>return()</code> function, but it is generally thought of as bad form.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>not to mention the life of an empirical economist<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>I guess I’ve asserted these definitions of <code>y</code> and <code>X</code>. You’re free to do whatever you like.<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>You could use <code>mutate()</code> too.<a href="#fnref6">↩</a></p></li>
-<li id="fn7"><p>See the package <code>magrittr</code> for even more pipe operators.<a href="#fnref7">↩</a></p></li>
-<li id="fn8"><p>Note: the period will actually allow you to shift the argument to which the prior expression’s output is sent.<a href="#fnref8">↩</a></p></li>
-<li id="fn9"><p><code>felm()</code>, like most regression functions I’ve seen in R, uses a formula where the dependent variable<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> is separated from the independent variables with a tilde (<code>~</code>).<a href="#fnref9">↩</a></p></li>
-<li id="fn10"><p>This is our first time meeting a list. Lists are yet another way to store data in R—like vectors, matrices, data.frames, and tibbles. You can create lists with the <code>list()</code> function much like you create vectors with the <code>c()</code> function: <code>my_list &lt;- list(&quot;a&quot;, 1, c(1,2,3))</code>. Lists differ in that they do not require a uniform data type, as demonstrated in the list in the preceding sentence. Lists also utilize a slightly different indexing: you access the third element of the list <code>my_list</code> via <code>my_list[[3]]</code>. Notice the extra set of square brackets.<a href="#fnref10">↩</a></p></li>
-<li id="fn11"><p>We could alternatively try <code>sapply()</code>, which attempts to return nicely formatted objects. However, you never know if it is going to succeed in nicely formatting your results. If it doesn’t, then it returns a list. This sort of inconsistency is not very helpful in programming, so I generally avoid <code>sapply()</code>.<a href="#fnref11">↩</a></p></li>
-<li id="fn12"><p>Parallelization basically means that you run things at the same time—instead of waiting until one thing finishes to start the next. Thus some tasks can be parallelized—simulations for unbiased estimators—while other tasks that depend upon the output from previous iterations are more difficult to parallelize. We’ll talk more about parallelization next time.<a href="#fnref12">↩</a></p></li>
-<li id="fn13"><p>Definitely not.<a href="#fnref13">↩</a></p></li>
+<li id="fn2"><p>Sorry if this garbage control function is not clear: I’m not a computer scientist.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>So meta, right?<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>You can get away with not using the <code>return()</code> function, but it is generally thought of as bad form.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>not to mention the life of an empirical economist<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>I guess I’ve asserted these definitions of <code>y</code> and <code>X</code>. You’re free to do whatever you like.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>You could use <code>mutate()</code> too.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>See the package <code>magrittr</code> for even more pipe operators.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>Note: the period will actually allow you to shift the argument to which the prior expression’s output is sent.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p><code>felm()</code>, like most regression functions I’ve seen in R, uses a formula where the dependent variable<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> is separated from the independent variables with a tilde (<code>~</code>).<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>This is our first time meeting a list. Lists are yet another way to store data in R—like vectors, matrices, data.frames, and tibbles. You can create lists with the <code>list()</code> function much like you create vectors with the <code>c()</code> function: <code>my_list &lt;- list(&quot;a&quot;, 1, c(1,2,3))</code>. Lists differ in that they do not require a uniform data type, as demonstrated in the list in the preceding sentence. Lists also utilize a slightly different indexing: you access the third element of the list <code>my_list</code> via <code>my_list[[3]]</code>. Notice the extra set of square brackets.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>We could alternatively try <code>sapply()</code>, which attempts to return nicely formatted objects. However, you never know if it is going to succeed in nicely formatting your results. If it doesn’t, then it returns a list. This sort of inconsistency is not very helpful in programming, so I generally avoid <code>sapply()</code>.<a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p>Parallelization basically means that you run things at the same time—instead of waiting until one thing finishes to start the next. Thus some tasks can be parallelized—simulations for unbiased estimators—while other tasks that depend upon the output from previous iterations are more difficult to parallelize. We’ll talk more about parallelization next time.<a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p>Definitely not.<a href="#fnref14">↩</a></p></li>
 </ol>
 </div>
 

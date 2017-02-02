@@ -10,12 +10,12 @@ setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212/Section03/")
 
 # Simple sample function -------------------------------------------------------
 # Define the function (named 'triple_prod')
-  triple_prod <- function(x, y, z) {
-    # Take the product of the three arguments
-    tmp_prod <- x * y * z
-    # Return 'tmp_prod'
-    return(tmp_prod)
-  }
+triple_prod <- function(x, y, z) {
+  # Take the product of the three arguments
+  tmp_prod <- x * y * z
+  # Return 'tmp_prod'
+  return(tmp_prod)
+}
 
 # Test the function
 triple_prod(x = 2, y = 3, z = 5)
@@ -24,6 +24,11 @@ triple_prod(x = 2, y = 3, z = 5)
 cars <- read_dta(file = "auto.dta")
 
 # Our OLS function -------------------------------------------------------------
+# Example values for our function
+data <- cars
+y <- "price"
+X <- c("mpg", "weight")
+
 # Define the function
 b_ols <- function(data, y, X) {
   # Require the 'dplyr' package
@@ -51,8 +56,9 @@ b_ols <- function(data, y, X) {
   return(beta_hat)
 }
 
+b_ols(data = cars, y = "price", X = c("mpg", "weight"))
+
 # Revised OLS function ---------------------------------------------------------
-# Revise OLS function using pipes
 b_ols <- function(data, y, X) {
   # Require the 'dplyr' package
   require(dplyr)
