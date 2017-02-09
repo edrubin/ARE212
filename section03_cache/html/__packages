@@ -1,6 +1,13 @@
 base
-rmarkdown
-haven
+methods
+datasets
+utils
+grDevices
+graphics
+stats
 dplyr
+haven
+readr
+psych
 Matrix
 lfe
