@@ -454,6 +454,15 @@ x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># I&#39;m not lying</span>
 T ==<span class="st"> </span><span class="ot">TRUE</span>
 ## [1] TRUE
+<span class="kw">identical</span>(T, <span class="ot">TRUE</span>)
+## [1] TRUE
+
+<span class="co"># A nuance</span>
+<span class="ot">TRUE</span> ==<span class="st"> &quot;TRUE&quot;</span>
+## [1] TRUE
+<span class="kw">identical</span>(<span class="ot">TRUE</span>, <span class="st">&quot;TRUE&quot;</span>)
+## [1] FALSE
+
 <span class="co"># Greater/less than</span>
 <span class="dv">1</span> &gt;<span class="st"> </span><span class="dv">3</span>
 ## [1] FALSE
@@ -463,31 +472,37 @@ T ==<span class="st"> </span><span class="ot">TRUE</span>
 ## [1] FALSE
 <span class="dv">1</span> &lt;=<span class="st"> </span><span class="dv">1</span>
 ## [1] TRUE
+
 <span class="co"># Alphabetization</span>
 <span class="st">&quot;Ed&quot;</span> &lt;<span class="st"> &quot;Everyone&quot;</span> <span class="co"># :(</span>
 ## [1] TRUE
 <span class="st">&quot;A&quot;</span> &lt;<span class="st"> &quot;B&quot;</span>
 ## [1] TRUE
+
 <span class="co"># NA is weird</span>
+<span class="ot">NA</span> ==<span class="st"> </span><span class="ot">NA</span>
+## [1] NA
 <span class="ot">NA</span> &gt;<span class="st"> </span><span class="dv">3</span>
 ## [1] NA
 <span class="ot">NA</span> ==<span class="st"> </span>T
 ## [1] NA
-<span class="ot">NA</span> ==<span class="st"> </span>F
-## [1] NA
 <span class="kw">is.na</span>(<span class="ot">NA</span>)
 ## [1] TRUE
+
 <span class="co"># Equals</span>
 T ==<span class="st"> </span>F
 ## [1] FALSE
 (pi &gt;<span class="st"> </span><span class="dv">1</span>) ==<span class="st"> </span>T
 ## [1] TRUE
+
 <span class="co"># And</span>
 (<span class="dv">3</span> &gt;<span class="st"> </span><span class="dv">2</span>) &amp;<span class="st"> </span>(<span class="dv">2</span> &gt;<span class="st"> </span><span class="dv">3</span>)
 ## [1] FALSE
+
 <span class="co"># Or</span>
 (<span class="dv">3</span> &gt;<span class="st"> </span><span class="dv">2</span>) |<span class="st"> </span>(<span class="dv">2</span> &gt;<span class="st"> </span><span class="dv">3</span>)
 ## [1] TRUE
+
 <span class="co"># Not (gives the opposite)</span>
 !<span class="st"> </span>T
 ## [1] FALSE</code></pre></div>

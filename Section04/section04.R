@@ -38,28 +38,41 @@ x <- rnorm(100) %>%
 # Logical operators --------------------
 # I'm not lying
 T == TRUE
+identical(T, TRUE)
+
+# A nuance 
+TRUE == "TRUE"
+identical(TRUE, "TRUE")
+
 # Greater/less than
 1 > 3
 1 < 1
 1 >= 3
 1 <= 1
+
 # Alphabetization
 "Ed" < "Everyone" # :(
 "A" < "B"
+
 # NA is weird
+NA == NA
 NA > 3
 NA == T
-NA == F
 is.na(NA)
+
 # Equals
 T == F
 (pi > 1) == T
+
 # And
 (3 > 2) & (2 > 3)
+
 # Or
 (3 > 2) | (2 > 3)
+
 # Not (gives the opposite)
 ! T
+
 
 # Optional arguments --------------------
 b_ols <- function(data, y_var, X_vars, intercept = TRUE) {
