@@ -1,7 +1,9 @@
 base
 rmarkdown
 dplyr
+haven
+readr
+psych
 Matrix
 lfe
-readr
 MASS

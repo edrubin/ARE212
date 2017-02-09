@@ -5,6 +5,7 @@ utils
 grDevices
 graphics
 stats
+rmarkdown
 dplyr
 haven
 readr
