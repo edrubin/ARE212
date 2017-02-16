@@ -471,7 +471,7 @@ b_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="d
 <p>Suppose we want to test whether the j<sup>th</sup> coefficient <span class="math inline">\(\beta_j\)</span> in our model is is significantly different from some other value <span class="math inline">\(\bar\gamma\)</span>, using the significance level <span class="math inline">\(\alpha\)</span>. Following Max’s notes, we can calculate the <em>t</em> statistic for the j<sup>th</sup> coefficient as</p>
 <p><span class="math display">\[ t_j = \dfrac{b_j - \bar\gamma}{\sqrt{ s^2 \cdot \left\{ \left(\mathbf{X}^\prime\mathbf{X}\right)^{-1} \right\}_{jj} }} = \dfrac{b_j - \bar\gamma}{\text{se}\left(b_j\right)} \]</span></p>
 <p>where <span class="math inline">\(b_j\)</span> is our estimate for <span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(s^2\)</span> is our estimate of <span class="math inline">\(\sigma^2\)</span>, and <span class="math inline">\(\left\{ \left(\mathbf{X}^\prime\mathbf{X}\right)^{-1} \right\}_{jj}\)</span> is the j<sup>th</sup> diagonal element of <span class="math inline">\(\left(\mathbf{X}^\prime\mathbf{X}\right)^{-1}\)</span>.</p>
-<p>Now let’s write a function in R that will calculate this tes_t_ statistic.</p>
+<p>Now let’s write a function in R that will calculate this test statistic.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t_stat &lt;-<span class="st"> </span>function(data, y_var, X_vars, gamma, <span class="dt">intercept =</span> T) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
@@ -607,7 +607,7 @@ cars %$%<span class="st"> </span><span class="kw">cor</span>(price, weight)
 </div>
 <div id="f-tests" class="section level1">
 <h1><span class="math inline">\(F\)</span> tests</h1>
-<p>As Max has likely told you, there will be situations where you don’t care as much about testing the significance of individual coefficients as you care about testing <em>joint</em> significance. For example, is there evidence that either <span class="math inline">\(\beta_1\)</span> <em>or</em> <span class="math inline">\(\beta_2\)</span> are different significantly from zero? Enter the <span class="math inline">\(F\)</span> test!<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
+<p>As Max has likely told you, there will be situations where you don’t care as much about testing the significance of individual coefficients as you care about testing <em>joint</em> significance. For example, is there evidence that either <span class="math inline">\(\beta_1\)</span> <em>or</em> <span class="math inline">\(\beta_2\)</span> differ significantly from zero? Enter the <span class="math inline">\(F\)</span> test!<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
 <div id="the-formal-part" class="section level2">
 <h2>The formal part</h2>
 <p>Assume our data-generating process is</p>

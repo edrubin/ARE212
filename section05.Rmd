@@ -111,7 +111,7 @@ $$ t_j = \dfrac{b_j - \bar\gamma}{\sqrt{ s^2 \cdot \left\{ \left(\mathbf{X}^\pri
 
 where $b_j$ is our estimate for $\beta_j$, $s^2$ is our estimate of $\sigma^2$, and $\left\{ \left(\mathbf{X}^\prime\mathbf{X}\right)^{-1} \right\}_{jj}$ is the j^th^ diagonal element of $\left(\mathbf{X}^\prime\mathbf{X}\right)^{-1}$.
 
-Now let's write a function in R that will calculate this tes_t_ statistic.
+Now let's write a function in R that will calculate this test statistic.
 
 ```{R}
 t_stat <- function(data, y_var, X_vars, gamma, intercept = T) {
@@ -265,7 +265,7 @@ Pretty cool, eh?
 
 # $F$ tests
 
-As Max has likely told you, there will be situations where you don't care as much about testing the significance of individual coefficients as you care about testing _joint_ significance. For example, is there evidence that either $\beta_1$ _or_ $\beta_2$ are different significantly from zero? Enter the $F$ test!^[Joint significance is a little bit of a strange idea. We are basically asking if there is evidence that at least one of the coefficients is significantly different from zero.]
+As Max has likely told you, there will be situations where you don't care as much about testing the significance of individual coefficients as you care about testing _joint_ significance. For example, is there evidence that either $\beta_1$ _or_ $\beta_2$ differ significantly from zero? Enter the $F$ test!^[Joint significance is a little bit of a strange idea. We are basically asking if there is evidence that at least one of the coefficients is significantly different from zero.]
 
 ## The formal part
 
