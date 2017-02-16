@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 5: Inference and parallelization</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 5: Inference and parallelization</h1>
+
+</div>
+
+
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<p>The Piazza page is now up. You can sign up <a href="piazza.com/berkeley/spring2017/are212">here</a>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p><strong>Packages</strong>:</p>
+<ul>
+<li>Previously used: <code>dplyr</code>, <code>lfe</code>, <code>readr</code></li>
+<li>New: <code>magrittr</code> and <code>parallel</code> (<code>parallel</code> is likely already installed)</li>
+</ul>
+<p><strong>Data</strong>: The <code>auto.csv</code> <a href="Section05/auto.csv">file</a>.</p>
+<p><strong>Review</strong>: It will also be helpful if you review the simulations from <a href="section03.html">section 3</a> and <a href="section04.html">section 4</a>.</p>
+</div>
+<div id="last-week" class="section level2">
+<h2>Last week</h2>
+<p>In our previous section, we discussed logical operators, optional arguments to functions, the Frisch-Waugh-Lovell theorem (and its applications—omitted variable bias, bad controls), and R<sup>2</sup>/measures of fit.</p>
+</div>
+<div id="this-week" class="section level2">
+<h2>This week</h2>
+<p>Testing hypotheses in R! Plus simulation and parallelizing your code.</p>
+</div>
+</div>
+<div id="testing-hypotheses" class="section level1">
+<h1>Testing hypotheses</h1>
+<p>This week we will focus on statistically testing hypotheses in R, which generally takes the form of testing whether a point estimate (<em>e.g.</em>, a coefficient) is significantly different from some value (generally, zero).</p>
+<p>The topic of hypothesis testing is <em>super important</em><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> but perhaps a little overlooked. We spend a lot of time cleaning and pruning our data, demonstrating the unbiasedness (or consistency or other properties) of various estimators, discussing identification strategies<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>, and writing models, and we can easily forget the original point of the exercise. In econometrics, the original point of the exercise is often something like: is there evidence of meaningful relationship between the variables <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span>? The point estimate from the regression of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> doesn’t actually answer this question; it gives us a best guess at the slope of a line drawn between <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span>. Hypothesis testing (and calculating standard errors) will tell us about the evidence for a relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span>.</p>
+<div id="setting-up" class="section level2">
+<h2>Setting up</h2>
+<p>As we discussed before, I find it helpful to have a section of my R script where I set settings, load libraries, define directories, read data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Setup ----</span>
+<span class="co"># Settings</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="co"># Packages</span>
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(lfe)
+<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(readr)
+<span class="co"># Directories</span>
+<span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section05&quot;</span>)
+<span class="co"># Load the dataset from CSV</span>
+cars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;auto.csv&quot;</span>)</code></pre></div>
+<p>We should also load the functions that we will want to use:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Functions ----</span>
+<span class="co"># Function to convert tibble, data.frame, or tbl_df to matrix</span>
+to_matrix &lt;-<span class="st"> </span>function(the_df, vars) {
+  <span class="co"># Create a matrix from variables in var</span>
+  new_mat &lt;-<span class="st"> </span>the_df %&gt;%
+<span class="st">    </span><span class="co"># Select the columns given in &#39;vars&#39;</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) %&gt;%
+<span class="st">    </span><span class="co"># Convert to matrix</span>
+<span class="st">    </span><span class="kw">as.matrix</span>()
+  <span class="co"># Return &#39;new_mat&#39;</span>
+  <span class="kw">return</span>(new_mat)
+}
+<span class="co"># Function for OLS coefficient estimates</span>
+b_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> <span class="ot">TRUE</span>) {
+  <span class="co"># Require the &#39;dplyr&#39; package</span>
+  <span class="kw">require</span>(dplyr)
+  <span class="co"># Create the y matrix</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> y_var)
+  <span class="co"># Create the X matrix</span>
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> X_vars)
+  <span class="co"># If &#39;intercept&#39; is TRUE, then add a column of ones</span>
+  if (intercept ==<span class="st"> </span>T) {
+    <span class="co"># Bind a column of ones to X</span>
+    X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+    <span class="co"># Name the new column &quot;intercept&quot;</span>
+    <span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;intercept&quot;</span>, X_vars)
+  }
+  <span class="co"># Calculate beta hat</span>
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>y
+  <span class="co"># Return beta_hat</span>
+  <span class="kw">return</span>(beta_hat)
+}</code></pre></div>
+</div>
+<div id="magrittr" class="section level2">
+<h2><code>magrittr</code></h2>
+<p>Notice that we loaded a new package called <code>magrittr</code>. We’ll talk about its functions shortly. <code>magrittr</code> offers is more flexibility for piping commands—similar to <code>dplyr</code>’s pipe <code>%&gt;%</code>. Fun facts: the package’s name comes from the Belgian artist <a href="https://www.wikiwand.com/en/Rene_Magritte#/Philosophical_and_artistic_gestures">René Magritte</a>. Specifically, the package is referencing Magritte’s <a href="https://www.wikiwand.com/en/The_Treachery_of_Images">painting</a> “The Treachery of Images,” which shows a pipe and the caption “This is not a pipe.”</p>
+</div>
+<div id="t-tests" class="section level2">
+<h2><span class="math inline">\(t\)</span> tests</h2>
+<p>Before we get to the math, you should know that a Guinness brewer named William S. Gosset developed the <em>t</em> test to deal with the fact that his sample means did not <em>act</em> normally. <a href="https://priceonomics.com/the-guinness-brewer-who-revolutionized-statistics/">More</a>.</p>
+<p>Okay. Now let’s math it up.</p>
+<p>Suppose we want to test whether the j<sup>th</sup> coefficient <span class="math inline">\(\beta_j\)</span> in our model is is significantly different from some other value <span class="math inline">\(\bar\gamma\)</span>, using the significance level <span class="math inline">\(\alpha\)</span>. Following Max’s notes, we can calculate the <em>t</em> statistic for the j<sup>th</sup> coefficient as</p>
+<p><span class="math display">\[ t_j = \dfrac{b_j - \bar\gamma}{\sqrt{ s^2 \cdot \left\{ \left(\mathbf{X}^\prime\mathbf{X}\right)^{-1} \right\}_{jj} }} = \dfrac{b_j - \bar\gamma}{\text{se}\left(b_j\right)} \]</span></p>
+<p>where <span class="math inline">\(b_j\)</span> is our estimate for <span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(s^2\)</span> is our estimate of <span class="math inline">\(\sigma^2\)</span>, and <span class="math inline">\(\left\{ \left(\mathbf{X}^\prime\mathbf{X}\right)^{-1} \right\}_{jj}\)</span> is the j<sup>th</sup> diagonal element of <span class="math inline">\(\left(\mathbf{X}^\prime\mathbf{X}\right)^{-1}\)</span>.</p>
+<p>Now let’s write a function in R that will calculate this tes_t_ statistic.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t_stat &lt;-<span class="st"> </span>function(data, y_var, X_vars, gamma, <span class="dt">intercept =</span> T) {
+  <span class="co"># Turn data into matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+  <span class="co"># Add intercept if requested</span>
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Calculate n and k for degrees of freedom</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># Estimate coefficients</span>
+  b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(data, y_var, X_vars, intercept)
+  <span class="co"># Calculate OLS residuals</span>
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
+  <span class="co"># Calculate s^2</span>
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
+  <span class="co"># Inverse of X&#39;X</span>
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
+  <span class="co"># Standard error</span>
+  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 *<span class="st"> </span><span class="kw">diag</span>(XX_inv))
+  <span class="co"># Vector of _t_ statistics</span>
+  t_stats &lt;-<span class="st"> </span>(b -<span class="st"> </span>gamma) /<span class="st"> </span>se
+  <span class="co"># Return the _t_ statistics</span>
+  <span class="kw">return</span>(t_stats)
+}</code></pre></div>
+<p>You could probably write the same function in a single (long) line of code. However, it would be (1) ugly and (2) difficult to debug. I recommend some intermediate steps—even if you are using pipes.</p>
+<p>Now let’s test drive our function <code>t_stat()</code> on our car data.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> Specifically, let’s regress price on an intercept, weight, and mpg and test the estimated coefficients against the null hypothesis that they are zero, <em>i.e.</em>, <span class="math inline">\(\bar{\boldsymbol{\gamma}} = \left[0 \quad 0 \quad 0\right]^\prime\)</span>.</p>
+<p>We should probably compare our calculated <em>t</em> statistics to the <em>t</em> statistics calculated by the function <code>felm()</code>. For this task, we will grab the <code>coefficients</code> from the <code>summary()</code> function<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> after it is applied to <code>felm()</code>. To grab the <code>coefficients</code> from <code>summary()</code> we will use the <code>%$%</code> operator from <code>magrittr</code>.</p>
+<div id="section" class="section level3">
+<h3><code>%$%</code></h3>
+<p>Officially, the <code>%$%</code> pipe is called the <em>exposition</em> pipe operator because it <em>exposes</em> the names of the left-hand-side object to the right-hand-side expression. More simply: <code>%$%</code> helps you avoid using too many <code>$</code>s. For example, if you want to find the correlation between price and weight, you could type <code>cor(cars$price, cars$weight)</code> or you could go with <code>cars %$% cor(price, weight)</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(cars$price, cars$weight)
+## [1] 0.5386115
+cars %$%<span class="st"> </span><span class="kw">cor</span>(price, weight)
+## [1] 0.5386115</code></pre></div>
+<p>For more on the <code>magrittr</code> package, type <code>vignette(&quot;magrittr&quot;)</code> into your console. Vignettes are helpful summaries of packages. To see all of the vignettes available, type <code>browseVignettes()</code>.</p>
+</div>
+<div id="back-to-t-statistics" class="section level3">
+<h3>Back to <span class="math inline">\(t\)</span> statistics!</h3>
+<p>Okay, so let’s finally compare our function to <code>felm()</code>’s results.</p>
+<p>First, our function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t_stat</span>(cars,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>),
+  <span class="dt">gamma =</span> <span class="dv">0</span>, <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                price
+## intercept  0.5410180
+## mpg       -0.5746808
+## weight     2.7232382</code></pre>
+<p>And now the <em>t</em> statistics from <code>felm()</code><a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">felm</span>(price ~<span class="st"> </span>mpg +<span class="st"> </span>weight, cars) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>() %$%<span class="st"> </span>(coefficients)[,<span class="dv">3</span>]</code></pre></div>
+<pre><code>## (Intercept)         mpg      weight 
+##   0.5410180  -0.5746808   2.7232382</code></pre>
+<p>Huzzah! They match! But unless you have a table of <em>t</em> statistics stored in your head, you will want more than a vector of <em>t</em> statistics. We want <em>p</em>-values.</p>
+</div>
+</div>
+<div id="p-values" class="section level2">
+<h2><em>p</em>-values</h2>
+<p>What do we need to do to turn our newly calculated <em>t</em> statistics into <em>p</em>-values? First off, we are going to stick with two-sided hypothesis tests where the null hypothesis is our parameter is zero.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> We need to find the percentage of the <em>t</em> distribution (with <span class="math inline">\(n-k\)</span> degrees of freedom) that is <em>more extreme</em> than (the absolute value) of our test statistic. More formally, the <em>p</em>-value <span class="math inline">\(p\)</span> for our j<sup>th</sup> <em>t</em> statistic <span class="math inline">\(t_j\)</span> is defined as</p>
+<p><span class="math display">\[ p = \text{Pr}\left( t_\text{df} &gt; \left| t_j \right| \right) \times 2\]</span></p>
+<p>Let’s code up the calculation of a <em>p</em>-value. We will make use of the function <code>pt(q, df)</code>, which gives the distribution function for a <em>t</em>-distributed random variable evaluated at <code>q</code> with <code>df</code> degrees of freedom. In our situation, we will make use of <code>pt()</code>’s optional argument <code>lower.tail</code>. The <code>lower.tail</code> argument defaults to <code>TRUE</code>, which means <code>pt()</code> is evaluating the CDF at <code>q</code>. If we set the <code>lower.tail</code> argument to <code>FALSE</code>, then we will get one minus the CDF, which is what we want for the <em>p</em>-value.</p>
+<p>Example</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The default: lower.tail = TRUE</span>
+<span class="kw">pt</span>(<span class="dt">q =</span> <span class="dv">2</span>, <span class="dt">df =</span> <span class="dv">15</span>)
+## [1] 0.9680275
+<span class="co"># Setting lower.tail = TRUE</span>
+<span class="kw">pt</span>(<span class="dt">q =</span> <span class="dv">2</span>, <span class="dt">df =</span> <span class="dv">15</span>, <span class="dt">lower.tail =</span> T)
+## [1] 0.9680275
+<span class="co"># Setting lower.tail = FALSE</span>
+<span class="kw">pt</span>(<span class="dt">q =</span> <span class="dv">2</span>, <span class="dt">df =</span> <span class="dv">15</span>, <span class="dt">lower.tail =</span> F)
+## [1] 0.0319725</code></pre></div>
+<p>This situation is a great example of how R plays very nicely with vectors. Imagine we have a vector of <em>t</em> statistics named <code>t_stats</code>. We can calculate the <em>p</em>-values associated with the <em>t</em> statistics via</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n-k, <span class="dt">lower.tail =</span> F) *<span class="st"> </span><span class="dv">2</span></code></pre></div>
+</div>
+<div id="put-it-all-together" class="section level2">
+<h2>Put it all together</h2>
+<p>Finally, let’s put together a nice-<em>ish</em> table like the one that <code>felm()</code> returns: coefficient estimates, standard errors, <em>t</em> statistics, and <em>p</em>-values. Because I’m so clever, we’ll call the function that performs this task <code>ols()</code>.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> In addition, because many of our functions return matrices, we will use <code>as.vector()</code> to convert <span class="math inline">\(1\times k\)</span> or <span class="math inline">\(k\times 1\)</span> matrices to vectors. We will also use the <code>round()</code> function to maintain a reasonable number of digits.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+  <span class="co"># Turn data into matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+  <span class="co"># Add intercept if requested</span>
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Calculate n and k for degrees of freedom</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># Estimate coefficients</span>
+  b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(data, y_var, X_vars, intercept)
+  <span class="co"># Calculate OLS residuals</span>
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
+  <span class="co"># Calculate s^2</span>
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
+  <span class="co"># Inverse of X&#39;X</span>
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
+  <span class="co"># Standard error</span>
+  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 *<span class="st"> </span><span class="kw">diag</span>(XX_inv))
+  <span class="co"># Vector of _t_ statistics</span>
+  t_stats &lt;-<span class="st"> </span>(b -<span class="st"> </span><span class="dv">0</span>) /<span class="st"> </span>se
+  <span class="co"># Calculate the p-values</span>
+  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n-k, <span class="dt">lower.tail =</span> F) *<span class="st"> </span><span class="dv">2</span>
+  <span class="co"># Nice table (data.frame) of results</span>
+  results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="co"># The rows have the coef. names</span>
+    <span class="dt">effect =</span> <span class="kw">rownames</span>(b),
+    <span class="co"># Estimated coefficients</span>
+    <span class="dt">coef =</span> <span class="kw">as.vector</span>(b) %&gt;%<span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>),
+    <span class="co"># Standard errors</span>
+    <span class="dt">std_error =</span> <span class="kw">as.vector</span>(se) %&gt;%<span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>),
+    <span class="co"># t statistics</span>
+    <span class="dt">t_stat =</span> <span class="kw">as.vector</span>(t_stats) %&gt;%<span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>),
+    <span class="co"># p-values</span>
+    <span class="dt">p_value =</span> <span class="kw">as.vector</span>(p_values) %&gt;%<span class="st"> </span><span class="kw">round</span>(<span class="dv">4</span>)
+    )
+  <span class="co"># Return the results</span>
+  <span class="kw">return</span>(results)
+}</code></pre></div>
+<p>Finally, let’s test our function and compare it to the output of <code>felm()</code> and the coefficients it outputs in <code>summary()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ols</span>(<span class="dt">data =</span> cars,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>),
+  <span class="dt">intercept =</span> T)
+##      effect     coef std_error t_stat p_value
+## 1 intercept 1946.069  3597.050  0.541  0.5902
+## 2       mpg  -49.512    86.156 -0.575  0.5673
+## 3    weight    1.747     0.641  2.723  0.0081</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">felm</span>(price ~<span class="st"> </span>mpg +<span class="st"> </span>weight, cars) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>() %$%<span class="st"> </span>coefficients
+##                Estimate   Std. Error    t value    Pr(&gt;|t|)
+## (Intercept) 1946.068668 3597.0495988  0.5410180 0.590188628
+## mpg          -49.512221   86.1560389 -0.5746808 0.567323727
+## weight         1.746559    0.6413538  2.7232382 0.008129813</code></pre></div>
+<p>Pretty cool, eh?</p>
+</div>
+</div>
+<div id="f-tests" class="section level1">
+<h1><span class="math inline">\(F\)</span> tests</h1>
+<p>As Max has likely told you, there will be situations where you don’t care as much about testing the significance of individual coefficients as you care about testing <em>joint</em> significance. For example, is there evidence that either <span class="math inline">\(\beta_1\)</span> <em>or</em> <span class="math inline">\(\beta_2\)</span> are different significantly from zero? Enter the <span class="math inline">\(F\)</span> test!<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
+<div id="the-formal-part" class="section level2">
+<h2>The formal part</h2>
+<p>Assume our data-generating process is</p>
+<p><span class="math display">\[ \mathbf{y} = \beta_0 + \mathbf{x}_1 \beta_1 + \mathbf{x}_2 \beta_2 + \mathbf{x}_3 \beta_3 + \varepsilon \]</span></p>
+<p>To test whether <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span> are jointly different from zero, we need two more objects: <span class="math inline">\(\mathbf{R}\)</span> and <span class="math inline">\(\mathbf{r}\)</span>. <span class="math inline">\(\mathbf{R}\)</span> is a <span class="math inline">\(j\times k\)</span> matrix where <span class="math inline">\(j\)</span> is the number of joint hypotheses we will test and <span class="math inline">\(k\)</span> is the number of coefficients in our model (inclusive of the intercept). The <span class="math inline">\(\mathbf{R}\)</span> matrix creates linear combinations of the coefficients for each of individual hypotheses that we will jointly test. The <span class="math inline">\(j\times 1\)</span> vector <span class="math inline">\(\mathbf{r}\)</span> gives the right-hand side of the hypotheses that we want to test.</p>
+<p>For example, if we want to jointly test <span class="math inline">\(\beta_1 = 1\)</span>, <span class="math inline">\(\beta_2 = 0\)</span> and <span class="math inline">\(\beta_3 = 7\)</span>, our matrices would be<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
+<p><span class="math display">\[
+  \mathbf{R} = \left[ \begin{array}{cccc}
+  0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 1 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 1 \\
+  \end{array} \right] \enspace \text{and} \enspace
+  \mathbf{r} = \left[ \begin{array}{c}
+  1 \\
+  0 \\
+  7 \\
+  \end{array} \right]
+\]</span></p>
+<p>If we want to jointly test that <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span> are jointly different from zero, the matrices become</p>
+<p><span class="math display">\[
+  \mathbf{R} = \left[ \begin{array}{cccc}
+  0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 1 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 1 \\
+  \end{array} \right] \enspace \text{and} \enspace
+  \mathbf{r} = \left[ \begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+  \end{array} \right]
+\]</span></p>
+<p>As you saw in lecture, you can write the statistic in the <span class="math inline">\(F\)</span> test as</p>
+<p><span class="math display">\[
+  F =
+  \dfrac{(\mathbf{R}\mathbf{b}-\mathbf{r})^\prime
+    \left[\mathbf{R}\left(\mathbf{X}^\prime \mathbf{X}\right)^{-1} \right]
+    (\mathbf{R}\mathbf{b}-\mathbf{r}) / J}{s^2} =
+  \dfrac{(\mathbf{R}\mathbf{b})^\prime
+    \left[\mathbf{R}\left(\mathbf{X}^\prime \mathbf{X}\right)^{-1} \right]
+    (\mathbf{R}\mathbf{b}) / J}{s^2}
+\]</span></p>
+<p>where the equality comes from the special (though common) case of <span class="math inline">\(\mathbf{r} = \boldsymbol{0}\)</span>. In our case, <span class="math inline">\(J=3\)</span> because we are jointly testing three hypotheses (also called imposing three restrictions).</p>
+</div>
+<div id="f-in-r" class="section level2">
+<h2><span class="math inline">\(F\)</span> in R</h2>
+<p>Now we will write up a function that jointly tests all of the coefficients (except the intercept). Here, I will assume the joint hypotheses in which we are interested take the from <span class="math inline">\(\beta_i = 0\)</span>. You should feel free to write more complex functions that take an arbitrary <span class="math inline">\(\mathbf{R}\)</span> and <span class="math inline">\(\mathbf{r}\)</span>. I’m also going to assume that we want an intercept.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">joint_test &lt;-<span class="st"> </span>function(data, y_var, X_vars) {
+  <span class="co"># Turn data into matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+  <span class="co"># Add intercept</span>
+  X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Name the new column &quot;intercept&quot;</span>
+  <span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;intercept&quot;</span>, X_vars)
+  <span class="co"># Calculate n and k for degrees of freedom</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># J is k-1</span>
+  J &lt;-<span class="st"> </span>k -<span class="st"> </span><span class="dv">1</span>
+  <span class="co"># Create the R matrix: bind a column of zeros</span>
+  <span class="co"># onto a J-by-J identity matrix</span>
+  R &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">0</span>, <span class="kw">diag</span>(J))
+
+  <span class="co"># Estimate coefficients</span>
+  b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(data, y_var, X_vars)
+  <span class="co"># Calculate OLS residuals</span>
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
+  <span class="co"># Calculate s^2</span>
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
+
+  <span class="co"># Create the inner matrix R(X&#39;X)^(-1)R&#39;</span>
+  RXXR &lt;-<span class="st"> </span>R %*%<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(R)
+  <span class="co"># Calculate the F stat</span>
+  f_stat &lt;-<span class="st"> </span><span class="kw">t</span>(R %*%<span class="st"> </span>b) %*%<span class="st"> </span><span class="kw">solve</span>(RXXR) %*%<span class="st"> </span>(R %*%<span class="st"> </span>b) /<span class="st"> </span>J /<span class="st"> </span>s2
+  <span class="co"># Calculate the p-value</span>
+  p_value &lt;-<span class="st"> </span><span class="kw">pf</span>(<span class="dt">q =</span> f_stat, <span class="dt">df1 =</span> J, <span class="dt">df2 =</span> n-k, <span class="dt">lower.tail =</span> F)
+  <span class="co"># Create a data.frame of the f stat. and p-value</span>
+  results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="dt">f_stat =</span> f_stat %&gt;%<span class="st"> </span><span class="kw">as.vector</span>(),
+    <span class="dt">p_value =</span> p_value %&gt;%<span class="st"> </span><span class="kw">as.vector</span>())
+  <span class="kw">return</span>(results)
+}</code></pre></div>
+<p>Now run the <span class="math inline">\(F\)</span> test jointly testing the significance of the coefficients on miles per gallon and weight (with the outcome variable price).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">joint_test</span>(<span class="dt">data =</span> cars,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))</code></pre></div>
+<pre><code>##     f_stat      p_value
+## 1 14.73982 4.424878e-06</code></pre>
+<p>Finally, let’s check if the our function matches <code>felm()</code>’s joint statistic and <em>p</em>-value.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">felm</span>(price ~<span class="st"> </span>mpg +<span class="st"> </span>weight, cars) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>() %$%<span class="st"> </span>F.fstat</code></pre></div>
+<pre><code>##            F          df1          df2            p 
+## 1.473982e+01 2.000000e+00 7.100000e+01 4.424878e-06</code></pre>
+</div>
+<div id="warningsmessages" class="section level2">
+<h2>Warnings/messages</h2>
+<p>What if you want to incorporate this <span class="math inline">\(F\)</span> statistic and joint test <em>p</em>-value in your <code>ols()</code> function? You might face a few challenges.</p>
+<ol style="list-style-type: decimal">
+<li>We created a nice table at the end of the <code>ols()</code> function. Where would we put this new output from the <span class="math inline">\(F\)</span> test? One option is to use a list: you could return a list where the first element is our nice results table and the second element is the information from our <span class="math inline">\(F\)</span> test.</li>
+<li>The second challenge that you face is that our <code>ols()</code> function allows the user to select whether or not to include an intercept, but we need an intercept for our <span class="math inline">\(F\)</span> test. Solution: warning and error messages in R.</li>
+</ol>
+<p>For an extreme solution, you could write an <code>if</code> statement that checked whether the user specified <code>intercept = F</code>. If <code>intercept</code> is indeed <code>FALSE</code>, you could stop the function in its tracks and print the error message “No intercept!”. In code, this would look like</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (intercept ==<span class="st"> </span>F) <span class="kw">stop</span>(<span class="st">&quot;No intercept!&quot;</span>)</code></pre></div>
+<p>However, this solution is a bit extreme: you will not be able to get your results for the other parts of your function if <code>intercept = F</code>. Instead, you might want to use the <code>warning()</code> function to warn the user that because she/he requested no intercept, you will not return an <span class="math inline">\(F\)</span> statistic or joint p-value. Let’s do it.</p>
+<p>Below is a function <code>ols_joint()</code> that returns a list of results and issues a warning if the user specifies no intercept.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ols_joint &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+  <span class="co"># Run the ols() function</span>
+  ols_results &lt;-<span class="st"> </span><span class="kw">ols</span>(data, y_var, X_vars, intercept)
+  <span class="co"># If intercept is T, run the joint_test() function</span>
+  <span class="co"># Otherwise, define joint_results to be NA and</span>
+  <span class="co"># issue a warning</span>
+  if (intercept ==<span class="st"> </span>T) {
+    joint_results &lt;-<span class="st"> </span><span class="kw">joint_test</span>(data, y_var, X_vars)
+  } else {
+    <span class="kw">warning</span>(<span class="st">&quot;No intercept: will not perform F test.&quot;</span>)
+    joint_results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+      <span class="dt">f_stat =</span> <span class="ot">NA</span>,
+      <span class="dt">p_value =</span> <span class="ot">NA</span>)
+  }
+  <span class="co"># Create the results list</span>
+  results &lt;-<span class="st"> </span><span class="kw">list</span>(ols_results, joint_results)
+  <span class="co"># Return the results list</span>
+  <span class="kw">return</span>(results)
+}</code></pre></div>
+<p>Now let’s see what happens when we include and exclude an intercept.</p>
+<p>With an intercept:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ols_joint</span>(<span class="dt">data =</span> cars,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>),
+  <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>## [[1]]
+##      effect     coef std_error t_stat p_value
+## 1 intercept 1946.069  3597.050  0.541  0.5902
+## 2       mpg  -49.512    86.156 -0.575  0.5673
+## 3    weight    1.747     0.641  2.723  0.0081
+## 
+## [[2]]
+##     f_stat      p_value
+## 1 14.73982 4.424878e-06</code></pre>
+<p>Without an intercept:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ols_joint</span>(<span class="dt">data =</span> cars,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>),
+  <span class="dt">intercept =</span> F)</code></pre></div>
+<pre><code>## Warning in ols_joint(data = cars, y_var = &quot;price&quot;, X_vars = c(&quot;mpg&quot;,
+## &quot;weight&quot;), : No intercept: will not perform F test.</code></pre>
+<pre><code>## [[1]]
+##   effect   coef std_error t_stat p_value
+## 1    mpg -5.479    28.122 -0.195  0.8461
+## 2 weight  2.076     0.199 10.431  0.0000
+## 
+## [[2]]
+##   f_stat p_value
+## 1     NA      NA</code></pre>
+</div>
+</div>
+<div id="simulation" class="section level1">
+<h1>Simulation</h1>
+<p>I think it’s time for a simulation. Let’s simulate the power (probability that we reject the null when the null is false) of a simple linear regression. We will also incorporate sample size into this simulation. First, let’s write a few functions.</p>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<p>The first function will generate data for the regression, given a sample size <code>sample_size</code>. As I mentioned above, we will stick with a simple linear regression</p>
+<p><span class="math display">\[\mathbf{y} = \beta_0 + \beta_1 \mathbf{x} + \boldsymbol{\varepsilon}\]</span></p>
+<p>Let’s assume <span class="math inline">\(\beta_0 = 7\)</span> and <span class="math inline">\(\beta_1 = 0.5\)</span>. We will draw <span class="math inline">\(x\)</span> and <span class="math inline">\(\varepsilon\)</span> from the standard normal distribution.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function to generate data</span>
+gen_data &lt;-<span class="st"> </span>function(sample_size) {
+  <span class="co"># Create data.frame with random x and error</span>
+  data_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="dt">x =</span> <span class="kw">rnorm</span>(sample_size),
+    <span class="dt">e =</span> <span class="kw">rnorm</span>(sample_size))
+  <span class="co"># Calculate y = 7 + 0.5 x + e; drop &#39;e&#39;</span>
+  data_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="dv">7</span> +<span class="st"> </span><span class="fl">0.5</span> *<span class="st"> </span>x +<span class="st"> </span>e) %&gt;%
+<span class="st">    </span><span class="kw">select</span>(-e)
+  <span class="co"># Return data_df</span>
+  <span class="kw">return</span>(data_df)
+}</code></pre></div>
+<p>Now we will write a function that takes the output of <code>gen_data()</code> and feeds it to <code>ols()</code>, which gives us the coefficient estimates and <em>p</em>-value from testing the coefficients against zero.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">one_sim &lt;-<span class="st"> </span>function(sample_size) {
+  <span class="co"># Estimate via OLS</span>
+  ols_est &lt;-<span class="st"> </span><span class="kw">ols</span>(<span class="dt">data =</span> <span class="kw">gen_data</span>(sample_size),
+    <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x&quot;</span>)
+  <span class="co"># Grab the estimated coefficient on x</span>
+  <span class="co"># (the second element of &#39;coef&#39;)</span>
+  b1 &lt;-<span class="st"> </span>ols_est %$%<span class="st"> </span>coef[<span class="dv">2</span>]
+  <span class="co"># Grab the second p-value</span>
+  <span class="co"># (the first p-value is for the intercept)</span>
+  p_value &lt;-<span class="st"> </span>ols_est %$%<span class="st"> </span>p_value[<span class="dv">2</span>]
+  <span class="co"># Return a data.frame with b1 and p_value</span>
+  <span class="kw">return</span>(<span class="kw">data.frame</span>(b1, p_value))
+}</code></pre></div>
+<p>Finally, we need to write a function that will run the simulation <code>n_sims</code> times. One option we used previously is the <code>lapply()</code> function. I’ll provide you with an alternative here that uses <code>replicate()</code>.<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> <code>replicate()</code> needs two arguments: the number of replications (<code>n</code>) and the expression (<code>expr</code>) you would like to replicate. You can also give <code>replicate()</code> an argument called <code>simplify</code> which tells the function how to format the results (which type of class). I prefer setting <code>simplify = F</code> so that I know I will get a list. We can then use <code>bind_rows()</code> on the list to create a nice data frame.</p>
+<p>The function will require two arguments: <code>n_sims</code>, the number of simulations that we want to run, and <code>n</code>, the sample size drawn within each simulation. The function will also accept a third optional argument <code>seed</code>, which is the seed we will use in the simulation. The default value for <code>seed</code> will be <code>12345</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ols_sim &lt;-<span class="st"> </span>function(n_sims, sample_size, <span class="dt">seed =</span> <span class="dv">12345</span>) {
+  <span class="co"># Set the seed</span>
+  <span class="kw">set.seed</span>(seed)
+  <span class="co"># Run one_sim n_sims times; convert results to data.frame</span>
+  sim_df &lt;-<span class="st"> </span><span class="kw">replicate</span>(
+    <span class="dt">n =</span> n_sims,
+    <span class="dt">expr =</span> <span class="kw">one_sim</span>(sample_size),
+    <span class="dt">simplify =</span> F
+    ) %&gt;%<span class="st"> </span><span class="kw">bind_rows</span>()
+  <span class="co"># Return sim_df</span>
+  <span class="kw">return</span>(sim_df)
+}</code></pre></div>
+<p>Finally, let’s run the <code>ols_sim()</code> function for two different sample sizes: 10 and 100. For each sample size, we will run the simulation 1,000 times.</p>
+<p><strong>Warning</strong>: Running two-thousand iterations of a simulation can take some time.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run ols_sim for sample size of 10</span>
+sim10 &lt;-<span class="st"> </span><span class="kw">ols_sim</span>(<span class="dt">n_sims =</span> <span class="fl">1e3</span>, <span class="dt">sample_size =</span> <span class="dv">10</span>)
+<span class="co"># Run ols_sim for sample size of 100</span>
+sim100 &lt;-<span class="st"> </span><span class="kw">ols_sim</span>(<span class="dt">n_sims =</span> <span class="fl">1e3</span>, <span class="dt">sample_size =</span> <span class="dv">100</span>)</code></pre></div>
+</div>
+<div id="graphs" class="section level2">
+<h2>Graphs</h2>
+<p>Let’s look at our results. I’m going to use the <code>ggplot2</code> package. Don’t worry about the coding syntax for the moment: we will cover <code>ggplot2</code> next section. For now, just look at the (pretty) pictures.<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(ggthemes)</code></pre></div>
+<p>Density plot of the <em>p</em>-values for the sample-size 10 simulation</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> sim10, <span class="kw">aes</span>(<span class="dt">x =</span> p_value)) +
+<span class="st">  </span><span class="kw">stat_density</span>(<span class="dt">fill =</span> <span class="st">&quot;grey20&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.9</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">0.05</span>, <span class="dt">color =</span> <span class="st">&quot;deeppink2&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">theme_pander</span>() +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="kw">italic</span>(<span class="st">&quot;p&quot;</span>), <span class="st">&quot;-Value&quot;</span>))) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;Distribution of &quot;</span>, <span class="kw">italic</span>(p),
+    <span class="st">&quot;-Values from 1,000 simulations with sample size 10&quot;</span>)))</code></pre></div>
+<p><img src="section05_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>Density plot of the <em>p</em>-values for the sample-size 100 simulation</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> sim100, <span class="kw">aes</span>(<span class="dt">x =</span> p_value)) +
+<span class="st">  </span><span class="kw">stat_density</span>(<span class="dt">fill =</span> <span class="st">&quot;grey20&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.9</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">0.05</span>, <span class="dt">color =</span> <span class="st">&quot;deeppink2&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">xlim</span>(<span class="dv">0</span>, <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">theme_pander</span>() +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="kw">italic</span>(<span class="st">&quot;p&quot;</span>), <span class="st">&quot;-Value&quot;</span>))) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;Distribution of &quot;</span>, <span class="kw">italic</span>(p),
+    <span class="st">&quot;-Values from 1,000 simulations with sample size 100&quot;</span>)))</code></pre></div>
+<p><img src="section05_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>So what is the takeaway here? Power increases with sample size. Why does the second plot look so strange? Nearly all of the <em>p</em>-values are approximately zero.</p>
+<p>A related topic: How does sample size affect the distribution of estimates for <span class="math inline">\(\beta_1\)</span>?</p>
+<p>Density plot of the estimates for <span class="math inline">\(\beta_1\)</span> for sample-size 10 simulation</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> sim10, <span class="kw">aes</span>(<span class="dt">x =</span> b1)) +
+<span class="st">  </span><span class="kw">stat_density</span>(<span class="dt">fill =</span> <span class="st">&quot;grey70&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;darkviolet&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">theme_pander</span>() +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(beta[<span class="dv">1</span>], <span class="st">&quot; estimate&quot;</span>))) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;Distribution of &quot;</span>, beta[<span class="dv">1</span>],
+    <span class="st">&quot; estimates from 1,000 simulations with sample size 10&quot;</span>)))</code></pre></div>
+<p><img src="section05_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>Density plot of the estimates for <span class="math inline">\(\beta_1\)</span> for sample-size 100 simulation</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> sim100, <span class="kw">aes</span>(<span class="dt">x =</span> b1)) +
+<span class="st">  </span><span class="kw">stat_density</span>(<span class="dt">fill =</span> <span class="st">&quot;grey70&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;darkviolet&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">theme_pander</span>() +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(beta[<span class="dv">1</span>], <span class="st">&quot; estimate&quot;</span>))) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;Distribution of &quot;</span>, beta[<span class="dv">1</span>],
+    <span class="st">&quot; estimates from 1,000 simulations with sample size 100&quot;</span>)))</code></pre></div>
+<p><img src="section05_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>So what is going on here? We are seeing the distribution of the estimates for <span class="math inline">\(\beta_1\)</span> get tighter around the true parameter value as the sample size increases (make sure you note the differences on the <em>x</em>-axis).</p>
+</div>
+</div>
+<div id="parallelization" class="section level1">
+<h1>Parallelization</h1>
+<p>Depending on your computer, the simulations above may have taken a little bit of time. Simulations can sometimes take a long time—you are, afterall, asking your computer to repeat a tasks thousands of times. So how can you speed up this process?</p>
+<ol style="list-style-type: decimal">
+<li>Write more efficient code.</li>
+<li>Parallelize where possible.</li>
+</ol>
+<p>Let’s assume your/my code is as efficient as it can be (it rarely is). It’s time to parallelize. Parallelization in R is fairly straightforward—especially if you are working on a Mac or in a Linux environment (sorry, Windows folks). I will first cover parallelization for Mac/Linux machines. Then I will cover parallelization on Windows machines.</p>
+<div id="on-mac-and-linux" class="section level2">
+<h2>On Mac and Linux</h2>
+<p>You will need to install the <code>parallel</code> package. The <code>parallel</code> package offers a number of functions to parallelize your code, but today we will focus on the parallelized version of <code>lapply()</code>: <code>mclapply()</code>. After loading the <code>parallel</code> package, enter <code>?mclapply</code> into the R console to see the function description. As you can see, <code>mclapply()</code> starts with the same two arguments as <code>lapply()</code>—<code>X</code> and <code>FUN</code>—and then offers a number of other options. The most important option for us at the moment is <code>mc.cores</code>, which is the option that allows you to choose how many processes to run simultaneously.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(parallel)</code></pre></div>
+<p>While infinity would be a nice number to enter in the <code>mc.cores</code> argument, you should probably stick with a number less than or equal to the number of cores on your computer. To see how many cores are available on your machine, type <code>detectCores()</code> into the R console.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detectCores</span>()</code></pre></div>
+<pre><code>## [1] 4</code></pre>
+<p>Looks like I have four.<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a></p>
+<p>We are now going to parallelize our function <code>ols_sim()</code>. For this parallelization, we will replace the <code>replicate()</code> function with a similar use of <code>lapply()</code>. However, instead of using plain old <code>lapply()</code>, we will use <code>mclapply()</code> with four cores.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ols_sim_mc &lt;-<span class="st"> </span>function(n_sims, sample_size, <span class="dt">seed =</span> <span class="dv">12345</span>) {
+  <span class="co"># Require the parallel package</span>
+  <span class="kw">require</span>(parallel)
+  <span class="co"># Set the seed</span>
+  <span class="kw">set.seed</span>(seed)
+  <span class="co"># Run one_sim n_sims times; convert results to data.frame</span>
+  sim_df &lt;-<span class="st"> </span><span class="kw">mclapply</span>(
+    <span class="dt">X =</span> <span class="kw">rep</span>(<span class="dt">x =</span> sample_size, <span class="dt">times =</span> n_sims),
+    <span class="dt">FUN =</span> one_sim,
+    <span class="co"># Specify that we want 4 cores</span>
+    <span class="dt">mc.cores =</span> <span class="dv">4</span>
+    ) %&gt;%<span class="st"> </span><span class="kw">bind_rows</span>()
+  <span class="co"># Return sim_df</span>
+  <span class="kw">return</span>(sim_df)
+}</code></pre></div>
+<p>Now let’s run the simulation again—both parallelized and non-parallelized. This time around, let’s go for 10,000 iterations. And let’s time everything (using <code>proc.time()</code> to get the time at which the simulation starts and stops).</p>
+<p>Not parallelized:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run ols_sim for sample size of 10</span>
+start1 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+sim10 &lt;-<span class="st"> </span><span class="kw">ols_sim</span>(<span class="dt">n_sims =</span> <span class="fl">1e4</span>, <span class="dt">sample_size =</span> <span class="dv">10</span>)
+stop1 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+<span class="co"># Run ols_sim for sample size of 100</span>
+start2 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+sim100 &lt;-<span class="st"> </span><span class="kw">ols_sim</span>(<span class="dt">n_sims =</span> <span class="fl">1e4</span>, <span class="dt">sample_size =</span> <span class="dv">100</span>)
+stop2 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()</code></pre></div>
+<p>Parallelized:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run ols_sim_mc for sample size of 10</span>
+start3 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+sim10_mc &lt;-<span class="st"> </span><span class="kw">ols_sim_mc</span>(<span class="dt">n_sims =</span> <span class="fl">1e4</span>, <span class="dt">sample_size =</span> <span class="dv">10</span>)
+stop3 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+<span class="co"># Run ols_sim_mc for sample size of 100</span>
+start4 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+sim100_mc &lt;-<span class="st"> </span><span class="kw">ols_sim_mc</span>(<span class="dt">n_sims =</span> <span class="fl">1e4</span>, <span class="dt">sample_size =</span> <span class="dv">100</span>)
+stop4 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()</code></pre></div>
+<p>What are the times? We can check them using the difference between the stop time and the start time for each specification:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop1 -<span class="st"> </span>start1</code></pre></div>
+<pre><code>##    user  system elapsed 
+##  51.450   1.707  53.213</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop2 -<span class="st"> </span>start2</code></pre></div>
+<pre><code>##    user  system elapsed 
+##  51.767   1.685  53.504</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop3 -<span class="st"> </span>start3</code></pre></div>
+<pre><code>##    user  system elapsed 
+##  97.273   3.876  30.240</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop4 -<span class="st"> </span>start4</code></pre></div>
+<pre><code>##    user  system elapsed 
+## 100.396   3.909  28.438</code></pre>
+<p>The column we care about here is the <code>elapsed</code> column (we can talk about the other columns another time). Comparing the non-parallelized times (the suffixes <code>1</code> and <code>2</code>) and the parallelized times (the suffixes <code>3</code> and <code>4</code>) reveals that parallelization in this setting (using four cores) cuts processing time approximately in half.</p>
+</div>
+<div id="on-windows" class="section level2">
+<h2>On Windows</h2>
+<p>The idea of parallelization does not change with Windows machines—what we covered above still applies—but the Windows installation of R requires a slightly different method of parallelizing your code. You can use the Windows-style parallelization we cove below on Mac or Linux computers, but you cannot use the Mac/Linux-style parallelization on Windows computers.<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a> The only reason I am teaching both is that the Mac/Linux methods are a bit easier.</p>
+<p>We will still use the <code>parallel</code> package on Windows machines, but we will cover a few more functions necessary for setting up the parallelization, and we will use the function <code>parLapply()</code> instead of <code>mclapply()</code>.</p>
+<p>Let’s get started. As above, you can check the number of cores available to you using the <code>detectCores()</code> function from the <code>parallel</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(parallel)
+<span class="kw">detectCores</span>()</code></pre></div>
+<pre><code>## [1] 4</code></pre>
+<p>Assuming you are ready to run some code in parallel, we will now set up a cluster using the <code>makeCluster()</code>, <code>clusterExport()</code>, and <code>clusterEvalQ()</code> functions.</p>
+<p>I recommend that you do set the number inside of <code>makeCluster()</code> to be less than or equal to the number of cores that you detected above. You should also know that if you set the number of cores in <code>makeCluster()</code> to be equal to the number of cores you detected, your computer may get really slow while you wait for your parallelized code to finish (<em>e.g.</em>, no Youtube).</p>
+<p>Let’s make a cluster with four cores.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Make the cluster</span>
+cl &lt;-<span class="st"> </span><span class="kw">makeCluster</span>(<span class="dv">4</span>)</code></pre></div>
+<p>Your new cluster is entirely blank. The functions <code>clusterExport()</code> and <code>clusterEvalQ()</code> pass objects from your current environment (what you see when you enter <code>ls()</code> in the R console) to the new clusters. You’ll often want to use some of the data/functions/packages you have already loaded to the cluster. What I mean here is even if you have loaded a few packages like <code>dplyr</code> and <code>magrittr</code>, they are not loaded on the cluster.</p>
+<p>We can load packages using <code>clusterEvalQ()</code>—let’s load <code>dplyr</code> and <code>magrittr</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load packages to cluster</span>
+<span class="kw">clusterEvalQ</span>(<span class="dt">cl =</span> cl, {
+  <span class="co"># Load packages</span>
+  <span class="kw">library</span>(dplyr)
+  <span class="kw">library</span>(magrittr)
+  })</code></pre></div>
+<p>Notice that <code>clusterEvalQ()</code> is actually just evaluating the code that we give it. We could do other things here than just loading functions.</p>
+<p>We also need to load any user-defined functions that we want to use on the cluster (the functions we wrote ourselves) to the cluster. For this task, we feed a character vector with the function/object names to the function <code>clusterExport()</code>. We have five functions that we will use the in simulation, so let’s load them:<a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load custom functions</span>
+<span class="kw">clusterExport</span>(<span class="dt">cl =</span> cl, <span class="kw">c</span>(<span class="st">&quot;b_ols&quot;</span>, <span class="st">&quot;gen_data&quot;</span>,
+  <span class="st">&quot;one_sim&quot;</span>, <span class="st">&quot;ols&quot;</span>, <span class="st">&quot;to_matrix&quot;</span>))</code></pre></div>
+<p>You can also load data to the cluster using <code>clusterExport()</code>, for example, <code>clusterExport(cl, &quot;cars&quot;)</code>. Alternatively, you could load everything in memory to the cluster using <code>clusterExport(cl, ls())</code>, but this route is a bit lazy and probably will slow your simulations down.</p>
+<p>We are finally ready to run our parallelized function. I am going to write it as a function and name the function <code>ols_sim_par()</code>. All we are really doing is replacing the <code>replicate()</code> with <code>parLapply()</code>. Note that we need to tell <code>parLapply()</code> which cluster to use (<code>cl</code>) and that <code>fun</code> is no longer capitalized as it was with <code>lapply()</code>. After defining this new simulation function <code>ols_sim_par</code>, we need to export it to the cluster, as we did with our other user-defined functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define the function</span>
+ols_sim_par &lt;-<span class="st"> </span>function(n_sims, sample_size, <span class="dt">seed =</span> <span class="dv">12345</span>) {
+  <span class="co"># Require the parallel package</span>
+  <span class="kw">require</span>(parallel)
+  <span class="co"># Set the seed</span>
+  <span class="kw">set.seed</span>(seed)
+  <span class="co"># Run one_sim n_sims times; convert results to data.frame</span>
+  sim_df &lt;-<span class="st"> </span><span class="kw">parLapply</span>(
+    <span class="dt">cl =</span> cl,
+    <span class="dt">X =</span> <span class="kw">rep</span>(<span class="dt">x =</span> sample_size, <span class="dt">times =</span> n_sims),
+    <span class="dt">fun =</span> one_sim
+    ) %&gt;%<span class="st"> </span><span class="kw">bind_rows</span>()
+  <span class="co"># Return sim_df</span>
+  <span class="kw">return</span>(sim_df)
+}
+<span class="co"># Send it to the cluster</span>
+<span class="kw">clusterExport</span>(cl, <span class="st">&quot;ols_sim_par&quot;</span>)</code></pre></div>
+<p>Finally, we can run the simulation. As we did above in the Mac/Linux section, let’s time the parallelized and non-parallelized versions and run them for 10,000 iterations.</p>
+<p>Parallelized:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run ols_sim_par for sample size of 10</span>
+start5 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+sim10_par &lt;-<span class="st"> </span><span class="kw">ols_sim_par</span>(<span class="dt">n_sims =</span> <span class="fl">1e4</span>, <span class="dt">sample_size =</span> <span class="dv">10</span>)
+stop5 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+<span class="co"># Run ols_sim_par for sample size of 100</span>
+start6 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+sim100_par &lt;-<span class="st"> </span><span class="kw">ols_sim_par</span>(<span class="dt">n_sims =</span> <span class="fl">1e4</span>, <span class="dt">sample_size =</span> <span class="dv">100</span>)
+stop6 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()</code></pre></div>
+<p>Not parallelized:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run ols_sim for sample size of 10</span>
+start7 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+sim10 &lt;-<span class="st"> </span><span class="kw">ols_sim</span>(<span class="dt">n_sims =</span> <span class="fl">1e4</span>, <span class="dt">sample_size =</span> <span class="dv">10</span>)
+stop7 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+<span class="co"># Run ols_sim for sample size of 100</span>
+start8 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+sim100 &lt;-<span class="st"> </span><span class="kw">ols_sim</span>(<span class="dt">n_sims =</span> <span class="fl">1e4</span>, <span class="dt">sample_size =</span> <span class="dv">100</span>)
+stop8 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()</code></pre></div>
+<p>When you finish the calculations using your cluster, you need to stop it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Stop the cluster</span>
+<span class="kw">stopCluster</span>(cl)</code></pre></div>
+<p>Putting it all together:</p>
+<p>And finally, we can compare the time taken for the parallelized and non-parallelized versions of our functions:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop5 -<span class="st"> </span>start5</code></pre></div>
+<pre><code>##    user  system elapsed 
+##  58.646   2.249  61.777</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop6 -<span class="st"> </span>start6</code></pre></div>
+<pre><code>##    user  system elapsed 
+##  55.020   1.900  57.221</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop7 -<span class="st"> </span>start7</code></pre></div>
+<pre><code>##    user  system elapsed 
+##   0.265   0.004  25.698</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stop8 -<span class="st"> </span>start8</code></pre></div>
+<pre><code>##    user  system elapsed 
+##   0.242   0.003  25.813</code></pre>
+<p>The result? Parallelizing your simulation cuts the time in half!<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a></p>
+</div>
+<div id="notes" class="section level2">
+<h2>Notes</h2>
+<p>The gains from parallelizing your code can be huge. However, writing efficient code can give you just as great of gains—and can also be less taxing on your computer (plus you can combine efficient code with parallelization for even bigger gains). Also, the parallelization we covered today will not work if your functions depend on previous outcomes from the simulation. This limitation generally not an issue for econometricians, but you should probably still be aware of it.</p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>There are a lot of resources—tutorials, packages, scripts—about parallelizing your R code. A decent place to start is <a href="http://www.parallelr.com/r-with-parallel-computing/">ParallelR</a>.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="piazza.com/berkeley/spring2017/are212" class="uri">piazza.com/berkeley/spring2017/are212</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Not a technical term.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>If this phrase does not make sense, don’t worry. Just wait until ARE 213.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Bad pun, I know.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>The <code>summary()</code> function is an example of a generic function in R: when you call <code>summary()</code> on the results from <code>felm()</code>, it is actually using the function <code>summary.felm()</code>. <code>summary()</code> looks at the class of the object you feed it and then decides which function to use to create the summary.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>The reason we use <code>(coefficients)[,3]</code> is that the <code>coefficients</code> object is actually a matrix with coefficient estimates, standard errors, <em>t</em> statistics, and <em>p</em>-values. The <code>[,3]</code> tells R we only want the third column of this matrix, which is the column with the <em>t</em> statistics.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>These two assumptions will not always be true in econometrics—but they will be true 99.99999% of the time.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>Because we are assuming the null hypothesis is always the parameter equals zero, our function with not have a <code>gamma</code> argument. Feel free to change this part.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>Joint significance is a little bit of a strange idea. We are basically asking if there is evidence that at least one of the coefficients is significantly different from zero.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>If you are having trouble seeing how <span class="math inline">\(\mathbf{R}\)</span> and <span class="math inline">\(\mathbf{r}\)</span> work, write out the multiplication of <span class="math inline">\(\mathbf{R}\boldsymbol{\beta} = \mathbf{r}\)</span> with <span class="math inline">\(\beta\)</span>s. It should give you a better sense of what is going on here.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>Below you will notice a new pipe operator, <code>%&lt;&gt;%</code>. This operator is also from the <code>magrittr</code> package. This pipe does exactly what our old friend <code>%&gt;%</code> does, but it then assigns the final value to the object on the left-hand side of <code>%&lt;&gt;%</code>. For instance, <code>tmp %&lt;&gt;% mean()</code> takes the object <code>tmp</code>, calculates its mean, and then replaces <code>tmp</code> with the calculated mean. Without using <code>%&lt;&gt;%</code>, one would write <code>tmp &lt;- tmp %&gt;% mean()</code> or <code>tmp &lt;- mean(tmp)</code>. The <code>%&lt;&gt;%</code> operator is especially helpful when chaining together several commands with the standard pipe <code>%&gt;%</code>.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>You are free to use either function—or an entirely different route. <code>replicate()</code> is a bit simpler, but <code>lapply()</code> has a parallelized version. Your choice. The <code>lapply()</code> call would look something like <code>lapply(X = rep(sample_size, n_sims), FUN = one_sim)</code><a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p>If you want to run the code, you will need to install the packages <code>ggplot2</code> and <code>ggthemes</code>.<a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p>You can sometimes get performance increases by using a number a little larger than your number of cores. I think this has something to do with multi-threaded cores, but we are now getting outside of my area of expertise, so….<a href="#fnref14">↩</a></p></li>
+<li id="fn15"><p>The most glaring issue is the fact that the Windows version of <code>mclapply()</code> does not allow <code>mc.cores</code> to be greater than one—<em>i.e.</em>, it does not allow parallelization.<a href="#fnref15">↩</a></p></li>
+<li id="fn16"><p>Now you are seeing why I like the Mac/Linux option for parallelization.<a href="#fnref16">↩</a></p></li>
+<li id="fn17"><p>We are being a little inaccurate in the calculation of the Windows-style processing times: we should probably include the time that it takes to set up the cluster—not just the time that it takes to run <code>ols_sim_par()</code>.<a href="#fnref17">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

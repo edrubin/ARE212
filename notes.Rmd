@@ -3,6 +3,8 @@ title: "Section notes"
 ---
 
 Links to section notes and relevant files.
+
+These notes (and I) owe a lot to previous GSIs for this class: [Fiona Burlig](https://www.fionaburlig.com/are212), [Kenny Bell](https://github.com/kendonB/ARE212), [Patrick Baylis](https://github.com/pbaylis/ARE212/), and [Dan Hammer](https://github.com/danhammer/ARE212).
 <br><br>
 
 #### [__Section 0__](section00.html): Setting up R
@@ -38,6 +40,13 @@ Writing your own (OLS) functions, using loops, and running simulations in R.
 Logical operators, optional arguments to your custom functions, Frisch-Waugh-Lovell (FWL) theorem, omitted variable bias, and measures of fit/overfitting.
 
 [pdf](Section04/section04.pdf) | [R script](Section04/section04.R) | [zip](Section04.zip)
+<br><br>
+
+#### [__Section 5__](section05.html): Inference and parallelization
+
+Statistical inference via hypothesis testing: _t_ tests and $F$ tests. Plus simulation and parallelization.
+
+[pdf](Section05/section05.pdf) | [R script](Section05/section05.R) | [zip](Section05.zip)
 <br><br>
 
 #### [__Supplement 1__](latexKnitr.html): LaTeX and `knitr`

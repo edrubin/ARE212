@@ -914,7 +914,7 @@ sim_dt &lt;-<span class="st"> </span><span class="kw">bias_simulator</span>(<spa
 <span class="co"># Emphasize the zero line</span>
 <span class="kw">abline</span>(<span class="dt">v =</span> <span class="dv">0</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)</code></pre></div>
 <p><img src="section03_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
-<p>Next section we’ll talk a bit about parallelization, which can greatly reduce the time of your simulations.</p>
+<p>In <a href="section05.html">section 5</a> we’ll talk about parallelization, which can greatly reduce the time of your simulations.</p>
 </div>
 </div>
 <div id="extensionschallenges" class="section level1">
@@ -940,7 +940,7 @@ sim_dt &lt;-<span class="st"> </span><span class="kw">bias_simulator</span>(<spa
 <li id="fn10"><p><code>felm()</code>, like most regression functions I’ve seen in R, uses a formula where the dependent variable<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> is separated from the independent variables with a tilde (<code>~</code>).<a href="#fnref10">↩</a></p></li>
 <li id="fn11"><p>This is our first time meeting a list. Lists are yet another way to store data in R—like vectors, matrices, data.frames, and tibbles. You can create lists with the <code>list()</code> function much like you create vectors with the <code>c()</code> function: <code>my_list &lt;- list(&quot;a&quot;, 1, c(1,2,3))</code>. Lists differ in that they do not require a uniform data type, as demonstrated in the list in the preceding sentence. Lists also utilize a slightly different indexing: you access the third element of the list <code>my_list</code> via <code>my_list[[3]]</code>. Notice the extra set of square brackets.<a href="#fnref11">↩</a></p></li>
 <li id="fn12"><p>We could alternatively try <code>sapply()</code>, which attempts to return nicely formatted objects. However, you never know if it is going to succeed in nicely formatting your results. If it doesn’t, then it returns a list. This sort of inconsistency is not very helpful in programming, so I generally avoid <code>sapply()</code>.<a href="#fnref12">↩</a></p></li>
-<li id="fn13"><p>Parallelization basically means that you run things at the same time—instead of waiting until one thing finishes to start the next. Thus some tasks can be parallelized—simulations for unbiased estimators—while other tasks that depend upon the output from previous iterations are more difficult to parallelize. We’ll talk more about parallelization next time.<a href="#fnref13">↩</a></p></li>
+<li id="fn13"><p>Parallelization basically means that you run things at the same time—instead of waiting until one thing finishes to start the next. Thus some tasks can be parallelized—simulations for unbiased estimators—while other tasks that depend upon the output from previous iterations are more difficult to parallelize. We’ll talk more about parallelization in <a href="section05.html">section 5</a>.<a href="#fnref13">↩</a></p></li>
 <li id="fn14"><p>Definitely not.<a href="#fnref14">↩</a></p></li>
 </ol>
 </div>

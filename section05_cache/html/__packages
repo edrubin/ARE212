@@ -1,0 +1,10 @@
+base
+rmarkdown
+dplyr
+Matrix
+lfe
+magrittr
+readr
+ggplot2
+ggthemes
+haven

@@ -428,7 +428,7 @@ Check the results in `results_df` using `lapply()` and `felm()`. _Hint_: remembe
 
 # Simulation
 
-One of the main reasons to learn the `apply()` family of functions is that they are very flexible (and easily parallelized).^[Parallelization basically means that you run things at the same time—instead of waiting until one thing finishes to start the next. Thus some tasks can be parallelized—simulations for unbiased estimators—while other tasks that depend upon the output from previous iterations are more difficult to parallelize. We'll talk more about parallelization next time.] This flexibility lends them to use in simulation, which basically means we want to generate random numbers and to test/observe properties of estimators. And repeat many times.
+One of the main reasons to learn the `apply()` family of functions is that they are very flexible (and easily parallelized).^[Parallelization basically means that you run things at the same time—instead of waiting until one thing finishes to start the next. Thus some tasks can be parallelized—simulations for unbiased estimators—while other tasks that depend upon the output from previous iterations are more difficult to parallelize. We'll talk more about parallelization in [section 5](section05.html).] This flexibility lends them to use in simulation, which basically means we want to generate random numbers and to test/observe properties of estimators. And repeat many times.
 
 ## Examining bias in one sample
 
@@ -529,7 +529,7 @@ hist(sim_dt[,2],
 abline(v = 0, col = "blue", lwd = 3)
 ```
 
-Next section we'll talk a bit about parallelization, which can greatly reduce the time of your simulations.
+In [section 5](section05.html) we'll talk about parallelization, which can greatly reduce the time of your simulations.
 
 # Extensions/challenges
 
