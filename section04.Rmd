@@ -794,4 +794,4 @@ legend(x = 0, y = max(c(ic_df$aic, ic_df$sic)),
   bty = "n")
 ```
 
-Here, AIC appears to do the best job noticing when the data become poor.
+Here, BIC appears to do the best job noticing when the data become poor.

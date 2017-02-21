@@ -1,0 +1,87 @@
+---
+title: "Section 6: Figures with `ggplot2`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: false
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+---
+
+<br>
+
+# Admin
+
+## What you will need
+
+__Packages__:
+
+- Previously used: `dplyr`, `lfe`, `readr`, `magrittr` and `parallel`
+- New: `ggplot2`, `ggthemes`, and `ggalt`
+
+__Data__: The `auto.csv` [file](Section05/auto.csv).
+
+__Review__: It will also be helpful if you review the simulation from last [section](section05.html).
+
+## Last week
+
+Last week we discussed statistical inference—specifically using $t$ and $F$ statistics to conduct hypothesis tests.
+
+## This week
+
+We will discuss how one may utilize R's powerful figure-making package `ggplot2`. We will also briefly discuss other options for plotting (both in R and LaTeX).
+
+# TODO
+
+- `ggplot2`
+- bootstrapping standard errors, t statistics, etc.; the plot
+- plotting distributions with curve(dt(x)) (e.g. supply/demand)
+- plotting in LaTeX: https://www.sharelatex.com/learn/Pgfplots_package
+
+```{R, eval = F}
+demand_function <- function(q) 10 - q
+supply_function <- function(q) 1 + 1.5 * q
+
+curve(expr = demand_function, from = 0, 10,
+  xlab = "Q", ylab = "P", n = 100)
+curve(expr = supply_function, from = 0, 10, add = T)
+curve(expr = supply_function(x) + 3, from = 0, 10, add = T, col = "red")
+```
+
+```{r, engine = 'tikz'}
+\documentclass{article}
+
+\usepackage{pgfplots}
+
+\begin{document}
+
+\begin{tikzpicture}
+\begin{axis}[
+  axis lines = left,
+  xlabel = $x$,
+  ylabel = {$f(x)$},
+  ]
+%Below the red parabola is defined
+\addplot [
+  domain=-10:10,
+  samples=100,
+  color=red,
+  ]
+{x^2 - 2*x - 1};
+\addlegendentry{$x^2 - 2x - 1$}
+%Here the blue parabloa is defined
+\addplot [
+  domain=-10:10,
+  samples=100,
+  color=blue,
+  ]
+{x^2 + 2*x + 1};
+\addlegendentry{$x^2 + 2x + 1$}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{document}
+```

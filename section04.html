@@ -1090,7 +1090,7 @@ cars_rand &lt;-<span class="st"> </span>dplyr::<span class="kw">select</span>(ca
 <p>This figure demonstrates why R<sup>2</sup> is not a perfect descriptor for model fit: as we add variables that are <strong>pure noise</strong>, R<sup>2</sup> describes the fit as actually getting substantially better—every variable after the tenth column in <span class="math inline">\(\mathbf{X}\)</span> is randomly generated and surely has nothing to do with the price of a car. However, R<sup>2</sup> continues to increase… and even the adjusted R<sup>2</sup> doesn’t really give us a clear picture that the model is falling apart.</p>
 <p>If you are interested in a challenge, change the <code>r2_ols()</code> function so that it also spits out AIC and SIC and then re-run this simulation. You should find something like:</p>
 <p><img src="section04_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
-<p>Here, AIC appears to do the best job noticing when the data become poor.</p>
+<p>Here, BIC appears to do the best job noticing when the data become poor.</p>
 </div>
 </div>
 <div class="footnotes">
