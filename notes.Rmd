@@ -49,6 +49,13 @@ Statistical inference via hypothesis testing: _t_ tests and $F$ tests. Plus simu
 [pdf](Section05/section05.pdf) | [R script](Section05/section05.R) | [zip](Section05.zip)
 <br><br>
 
+#### [__Section 6__](section06.html): Figures with `ggplot2`
+
+Creating informative and aesthetically figures using R's `ggplot2`—scatter plots, histograms, density plots, and more.
+
+[pdf](Section06/section06.pdf) | [R script](Section06/section06.R) | [zip](Section06.zip)
+<br><br>
+
 #### [__Supplement 1__](latexKnitr.html): LaTeX and `knitr`
 
 Introductions to and resources for LaTeX and `knitr`.

@@ -1,0 +1,12 @@
+base
+rmarkdown
+dplyr
+magrittr
+ggplot2
+ggthemes
+readr
+viridis
+lubridate
+sp
+maptools
+broom
