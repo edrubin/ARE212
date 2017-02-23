@@ -149,8 +149,9 @@ ggplot(data = cars, aes(x = weight, y = price)) +
   geom_point(aes(color = foreign)) +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2))
 # CORRECT quadratic by 'foreign'
-ggplot(data = cars, aes(x = weight, y = price)) +
-  geom_point(aes(color = foreign)) +
+ggplot(data = cars,
+  aes(x = weight, y = price, color = foreign)) +
+  geom_point() +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2))
 # Color by 'length'
 ggplot(data = cars, aes(x = weight, y = price)) +
@@ -166,7 +167,7 @@ ggplot(data = cars, aes(x = weight, y = price)) +
   geom_point(aes(color = foreign, size = mpg), shape = 1)
 # Alpha
 ggplot(data = cars, aes(x = weight, y = price)) +
-  geom_point(aes(color = foreign, size = mpg), shape = 1)
+  geom_point(aes(color = foreign, size = mpg), alpha = 0.5)
 
 # Labels ----
 ggplot(data = cars, aes(x = weight, y = price)) +
@@ -246,8 +247,8 @@ ggplot(data = cars, aes(x = weight, y = price)) +
     panel.background = element_rect(fill = NA),
     panel.border = element_rect(fill = NA, color = "grey75"),
     axis.ticks = element_line(color = "grey85"),
-    panel.grid.major = element_line(color = "grey95", size = 0.2),
-    panel.grid.minor = element_line(color = "grey95", size = 0.2))
+    panel.grid.major = element_line(color = "grey90", size = 0.2),
+    panel.grid.minor = element_line(color = "grey90", size = 0.2))
 # Remove grey legend boxes
 ggplot(data = cars, aes(x = weight, y = price)) +
   geom_point(aes(color = foreign, size = mpg), alpha = 0.5) +
@@ -273,14 +274,13 @@ theme_ed <- theme(
   panel.grid.minor = element_line(color = "grey95", size = 0.2),
   legend.key = element_blank())
 # Apply our own theme
-theme_ed <- theme(
-  legend.position = "bottom",
-  panel.background = element_rect(fill = NA),
-  panel.border = element_rect(fill = NA, color = "grey75"),
-  axis.ticks = element_line(color = "grey85"),
-  panel.grid.major = element_line(color = "grey95", size = 0.2),
-  panel.grid.minor = element_line(color = "grey95", size = 0.2),
-  legend.key = element_blank())
+ggplot(data = cars, aes(x = weight, y = price)) +
+  geom_point(aes(color = foreign, size = mpg), alpha = 0.5) +
+  xlab("Weight (lbs)") +
+  ylab("Price (USD)") +
+  ggtitle("Trends in cars sold on the US market",
+    subtitle = "From the world-famous autos dataset") +
+  theme_ed
 
 # More control ----
 # Manual colors
