@@ -493,6 +493,8 @@ RStudio recently added multiple-cursor capabilities, but RStudio's multiple curs
 
 Boom! If I had only known about Atom sooner....
 
-Two other Atom features that I find hugely useful/productivity-enhancing are customizable keyboard shortcuts and snippets. I'll let you explore these features on your own.
+Two other Atom features that I find hugely useful/productivity-enhancing are customizable keyboard shortcuts, snippets, and Github syncing. I'll let you explore these features on your own.
 
 Anyway, Atom can help you with a lot of text editing tasks. And it's [pretty](https://atom.io/themes/duotone-dark-sea-syntax).
+
+![My Atom right now.](Images/myAtom.png)
