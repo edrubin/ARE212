@@ -611,7 +611,7 @@ where $n$ is the number of observations and $k$ is the number of covariates.
 We've covered the intuition and mathematics behind R^2^, let's now apply what we know by calculating the three measures of R^2^ in R. We'll use the data in `auto.csv` (loaded above as `cars`).
 
 It will be helpful to have a function that creates the demeaning matrix $\mathbf{A}$. Recall from Max's notes that $\mathbf{A}$ is defined as
-$$ \mathbf{A} = \mathbf{I}_n - \left(\dfrac{1}{n}\right)\mathbf{i}\\mathbf{i}^\prime $$
+$$ \mathbf{A} = \mathbf{I}_n - \left(\dfrac{1}{n}\right)\mathbf{i}\mathbf{i}^\prime $$
 where $\mathbf{i}$ is an $n$-by-$1$ vectors of ones. When $\mathbf{A}$ is post-multiplied by an arbitrary $n$-by-$k$ matrix $\mathbf{Z}$ (_e.g._, $\mathbf{A}\mathbf{Z}$) the result is an $n$-by-$k$ matrix whose columns are the demeaned columns of $\mathbf{Z}$.
 
 The function will accept $N$, the desired number of rows.

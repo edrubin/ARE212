@@ -56,6 +56,13 @@ Creating informative and aesthetically figures using R's `ggplot2`—scatter plo
 [pdf](Section06/section06.pdf) | [R script](Section06/section06.R) | [zip](Section06.zip)
 <br><br>
 
+#### [__Section 7__](section07.html): GLS and WLS
+
+Generalized least squares (GLS), weighted least squares (WLS), and more simulations!
+
+[pdf](Section07/section07.pdf) | [R script](Section07/section07.R) | [zip](Section07.zip)
+<br><br>
+
 #### [__Supplement 1__](latexKnitr.html): LaTeX and `knitr`
 
 Introductions to and resources for LaTeX and `knitr`.

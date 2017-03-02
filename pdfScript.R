@@ -1,5 +1,5 @@
 library(rmarkdown)
-render("section06.Rmd",
+render("section07.Rmd",
   pdf_document(
     latex_engine = "xelatex",
     toc = T,
@@ -12,4 +12,4 @@ render("section06.Rmd",
       pandoc_variable_arg("fontsize", "11pt")
       )
     ),
-  output_dir = "Section06")
+  output_dir = "Section07")

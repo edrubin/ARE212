@@ -340,6 +340,9 @@ div.tocify {
       <a href="section06.html">Section 6</a>
     </li>
     <li>
+      <a href="section07.html">Section 7</a>
+    </li>
+    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
   </ul>
@@ -971,7 +974,7 @@ R^2 =
 <div id="r2-in-r" class="section level2">
 <h2>R<span class="math inline">\(^2\)</span> in R</h2>
 <p>We’ve covered the intuition and mathematics behind R<sup>2</sup>, let’s now apply what we know by calculating the three measures of R<sup>2</sup> in R. We’ll use the data in <code>auto.csv</code> (loaded above as <code>cars</code>).</p>
-<p>It will be helpful to have a function that creates the demeaning matrix <span class="math inline">\(\mathbf{A}\)</span>. Recall from Max’s notes that <span class="math inline">\(\mathbf{A}\)</span> is defined as <span class="math display">\[ \mathbf{A} = \mathbf{I}_n - \left(\dfrac{1}{n}\right)\mathbf{i}\\mathbf{i}^\prime \]</span> where <span class="math inline">\(\mathbf{i}\)</span> is an <span class="math inline">\(n\)</span>-by-<span class="math inline">\(1\)</span> vectors of ones. When <span class="math inline">\(\mathbf{A}\)</span> is post-multiplied by an arbitrary <span class="math inline">\(n\)</span>-by-<span class="math inline">\(k\)</span> matrix <span class="math inline">\(\mathbf{Z}\)</span> (<em>e.g.</em>, <span class="math inline">\(\mathbf{A}\mathbf{Z}\)</span>) the result is an <span class="math inline">\(n\)</span>-by-<span class="math inline">\(k\)</span> matrix whose columns are the demeaned columns of <span class="math inline">\(\mathbf{Z}\)</span>.</p>
+<p>It will be helpful to have a function that creates the demeaning matrix <span class="math inline">\(\mathbf{A}\)</span>. Recall from Max’s notes that <span class="math inline">\(\mathbf{A}\)</span> is defined as <span class="math display">\[ \mathbf{A} = \mathbf{I}_n - \left(\dfrac{1}{n}\right)\mathbf{i}\mathbf{i}^\prime \]</span> where <span class="math inline">\(\mathbf{i}\)</span> is an <span class="math inline">\(n\)</span>-by-<span class="math inline">\(1\)</span> vectors of ones. When <span class="math inline">\(\mathbf{A}\)</span> is post-multiplied by an arbitrary <span class="math inline">\(n\)</span>-by-<span class="math inline">\(k\)</span> matrix <span class="math inline">\(\mathbf{Z}\)</span> (<em>e.g.</em>, <span class="math inline">\(\mathbf{A}\mathbf{Z}\)</span>) the result is an <span class="math inline">\(n\)</span>-by-<span class="math inline">\(k\)</span> matrix whose columns are the demeaned columns of <span class="math inline">\(\mathbf{Z}\)</span>.</p>
 <p>The function will accept <span class="math inline">\(N\)</span>, the desired number of rows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function that demeans the columns of Z</span>
 demeaner &lt;-<span class="st"> </span>function(N) {
