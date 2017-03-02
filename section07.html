@@ -393,6 +393,10 @@ div.tocify {
 <p><br></p>
 <div id="admin" class="section level1">
 <h1>Admin</h1>
+<div id="new-this-week" class="section level2">
+<h2>New this week</h2>
+<p>Starting this week, I am going to introduce you to a few tools that I’ve found useful for empirically minded economic research.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Feel free to ask for specific topics or to make recommendations of your own. I’ll include this part last in the section notes, as it is not as much of a priority as learning to code in R.</p>
+</div>
 <div id="problem-set-1" class="section level2">
 <h2>Problem set 1</h2>
 <p>After grading your problem sets, I have a few comments/requests:</p>
@@ -431,10 +435,10 @@ div.tocify {
 <h2>BLUE estimators</h2>
 <p>Let’s return to OLS land for a moment: we assumed our errors are spherical—homoskedastic and uncorrelated—which we can also write</p>
 <p><span class="math display">\[ \mathop{\boldsymbol{E}} \left[ \boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^\prime | \mathbf{X} \right] = \sigma^2 \mathbf{I}_n \]</span></p>
-<p>Under this assumption, we showed OLS is BLUE (best^[smallest variance] linear unbiased estimator). But as you saw in your first problem set, there are times where our errors are not exactly spherical. What happens in this case—<em>i.e.</em>, what happens when we relax our spherical-error assumption? OLS is still unbiased,<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> but it will no longer be BLUE (and your inferential statistics might be bad).</p>
+<p>Under this assumption, we showed OLS is BLUE (best^[smallest variance] linear unbiased estimator). But as you saw in your first problem set, there are times where our errors are not exactly spherical. What happens in this case—<em>i.e.</em>, what happens when we relax our spherical-error assumption? OLS is still unbiased,<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> but it will no longer be BLUE (and your inferential statistics might be bad).</p>
 <p>So where do we go from here? Instead of making the spherical error assumption, let’s make a generalized assumption about the disturbances:</p>
 <p><span class="math display">\[ \mathop{\boldsymbol{E}}\left[ \boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^\prime | \mathbf{X} \right] = \sigma^2 \boldsymbol{\Omega}(\mathbf{X}) \]</span></p>
-<p>If <span class="math inline">\(\boldsymbol{\Omega}(\mathbf{X})\)</span> is known and positive definite, then GLS is BLUE (where the estimator is <span class="math inline">\(\left(\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{X}\right)^{-1}\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{y}\)</span>).<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> So, if you happen to know your disturbances are non-spherical (somewhat likely), and if you know the exact form of <span class="math inline">\(\boldsymbol{\Omega}(\mathbf{X})\)</span> (somewhat unlikely), then you should opt for GLS. Why? GLS is the more efficient estimator in this world. (Recall the <em>b</em> in BLUE: OLS is no longer <em>best</em>, and GLS is now <em>best</em>.) In practice, this efficiency should translate to more power/smaller standard errors.</p>
+<p>If <span class="math inline">\(\boldsymbol{\Omega}(\mathbf{X})\)</span> is known and positive definite, then GLS is BLUE (where the estimator is <span class="math inline">\(\left(\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{X}\right)^{-1}\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{y}\)</span>).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> So, if you happen to know your disturbances are non-spherical (somewhat likely), and if you know the exact form of <span class="math inline">\(\boldsymbol{\Omega}(\mathbf{X})\)</span> (somewhat unlikely), then you should opt for GLS. Why? GLS is the more efficient estimator in this world. (Recall the <em>b</em> in BLUE: OLS is no longer <em>best</em>, and GLS is now <em>best</em>.) In practice, this efficiency should translate to more power/smaller standard errors.</p>
 <p>Let’s check out a special case of GLS: weighted least squares (WLS).</p>
 </div>
 <div id="wls" class="section level2">
@@ -450,7 +454,7 @@ div.tocify {
 \tilde{x}_i = \dfrac{x_i}{\sqrt{\omega_i(\mathbf{X})}}\]</span></p>
 <p>and then regress <span class="math inline">\(\tilde{y_i}\)</span> on <span class="math inline">\(\tilde{x_i}\)</span>.</p>
 <p>To see these steps a bit more formally:</p>
-\begin{align} \mathbf{b}_\text{gls}
+<span class="math display">\[\begin{align} \mathbf{b}_\text{gls}
   &amp;=
   \left(\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{X}\right)^{-1}\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{y}
   \\&amp;=
@@ -461,7 +465,7 @@ div.tocify {
   \left((\mathbf{C}\mathbf{X})^{\prime}\mathbf{C}\mathbf{X}\right)^{-1}(\mathbf{C}\mathbf{X})^{\prime}\mathbf{C}\mathbf{y}
   \\&amp;=
   \left(\widetilde{\mathbf{X}}^{\prime}\widetilde{\mathbf{X}}\right)^{-1}\widetilde{\mathbf{X}}^{\prime}\widetilde{\mathbf{y}}  
-\end{align}
+\end{align}\]</span>
 </div>
 <div id="wls-simulation" class="section level2">
 <h2>WLS simulation</h2>
@@ -479,14 +483,23 @@ div.tocify {
 <span class="co"># Options</span>
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
 <span class="co"># Packages</span>
-<span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
 <span class="kw">library</span>(parallel)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(ggthemes)
 <span class="kw">library</span>(viridis)
-<span class="kw">library</span>(lfe)
-<span class="co"># Directory</span>
+<span class="kw">library</span>(lfe)</code></pre></div>
+<pre><code>## Loading required package: Matrix</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Directory</span>
 <span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section07&quot;</span>)
 <span class="co"># My ggplot2 theme</span>
 theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
@@ -553,7 +566,7 @@ pop_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span c
   <span class="dt">i_w =</span> i *<span class="st"> </span>w,
   <span class="dt">x_w =</span> x *<span class="st"> </span>w)</code></pre></div>
 <p>Notice that we apply the weights to the entire observation—including the intercept (think of it as multiply both <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{X}\)</span> by a weighting matrix).</p>
-<p>Now we want to write a function that takes care of a single iteration of the simulation. This function needs to draw a sample of size 1,000 and then estimate/return the OLS and WLS coefficients.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>Now we want to write a function that takes care of a single iteration of the simulation. This function needs to draw a sample of size 1,000 and then estimate/return the OLS and WLS coefficients.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function for a single iteration of the simulation</span>
 one_run &lt;-<span class="st"> </span>function(iter, population) {
   <span class="co"># Sample 1000 rows from the population</span>
@@ -598,7 +611,7 @@ cl &lt;-<span class="st"> </span><span class="kw">makeCluster</span>(<span class
 <p>Finally, stop the cluster.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Stop the cluster</span>
 <span class="kw">stopCluster</span>(cl)</code></pre></div>
-<p>If you are opting for the non-parallelized version:<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<p>If you are opting for the non-parallelized version:<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_df &lt;-<span class="st"> </span><span class="kw">lapply</span>(
   <span class="dt">X =</span> <span class="dv">1</span>:<span class="fl">1e4</span>,
   <span class="dt">FUN =</span> one_run,
@@ -617,7 +630,7 @@ cl &lt;-<span class="st"> </span><span class="kw">makeCluster</span>(<span class
 <span class="st">  </span>theme_ed</code></pre></div>
 <p><img src="section07_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>What do we see? Exactly what Max told us we would see (and showed us): both OLS and WLS are unbiased (both distributions are centered on the true parameter), but when we know <span class="math inline">\(\boldsymbol{\Omega}(\mathbf{X})\)</span>, WLS (a special case of GLS) is more efficient—the distribution of estimates is tighter around the true value of the parameter.</p>
-<p>And for a numeric summarization of the results:<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>And for a numeric summarization of the results:<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_df %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(param, method) %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="kw">mean</span>(est), <span class="kw">sd</span>(est)) %&gt;%
@@ -821,7 +834,7 @@ miss_df &lt;-<span class="st"> </span><span class="kw">lapply</span>(
 <p>To takeaways from these simulations:</p>
 <ol style="list-style-type: decimal">
 <li>Humility in econometrics (and in life) is a great virtue: don’t assume you know everything and don’t hide your assumptions.</li>
-<li>You will generally not use GLS in real life. One common exception: you may use WLS when you know the sample weights in your sample or to adjust for heterogeneous treatment effects. You may also use some forms of feasible GLS (FGLS).<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></li>
+<li>You will generally not use GLS in real life. One common exception: you may use WLS when you know the sample weights in your sample or to adjust for heterogeneous treatment effects. You may also use some forms of feasible GLS (FGLS).<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></li>
 </ol>
 </div>
 <div id="canned-weighting" class="section level2">
@@ -856,15 +869,37 @@ miss_df &lt;-<span class="st"> </span><span class="kw">lapply</span>(
 <p>If you can spare a minute, please fill out the following survey to help me better understand how section/learning R is going. Thank you in advance!</p>
 <p><a href="https://edrubin.typeform.com/to/BcECl6">Launch the survey!</a></p>
 </div>
+<div id="fun-tools-atom" class="section level1">
+<h1>Fun tools: Atom</h1>
+<p>As advertised above, henceforth I will try to include a new section in the notes about tools that I have found useful for research in applied economics (or in the life of a graduate student).</p>
+<p>This week, I would like to introduce you to the app. in which I probably spend 99% of my work/research time: <a href="https://atom.io">Atom</a>.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> Atom is an amazingly useful and infinitely customizable test editor produced by the folks at Github.</p>
+<p>What do I do with Atom? Essentially everything. Atom has beautiful syntax highlighting for essentially any language you can imagine—R, Stata, Python, Julia, LaTeX, Markdown, C++, …. You can also link Atom to other apps, so you are not stuck copying and pasting. I actually use RStudio pretty infrequently—instead, I connect Atom to my terminal (and run R in my terminal… there is an <a href="https://atom.io/packages/r-exec">Atom package that helps you with this task</a>). And I <a href="https://atom.io/packages/latextools">edit and compile LaTeX documents from Atom</a>.</p>
+<p>Okay, so you see that you can do lots of things in Atom, but why would you want to? Well, in addition to being beautiful and <em>really, really</em> customizable, Atom has a few features that most other text editors lack. My favorite: multiple cursors based upon word searching:</p>
+<div class="figure">
+<img src="Images/multiCursors.gif" alt="Multiple cursors in action." />
+<p class="caption">Multiple cursors in action.</p>
+</div>
+<p>RStudio recently added multiple-cursor capabilities, but RStudio’s multiple cursors are still nowhere near what Atom offers. For instance, check this out:<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
+<div class="figure">
+<img src="Images/sequentialNumber.gif" alt="Multiple cursors with customizable sequences of numbers!" />
+<p class="caption">Multiple cursors with customizable sequences of numbers!</p>
+</div>
+<p>Boom! If I had only known about Atom sooner….</p>
+<p>Two other Atom features that I find hugely useful/productivity-enhancing are customizable keyboard shortcuts and snippets. I’ll let you explore these features on your own.</p>
+<p>Anyway, Atom can help you with a lot of text editing tasks. And it’s <a href="https://atom.io/themes/duotone-dark-sea-syntax">pretty</a>.</p>
+</div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Phew!<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>See Max’s notes.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>To make our simulation as efficient as possible, I am keeping the things I do within a single iteration very simple. I also do as much as possible <em>outside</em> the individual iterations, <em>e.g.</em>, creating the population data.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>Again, if you are not going to run the simulation in parallel, you may want to run fewer than 10,000 iterations.<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>I use a few new functions below. <code>group_by()</code> allows us to specify by which variables we would like to group our data (helpful for <code>summarize()</code> and <code>mutate()</code>). <code>kable()</code> is a function from the <code>knitr</code> package that outputs simple tables (the default format is Markdown).<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>If these exceptions do not make sense, don’t worry. You will see them in later classes.<a href="#fnref6">↩</a></p></li>
+<li id="fn1"><p>Don’t worry: I’m not being paid to endorse any of these products.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Phew!<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>See Max’s notes.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>To make our simulation as efficient as possible, I am keeping the things I do within a single iteration very simple. I also do as much as possible <em>outside</em> the individual iterations, <em>e.g.</em>, creating the population data.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Again, if you are not going to run the simulation in parallel, you may want to run fewer than 10,000 iterations.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>I use a few new functions below. <code>group_by()</code> allows us to specify by which variables we would like to group our data (helpful for <code>summarize()</code> and <code>mutate()</code>). <code>kable()</code> is a function from the <code>knitr</code> package that outputs simple tables (the default format is Markdown).<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>If these exceptions do not make sense, don’t worry. You will see them in later classes.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>Sublime Text is very similar alternative to Atom. I started out with Sublime Text, but its updates became really infrequent. Sublime Text technically costs money and is run by a small group of people. Atom is free and backed by an organization I expect to be around for a while. Sublime Text is great; I’m just sticking with Atom.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>This functionality requires the Atom package <a href="https://atom.io/packages/sequential-number">sequential-number</a>.<a href="#fnref9">↩</a></p></li>
 </ol>
 </div>
 

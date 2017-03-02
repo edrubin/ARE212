@@ -15,6 +15,10 @@ output:
 
 # Admin
 
+## New this week
+
+Starting this week, I am going to introduce you to a few tools that I've found useful for empirically minded economic research.^[Don't worry: I'm not being paid to endorse any of these products.] Feel free to ask for specific topics or to make recommendations of your own. I'll include this part last in the section notes, as it is not as much of a priority as learning to code in R.
+
 ## Problem set 1
 
 After grading your problem sets, I have a few comments/requests:
@@ -470,3 +474,25 @@ Great! Now you can impress all of your friends with weighted regressions.
 If you can spare a minute, please fill out the following survey to help me better understand how section/learning R is going. Thank you in advance!
 
 [Launch the survey!](https://edrubin.typeform.com/to/BcECl6)
+
+# Fun tools: Atom
+
+As advertised above, henceforth I will try to include a new section in the notes about tools that I have found useful for research in applied economics (or in the life of a graduate student).
+
+This week, I would like to introduce you to the app. in which I probably spend 99% of my work/research time: [Atom](https://atom.io).^[Sublime Text is very similar alternative to Atom. I started out with Sublime Text, but its updates became really infrequent. Sublime Text technically costs money and is run by a small group of people. Atom is free and backed by an organization I expect to be around for a while. Sublime Text is great; I'm just sticking with Atom.] Atom is an amazingly useful and infinitely customizable test editor produced by the folks at Github.
+
+What do I do with Atom? Essentially everything. Atom has beautiful syntax highlighting for essentially any language you can imagine—R, Stata, Python, Julia, LaTeX, Markdown, C++, .... You can also link Atom to other apps, so you are not stuck copying and pasting. I actually use RStudio pretty infrequently—instead, I connect Atom to my terminal (and run R in my terminal... there is an [Atom package that helps you with this task](https://atom.io/packages/r-exec)). And I [edit and compile LaTeX documents from Atom](https://atom.io/packages/latextools).
+
+Okay, so you see that you can do lots of things in Atom, but why would you want to? Well, in addition to being beautiful and _really, really_ customizable, Atom has a few features that most other text editors lack. My favorite: multiple cursors based upon word searching:
+
+![Multiple cursors in action.](Images/multiCursors.gif)
+
+RStudio recently added multiple-cursor capabilities, but RStudio's multiple cursors are still nowhere near what Atom offers. For instance, check this out:^[This functionality requires the Atom package [sequential-number](https://atom.io/packages/sequential-number).]
+
+![Multiple cursors with customizable sequences of numbers!](Images/sequentialNumber.gif)
+
+Boom! If I had only known about Atom sooner....
+
+Two other Atom features that I find hugely useful/productivity-enhancing are customizable keyboard shortcuts and snippets. I'll let you explore these features on your own.
+
+Anyway, Atom can help you with a lot of text editing tasks. And it's [pretty](https://atom.io/themes/duotone-dark-sea-syntax).
