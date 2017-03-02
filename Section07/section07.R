@@ -63,7 +63,7 @@ pop_df <- data.frame(
 pop_df %<>% mutate(
   e = rnorm(N, mean = 0, sd = sqrt(4 * x^2)))
 # Calculate y
-pop_df %<>% mutate(y = alpha + 1.5 * x + e)
+pop_df %<>% mutate(y = alpha + beta * x + e)
 
 # Add weights
 pop_df %<>% mutate(w = 10/x)

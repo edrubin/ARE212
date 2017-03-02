@@ -61,7 +61,7 @@ Let's return to OLS land for a moment: we assumed our errors are spherical—hom
 
 $$ \mathop{\boldsymbol{E}} \left[ \boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^\prime | \mathbf{X} \right] = \sigma^2 \mathbf{I}_n $$
 
-Under this assumption, we showed OLS is BLUE (best^\[smallest variance] linear unbiased estimator). But as you saw in your first problem set, there are times where our errors are not exactly spherical. What happens in this case—_i.e._, what happens when we relax our spherical-error assumption? OLS is still unbiased,^[Phew!] but it will no longer be BLUE (and your inferential statistics might be bad).
+Under this assumption, we showed OLS is BLUE (best^[smallest variance] linear unbiased estimator). But as you saw in your first problem set, there are times where our errors are not exactly spherical. What happens in this case—_i.e._, what happens when we relax our spherical-error assumption? OLS is still unbiased,^[Phew!] but it will no longer be BLUE (and your inferential statistics might be bad).
 
 So where do we go from here? Instead of making the spherical error assumption, let's make a generalized assumption about the disturbances:
 
