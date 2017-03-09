@@ -426,9 +426,11 @@ dplyr::<span class="kw">between</span>(x, <span class="dv">1</span>, <span class
 <h2>What you will need</h2>
 <p><strong>Packages</strong>:</p>
 <ul>
-<li>New! (You probably need to install these packages):</li>
+<li>New! (You probably need to install these packages):
+<ul>
 <li><code>gridExtra</code> arranges multiple plots on a page (<a href="https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html">vignette</a>)</li>
 <li><code>VGAM</code> offers more named distributions (we’ll used the Pareto)</li>
+</ul></li>
 <li>Previously used: <code>dplyr</code>, <code>lfe</code>, <code>readr</code>, <code>magrittr</code>, <code>parallel</code>, <code>lfe</code>, <code>ggplot2</code>, <code>ggthemes</code>, <code>viridis</code></li>
 </ul>
 </div>
@@ -442,7 +444,7 @@ dplyr::<span class="kw">between</span>(x, <span class="dv">1</span>, <span class
 <p>We also relax a bunch of assumptions, either dropping them (<em>e.g.</em>, we no longer assume the error term is normally distributed) or replacing them with less restrictive assumption (<em>e.g.</em>, we replace strict exogeneity with population orthogonality <span class="math inline">\(\mathop{\boldsymbol{E}} \left[ \mathbf{x}_i^\prime \varepsilon_i \right] = 0\)</span>).</p>
 <p>Thus, our assumptions are:</p>
 <ol style="list-style-type: decimal">
-<li>Linearity in parameters/disturbance: <span class="math inline">\(y_i = \mathbf{x}_i \boldsymbol{\beta} + \varepsilon_i\)</span></li>
+<li>Linearity in parameters/disturbance: <span class="math inline">\(y_i = \mathbf{x}_i^\prime \boldsymbol{\beta} + \varepsilon_i\)</span></li>
 <li><span class="math inline">\(y_i\)</span> and <span class="math inline">\(\mathbf{x}_i\)</span> are both i.i.d. random variables</li>
 <li>Population orthogonality between <span class="math inline">\(\mathbf{x}_i\)</span> and <span class="math inline">\(\varepsilon_i\)</span></li>
 <li>A (new) rank condition: <span class="math inline">\(\mathop{r}\left(\mathop{\boldsymbol{E}} \left[ \mathbf{x}_i^\prime \mathbf{x}_i \right]\right) = k\)</span></li>
@@ -660,19 +662,21 @@ gg_errors &lt;-<span class="st"> </span><span class="kw">arrangeGrob</span>(gg_n
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">one_iter &lt;-<span class="st"> </span>function(n, data) {
   <span class="co"># Draw &#39;n&#39; observations from &#39;data&#39;</span>
   tmp_df &lt;-<span class="st"> </span><span class="kw">sample_n</span>(<span class="dt">tbl =</span> data, <span class="dt">size =</span> n)
+  <span class="co"># Define the X matrix (same across regressions)</span>
+  x_mat &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(tmp_df, <span class="kw">c</span>(<span class="st">&quot;ones&quot;</span>, <span class="st">&quot;x&quot;</span>))
   <span class="co"># Estimate OLS for each &#39;y&#39;</span>
   b_norm =<span class="st"> </span><span class="kw">b_ols</span>(
     <span class="dt">y =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y_norm&quot;</span>),
-    <span class="dt">X =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="kw">c</span>(<span class="st">&quot;ones&quot;</span>, <span class="st">&quot;x&quot;</span>)))[<span class="dv">2</span>]
+    <span class="dt">X =</span> x_mat)[<span class="dv">2</span>]
   b_unif =<span class="st"> </span><span class="kw">b_ols</span>(
     <span class="dt">y =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y_unif&quot;</span>),
-    <span class="dt">X =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="kw">c</span>(<span class="st">&quot;ones&quot;</span>, <span class="st">&quot;x&quot;</span>)))[<span class="dv">2</span>]
+    <span class="dt">X =</span> x_mat)[<span class="dv">2</span>]
   b_pois =<span class="st"> </span><span class="kw">b_ols</span>(
     <span class="dt">y =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y_pois&quot;</span>),
-    <span class="dt">X =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="kw">c</span>(<span class="st">&quot;ones&quot;</span>, <span class="st">&quot;x&quot;</span>)))[<span class="dv">2</span>]
+    <span class="dt">X =</span> x_mat)[<span class="dv">2</span>]
   b_bg =<span class="st"> </span><span class="kw">b_ols</span>(
     <span class="dt">y =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y_bg&quot;</span>),
-    <span class="dt">X =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="kw">c</span>(<span class="st">&quot;ones&quot;</span>, <span class="st">&quot;x&quot;</span>)))[<span class="dv">2</span>]
+    <span class="dt">X =</span> x_mat)[<span class="dv">2</span>]
   <span class="co"># Create a data.frame to return</span>
   coef_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
     <span class="co"># The estimates</span>
@@ -685,6 +689,7 @@ gg_errors &lt;-<span class="st"> </span><span class="kw">arrangeGrob</span>(gg_n
   <span class="co"># Return coef_df</span>
   <span class="kw">return</span>(coef_df)
 }</code></pre></div>
+<p><strong>Note on efficiency</strong>: You want to avoid doing the same thing many times. For examples, my original function repeated <code>X = to_matrix(tmp_df, c(&quot;ones&quot;, &quot;x&quot;))</code> inside of each call to <code>b_ols()</code>. The new function only calls the command <code>to_matrix(tmp_df, c(&quot;ones&quot;, &quot;x&quot;))</code> once. When you are going to run a function 40,000 times, little inefficiencies can add up quickly: we just reduced the number of times R calculates <code>to_matrix(tmp_df, c(&quot;ones&quot;, &quot;x&quot;))</code> from 160,000 to 40,000. Pretty good.</p>
 </div>
 <div id="simulation-function" class="section level2">
 <h2>Simulation function</h2>

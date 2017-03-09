@@ -47,8 +47,8 @@ OLS in asymptopia: $N$ gets (very) big.
 __Packages__:
 
 - New! (You probably need to install these packages):
-  - `gridExtra` arranges multiple plots on a page ([vignette](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html))
-  - `VGAM` offers more named distributions (we'll used the Pareto)
+    - `gridExtra` arranges multiple plots on a page ([vignette](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html))
+    - `VGAM` offers more named distributions (we'll used the Pareto)
 - Previously used: `dplyr`, `lfe`, `readr`, `magrittr`, `parallel`, `lfe`, `ggplot2`, `ggthemes`, `viridis`
 
 # Asymptopia
@@ -63,7 +63,7 @@ We also relax a bunch of assumptions, either dropping them (_e.g._, we no longer
 
 Thus, our assumptions are:
 
-1. Linearity in parameters/disturbance: $y_i = \mathbf{x}_i \boldsymbol{\beta} + \varepsilon_i$
+1. Linearity in parameters/disturbance: $y_i = \mathbf{x}_i^\prime \boldsymbol{\beta} + \varepsilon_i$
 2. $y_i$ and $\mathbf{x}_i$ are both i.i.d. random variables
 3. Population orthogonality between $\mathbf{x}_i$ and $\varepsilon_i$
 4. A (new) rank condition: $\mathop{r}\left(\mathop{\boldsymbol{E}} \left[ \mathbf{x}_i^\prime \mathbf{x}_i \right]\right) = k$
@@ -289,19 +289,21 @@ Our function for this simulation needs to accomplish two tasks:
 one_iter <- function(n, data) {
   # Draw 'n' observations from 'data'
   tmp_df <- sample_n(tbl = data, size = n)
+  # Define the X matrix (same across regressions)
+  x_mat <- to_matrix(tmp_df, c("ones", "x"))
   # Estimate OLS for each 'y'
   b_norm = b_ols(
     y = to_matrix(tmp_df, "y_norm"),
-    X = to_matrix(tmp_df, c("ones", "x")))[2]
+    X = x_mat)[2]
   b_unif = b_ols(
     y = to_matrix(tmp_df, "y_unif"),
-    X = to_matrix(tmp_df, c("ones", "x")))[2]
+    X = x_mat)[2]
   b_pois = b_ols(
     y = to_matrix(tmp_df, "y_pois"),
-    X = to_matrix(tmp_df, c("ones", "x")))[2]
+    X = x_mat)[2]
   b_bg = b_ols(
     y = to_matrix(tmp_df, "y_bg"),
-    X = to_matrix(tmp_df, c("ones", "x")))[2]
+    X = x_mat)[2]
   # Create a data.frame to return
   coef_df <- data.frame(
     # The estimates
@@ -315,6 +317,8 @@ one_iter <- function(n, data) {
   return(coef_df)
 }
 ```
+
+__Note on efficiency__: You want to avoid doing the same thing many times. For examples, my original function repeated `X = to_matrix(tmp_df, c("ones", "x"))` inside of each call to `b_ols()`. The new function only calls the command `to_matrix(tmp_df, c("ones", "x"))` once. When you are going to run a function 40,000 times, little inefficiencies can add up quickly: we just reduced the number of times R calculates `to_matrix(tmp_df, c("ones", "x"))` from 160,000 to 40,000. Pretty good.
 
 ## Simulation function
 
