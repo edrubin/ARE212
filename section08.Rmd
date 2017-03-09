@@ -858,5 +858,6 @@ The folks at RStudio also provide a [bunch of cheatsheets](https://www.rstudio.c
 Last, UC Berkeley's D-Lab has a lot of resources, including training sessions and experts who will meet with you and answer your questions. I'll try to cover as much as I can in our approximately 50 weekly minutes in section, but in case you need more, D-Lab is a great place to start.
 
 __D-Lab__
-  - [Training schedule](http://dlab.berkeley.edu/training), including upcoming sessions in data wrangling, machine learing, and `ggplot2`
-  - [Other services](http://dlab.berkeley.edu/services)
+
+- [Training schedule](http://dlab.berkeley.edu/training), including upcoming sessions in data wrangling, machine learing, and `ggplot2`
+- [Other services](http://dlab.berkeley.edu/services)
