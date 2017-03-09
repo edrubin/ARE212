@@ -154,19 +154,21 @@ pop_df %>% select(starts_with("e_")) %>% summarize_each(funs = "mean")
 one_iter <- function(n, data) {
   # Draw 'n' observations from 'data'
   tmp_df <- sample_n(tbl = data, size = n)
+  # Define the X matrix (same across regressions)
+  x_mat <- to_matrix(tmp_df, c("ones", "x"))
   # Estimate OLS for each 'y'
   b_norm = b_ols(
     y = to_matrix(tmp_df, "y_norm"),
-    X = to_matrix(tmp_df, c("ones", "x")))[2]
+    X = x_mat)[2]
   b_unif = b_ols(
     y = to_matrix(tmp_df, "y_unif"),
-    X = to_matrix(tmp_df, c("ones", "x")))[2]
+    X = x_mat)[2]
   b_pois = b_ols(
     y = to_matrix(tmp_df, "y_pois"),
-    X = to_matrix(tmp_df, c("ones", "x")))[2]
+    X = x_mat)[2]
   b_bg = b_ols(
     y = to_matrix(tmp_df, "y_bg"),
-    X = to_matrix(tmp_df, c("ones", "x")))[2]
+    X = x_mat)[2]
   # Create a data.frame to return
   coef_df <- data.frame(
     # The estimates
@@ -419,6 +421,8 @@ set.seed(12345)
 N_par <- 1e6
 # Create a population
 par_df <- data.frame(e = rpareto(N_par, scale = 2, shape = 1))
+# Demean
+par_df %<>% mutate(e = e - mean(e))
 # Add x and ones
 par_df %<>% mutate(
   ones = 1,

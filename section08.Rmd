@@ -695,7 +695,17 @@ Both tests fail to reject the null hypothesis that our data are normally distrib
 
 # Are we in asymptopia?
 
-Finally, let's repeat our simulation with disturbances that are less well behaved. Enter the Pareto distribution. We will now use the `VGAM` package for its `rpareto()` function.
+Finally, let's repeat our simulation with disturbances that are less well behaved. Enter the Pareto distribution. The Pareto distribution offers the unique feature of having infinite variance for certain parameter values.
+
+Why do we care about infinite variance? We care because the Lindeberg-Levy Central Limit Theorem (CLT) requires finite variance. And why do we care about what the Lindeberg-Levy CLT requires? We care about what the Lindeberg-Levy CLT requires because we use it to prove the asymptotic normality of $\mathbf{b}$. Specifically, we use the Lindeberg-Levy CLT to to prove the asymptotic distribution of $\mathbf{x}_i^\prime \varepsilon_i$, which requires finite variance of $\mathbf{x}_i^\prime \varepsilon_i$. In short: when we allow $\varepsilon_i$ to have infinite variance, we lose the Lindeberg-Levy CLT and asymptotic normality of $\mathbf{b}$.
+
+We will now use the `VGAM` package for its `rpareto()` function. If we set its parameters `scale = 2` and `shape = 1`, then the variance of our variable is infinite. See it in action with 10 million draws:
+```{R, message = F}
+library(VGAM)
+rpareto(n = 1e7, scale = 2, shape = 1) %>% var()
+```
+
+Big variance!
 
 ```{R, message = F}
 # Load the VGAM package
@@ -705,7 +715,10 @@ set.seed(12345)
 # Define the population size
 N_par <- 1e6
 # Create a population
-par_df <- data.frame(e = rpareto(N_par, scale = 2, shape = 1))
+par_df <- data.frame(
+  e = rpareto(N_par, scale = 2, shape = 1))
+# Demean our disturbances
+par_df %<>% mutate(e = e - mean(e))
 # Add x and ones
 par_df %<>% mutate(
   ones = 1,
@@ -761,7 +774,10 @@ run_par <- function(n, n_iter, data, n_cores = 4) {
 
 Now let's run the simulation 10,000 times with sample sizes of 10,000.
 ```{R, message = F, cache = T, results = "hide"}
-par_10k <- run_par(n = 1e4, n_iter = 1e4, data = par_df)
+par_10k <- run_par(
+  n      = 1e4,
+  n_iter = 1e4,
+  data   = par_df)
 ```
 
 What does the distribution of parameters from this simulation look like?
@@ -798,9 +814,12 @@ ks.test(
 
 Kolmogorov and Smirnov agree: not normal.
 
-Perhaps we need to be closer to infinity. Let's try sample sizes of 100,000.
+Just to make sure we cannot solve the problem with more data, let's try sample sizes of 100,000.
 ```{R, message = F, cache = T, results = "hide"}
-par_100k <- run_par(n = 1e5, n_iter = 1e4, data = par_df)
+par_100k <- run_par(
+  n      = 1e5,
+  n_iter = 1e4,
+  data   = par_df)
 ```
 
 What does the distribution of coefficients look like now?
@@ -834,7 +853,7 @@ ks.test(
   sd   = sd(par_100k$est))
 ```
 
-Not so normal, my friends. I guess we are not as close to infinity as we thought we were.
+Not so normal, my friends. The takeaway? Assumptions matter: we need finite variance to get asymptotic normality.
 
 ---
 
