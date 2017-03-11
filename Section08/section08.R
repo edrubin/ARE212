@@ -287,7 +287,7 @@ ggplot(data = sim_df,
     "with normal disturbances")) +
   scale_fill_viridis("Sample size:", discrete = T,
     direction = -1) +
-  facet_grid(dist_fac ~ ., scales = "fixed") +
+  facet_grid(dist_fac ~ ., scales = "free_y") +
   theme_ed
 
 # Summarize ----

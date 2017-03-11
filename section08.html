@@ -867,7 +867,7 @@ sim_df$n_fac %&gt;%<span class="st"> </span><span class="kw">head</span>()</code
     <span class="st">&quot;with normal disturbances&quot;</span>)) +
 <span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Sample size:&quot;</span>, <span class="dt">discrete =</span> T,
     <span class="dt">direction =</span> -<span class="dv">1</span>) +
-<span class="st">  </span><span class="kw">facet_grid</span>(dist_fac ~<span class="st"> </span>., <span class="dt">scales =</span> <span class="st">&quot;fixed&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_grid</span>(dist_fac ~<span class="st"> </span>., <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
 <span class="st">  </span>theme_ed</code></pre></div>
 <p><img src="section08_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p>Keeping in mind that we’ve allowed the y-axis to vary, what do these graphs tell us? First, it appears as though OLS is consistent in estimating the true parameter regardless of the distribution of the disturbances: as <span class="math inline">\(N\)</span> (sample size) approaches infinity in each of the plots, the distribution of the coefficients tightens around the true parameter value (5).</p>
