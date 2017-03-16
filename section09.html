@@ -679,7 +679,7 @@ reg1 &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class
 <p><span class="math display">\[ \mathop{\text{Var}} \left( \widehat{LC} \right) = \mathop{\text{Var}} \left( 20 b_1 + 3000 b_2 \right) \]</span></p>
 <p>Now let’s think way back to elementary statistics. There are a few relationships that will be useful here:</p>
 <p><span class="math display">\[ \mathop{\text{Var}} \left( aX \right) = a^2 \mathop{\text{Var}} \left( X \right) \]</span></p>
-<p><span class="math display">\[ \mathop{\text{Var}} \left( X + Y \right) = \mathop{\text{Var}} \left( X \right) + \mathop{\text{Var}} \left( Y \right) + \mathop{\text{Cov}} \left(X,Y\right) \]</span></p>
+<p><span class="math display">\[ \mathop{\text{Var}} \left( X + Y \right) = \mathop{\text{Var}} \left( X \right) + \mathop{\text{Var}} \left( Y \right) + 2 \mathop{\text{Cov}} \left(X,Y\right) \]</span></p>
 <p><span class="math display">\[ \mathop{\text{Cov}} \left( aX,bY \right) = ab \mathop{\text{Cov}} \left( X,Y \right)\]</span></p>
 <p>which leaves us with</p>
 <p><span class="math display">\[ \mathop{\text{Var}} \left( aX + bY \right) = a^2 \mathop{\text{Var}} \left( X \right) + b^2 \mathop{\text{Var}} \left( Y \right) + 2ab \mathop{\text{Cov}} \left(X,Y\right) \]</span></p>
@@ -722,7 +722,7 @@ vcov_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars) {
 <p><span class="math display">\[\mathop{\text{Var}} \left( \mathbf{b} \right) =
 \left[\begin{array}{ccc}
 \mathop{\text{Var}} \left( b_0 \right) &amp; \mathop{\text{Cov}} \left( b_0, b_1 \right) &amp; \mathop{\text{Cov}} \left( b_0, b_2 \right) \\
-\mathop{\text{Cov}} \left( b_0, b_1 \right) &amp; \mathop{\text{Var}} \left( b_1 \right) &amp; \mathop{\text{Cov}} \left( b_0, b_2 \right) \\
+\mathop{\text{Cov}} \left( b_0, b_1 \right) &amp; \mathop{\text{Var}} \left( b_1 \right) &amp; \mathop{\text{Cov}} \left( b_1, b_2 \right) \\
 \mathop{\text{Cov}} \left( b_0, b_2 \right) &amp; \mathop{\text{Cov}} \left( b_1, b_2 \right) &amp; \mathop{\text{Var}} \left( b_2 \right)
 \end{array}\right]
 \]</span></p>
@@ -751,7 +751,7 @@ lm_est &lt;-<span class="st"> </span><span class="kw">lm</span>(price ~<span cla
 ##  0.2203818  1.5018836  1.0000000  0.2244315  1.5018836 71.0000000 
 ## attr(,&quot;formula&quot;)
 ## ~20 * mpg + 3000 * weight
-## &lt;environment: 0x7feb88ed87c0&gt;</code></pre>
+## &lt;environment: 0x7fa4794a33c0&gt;</code></pre>
 <p>I’ve also added <code>lfe</code>’s <code>waldtest()</code> function. It gives a point estimate and tests against zero but does not provide a standard error.</p>
 <p>How could we build our own <em>t</em> statistic?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Our t statistic</span>

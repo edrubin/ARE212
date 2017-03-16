@@ -243,7 +243,7 @@ Now let's think way back to elementary statistics. There are a few relationships
 
 $$ \mathop{\text{Var}} \left( aX \right) = a^2 \mathop{\text{Var}} \left( X \right) $$
 
-$$ \mathop{\text{Var}} \left( X + Y \right) = \mathop{\text{Var}} \left( X \right) + \mathop{\text{Var}} \left( Y \right) + \mathop{\text{Cov}} \left(X,Y\right) $$
+$$ \mathop{\text{Var}} \left( X + Y \right) = \mathop{\text{Var}} \left( X \right) + \mathop{\text{Var}} \left( Y \right) + 2 \mathop{\text{Cov}} \left(X,Y\right) $$
 
 $$ \mathop{\text{Cov}} \left( aX,bY \right) = ab \mathop{\text{Cov}} \left( X,Y \right)$$
 
@@ -296,7 +296,7 @@ This matrix contains our estimates for
 $$\mathop{\text{Var}} \left( \mathbf{b} \right) =
 \left[\begin{array}{ccc}
 \mathop{\text{Var}} \left( b_0 \right) & \mathop{\text{Cov}} \left( b_0, b_1 \right) & \mathop{\text{Cov}} \left( b_0, b_2 \right) \\
-\mathop{\text{Cov}} \left( b_0, b_1 \right) & \mathop{\text{Var}} \left( b_1 \right) & \mathop{\text{Cov}} \left( b_0, b_2 \right) \\
+\mathop{\text{Cov}} \left( b_0, b_1 \right) & \mathop{\text{Var}} \left( b_1 \right) & \mathop{\text{Cov}} \left( b_1, b_2 \right) \\
 \mathop{\text{Cov}} \left( b_0, b_2 \right) & \mathop{\text{Cov}} \left( b_1, b_2 \right) & \mathop{\text{Var}} \left( b_2 \right)
 \end{array}\right]
 $$
