@@ -208,7 +208,7 @@ This is about as far as `knitr` and `kable()` can take us in table creation. For
 
 ## Linear combinations
 
-Okay, so we know how to calculate the standard error for out point estimates of the coefficients. What if we would like to know the average "effect" on price for 20 MPG and 3,000 pounds?^[The reason for the quotation marks around effect is that we are not estimating _causal_ effects in this regression. However, because this class (and section) is not about causal inference, we will for the moment pretend the effects are causal.] Let us call this "mean effect" $lc$ (for linear combination). Thus, we are interested in $lc = 20\beta_1 + 3000\beta_2$. We will estimate $lc$ via
+Okay, so we know how to calculate the standard error for out point estimates of the coefficients. What if we would like to know the average "effect" on price for 20 MPG and 3,000 pounds?^[The reason for the quotation marks around effect is that we are not estimating _causal_ effects in this regression. However, because this class (and section) is not about causal inference, we will for the moment pretend the effects are causal.] Let us call this "mean effect" $lc$ (for linear combination). Thus, we are interested in $LC = 20\beta_1 + 3000\beta_2$. We will estimate $lc$ via
 
 $$ \widehat{LC} = 20\times b_1 + 3000\times b_2 $$
 

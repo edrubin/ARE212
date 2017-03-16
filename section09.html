@@ -658,7 +658,7 @@ knitr::<span class="kw">kable</span>(tmp_results,
 </div>
 <div id="linear-combinations" class="section level2">
 <h2>Linear combinations</h2>
-<p>Okay, so we know how to calculate the standard error for out point estimates of the coefficients. What if we would like to know the average “effect” on price for 20 MPG and 3,000 pounds?<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Let us call this “mean effect” <span class="math inline">\(lc\)</span> (for linear combination). Thus, we are interested in <span class="math inline">\(lc = 20\beta_1 + 3000\beta_2\)</span>. We will estimate <span class="math inline">\(lc\)</span> via</p>
+<p>Okay, so we know how to calculate the standard error for out point estimates of the coefficients. What if we would like to know the average “effect” on price for 20 MPG and 3,000 pounds?<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Let us call this “mean effect” <span class="math inline">\(lc\)</span> (for linear combination). Thus, we are interested in <span class="math inline">\(LC = 20\beta_1 + 3000\beta_2\)</span>. We will estimate <span class="math inline">\(lc\)</span> via</p>
 <p><span class="math display">\[ \widehat{LC} = 20\times b_1 + 3000\times b_2 \]</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regress price on mpg and weight</span>
 reg1 &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))
@@ -751,7 +751,7 @@ lm_est &lt;-<span class="st"> </span><span class="kw">lm</span>(price ~<span cla
 ##  0.2203818  1.5018836  1.0000000  0.2244315  1.5018836 71.0000000 
 ## attr(,&quot;formula&quot;)
 ## ~20 * mpg + 3000 * weight
-## &lt;environment: 0x7f849fac2a30&gt;</code></pre>
+## &lt;environment: 0x7f813fd31e28&gt;</code></pre>
 <p>I’ve also added <code>lfe</code>’s <code>waldtest()</code> function. It gives a point estimate and tests against zero but does not provide a standard error.</p>
 <p>How could we build our own <em>t</em> statistic?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Our t statistic</span>
