@@ -1,0 +1,25 @@
+<!--
+
+# TODO
+
+- Prediction intervals
+- Tables
+- Bootstrapped standard errors
+
+# Predictions
+
+Increasingly, [economists are getting involved in the prediction game]((https://www.aeaweb.org/articles?id=10.1257/aer.p20151023)).^[Macroeconomists have been in it for a while.] Up to this point, we've talked about the behavior of the mean—what will happen in expectation—but when we make predictions—estimates for an individual from the population—there is some additional uncertainty. This additional uncertainty is called the _prediction error_. Let's (formally) discuss this _prediction error_.
+
+Take our standard linear model
+
+$$ \mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon} $$
+
+We can easily make predictions using this model—replace $\boldsymbol{\boldsymbol{\beta}}$ with its estimator $\mathbf{b}$, drop $\boldsymbol{\varepsilon}$, and you get _in-sample_ predictions, _i.e._,
+
+$$ \hat{\mathbf{y}} = \mathbf{X}\mathbf{b} $$
+
+But if you want _out-of-sample_ predictions—predictions for $y$ that use values of $\mathbf{X}$ not observed in our dataset—then you need to include the individual-to-individual variance.
+
+Let's think about making a prediction for the data series $y^0,\,\mathbf{X}^0$.
+
+There -->
