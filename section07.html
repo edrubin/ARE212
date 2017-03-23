@@ -349,6 +349,9 @@ div.tocify {
       <a href="section09.html">Section 9</a>
     </li>
     <li>
+      <a href="section10.html">Section 10</a>
+    </li>
+    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
   </ul>
@@ -460,7 +463,7 @@ div.tocify {
 \tilde{x}_i = \dfrac{x_i}{\sqrt{\omega_i(\mathbf{X})}}\]</span></p>
 <p>and then regress <span class="math inline">\(\tilde{y_i}\)</span> on <span class="math inline">\(\tilde{x_i}\)</span>.</p>
 <p>To see these steps a bit more formally:</p>
-<span class="math display">\[\begin{align} \mathbf{b}_\text{gls}
+\begin{align} \mathbf{b}_\text{gls}
   &amp;=
   \left(\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{X}\right)^{-1}\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{y}
   \\&amp;=
@@ -471,7 +474,7 @@ div.tocify {
   \left((\mathbf{C}\mathbf{X})^{\prime}\mathbf{C}\mathbf{X}\right)^{-1}(\mathbf{C}\mathbf{X})^{\prime}\mathbf{C}\mathbf{y}
   \\&amp;=
   \left(\widetilde{\mathbf{X}}^{\prime}\widetilde{\mathbf{X}}\right)^{-1}\widetilde{\mathbf{X}}^{\prime}\widetilde{\mathbf{y}}  
-\end{align}\]</span>
+\end{align}
 </div>
 <div id="wls-simulation" class="section level2">
 <h2>WLS simulation</h2>
