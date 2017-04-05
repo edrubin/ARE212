@@ -352,6 +352,9 @@ div.tocify {
       <a href="section10.html">Section 10</a>
     </li>
     <li>
+      <a href="section11.html">Section 11</a>
+    </li>
+    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
   </ul>
@@ -463,7 +466,7 @@ div.tocify {
 \tilde{x}_i = \dfrac{x_i}{\sqrt{\omega_i(\mathbf{X})}}\]</span></p>
 <p>and then regress <span class="math inline">\(\tilde{y_i}\)</span> on <span class="math inline">\(\tilde{x_i}\)</span>.</p>
 <p>To see these steps a bit more formally:</p>
-\begin{align} \mathbf{b}_\text{gls}
+<span class="math display">\[\begin{align} \mathbf{b}_\text{gls}
   &amp;=
   \left(\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{X}\right)^{-1}\mathbf{X}^{\prime}\boldsymbol{\Omega}^{-1}\mathbf{y}
   \\&amp;=
@@ -474,7 +477,7 @@ div.tocify {
   \left((\mathbf{C}\mathbf{X})^{\prime}\mathbf{C}\mathbf{X}\right)^{-1}(\mathbf{C}\mathbf{X})^{\prime}\mathbf{C}\mathbf{y}
   \\&amp;=
   \left(\widetilde{\mathbf{X}}^{\prime}\widetilde{\mathbf{X}}\right)^{-1}\widetilde{\mathbf{X}}^{\prime}\widetilde{\mathbf{y}}  
-\end{align}
+\end{align}\]</span>
 </div>
 <div id="wls-simulation" class="section level2">
 <h2>WLS simulation</h2>
@@ -492,14 +495,23 @@ div.tocify {
 <span class="co"># Options</span>
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
 <span class="co"># Packages</span>
-<span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
 <span class="kw">library</span>(parallel)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(ggthemes)
 <span class="kw">library</span>(viridis)
-<span class="kw">library</span>(lfe)
-<span class="co"># Directory</span>
+<span class="kw">library</span>(lfe)</code></pre></div>
+<pre><code>## Loading required package: Matrix</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Directory</span>
 <span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section07&quot;</span>)
 <span class="co"># My ggplot2 theme</span>
 theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(

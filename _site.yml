@@ -30,6 +30,8 @@ navbar:
           href: section09.html
         - text: "Section 10"
           href: section10.html
+        - text: "Section 11"
+          href: section11.html
         - text: "LaTeX and knitr"
           href: latexKnitr.html
     - text: "Course Info"

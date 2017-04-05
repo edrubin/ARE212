@@ -352,6 +352,9 @@ div.tocify {
       <a href="section10.html">Section 10</a>
     </li>
     <li>
+      <a href="section11.html">Section 11</a>
+    </li>
+    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
   </ul>
@@ -597,7 +600,7 @@ knitr::<span class="kw">kable</span>(tmp_results,
 <caption>Regressing price on mileage and weight</caption>
 <thead>
 <tr class="header">
-<th align="left"></th>
+<th></th>
 <th align="right"><span class="math inline">\(\widehat{\boldsymbol{\beta}}\)</span></th>
 <th align="right">S.E.</th>
 <th align="right"><strong><em>t</em></strong> stat</th>
@@ -606,21 +609,21 @@ knitr::<span class="kw">kable</span>(tmp_results,
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Intercept</td>
+<td>Intercept</td>
 <td align="right">1946.07</td>
 <td align="right">3597.05</td>
 <td align="right">0.54</td>
 <td align="right">0.590</td>
 </tr>
 <tr class="even">
-<td align="left">MPG</td>
+<td>MPG</td>
 <td align="right">-49.51</td>
 <td align="right">86.16</td>
 <td align="right">-0.57</td>
 <td align="right">0.567</td>
 </tr>
 <tr class="odd">
-<td align="left">Weight</td>
+<td>Weight</td>
 <td align="right">1.75</td>
 <td align="right">0.64</td>
 <td align="right">2.72</td>
@@ -754,7 +757,7 @@ lm_est &lt;-<span class="st"> </span><span class="kw">lm</span>(price ~<span cla
 ##  0.2203818  1.5018836  1.0000000  0.2244315  1.5018836 71.0000000 
 ## attr(,&quot;formula&quot;)
 ## ~20 * mpg + 3000 * weight
-## &lt;environment: 0x7fcc73d56708&gt;</code></pre>
+## &lt;environment: 0x7feaee314060&gt;</code></pre>
 <p>I’ve also added <code>lfe</code>’s <code>waldtest()</code> function. It gives a point estimate and tests against zero but does not provide a standard error.</p>
 <p>How could we build our own <em>t</em> statistic?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Our t statistic</span>

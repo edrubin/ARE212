@@ -84,6 +84,13 @@ Calculating standard errors in various situations: spherical errors, heteroskeda
 [pdf](Section10/section10.pdf) | [R script](Section10/section10.R) | [zip](Section10.zip)
 <br><br>
 
+#### [__Section 11__](section11.html): Instrumental variables
+
+Instrumental variables (IV) and two-stage least squares (2SLS). Plus measurement error.
+
+[pdf](Section11/section11.pdf) | [R script](Section11/section11.R) | [zip](Section11.zip)
+<br><br>
+
 #### [__Supplement 1__](latexKnitr.html): LaTeX and `knitr`
 
 Introductions to and resources for LaTeX and `knitr`.
