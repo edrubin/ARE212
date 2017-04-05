@@ -32,7 +32,7 @@ In our previous section, someone asked what happens when we calculate cluster-ro
 
 I think the `sim_fun()` function below is pretty cool:^[Yes, I am a nerd.] you can give `sim_fun()` any within-cluster variance covariance matrix (the `var_cov` argument), and it will run the simulation based upon that within-cluster relationship.
 
-```{R, r setup}
+```{R, r setup, message = F}
 # General setup ----
 # Options
 options(stringsAsFactors = F)

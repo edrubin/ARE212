@@ -427,67 +427,13 @@ div.tocify {
 <span class="co"># Options</span>
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
 <span class="co"># Packages</span>
-<span class="kw">library</span>(data.table)</code></pre></div>
-<pre><code>## data.table 1.10.0</code></pre>
-<pre><code>## **********
-## This installation of data.table has not detected OpenMP support. It will still work but in single-threaded mode.
-## **********</code></pre>
-<pre><code>##   The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way</code></pre>
-<pre><code>##   Documentation: ?data.table, example(data.table) and browseVignettes(&quot;data.table&quot;)</code></pre>
-<pre><code>##   Release notes, videos and slides: http://r-datatable.com</code></pre>
-<pre><code>## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------
-## -------------------------------------------------------------------------</code></pre>
-<pre><code>## data.table + dplyr code now lives in dtplyr.
-## Please library(dtplyr)!</code></pre>
-<pre><code>## -------------------------------------------------------------------------</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(data.table)
+<span class="kw">library</span>(magrittr)
 <span class="kw">library</span>(MASS)
-<span class="kw">library</span>(lfe)</code></pre></div>
-<pre><code>## Loading required package: Matrix</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(parallel)
-<span class="kw">library</span>(ggplot2)</code></pre></div>
-<pre><code>## Use suppressPackageStartupMessages() to eliminate package startup
-## messages.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(viridis)
+<span class="kw">library</span>(lfe)
+<span class="kw">library</span>(parallel)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(viridis)
 <span class="co"># My ggplot2 theme</span>
 theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
   <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
@@ -817,11 +763,11 @@ gen_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
   <span class="dt">y =</span> beta[<span class="dv">1</span>] +<span class="st"> </span>beta[<span class="dv">2</span>] *<span class="st"> </span>x1 +<span class="st"> </span>beta[<span class="dv">3</span>] *<span class="st"> </span>x2 +<span class="st"> </span>e)</code></pre></div>
 <p>Just to make sure everything worked:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(gen_df, x1, x2, z, e) %&gt;%<span class="st"> </span><span class="kw">cor</span>()</code></pre></div>
-<pre><code>##            x1                      x2                       z            e
-## x1 1.00000000  0.75000000000000033307  0.24999999999999933387 0.0116999490
-## x2 0.75000000  1.00000000000000000000 -0.00000000000000025387 0.0051329951
-## z  0.25000000 -0.00000000000000025387  1.00000000000000000000 0.0008299724
-## e  0.01169995  0.00513299512399454597  0.00082997241892529897 1.0000000000</code></pre>
+<pre><code>##            x1            x2             z            e
+## x1 1.00000000  7.500000e-01  2.500000e-01 0.0116999490
+## x2 0.75000000  1.000000e+00 -2.538700e-16 0.0051329951
+## z  0.25000000 -2.538700e-16  1.000000e+00 0.0008299724
+## e  0.01169995  5.132995e-03  8.299724e-04 1.0000000000</code></pre>
 <p>Looking good!</p>
 <p>If we regress <span class="math inline">\(y\)</span> on <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, we do not have an omitted-variable problem—we should have a consistent estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ols</span>(<span class="dt">data =</span> gen_df, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>))</code></pre></div>
