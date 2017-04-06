@@ -198,7 +198,7 @@ In order to keep things simple, we will assume $x_1$ and $x_2$ are uncorrelated 
 
 Why wouldn't the researcher observe $x_2$—an obviously important variable? One reason is that we do not always know which variables predict $y$ and correlate with other covariates. Another reason is that we do not always get all the data that we want. In either situation, we eventually end up with some variables in the regression and some variables left out.
 
-So what happens if the researcher $x_2$ and simply regresses $y$ on $x_1$ (and an intercept)?
+So what happens if the researcher omits $x_2$ and simply regresses $y$ on $x_1$ (and an intercept)?
 
 $$ y = \theta_0 + \theta_1 x_1 + \nu $$
 

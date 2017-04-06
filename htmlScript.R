@@ -1,3 +1,4 @@
+setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212")
 
 my_render <- function(site) {
   # Build the site

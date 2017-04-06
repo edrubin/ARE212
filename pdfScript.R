@@ -1,4 +1,5 @@
 library(rmarkdown)
+setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212")
 render("section11.Rmd",
   pdf_document(
     latex_engine = "xelatex",
