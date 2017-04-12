@@ -17,10 +17,8 @@ output:
 
 ## Announcements
 
-1. Change in time for office hours this week—still Friday but with different times:
-    - Friday from 11am–12pm in Giannini 234
-    - Friday from 2:30pm–3:30pm in Giannini 236
-2. If you really like instrumental variables: Pat Kline (Berkeley econ.) is presenting an instrumental-variables related paper this week (Thursday, 2pm–3:30pm in Evans 648): Episode IV: A New Hope.
+1. We had a baby!
+2. You can take your final in any 48-hour period between April 29^th^ and May 9^th^.
 
 ## Last section
 
@@ -215,6 +213,12 @@ $$ \begin{aligned}
 \end{aligned}$$
 
 Thus, our covariate is correlated with our disturbance, violating population orthogonality. What's the big deal? We can no longer assume the OLS estimator for $\boldsymbol{\beta}$ is consistent. Not good.
+
+For a slightly different view: recall from our [section on the Frisch-Waugh-Lovell theorem](section04.html) that when we regress $y$ on $x_1$ and $x_2$, the estimate for $\beta_1$ (the coefficient on $x_1$) is
+
+$$ b_1 = \left(\mathbf{X}_1'\mathbf{X}_1\right)^{-1}\mathbf{X}_1'\mathbf{y} - \left(\mathbf{X}_1'\mathbf{X}_1\right)^{-1}\mathbf{X}_1'\mathbf{X}_2 b_2 $$
+
+The second term in the difference reminds us that we will calculate a different (wrong/inconsistent) coefficient if we omit $x_2$ when (1) $x_1$ and $x_2$ have non-zero covariance (_i.e._, $\mathbf{X}_1'\mathbf{X}_2 \neq \mathbf{0}$) and (2) $y$ and $x_2$ have non-zero covariance (_e.g._, $b_2 \neq 0$). More succinctly: if $x_1$ and $x_2$ are not orthogonal, and if $y$ and $x_2$ are not orthogonal, then if you omit $x_2$ from your regression of $y$ and $x_1$, your estimate for $\beta_1$ is inconsistent/biased. The inconsistency/bias comes from the effect of $x_2$ "loading" onto $x_1$ when you fail to explicitly control for $x_2$.
 
 ## Omitted variables solution
 

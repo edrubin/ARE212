@@ -408,12 +408,8 @@ div.tocify {
 <div id="announcements" class="section level2">
 <h2>Announcements</h2>
 <ol style="list-style-type: decimal">
-<li>Change in time for office hours this week—still Friday but with different times:
-<ul>
-<li>Friday from 11am–12pm in Giannini 234</li>
-<li>Friday from 2:30pm–3:30pm in Giannini 236</li>
-</ul></li>
-<li>If you really like instrumental variables: Pat Kline (Berkeley econ.) is presenting an instrumental-variables related paper this week (Thursday, 2pm–3:30pm in Evans 648): Episode IV: A New Hope.</li>
+<li>We had a baby!</li>
+<li>You can take your final in any 48-hour period between April 29<sup>th</sup> and May 9<sup>th</sup>.</li>
 </ol>
 </div>
 <div id="last-section" class="section level2">
@@ -589,6 +585,9 @@ pair_dt &lt;-<span class="st"> </span><span class="kw">merge</span>(
 &amp;\neq 0
 \end{aligned}\]</span></p>
 <p>Thus, our covariate is correlated with our disturbance, violating population orthogonality. What’s the big deal? We can no longer assume the OLS estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span> is consistent. Not good.</p>
+<p>For a slightly different view: recall from our <a href="section04.html">section on the Frisch-Waugh-Lovell theorem</a> that when we regress <span class="math inline">\(y\)</span> on <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, the estimate for <span class="math inline">\(\beta_1\)</span> (the coefficient on <span class="math inline">\(x_1\)</span>) is</p>
+<p><span class="math display">\[ b_1 = \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{y} - \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{X}_2 b_2 \]</span></p>
+<p>The second term in the difference reminds us that we will calculate a different (wrong/inconsistent) coefficient if we omit <span class="math inline">\(x_2\)</span> when (1) <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> have non-zero covariance (<em>i.e.</em>, <span class="math inline">\(\mathbf{X}_1&#39;\mathbf{X}_2 \neq \mathbf{0}\)</span>) and (2) <span class="math inline">\(y\)</span> and <span class="math inline">\(x_2\)</span> have non-zero covariance (<em>e.g.</em>, <span class="math inline">\(b_2 \neq 0\)</span>). More succinctly: if <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are not orthogonal, and if <span class="math inline">\(y\)</span> and <span class="math inline">\(x_2\)</span> are not orthogonal, then if you omit <span class="math inline">\(x_2\)</span> from your regression of <span class="math inline">\(y\)</span> and <span class="math inline">\(x_1\)</span>, your estimate for <span class="math inline">\(\beta_1\)</span> is inconsistent/biased. The inconsistency/bias comes from the effect of <span class="math inline">\(x_2\)</span> “loading” onto <span class="math inline">\(x_1\)</span> when you fail to explicitly control for <span class="math inline">\(x_2\)</span>.</p>
 </div>
 <div id="omitted-variables-solution" class="section level2">
 <h2>Omitted variables solution</h2>
