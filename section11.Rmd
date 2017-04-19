@@ -532,7 +532,7 @@ Excellent. The estimate using two-stage least squares ($\mathbf{b}_\text{2SLS}$)
 
 Pretty impressive name, right? There is some disagreement about what actually constitutes the _forbidden regression_, but the two contexts in which you will see forbidden regressions are:
 
-1. You use a nonlinear predictor in your first stage, _e.g._, probit, logit, Poisson, _etc_. You need linear OLS in the first stage to guarantee that the covariates and fitted values in second stage will be uncorrelated with the error (exegenous).
+1. You use a nonlinear predictor in your first stage, _e.g._, probit, logit, Poisson, _etc_. You need linear OLS in the first stage to guarantee that the covariates and fitted values in second stage will be uncorrelated with the error (exogenous).
 2. Your first stage does not match your second stage, _e.g._,
     - You use different fixed effects in the two stages
     - You use a different functional form of the endogenous covariate in the two stages, _e.g._, $x$ in the first stage and $\hat{x}^2$ in the second stage.^[Note: If you have $x$ and $x^2$ in your first stage, and you are instrumenting $x$ with $z$, then you should also instrument $x^2$ with $z^2$. You might be tempted to predict $x$ with $z$ and then square the prediction in the second stage; this method is wrong.]

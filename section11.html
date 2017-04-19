@@ -866,7 +866,7 @@ b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span
 <h2>The forbidden regression</h2>
 <p>Pretty impressive name, right? There is some disagreement about what actually constitutes the <em>forbidden regression</em>, but the two contexts in which you will see forbidden regressions are:</p>
 <ol style="list-style-type: decimal">
-<li>You use a nonlinear predictor in your first stage, <em>e.g.</em>, probit, logit, Poisson, <em>etc</em>. You need linear OLS in the first stage to guarantee that the covariates and fitted values in second stage will be uncorrelated with the error (exegenous).</li>
+<li>You use a nonlinear predictor in your first stage, <em>e.g.</em>, probit, logit, Poisson, <em>etc</em>. You need linear OLS in the first stage to guarantee that the covariates and fitted values in second stage will be uncorrelated with the error (exogenous).</li>
 <li>Your first stage does not match your second stage, <em>e.g.</em>,
 <ul>
 <li>You use different fixed effects in the two stages</li>
