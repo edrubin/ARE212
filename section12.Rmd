@@ -26,7 +26,7 @@ In our [previous section](section11.html) we covered instrumental variables and 
 
 ### Follow up: Papers
 
-Someone asked for a few examples of papers that apply instrumental variables. Below are several options for you. In general, it is hard to go wrong with Angrist and Krueger (or Imbens). The first two papers are actually a summary articles—the first paper has a great table of instrumental variables papers in myriad settings. The third paper is a classic. The fourth paper is quite new by Reed Walker (Berkeley). The fifth paper is a working paper on rural electrification by three more Berkeley folks.
+Someone asked for a few examples of papers that apply instrumental variables. Below are several options for you. In general, it is hard to go wrong with Angrist and Krueger (or Imbens). The first two papers are actually a summary articles—the first paper has a great table of instrumental variables papers in myriad settings. The third paper (Angrist, 1990) is a classic. The fourth paper is quite new by Reed Walker (Berkeley). The fifth paper (Lee _et al._) is a working paper on rural electrification by three more Berkeley folks. The last paper (Maccini and Yang, 2009) is a pretty classic paper of health, development, and measurement error.
 
 I've provided the PDF of the first two papers. You'll need to download the other papers from an IP address with access.
 
@@ -35,6 +35,7 @@ I've provided the PDF of the first two papers. You'll need to download the other
 - [Lifetime Earnings and the Vietnam Era Draft Lottery: Evidence from Social Security Administrative Records](https://www.jstor.org/stable/2006669), Angrist (1990)
 - [Airports, Air Pollution, and Contemporaneous Health](Airports, Air Pollution, and Contemporaneous Health), Schlenker and Walker (2016)
 - [Experimental Evidence on the Demand for and Costs of Rural Electrification](http://emiguel.econ.berkeley.edu/research/experimental-evidence-on-the-demand-for-and-costs-of-rural-electrification), Lee, Miguel, and Wolfram (working paper)
+- [Under the Weather: Health, Schooling, and Economic Consequences of Early-Life Rainfall](https://www.aeaweb.org/articles?id=10.1257/aer.99.3.1006), Maccini and Yang (2009)
 
 More generally, over the summer, you should read the book [Mostly Harmless Econometrics](http://www.mostlyharmlesseconometrics.com) by Angrist and Pischke.
 
