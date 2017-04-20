@@ -45,8 +45,8 @@ __Packages__:
 
 __Data__:
 
-- The folder "ChicagoPoliceBeats", which contains the shapefile of Chicago's police beats.
-- The file "chicagoCrime.rds".
+- The folder [ChicagoPoliceBeats](Section12/ChicagoPoliceBeats.zip), which contains the shapefile of Chicago's police beats.
+- The file [chicagoCrime.rds](chicagoCrime.rds).
 
 <!-- TODO -->
 
