@@ -39,7 +39,7 @@ __Packages__:
 
 - New:
     - Package management: `pacman`
-    - Spatial: `rgdal`, `raster`, `broom`
+    - Spatial: `rgdal`, `raster`, `broom`, `rgeos`, `GISTools`
     - Dates: `lubridate`
 - Old: `dplyr`, `ggplot2`, `ggthemes`, `magrittr`, `viridis`
 
@@ -71,7 +71,7 @@ Set up R. Notice that I am using a new package `pacman`, which helps with packag
 # Options
 options(stringsAsFactors = F)
 # Load new packages
-pacman::p_load(lubridate, rgdal, raster, broom)
+pacman::p_load(lubridate, rgdal, raster, broom, rgeos, GISTools)
 # Load old packages
 pacman::p_load(dplyr, ggplot2, ggthemes, magrittr, viridis)
 # My ggplot2 theme
@@ -117,14 +117,14 @@ dim(beats_shp)
 plot(beats_shp)
 ```
 
-Cool, right? So what does it mean that this "spatial polygons data frame" has dimensions 277 and 4? The first number is generally the number of distinct shapes in the shapefile. In our case, we 277 polygons. And what about the second number? The second number gives us the number of attributes—essentially the number of variables for which we have information for each polygon.
+Cool, right? So what does it mean that this "spatial polygons data frame" has dimensions 277 and 4? The first number is generally the number of distinct shapes (features) in the shapefile. In our case, we 277 polygons. And what about the second number? The second number gives us the number of fields—essentially the number of variables (a.k.a. features) for which we have information for each polygon.
 
 ## Decomposing a shapefile
 
-We can dive a bit deeper into the data that compose a shapefile in R. Up to this point, you've seen that you can access the columns of a `data.frame`^[or `tibble` or `tbl_df` or `data.table`] using the dollar sign, _e.g._, `pretend_df$variable1`. Spatial data frames add an additional level—we now have slots. You can still find out the names of the attribute (variables) using `names(beats_shp)`, but now you can also find the names of the _slots_ using `slotNames(beats_shp)`:
+We can dive a bit deeper into the data that compose a shapefile in R. Up to this point, you've seen that you can access the columns of a `data.frame`^[or `tibble` or `tbl_df` or `data.table`] using the dollar sign, _e.g._, `pretend_df$variable1`. Spatial data frames add an additional level—we now have slots. You can still find out the names of the fields (variables) using `names(beats_shp)`, but now you can also find the names of the _slots_ using `slotNames(beats_shp)`:
 
 ```{R, slot names}
-# Attribute/variable names
+# Fied/variable names
 names(beats_shp)
 # Slot names
 slotNames(beats_shp)
@@ -206,7 +206,7 @@ Thus, we see that the first polygon is made up of 345 coordinates that jointly d
 subset(beats_shp, beat_num == "1713") %>% plot()
 ```
 
-So what have we learned, thus far, about this shapefile? The shapefile is made up of polygons, and each polygon is made up of points on a coordinate system—in this case, longitudes ($x$) and latitudes ($y$). When you plot the points using their coordinates and then connect the dots (points), you get a polygon. Together, the polygons determine the shapefile. In addition to shapes of the polygons, we also have data (in the `data` slot) about each polygons. In the current examples, we have four attributes about the polygons, but in other cases, you will know a lot more about each polygon—for instance, Census will have hundreds of attributes for each polygon (the polygons are the Census blocks, tracts, _etc._).
+So what have we learned, thus far, about this shapefile? The shapefile is made up of polygons, and each polygon is made up of points on a coordinate system—in this case, longitudes ($x$) and latitudes ($y$). When you plot the points using their coordinates and then connect the dots (points), you get a polygon. Together, the polygons determine the shapefile. In addition to shapes of the polygons, we also have data (in the `data` slot) about each polygons. In the current examples, we have four fields/attributes/features/variables^[I know, too much. I just wanted to emphasize that you will hear different words for the same concept across disciplines.] about the polygons, but in other cases, you will know a lot more about each polygon—for instance, Census will have hundreds of variables for each polygon (the polygons are the Census blocks, tracts, _etc._).
 
 ## Building a shapefile
 
@@ -292,41 +292,201 @@ crime_df %<>% tbl_df()
 crime_df
 ```
 
-Let's clean up the file a bit more. First, we will change the names of the variables. Second, we will convert the dates from character to actual dates using the function `mdy_hms()` from the `lubridate` package. The `mdy` part of the function's name implies that the dates have month first, followed by day, follwed by year. The `hms` part of the function's name implies that we have hours, minutes, and seconds. If you did not have hours, minutes, and seconds, then you would want to use the function `mdy()`. If you had year, followed by month, followed by day, then you would want to use the function `ymd()`. And so on....
+Let's clean up the file a bit more. First, we will change the names of the variables. Second, we will drop any observations missing their latitude or longitude.^[In your actual research, yuo want to be careful with which observations are missing values—it is quite likely that latitude and longitude are not missing at random.] Third, we will convert the dates from character to actual dates using the function `mdy_hms()` from the `lubridate` package. The `mdy` part of the function's name implies that the dates have month first, followed by day, follwed by year. The `hms` part of the function's name implies that we have hours, minutes, and seconds. If you did not have hours, minutes, and seconds, then you would want to use the function `mdy()`. If you had year, followed by month, followed by day, then you would want to use the function `ymd()`. And so on....
 
 ```{R, clean crime data}
 # Change names
 names(crime_df) <- c("id", "date", "primary_offense",
-  "arrest", "domestic", "beat", "latitude", "longitude")
+  "arrest", "domestic", "beat", "lat", "lon")
+# Drop observations missing lat or lon
+crime_df %<>% filter(!is.na(lat) & !is.na(lon))
 # Convert dates
 crime_df %<>% mutate(date = mdy_hms(date))
 # Check it out again
 crime_df
 ```
 
-Great! Now let's plot the points data.
+Great! While we know that these data depict a points in space, R does not. However, we can easily tell R which variables are the coordinates for these data. For this task, we use the `coordinates()` function from the `sp` package (loaded when we load `rgdal`). You define the coordinates in a data frame using a slightly strange formula of the form `coordinates(your_df) <- ~ x_var + y_var`. Let's do it.
+
+```{R, define crime coords}
+# Define longitude and latitude as our coordinates
+coordinates(crime_df) <- ~ lon + lat
+```
+
+Check the class, the head, and the slot names of `crime_df`:
+```{R, check crime coords}
+# Check class
+crime_df %>% class()
+# Check head
+crime_df %>% head()
+# Check slot names
+crime_df %>% slotNames()
+```
+
+Notice that the variables we defined as the coordinates no longer show up in the `head`. If you check out the data frame in the `data` slot, you will not see the variables there, either. (Applying `head()` to the spatial points data frame is actually giving you the head of the data frame stored in the `data` slot.) So where did they go? The variables are now stored in the `coords` slot. See:
+
+```{R, points coords slot}
+# Check out the coords slot
+crime_df@coords %>% head()
+```
+
+When we converted the data frame to a spatial points data frame—by assigning the coordinates—what happened to the coordinate reference system (CRS)? Did R find/choose a CRS for us?
+
+```{R, check projection points}
+# Check the projection
+crime_df@proj4string
+```
+
+Nope. The coordinate reference system is missing. I could not find any information on the CRS that the city of Chicago uses, but let's assume it matches their other data files—specifically the police beats shapefile we already loaded. We can assign the `proj4string` using a function by the same name. And we can grab the CRS from another object using the `crs()` function from the `raster` package.
+
+```{R, assign crs}
+# Assing a CRS to the crime points data
+proj4string(crime_df) <- crs(beats_shp)
+# See if it worked
+crime_df@proj4string
+```
+
+Great!
+
+## Points in polygons
+
+Let's now add the points to our map. Because we have 2.2 million observations, we will focus on two primary offenses: narcotics (200,000+ observations) and homicide (about 3600 observations). `dplyr`'s handy functions do not currently work on spatial points data frames, but we can use the old-fashioned `subset()` function, which is like a combination of `filter()` and `select()`. Let's overwrite our current `crime_df` with the subset that includes only homicides and narcotics.
+
+```{R}
+# Take subset of crimes
+crime_df %<>% subset(primary_offense %in% c("HOMICIDE", "NARCOTICS"))
+```
+
+As with the shapefile data, you can quickly plot a spatial points data frame using the base `plot()` function. Let's do it.
+
+```{R, base plot points, fig.height = 6}
+plot(crime_df)
+```
+
+It looks like we have at least one observation that is not quite in Chicago. From the police beats, we know where Chicago is, so let's use this knowledge to drop observations that are outside of Chicago.
+
+First, let's take the union of all of the polygons, which will give us a single polygon that outlines Chicago. For this task, we will use the function `gUnaryUnion()` from the `rgeos` package. We will plot the result using `plot()`.^[The reason we take the union here is that we want a single polygon when testing whether the points are in Chicago. It makes life a bit easier.]
+
+```{R, chicago outline, fig.height = 6}
+# Take the union of the beats polygons
+chicago_union <- gUnaryUnion(beats_shp)
+# Plot the union
+plot(chicago_union)
+```
+
+We can now use this union to keep the crimes that fall within Chicago's city limits.^[You could also make use of the bounding box of the shapefile for the exercise, but it would not be as clean—you might still have crimes that are outside of the police beats.] In particular, we can use the `over()` function from the `sp` package to determine which points are _over_ which polygons.^[__Warning__: The `over()` function can be a bit slow—the task we are asking R to complete can be pretty computationally intense if you have complex shapes for your polygons (many points making up your polygons) and many points to test.] Thus, you can also use the `over()` function to map points to polygons or to grab the value of some variable related to a polygon for each point. Our use is much more simple: if the point is not _over_ a polygon, then we get an `NA`. This task is sometimes referred to as _points in polygons_.
+
+```{R, points over, cache = T}
+# Check which crime points are inside of Chicago
+test_points <- over(crime_df, chicago_union)
+# From 1 and NA to T and F (F means not in Chicago)
+test_points <- !is.na(test1)
+```
+
+An alternative route that requires a bit more typing:
+```{R, eval = F}
+crime_xy <- crime_df@coords
+chicago_xy <- chicago_union@polygons[[1]]@Polygons[[1]]@coords
+test_points2 <- point.in.polygon(
+  crime_xy[,1], crime_xy[,2],
+  chicago_xy[,1], chicago_xy[,2])
+```
+
+Now we will use `test_points` to drop observations outside of Chicago's limits.
+```{R}
+crime_df <- crime_df[which(test_points == T), ]
+```
+
+Finally, let's plot the crime points again to see if they now fit inside of the city.
+```{R, do points fit, fig.height = 6}
+plot(chicago_union, col = "yellow")
+plot(crime_df, pch = 20, add = T)
+```
+
+Much better.
+
+But what if we want to do all of this in `ggplot2`?
 
 ## Plotting points data with `ggplot2`
 
+As we discussed above, `ggplot2` doesn't really want spatial data objects—it just wants data frames (or similar objects). Therefore, to plot the spatial points data frame in `ggplot2`, we want to convert it _back_ to a standard data frame. Because it may be hand to preserve the spatial object, let's _copy_ the current `crime_df`, renaming it to `crime_spdf` and then convert `crime_df` to a `tbl_df`.
 
+```{R, converting SPDF}
+# Copy the spatial points data frame, renaming
+crime_spdf <- crime_df
+# Convert the spatial points data frame to tbl_df
+crime_df <- crime_df %>% tbl_df()
+# Check classes
+crime_spdf %>% class()
+crime_df %>% class()
+```
+
+Alright, we are now ready to plot the police beat polygons with the crime data. Let's make a map for each class of crime. I'll add a factor variable for type of crime. I'll also add year.
+
+```{R, plot beats and crimes, fig.height = 7, cache = T}
+# Add a factor to crime_df
+crime_df %<>% mutate(crime_fac =
+  factor(primary_offense,
+    levels = c("HOMICIDE", "NARCOTICS"),
+    labels = c("Homicide", "Narcotics")
+    ))
+# Add year
+crime_df %<>% mutate(year = year(date))
+# The maps
+ggplot(data = crime_df) +
+  geom_path(data = beats_df, aes(long, lat, group = group),
+    size = 0.3, color = "grey60") +
+  geom_point(aes(lon, lat, color = crime_fac, alpha = crime_fac),
+    size = 0.5) +
+  xlab("") + ylab("") +
+  ggtitle("Spatial distribution of homicides and narcotics offenses",
+    subtitle = "Chicago, 2010 to present") +
+  theme_ed +
+  theme(legend.position = "none", axis.text = element_blank()) +
+  scale_color_manual(values = viridis(2, end = 0.6)) +
+  scale_alpha_manual(values = c(0.5, 0.05)) +
+  coord_map() +
+  facet_grid(. ~ crime_fac)
+```
+
+What if we want to incorporate time into this picture? We can add another dimension to the `fact_grid()`. I'm also going to look only at 2010, 2013, and 2016 to keep things from getting too crazy.
+```{R, year and space, fig.height = 11, cache = T}
+# The maps
+ggplot(data = subset(crime_df, year %in% c(2010, 2013, 2016))) +
+  geom_path(data = beats_df, aes(long, lat, group = group),
+    size = 0.3, color = "grey60") +
+  geom_point(aes(lon, lat, color = crime_fac, alpha = crime_fac),
+    size = 0.5) +
+  xlab("") + ylab("") +
+  ggtitle("Spatial distribution of homicides and narcotics offenses",
+    subtitle = "Chicago, 2010 to present") +
+  theme_ed +
+  theme(legend.position = "none", axis.text = element_blank()) +
+  scale_color_manual(values = viridis(2, end = 0.6)) +
+  scale_alpha_manual(values = c(0.5, 0.1)) +
+  coord_map() +
+  facet_grid(year ~ crime_fac)
+```
+
+Nice. These maps are pretty interesting—you can see Chicago's highly publicized homicide explosion in 2016, but you can also see a (non-publicized) large drop in the narcotics busts in 2016.
+
+## Aggregating points to polygons
+
+What if want to count the number of incidents within a beat? You could use the `over()` function from the `sp` package, but the `poly.counts()` function in the `GISTools` package is a bit easier.
 
 <!-- TODO -->
 
 # Raster data
 
-
+<!-- TODO -->
 
 # Projections
 
 Let's return to the `proj4string` slot for a moment. This slot contains the projection (coordinate reference system or CRS) used in creating the shapefile. [Different projections](https://xkcd.com/977/) yield different sets of coordinates. Thus, if your projects entails multiple datasets—as most do—then you need to make sure that you are using a consistent projection across all of your datasets/files. If you do not, then (0, 0) in one of your datasets may actually be (180, 180) in another of your datasets—nothing will line up (or it will erroneously line up). Be careful here. For information on how to change projections, see the help files `?raster::crs`, `?rgdal::spTransform`, the [`proj4` package](https://cran.r-project.org/web/packages/proj4/proj4.pdf), and/or the [proj.4 website](http://proj4.org/)).
 
+# Geocoding
 
-
-
-
-
-
-
+<!-- TODO -->
 
 # QGIS
 

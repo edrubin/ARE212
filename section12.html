@@ -431,7 +431,7 @@ div.tocify {
 <li>New:
 <ul>
 <li>Package management: <code>pacman</code></li>
-<li>Spatial: <code>rgdal</code>, <code>raster</code>, <code>broom</code></li>
+<li>Spatial: <code>rgdal</code>, <code>raster</code>, <code>broom</code>, <code>rgeos</code>, <code>GISTools</code></li>
 <li>Dates: <code>lubridate</code></li>
 </ul></li>
 <li>Old: <code>dplyr</code>, <code>ggplot2</code>, <code>ggthemes</code>, <code>magrittr</code>, <code>viridis</code></li>
@@ -461,7 +461,7 @@ div.tocify {
 <span class="co"># Options</span>
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
 <span class="co"># Load new packages</span>
-pacman::<span class="kw">p_load</span>(lubridate, rgdal, raster, broom)
+pacman::<span class="kw">p_load</span>(lubridate, rgdal, raster, broom, rgeos, GISTools)
 <span class="co"># Load old packages</span>
 pacman::<span class="kw">p_load</span>(dplyr, ggplot2, ggthemes, magrittr, viridis)
 <span class="co"># My ggplot2 theme</span>
@@ -507,12 +507,12 @@ beats_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot</span>
 <span class="kw">plot</span>(beats_shp)</code></pre></div>
 <p><img src="section12_files/figure-html/check%20beats%20shapefile-1.png" width="672" /></p>
-<p>Cool, right? So what does it mean that this “spatial polygons data frame” has dimensions 277 and 4? The first number is generally the number of distinct shapes in the shapefile. In our case, we 277 polygons. And what about the second number? The second number gives us the number of attributes—essentially the number of variables for which we have information for each polygon.</p>
+<p>Cool, right? So what does it mean that this “spatial polygons data frame” has dimensions 277 and 4? The first number is generally the number of distinct shapes (features) in the shapefile. In our case, we 277 polygons. And what about the second number? The second number gives us the number of fields—essentially the number of variables (a.k.a. features) for which we have information for each polygon.</p>
 </div>
 <div id="decomposing-a-shapefile" class="section level2">
 <h2>Decomposing a shapefile</h2>
-<p>We can dive a bit deeper into the data that compose a shapefile in R. Up to this point, you’ve seen that you can access the columns of a <code>data.frame</code><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> using the dollar sign, <em>e.g.</em>, <code>pretend_df$variable1</code>. Spatial data frames add an additional level—we now have slots. You can still find out the names of the attribute (variables) using <code>names(beats_shp)</code>, but now you can also find the names of the <em>slots</em> using <code>slotNames(beats_shp)</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Attribute/variable names</span>
+<p>We can dive a bit deeper into the data that compose a shapefile in R. Up to this point, you’ve seen that you can access the columns of a <code>data.frame</code><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> using the dollar sign, <em>e.g.</em>, <code>pretend_df$variable1</code>. Spatial data frames add an additional level—we now have slots. You can still find out the names of the fields (variables) using <code>names(beats_shp)</code>, but now you can also find the names of the <em>slots</em> using <code>slotNames(beats_shp)</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fied/variable names</span>
 <span class="kw">names</span>(beats_shp)</code></pre></div>
 <pre><code>## [1] &quot;district&quot; &quot;beat_num&quot; &quot;sector&quot;   &quot;beat&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Slot names</span>
@@ -595,7 +595,7 @@ beats_shp@polygons[[<span class="dv">1</span>]]@Polygons[[<span class="dv">1</sp
 <p>Thus, we see that the first polygon is made up of 345 coordinates that jointly determine area for beat number 1713 (the first row in <code>beats_shp@data</code>). We can confirm that these points match the polygon for beat number 1713 by taking the <code>subset()</code> of <code>beats_shp</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subset</span>(beats_shp, beat_num ==<span class="st"> &quot;1713&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">plot</span>()</code></pre></div>
 <p><img src="section12_files/figure-html/plot%201713-1.png" width="672" /></p>
-<p>So what have we learned, thus far, about this shapefile? The shapefile is made up of polygons, and each polygon is made up of points on a coordinate system—in this case, longitudes (<span class="math inline">\(x\)</span>) and latitudes (<span class="math inline">\(y\)</span>). When you plot the points using their coordinates and then connect the dots (points), you get a polygon. Together, the polygons determine the shapefile. In addition to shapes of the polygons, we also have data (in the <code>data</code> slot) about each polygons. In the current examples, we have four attributes about the polygons, but in other cases, you will know a lot more about each polygon—for instance, Census will have hundreds of attributes for each polygon (the polygons are the Census blocks, tracts, <em>etc.</em>).</p>
+<p>So what have we learned, thus far, about this shapefile? The shapefile is made up of polygons, and each polygon is made up of points on a coordinate system—in this case, longitudes (<span class="math inline">\(x\)</span>) and latitudes (<span class="math inline">\(y\)</span>). When you plot the points using their coordinates and then connect the dots (points), you get a polygon. Together, the polygons determine the shapefile. In addition to shapes of the polygons, we also have data (in the <code>data</code> slot) about each polygons. In the current examples, we have four fields/attributes/features/variables<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> about the polygons, but in other cases, you will know a lot more about each polygon—for instance, Census will have hundreds of variables for each polygon (the polygons are the Census blocks, tracts, <em>etc.</em>).</p>
 </div>
 <div id="building-a-shapefile" class="section level2">
 <h2>Building a shapefile</h2>
@@ -639,8 +639,8 @@ the_spdf@data</code></pre></div>
 </div>
 <div id="plotting-shapefiles-with-ggplot2" class="section level2">
 <h2>Plotting shapefiles with <code>ggplot2</code></h2>
-<p>You’ve already seen that we can use R’s base <code>plot()</code> function to plot shapefiles, but what if we want to use <code>ggplot2</code>? In this situation, <code>ggplot2</code> still produces pretty pictures, but it can be much slower than <code>plot()</code> when you have a lot of polygons with many points. Plot at your own risk.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
-<p>Okay, so let’s plot the police beats shapefile. <code>ggplot2</code> wants a data frame where each row is a point. As we saw above, we’re almost there—the polygons are composed of points—but we need to formally convert the spatial polygons data frame to a data frame. For this task, I suggest the <code>tidy()</code> function from the <code>broom</code> package.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> We simply feed our shapefile (the spatial polygons data frame <code>beats_shp</code>) to <code>tidy()</code>, and we get back a data frame where each row is a point in one of the polygons in the shapefile. This process can take a while and can also take up a lot of memory if you have many polygons with many points.</p>
+<p>You’ve already seen that we can use R’s base <code>plot()</code> function to plot shapefiles, but what if we want to use <code>ggplot2</code>? In this situation, <code>ggplot2</code> still produces pretty pictures, but it can be much slower than <code>plot()</code> when you have a lot of polygons with many points. Plot at your own risk.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<p>Okay, so let’s plot the police beats shapefile. <code>ggplot2</code> wants a data frame where each row is a point. As we saw above, we’re almost there—the polygons are composed of points—but we need to formally convert the spatial polygons data frame to a data frame. For this task, I suggest the <code>tidy()</code> function from the <code>broom</code> package.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> We simply feed our shapefile (the spatial polygons data frame <code>beats_shp</code>) to <code>tidy()</code>, and we get back a data frame where each row is a point in one of the polygons in the shapefile. This process can take a while and can also take up a lot of memory if you have many polygons with many points.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Tidy the shapefile</span>
 beats_df &lt;-<span class="st"> </span><span class="kw">tidy</span>(beats_shp)</code></pre></div>
 <pre><code>## Regions defined for each Polygons</code></pre>
@@ -650,7 +650,7 @@ beats_df %&gt;%<span class="st"> </span><span class="kw">head</span>(<span class
 ## 1 -87.70473 41.97577     1 FALSE     1   0.1  0
 ## 2 -87.70472 41.97577     2 FALSE     1   0.1  0
 ## 3 -87.70472 41.97574     3 FALSE     1   0.1  0</code></pre>
-<p>Now we are ready to plot. The syntax for <code>ggplot2</code> remains the same. We need to map the <code>x</code> and <code>y</code> aesthetics (longitude and latitude), as well as the <code>group</code> (the polygon). For the actual plotting, we can use <code>geom_path()</code>—for only the outline of the polygons—and/or <code>geom_polygon()</code>, which allows for filling the polygons with color. <code>geom_map</code> is another nice option, but I will stick to <code>geom_path()</code> and <code>geom_polygon()</code> because they are a bit clearer. Finally, the <code>coord_map()</code> function allows you to specify a projection for the map. If you’ve ever seen maps that look a bit strange, it was probably because they used a different projection.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
+<p>Now we are ready to plot. The syntax for <code>ggplot2</code> remains the same. We need to map the <code>x</code> and <code>y</code> aesthetics (longitude and latitude), as well as the <code>group</code> (the polygon). For the actual plotting, we can use <code>geom_path()</code>—for only the outline of the polygons—and/or <code>geom_polygon()</code>, which allows for filling the polygons with color. <code>geom_map</code> is another nice option, but I will stick to <code>geom_path()</code> and <code>geom_polygon()</code> because they are a bit clearer. Finally, the <code>coord_map()</code> function allows you to specify a projection for the map. If you’ve ever seen maps that look a bit strange, it was probably because they used a different projection.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot the tidied shapefile</span>
 <span class="kw">ggplot</span>(<span class="dt">data =</span> beats_df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group)) +
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>) +
@@ -687,15 +687,17 @@ crime_df</code></pre></div>
 ## 10 8438091 01/12/2012 07:30:00 PM  DECEPTIVE PRACTICE  false    false
 ## # ... with 2,234,873 more rows, and 3 more variables: Beat &lt;int&gt;,
 ## #   Latitude &lt;dbl&gt;, Longitude &lt;dbl&gt;</code></pre>
-<p>Let’s clean up the file a bit more. First, we will change the names of the variables. Second, we will convert the dates from character to actual dates using the function <code>mdy_hms()</code> from the <code>lubridate</code> package. The <code>mdy</code> part of the function’s name implies that the dates have month first, followed by day, follwed by year. The <code>hms</code> part of the function’s name implies that we have hours, minutes, and seconds. If you did not have hours, minutes, and seconds, then you would want to use the function <code>mdy()</code>. If you had year, followed by month, followed by day, then you would want to use the function <code>ymd()</code>. And so on….</p>
+<p>Let’s clean up the file a bit more. First, we will change the names of the variables. Second, we will drop any observations missing their latitude or longitude.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> Third, we will convert the dates from character to actual dates using the function <code>mdy_hms()</code> from the <code>lubridate</code> package. The <code>mdy</code> part of the function’s name implies that the dates have month first, followed by day, follwed by year. The <code>hms</code> part of the function’s name implies that we have hours, minutes, and seconds. If you did not have hours, minutes, and seconds, then you would want to use the function <code>mdy()</code>. If you had year, followed by month, followed by day, then you would want to use the function <code>ymd()</code>. And so on….</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Change names</span>
 <span class="kw">names</span>(crime_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;date&quot;</span>, <span class="st">&quot;primary_offense&quot;</span>,
-  <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;domestic&quot;</span>, <span class="st">&quot;beat&quot;</span>, <span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;longitude&quot;</span>)
+  <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;domestic&quot;</span>, <span class="st">&quot;beat&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;lon&quot;</span>)
+<span class="co"># Drop observations missing lat or lon</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(lat) &amp;<span class="st"> </span>!<span class="kw">is.na</span>(lon))
 <span class="co"># Convert dates</span>
 crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">mdy_hms</span>(date))
 <span class="co"># Check it out again</span>
 crime_df</code></pre></div>
-<pre><code>## # A tibble: 2,234,883 × 8
+<pre><code>## # A tibble: 2,203,481 × 8
 ##         id                date     primary_offense arrest domestic  beat
 ##      &lt;int&gt;              &lt;dttm&gt;               &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
 ## 1  8438081 2012-01-12 18:40:00               THEFT   true    false   131
@@ -708,21 +710,162 @@ crime_df</code></pre></div>
 ## 8  8438089 2012-01-10 16:00:00 MOTOR VEHICLE THEFT  false    false  1723
 ## 9  8438090 2012-01-12 19:20:00  DECEPTIVE PRACTICE   true    false  1832
 ## 10 8438091 2012-01-12 19:30:00  DECEPTIVE PRACTICE  false    false  1133
-## # ... with 2,234,873 more rows, and 2 more variables: latitude &lt;dbl&gt;,
-## #   longitude &lt;dbl&gt;</code></pre>
-<p>Great! Now let’s plot the points data.</p>
+## # ... with 2,203,471 more rows, and 2 more variables: lat &lt;dbl&gt;, lon &lt;dbl&gt;</code></pre>
+<p>Great! While we know that these data depict a points in space, R does not. However, we can easily tell R which variables are the coordinates for these data. For this task, we use the <code>coordinates()</code> function from the <code>sp</code> package (loaded when we load <code>rgdal</code>). You define the coordinates in a data frame using a slightly strange formula of the form <code>coordinates(your_df) &lt;- ~ x_var + y_var</code>. Let’s do it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define longitude and latitude as our coordinates</span>
+<span class="kw">coordinates</span>(crime_df) &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>lon +<span class="st"> </span>lat</code></pre></div>
+<p>Check the class, the head, and the slot names of <code>crime_df</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check class</span>
+crime_df %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;SpatialPointsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check head</span>
+crime_df %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>## # A tibble: 6 × 6
+##        id                date primary_offense arrest domestic  beat
+##     &lt;int&gt;              &lt;dttm&gt;           &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
+## 1 8438081 2012-01-12 18:40:00           THEFT   true    false   131
+## 2 8438082 2012-01-08 12:00:00           THEFT  false    false  1732
+## 3 8438084 2012-01-12 19:23:00       NARCOTICS   true    false  1211
+## 4 8438085 2012-01-12 16:30:00         BATTERY  false    false  1623
+## 5 8438086 2012-01-11 13:00:00 CRIMINAL DAMAGE  false    false  1412
+## 6 8438087 2012-01-10 02:00:00         ASSAULT  false     true  1732</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check slot names</span>
+crime_df %&gt;%<span class="st"> </span><span class="kw">slotNames</span>()</code></pre></div>
+<pre><code>## [1] &quot;data&quot;        &quot;coords.nrs&quot;  &quot;coords&quot;      &quot;bbox&quot;        &quot;proj4string&quot;</code></pre>
+<p>Notice that the variables we defined as the coordinates no longer show up in the <code>head</code>. If you check out the data frame in the <code>data</code> slot, you will not see the variables there, either. (Applying <code>head()</code> to the spatial points data frame is actually giving you the head of the data frame stored in the <code>data</code> slot.) So where did they go? The variables are now stored in the <code>coords</code> slot. See:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check out the coords slot</span>
+crime_df@coords %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>##         lon      lat
+## 1 -87.63916 41.86449
+## 2 -87.71400 41.94883
+## 3 -87.68639 41.87963
+## 4 -87.76728 41.96173
+## 5 -87.71294 41.93927
+## 6 -87.72013 41.94916</code></pre>
+<p>When we converted the data frame to a spatial points data frame—by assigning the coordinates—what happened to the coordinate reference system (CRS)? Did R find/choose a CRS for us?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the projection</span>
+crime_df@proj4string</code></pre></div>
+<pre><code>## CRS arguments: NA</code></pre>
+<p>Nope. The coordinate reference system is missing. I could not find any information on the CRS that the city of Chicago uses, but let’s assume it matches their other data files—specifically the police beats shapefile we already loaded. We can assign the <code>proj4string</code> using a function by the same name. And we can grab the CRS from another object using the <code>crs()</code> function from the <code>raster</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Assing a CRS to the crime points data</span>
+<span class="kw">proj4string</span>(crime_df) &lt;-<span class="st"> </span><span class="kw">crs</span>(beats_shp)
+<span class="co"># See if it worked</span>
+crime_df@proj4string</code></pre></div>
+<pre><code>## CRS arguments: +proj=longlat +ellps=WGS84 +no_defs</code></pre>
+<p>Great!</p>
+</div>
+<div id="points-in-polygons" class="section level2">
+<h2>Points in polygons</h2>
+<p>Let’s now add the points to our map. Because we have 2.2 million observations, we will focus on two primary offenses: narcotics (200,000+ observations) and homicide (about 3600 observations). <code>dplyr</code>’s handy functions do not currently work on spatial points data frames, but we can use the old-fashioned <code>subset()</code> function, which is like a combination of <code>filter()</code> and <code>select()</code>. Let’s overwrite our current <code>crime_df</code> with the subset that includes only homicides and narcotics.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Take subset of crimes</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">subset</span>(primary_offense %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HOMICIDE&quot;</span>, <span class="st">&quot;NARCOTICS&quot;</span>))</code></pre></div>
+<p>As with the shapefile data, you can quickly plot a spatial points data frame using the base <code>plot()</code> function. Let’s do it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(crime_df)</code></pre></div>
+<p><img src="section12_files/figure-html/base%20plot%20points-1.png" width="672" /></p>
+<p>It looks like we have at least one observation that is not quite in Chicago. From the police beats, we know where Chicago is, so let’s use this knowledge to drop observations that are outside of Chicago.</p>
+<p>First, let’s take the union of all of the polygons, which will give us a single polygon that outlines Chicago. For this task, we will use the function <code>gUnaryUnion()</code> from the <code>rgeos</code> package. We will plot the result using <code>plot()</code>.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Take the union of the beats polygons</span>
+chicago_union &lt;-<span class="st"> </span><span class="kw">gUnaryUnion</span>(beats_shp)
+<span class="co"># Plot the union</span>
+<span class="kw">plot</span>(chicago_union)</code></pre></div>
+<p><img src="section12_files/figure-html/chicago%20outline-1.png" width="672" /></p>
+<p>We can now use this union to keep the crimes that fall within Chicago’s city limits.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> In particular, we can use the <code>over()</code> function from the <code>sp</code> package to determine which points are <em>over</em> which polygons.<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> Thus, you can also use the <code>over()</code> function to map points to polygons or to grab the value of some variable related to a polygon for each point. Our use is much more simple: if the point is not <em>over</em> a polygon, then we get an <code>NA</code>. This task is sometimes referred to as <em>points in polygons</em>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check which crime points are inside of Chicago</span>
+test_points &lt;-<span class="st"> </span><span class="kw">over</span>(crime_df, chicago_union)
+<span class="co"># From 1 and NA to T and F (F means not in Chicago)</span>
+test_points &lt;-<span class="st"> </span>!<span class="kw">is.na</span>(test1)</code></pre></div>
+<p>An alternative route that requires a bit more typing:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_xy &lt;-<span class="st"> </span>crime_df@coords
+chicago_xy &lt;-<span class="st"> </span>chicago_union@polygons[[<span class="dv">1</span>]]@Polygons[[<span class="dv">1</span>]]@coords
+test_points2 &lt;-<span class="st"> </span><span class="kw">point.in.polygon</span>(
+  crime_xy[,<span class="dv">1</span>], crime_xy[,<span class="dv">2</span>],
+  chicago_xy[,<span class="dv">1</span>], chicago_xy[,<span class="dv">2</span>])</code></pre></div>
+<p>Now we will use <code>test_points</code> to drop observations outside of Chicago’s limits.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_df &lt;-<span class="st"> </span>crime_df[<span class="kw">which</span>(test_points ==<span class="st"> </span>T), ]</code></pre></div>
+<p>Finally, let’s plot the crime points again to see if they now fit inside of the city.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(chicago_union, <span class="dt">col =</span> <span class="st">&quot;yellow&quot;</span>)
+<span class="kw">plot</span>(crime_df, <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">add =</span> T)</code></pre></div>
+<p><img src="section12_files/figure-html/do%20points%20fit-1.png" width="672" /></p>
+<p>Much better.</p>
+<p>But what if we want to do all of this in <code>ggplot2</code>?</p>
 </div>
 <div id="plotting-points-data-with-ggplot2" class="section level2">
 <h2>Plotting points data with <code>ggplot2</code></h2>
+<p>As we discussed above, <code>ggplot2</code> doesn’t really want spatial data objects—it just wants data frames (or similar objects). Therefore, to plot the spatial points data frame in <code>ggplot2</code>, we want to convert it <em>back</em> to a standard data frame. Because it may be hand to preserve the spatial object, let’s <em>copy</em> the current <code>crime_df</code>, renaming it to <code>crime_spdf</code> and then convert <code>crime_df</code> to a <code>tbl_df</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Copy the spatial points data frame, renaming</span>
+crime_spdf &lt;-<span class="st"> </span>crime_df
+<span class="co"># Convert the spatial points data frame to tbl_df</span>
+crime_df &lt;-<span class="st"> </span>crime_df %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Check classes</span>
+crime_spdf %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;SpatialPointsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_df %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<p>Alright, we are now ready to plot the police beat polygons with the crime data. Let’s make a map for each class of crime. I’ll add a factor variable for type of crime. I’ll also add year.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add a factor to crime_df</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">crime_fac =</span>
+  <span class="kw">factor</span>(primary_offense,
+    <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;HOMICIDE&quot;</span>, <span class="st">&quot;NARCOTICS&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Homicide&quot;</span>, <span class="st">&quot;Narcotics&quot;</span>)
+    ))
+<span class="co"># Add year</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(date))
+<span class="co"># The maps</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> crime_df) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> beats_df, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group),
+    <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;grey60&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> crime_fac, <span class="dt">alpha =</span> crime_fac),
+    <span class="dt">size =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial distribution of homicides and narcotics offenses&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;Chicago, 2010 to present&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) +
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">viridis</span>(<span class="dv">2</span>, <span class="dt">end =</span> <span class="fl">0.6</span>)) +
+<span class="st">  </span><span class="kw">scale_alpha_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>)) +
+<span class="st">  </span><span class="kw">coord_map</span>() +
+<span class="st">  </span><span class="kw">facet_grid</span>(. ~<span class="st"> </span>crime_fac)</code></pre></div>
+<p><img src="section12_files/figure-html/plot%20beats%20and%20crimes-1.png" width="672" /></p>
+<p>What if we want to incorporate time into this picture? We can add another dimension to the <code>fact_grid()</code>. I’m also going to look only at 2010, 2013, and 2016 to keep things from getting too crazy.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The maps</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">subset</span>(crime_df, year %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">2010</span>, <span class="dv">2013</span>, <span class="dv">2016</span>))) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> beats_df, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group),
+    <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;grey60&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> crime_fac, <span class="dt">alpha =</span> crime_fac),
+    <span class="dt">size =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial distribution of homicides and narcotics offenses&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;Chicago, 2010 to present&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) +
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">viridis</span>(<span class="dv">2</span>, <span class="dt">end =</span> <span class="fl">0.6</span>)) +
+<span class="st">  </span><span class="kw">scale_alpha_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>)) +
+<span class="st">  </span><span class="kw">coord_map</span>() +
+<span class="st">  </span><span class="kw">facet_grid</span>(year ~<span class="st"> </span>crime_fac)</code></pre></div>
+<p><img src="section12_files/figure-html/year%20and%20space-1.png" width="672" /></p>
+<p>Nice. These maps are pretty interesting—you can see Chicago’s highly publicized homicide explosion in 2016, but you can also see a (non-publicized) large drop in the narcotics busts in 2016.</p>
+</div>
+<div id="aggregating-points-to-polygons" class="section level2">
+<h2>Aggregating points to polygons</h2>
+<p>What if want to count the number of incidents within a beat? You could use the <code>over()</code> function from the <code>sp</code> package, but the <code>poly.counts()</code> function in the <code>GISTools</code> package is a bit easier.</p>
 <!-- TODO -->
 </div>
 </div>
 <div id="raster-data" class="section level1">
 <h1>Raster data</h1>
+<!-- TODO -->
 </div>
 <div id="projections" class="section level1">
 <h1>Projections</h1>
 <p>Let’s return to the <code>proj4string</code> slot for a moment. This slot contains the projection (coordinate reference system or CRS) used in creating the shapefile. <a href="https://xkcd.com/977/">Different projections</a> yield different sets of coordinates. Thus, if your projects entails multiple datasets—as most do—then you need to make sure that you are using a consistent projection across all of your datasets/files. If you do not, then (0, 0) in one of your datasets may actually be (180, 180) in another of your datasets—nothing will line up (or it will erroneously line up). Be careful here. For information on how to change projections, see the help files <code>?raster::crs</code>, <code>?rgdal::spTransform</code>, the <a href="https://cran.r-project.org/web/packages/proj4/proj4.pdf"><code>proj4</code> package</a>, and/or the <a href="http://proj4.org/">proj.4 website</a>).</p>
+</div>
+<div id="geocoding" class="section level1">
+<h1>Geocoding</h1>
+<!-- TODO -->
 </div>
 <div id="qgis" class="section level1">
 <h1>QGIS</h1>
@@ -754,9 +897,14 @@ crime_df</code></pre></div>
 <li id="fn2"><p>I downloaded these data from <a href="https://data.cityofchicago.org/">Chicago’s data portal</a>.<a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>or <code>tibble</code> or <code>tbl_df</code> or <code>data.table</code><a href="#fnref3">↩</a></p></li>
 <li id="fn4"><p>Recall that we use <code>a_list[[n]]</code> to access the n<sup>th</sup> object of the list <code>a_list</code>.<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>If it is taking too long, try saving the plot, rather than printing it to screen.<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>You can use this <code>tidy()</code> function for tidying up all kinds of objects.<a href="#fnref6">↩</a></p></li>
-<li id="fn7"><p>See <code>?coor_map</code> for more information.<a href="#fnref7">↩</a></p></li>
+<li id="fn5"><p>I know, too much. I just wanted to emphasize that you will hear different words for the same concept across disciplines.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>If it is taking too long, try saving the plot, rather than printing it to screen.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>You can use this <code>tidy()</code> function for tidying up all kinds of objects.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>See <code>?coor_map</code> for more information.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>In your actual research, yuo want to be careful with which observations are missing values—it is quite likely that latitude and longitude are not missing at random.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>The reason we take the union here is that we want a single polygon when testing whether the points are in Chicago. It makes life a bit easier.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>You could also make use of the bounding box of the shapefile for the exercise, but it would not be as clean—you might still have crimes that are outside of the police beats.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p><strong>Warning</strong>: The <code>over()</code> function can be a bit slow—the task we are asking R to complete can be pretty computationally intense if you have complex shapes for your polygons (many points making up your polygons) and many points to test.<a href="#fnref12">↩</a></p></li>
 </ol>
 </div>
 
