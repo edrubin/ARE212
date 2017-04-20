@@ -46,7 +46,7 @@ __Packages__:
 __Data__:
 
 - The folder [ChicagoPoliceBeats](Section12/ChicagoPoliceBeats.zip), which contains the shapefile of Chicago's police beats.
-- The file [chicagoCrime.rds](chicagoCrime.rds).
+- The file [chicagoCrime.rds](Section12/chicagoCrime.rds).
 
 <!-- TODO -->
 
@@ -365,6 +365,8 @@ plot(crime_df)
 
 It looks like we have at least one observation that is not quite in Chicago. From the police beats, we know where Chicago is, so let's use this knowledge to drop observations that are outside of Chicago.
 
+This observation brings up an important point: with all of the data manipulation required for spatial data—or any data-intensive project—it is good to continually check the quality of your data to make sure everything is making sense. For spatial data, this often looks like making many maps.
+
 First, let's take the union of all of the polygons, which will give us a single polygon that outlines Chicago. For this task, we will use the function `gUnaryUnion()` from the `rgeos` package. We will plot the result using `plot()`.^[The reason we take the union here is that we want a single polygon when testing whether the points are in Chicago. It makes life a bit easier.]
 
 ```{R, chicago outline, fig.height = 6}
@@ -399,7 +401,7 @@ crime_df <- crime_df[which(test_points == T), ]
 
 Finally, let's plot the crime points again to see if they now fit inside of the city.
 ```{R, do points fit, fig.height = 6}
-plot(chicago_union, col = "yellow")
+plot(chicago_union, col = "grey80")
 plot(crime_df, pch = 20, add = T)
 ```
 
@@ -472,7 +474,85 @@ Nice. These maps are pretty interesting—you can see Chicago's highly publicize
 
 ## Aggregating points to polygons
 
-What if want to count the number of incidents within a beat? You could use the `over()` function from the `sp` package, but the `poly.counts()` function in the `GISTools` package is a bit easier.
+What if want to count the number of incidents within a beat? You could use the `over()` function from the `sp` package, but the `poly.counts()` function in the `GISTools` package is a bit easier. You feed the function a dataset of points and a dataset of polygons, and `poly.counts()` counts the points within each polygon.
+
+The general
+```{R, example count points, eval = F}
+poly.counts(pts = crime_spdf, polys = beats_shp)
+```
+
+Let's also add a year feature to the spatial points data frame.
+```{R, add year spdf}
+# Add 'year' to spatial points data frame
+crime_spdf@data %<>% mutate(year = year(date))
+```
+
+Now let's count the points in each polygon (beat) by year and by type of crime.
+```{R, poly counts, cache = T}
+# Count homicides by year
+homicide_beats <- lapply(X = 2010:2016, FUN = function(y) {
+  # Count points in polygons
+  tmp <- poly.counts(
+    pts = subset(crime_spdf, (year == y) & (primary_offense == "HOMICIDE")),
+    polys = beats_shp)
+  # Create data frame
+  tmp_df <- data.frame(
+    id = names(tmp),
+    count = tmp)
+  # Change names
+  names(tmp_df)[2] <- paste0("hom_", y)
+  # Return tmp_df
+  return(tmp_df)
+  })
+# Count narcotics offenses by year
+narcotics_beats <- lapply(X = 2010:2016, FUN = function(y) {
+  # Count points in polygons
+  tmp <- poly.counts(
+    pts = subset(crime_spdf, (year == y) & (primary_offense == "NARCOTICS")),
+    polys = beats_shp)
+  # Create data frame
+  tmp_df <- data.frame(
+    id = names(tmp),
+    count = tmp)
+  # Change names
+  names(tmp_df)[2] <- paste0("narc_", y)
+  # Return tmp_df
+  return(tmp_df)
+  })
+```
+
+Finally, we will (1) bind these lists of datasets together, and (2) join these datasets onto the data stored in the police beats shapefile (in the `data` slot).
+
+```{R, clean up counts}
+# Bind the lists together
+narc_df <- bind_cols(narcotics_beats)
+hom_df <- bind_cols(homicide_beats)
+# Select unique columns
+narc_df <- narc_df[, !duplicated(names(narc_df))] %>% tbl_df()
+hom_df <- hom_df[, !duplicated(names(hom_df))] %>% tbl_df()
+```
+
+Finally, we can join these data in `hom_df` and `narc_df` to the `data` slot in our shapefile. We will add the row names to the shapefile's data so that we can join the dataset with `narc_df` and `hom_df`. We will then update `beats_df` using `tidy()`. Finally, to join the new variables, we will use `left_join()` from `dplyr`. It's a great function.
+
+```{R, join data}
+# Add row names
+beats_shp@data$id <- rownames(beats_shp@data)
+# Join the count data
+beats_shp@data <- left_join(x = beats_shp@data, y = narc_df, by = "id")
+beats_shp@data <- left_join(x = beats_shp@data, y = hom_df, by = "id")
+# Re-create data frame
+beats_df <- tidy(beats_shp, region = "id")
+# Join the beats counts (again)
+beats_df %<>% left_join(x = ., y = narc_df, by = "id")
+beats_df %<>% left_join(x = ., y = hom_df, by = "id")
+```
+
+And now, we can plot our shapefile, coloring the police beats by the number of homicides in 2010. We will update `beats_df`.
+
+```{R, color by beat}
+#
+```
+
 
 <!-- TODO -->
 
