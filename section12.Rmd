@@ -17,7 +17,8 @@ output:
 
 ## Announcements
 
-<!-- TODO -->
+1. Thank you for the very sweet card!
+2. Next week we will wrap up spatial data and then move on to strategies for large datasets (_big data_), including efficient coding practices.
 
 ## Last section
 
@@ -25,9 +26,21 @@ In our [previous section](section11.html) we covered instrumental variables and 
 
 ### Follow up: Papers
 
+Someone asked for a few examples of papers that apply instrumental variables. Below are several options for you. In general, it is hard to go wrong with Angrist and Krueger (or Imbens). The first two papers are actually a summary articles—the first paper has a great table of instrumental variables papers in myriad settings. The third paper is a classic. The fourth paper is quite new by Reed Walker (Berkeley). The fifth paper is a working paper on rural electrification by three more Berkeley folks.
+
+I've provided the PDF of the first two papers. You'll need to download the other papers from an IP address with access.
+
+- [Instrumental Variables and the Search for Identification: From Supply and Demand to Natural Experiments](Papers/AngristKrueger2001.pdf), Angrist and Krueger (2001)
+- [Instrumental Variables: An Econometrician’s Perspective](Papers/Imbens2014.pdf), Imbens (2014)
+- [Lifetime Earnings and the Vietnam Era Draft Lottery: Evidence from Social Security Administrative Records](https://www.jstor.org/stable/2006669), Angrist (1990)
+- [Airports, Air Pollution, and Contemporaneous Health](Airports, Air Pollution, and Contemporaneous Health), Schlenker and Walker (2016)
+- [Experimental Evidence on the Demand for and Costs of Rural Electrification](http://emiguel.econ.berkeley.edu/research/experimental-evidence-on-the-demand-for-and-costs-of-rural-electrification), Lee, Miguel, and Wolfram (working paper)
+
+More generally, over the summer, you should read the book [Mostly Harmless Econometrics](http://www.mostlyharmlesseconometrics.com) by Angrist and Pischke.
+
 ### Follow up: Creative specification
 
-<!-- TODO: good IV papers and including the instrument in the regression -->
+Adding the instrument to your regression without doing 2SLS (or IV) does not fix your problem—and may make it worse. To see why, think about Frisch-Waugh-Lovell.^[I told you it was important!] If we residualize all variables on the (exogenous) instrument, then the remaining variation (in the residuals) is still endogenous. Worse yet, we've already controlled for the exogenous variation, so this strategy will estimate the coefficient using _only_ the endogenous variation—essentially the opposite of what IV/2SLS does.
 
 ## This week
 
@@ -47,8 +60,6 @@ __Data__:
 
 - The folder [ChicagoPoliceBeats](Section12/ChicagoPoliceBeats.zip), which contains the shapefile of Chicago's police beats.
 - The file [chicagoCrime.rds](Section12/chicagoCrime.rds).
-
-<!-- TODO -->
 
 # Spatial data
 
@@ -292,7 +303,7 @@ crime_df %<>% tbl_df()
 crime_df
 ```
 
-Let's clean up the file a bit more. First, we will change the names of the variables. Second, we will drop any observations missing their latitude or longitude.^[In your actual research, yuo want to be careful with which observations are missing values—it is quite likely that latitude and longitude are not missing at random.] Third, we will convert the dates from character to actual dates using the function `mdy_hms()` from the `lubridate` package. The `mdy` part of the function's name implies that the dates have month first, followed by day, follwed by year. The `hms` part of the function's name implies that we have hours, minutes, and seconds. If you did not have hours, minutes, and seconds, then you would want to use the function `mdy()`. If you had year, followed by month, followed by day, then you would want to use the function `ymd()`. And so on....
+Let's clean up the file a bit more. First, we will change the names of the variables. Second, we will drop any observations missing their latitude or longitude.^[In your actual research, you want to be careful with which observations are missing values—it is quite likely that latitude and longitude are not missing at random.] Third, we will convert the dates from character to actual dates using the function `mdy_hms()` from the `lubridate` package. The `mdy` part of the function's name implies that the dates have month first, followed by day, follwed by year. The `hms` part of the function's name implies that we have hours, minutes, and seconds. If you did not have hours, minutes, and seconds, then you would want to use the function `mdy()`. If you had year, followed by month, followed by day, then you would want to use the function `ymd()`. And so on....
 
 ```{R, clean crime data}
 # Change names
@@ -382,7 +393,7 @@ We can now use this union to keep the crimes that fall within Chicago's city lim
 # Check which crime points are inside of Chicago
 test_points <- over(crime_df, chicago_union)
 # From 1 and NA to T and F (F means not in Chicago)
-test_points <- !is.na(test1)
+test_points <- !is.na(test_points)
 ```
 
 An alternative route that requires a bit more typing:
@@ -547,28 +558,78 @@ beats_df %<>% left_join(x = ., y = narc_df, by = "id")
 beats_df %<>% left_join(x = ., y = hom_df, by = "id")
 ```
 
-And now, we can plot our shapefile, coloring the police beats by the number of homicides in 2010. We will update `beats_df`.
+And now, we can plot our shapefile, coloring the police beats by the number of homicides in 2016. We will update `beats_df`.
 
-```{R, color by beat}
-#
+```{R, homicides by beat 2016, fig.height = 6}
+ggplot(beats_df, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = hom_2016), color = "black", size = 0.07) +
+  xlab("") + ylab("") +
+  ggtitle("Homicides by police beat, Chicago 2016") +
+  theme_ed +
+  theme(axis.text = element_blank()) +
+  scale_fill_viridis("Homicides within police beat",
+    option = "B") +
+  coord_map()
 ```
 
+Let's also plot the within-beat change between 2010 and 2016.
+```{R, homicide growth in beat, fig.height = 6}
+ggplot(beats_df, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = hom_2016 - hom_2010), color = "black", size = 0.07) +
+  xlab("") + ylab("") +
+  ggtitle("Homicide change between 2010 and 2016, by police beat, Chicago") +
+  theme_ed +
+  theme(axis.text = element_blank()) +
+  scale_fill_viridis("Change in number of homicides within police beat",
+    option = "B") +
+  coord_map()
+```
 
-<!-- TODO -->
+Finally, let's make the same plots for narcotics.
 
-# Raster data
+```{R, narcotics by beat 2016, fig.height = 6}
+ggplot(beats_df, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = narc_2016), color = "black", size = 0.07) +
+  xlab("") + ylab("") +
+  ggtitle("Narcotics by police beat, Chicago 2016") +
+  theme_ed +
+  theme(axis.text = element_blank()) +
+  scale_fill_viridis("Narcotics offenses within police beat",
+    option = "B") +
+  coord_map()
+```
 
-<!-- TODO -->
+```{R, narcotics growth in beat, fig.height = 6}
+ggplot(beats_df, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = narc_2016 - narc_2010), color = "black", size = 0.07) +
+  xlab("") + ylab("") +
+  ggtitle("Narcotics change between 2010 and 2016, by police beat, Chicago") +
+  theme_ed +
+  theme(axis.text = element_blank()) +
+  scale_fill_viridis("Change in number of narcotics offenses within police beat",
+    option = "B") +
+  coord_map()
+```
 
 # Projections
 
 Let's return to the `proj4string` slot for a moment. This slot contains the projection (coordinate reference system or CRS) used in creating the shapefile. [Different projections](https://xkcd.com/977/) yield different sets of coordinates. Thus, if your projects entails multiple datasets—as most do—then you need to make sure that you are using a consistent projection across all of your datasets/files. If you do not, then (0, 0) in one of your datasets may actually be (180, 180) in another of your datasets—nothing will line up (or it will erroneously line up). Be careful here. For information on how to change projections, see the help files `?raster::crs`, `?rgdal::spTransform`, the [`proj4` package](https://cran.r-project.org/web/packages/proj4/proj4.pdf), and/or the [proj.4 website](http://proj4.org/)).
 
+# Raster data
+
+Next week.
+
+<!-- TODO -->
+
 # Geocoding
+
+Next week.
 
 <!-- TODO -->
 
 # QGIS
+
+Next week. Maybe.
 
 <!-- TODO -->
 
@@ -587,6 +648,6 @@ Here are a few more resources for utilizing spatial data in R.
 - https://cran.r-project.org/doc/contrib/intro-spatial-rl.pdf
 - ftp://ftp.bgc-jena.mpg.de/pub/outgoing/mforkel/Rcourse/spatialR_2015.pdf
 
-# Fun tools: Vivaldi
+# Fun tools: unpaywall
 
-Example: https://fieldguide.gizmodo.com/5-reasons-to-use-to-vivaldi-instead-of-chrome-or-firefo-1771284757
+The browser extension [unpaywall](http://unpaywall.org) helps you find papers that are behind a paywall. It doesn't work all the time, but it works frequently, and I imagine/hope it will continue to get better.

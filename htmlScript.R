@@ -11,7 +11,7 @@ my_render <- function(site) {
 }
 
 # Render the section pages
-sites <- stringr::str_pad(1:11, 2, "left", 0)
+sites <- stringr::str_pad(11:12, 2, "left", 0)
 for (i in sites) my_render(paste0("section", i, ".Rmd"))
 
 # Render other pages
