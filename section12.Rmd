@@ -275,7 +275,7 @@ beats_df <- tidy(beats_shp)
 beats_df %>% head(3)
 ```
 
-Now we are ready to plot. The syntax for `ggplot2` remains the same. We need to map the `x` and `y` aesthetics (longitude and latitude), as well as the `group` (the polygon). For the actual plotting, we can use `geom_path()`—for only the outline of the polygons—and/or `geom_polygon()`, which allows for filling the polygons with color. `geom_map` is another nice option, but I will stick to `geom_path()` and `geom_polygon()` because they are a bit clearer. Finally, the `coord_map()` function allows you to specify a projection for the map. If you've ever seen maps that look a bit strange, it was probably because they used a different projection.^[See `?coor_map` for more information.]
+Now we are ready to plot. The syntax for `ggplot2` remains the same. We need to map the `x` and `y` aesthetics (longitude and latitude), as well as the `group` (the polygon). For the actual plotting, we can use `geom_path()`—for only the outline of the polygons—and/or `geom_polygon()`, which allows for filling the polygons with color. `geom_map` is another nice option, but I will stick to `geom_path()` and `geom_polygon()` because they are a bit clearer. Finally, the `coord_map()` function allows you to specify a projection for the map. If you've ever seen maps that look a bit strange, it was probably because they used a different projection.^[See `?coord_map` for more information.]
 
 ```{R, plot shapefile, fig.height = 7}
 # Plot the tidied shapefile
@@ -615,24 +615,6 @@ ggplot(beats_df, aes(long, lat, group = group)) +
 # Projections
 
 Let's return to the `proj4string` slot for a moment. This slot contains the projection (coordinate reference system or CRS) used in creating the shapefile. [Different projections](https://xkcd.com/977/) yield different sets of coordinates. Thus, if your projects entails multiple datasets—as most do—then you need to make sure that you are using a consistent projection across all of your datasets/files. If you do not, then (0, 0) in one of your datasets may actually be (180, 180) in another of your datasets—nothing will line up (or it will erroneously line up). Be careful here. For information on how to change projections, see the help files `?raster::crs`, `?rgdal::spTransform`, the [`proj4` package](https://cran.r-project.org/web/packages/proj4/proj4.pdf), and/or the [proj.4 website](http://proj4.org/)).
-
-# Raster data
-
-Next week.
-
-<!-- TODO -->
-
-# Geocoding
-
-Next week.
-
-<!-- TODO -->
-
-# QGIS
-
-Next week. Maybe.
-
-<!-- TODO -->
 
 # Other resources
 

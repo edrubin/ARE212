@@ -1,4 +1,19 @@
 
+# Ideas:
+
+- Issues from the problem set:
+  - Delta method: derivative w.r.t. all parameters in model.
+- `data.table`
+- debugging (`browser()`)
+- `dplyr` and `SQL`
+- `stargazer`
+
+
+# Nice tools for R
+
+- http://ggplot2.tidyverse.org/reference/
+- https://www.rdocumentation.org
+- http://www.gadm.org/download
 
 # Fun tools: Vivaldi
 

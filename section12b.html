@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 12b: Spatial data, continued</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/htmlwidgets-0.7/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-0.7.7/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<link href="site_libs/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+<script src="site_libs/leaflet-label-0.2.2/leaflet.label.js"></script>
+<script src="site_libs/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+<script src="site_libs/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+<script src="site_libs/leaflet-binding-1.1.0/leaflet.js"></script>
+<script src="site_libs/leaflet-providers-1.0.27/leaflet-providers.js"></script>
+<script src="site_libs/leaflet-providers-plugin-1.1.0/leaflet-providers-plugin.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="section06.html">Section 6</a>
+    </li>
+    <li>
+      <a href="section07.html">Section 7</a>
+    </li>
+    <li>
+      <a href="section08.html">Section 8</a>
+    </li>
+    <li>
+      <a href="section09.html">Section 9</a>
+    </li>
+    <li>
+      <a href="section10.html">Section 10</a>
+    </li>
+    <li>
+      <a href="section11.html">Section 11</a>
+    </li>
+    <li>
+      <a href="section12.html">Section 12</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 12b: Spatial data, continued</h1>
+
+</div>
+
+
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<div id="announcements" class="section level2">
+<h2>Announcements</h2>
+<p>See the <a href="section13.html">notes for Section 13</a>.</p>
+</div>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p><strong>Packages</strong>:</p>
+<ul>
+<li>New: <code>ggmap</code> and <code>leaflet</code> (and <code>raster</code>, though we loaded it last week)</li>
+<li>Old: <code>lubridate</code>, <code>rgdal</code>, <code>raster</code>, <code>broom</code>, <code>rgeos</code>, <code>GISTools</code>, <code>dplyr</code>, <code>ggplot2</code>, <code>ggthemes</code>, <code>magrittr</code>, and <code>viridis</code></li>
+</ul>
+<p><strong>Data</strong>:</p>
+<ul>
+<li>The file <a href="Section12b/chicagoNightLights.tif">chicagoNightLights.tif</a></li>
+<li>The folder <a href="Section12/ChicagoPoliceBeats.zip">ChicagoPoliceBeats</a>, which contains the shapefile of Chicago’s police beats.</li>
+<li>The file <a href="Section12/chicagoCrime.rds">chicagoCrime.rds</a></li>
+</ul>
+</div>
+</div>
+<div id="spatial-data-continued" class="section level1">
+<h1>Spatial data, continued</h1>
+<p>These notes continue our discussion of spatial data, which we began in <a href="section12.html">Section 12</a>. We split the world of spatial data into two broad categories: vector data and raster data. We’ve already covered vector data—focusing on (1) a shapefile composed of polygons that represent Chicago’s police beats and (2) a points file representing police-reported crimes in Chicago. Now we will turn to raster data.</p>
+</div>
+<div id="raster-data" class="section level1">
+<h1>Raster data</h1>
+<p>As I mentioned previously, raster data are grids with values assigned to the squares within the grid.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> A major difference between rasters and vectors: vectors are composed of discrete elements throughout space, whereas rasters are defined continuously through space. Although you still end up with non-continuous movement in the values between cells, you can think of a raster as the interpolation of a field (variable) that is constant through space. A common example is temperature. Every point on Earth’s surface has a temperature. And guess what… you can get temperature rasters.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Other examples? <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time/hazards-and-disasters/air-quality">Air quality/pollution</a>, property values, <a href="https://www.mrlc.gov/nlcd2011.php">land cover</a>, <a href="https://nationalmap.gov/elevation.html">elevation</a>, and <a href="http://sedac.ciesin.columbia.edu/data/set/gpw-v3-population-density">population</a> (sort of).</p>
+<div id="r-setup" class="section level2">
+<h2>R setup</h2>
+<p>Let’s set up R and then dive in.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># General R setup ----</span>
+<span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="co"># Load new packages</span>
+pacman::<span class="kw">p_load</span>(ggmap, leaflet)
+<span class="co"># Load old packages</span>
+pacman::<span class="kw">p_load</span>(lubridate, rgdal, raster, broom, rgeos, GISTools)
+pacman::<span class="kw">p_load</span>(dplyr, ggplot2, ggthemes, magrittr, viridis)
+<span class="co"># My ggplot2 theme</span>
+theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
+  <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+  <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+  <span class="co"># panel.border = element_rect(fill = NA, color = &quot;grey75&quot;),</span>
+  <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())
+<span class="co"># My directories</span>
+dir_12 &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section12/&quot;</span>
+dir_12b &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section12b/&quot;</span></code></pre></div>
+</div>
+<div id="loading-rasters" class="section level2">
+<h2>Loading rasters</h2>
+<p>We need a raster.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> I’ve decided we are going to look a small subset of the (in)famous <a href="https://ngdc.noaa.gov/eog/viirs/download_dnb_composites.html">night(time) lights dataset</a>.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> You can download the night lights data in various ways, but they are all fairly large—like 520 million cells large. I’ve cropped the original night lights raster (for January 2017) so that it covers the Chicago area with a little room to spare.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>Let’s read in this raster (named <code>chicagoNightLights.tif</code>). For this task, we will use the <code>raster()</code> function from the <code>raster</code> package.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> We will also load the police beats shapefile that we used in the previous section.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read the Chicago lights raster</span>
+chi_lights &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="kw">paste0</span>(dir_12b, <span class="st">&quot;chicagoNightLights.tif&quot;</span>))
+<span class="co"># Read the Chicago police beats shapefile</span>
+chi_beats &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste0</span>(dir_12, <span class="st">&quot;ChicagoPoliceBeats&quot;</span>), <span class="st">&quot;chiBeats&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section12/ChicagoPoliceBeats&quot;, layer: &quot;chiBeats&quot;
+## with 277 features
+## It has 4 fields</code></pre>
+<p>As was the case with vectors (shapefiles), we can quickly and easily plot rasters using R’s <code>base</code> <code>plot()</code> function. Again, this frequent plotting—particularly after loading a new file—is a good policy that helps you avoid errors and better understand what you are looking at/doing. Once again, I am going to use the <code>virids</code> package (and function) for its color palette.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot the Chicago night lights raster</span>
+<span class="kw">plot</span>(chi_lights, <span class="dt">col =</span> <span class="kw">viridis</span>(<span class="fl">1e3</span>))</code></pre></div>
+<p><img src="section12b_files/figure-html/quick%20plot%20of%20lights%20raster-1.png" width="672" /></p>
+<p>Now that we’ve plotted the raster, let’s plot the police beats shapefile <em>over</em> the raster, using the <code>base</code> <code>lines()</code> function. You could also use <code>plot()</code> here with the additional argument <code>add = T</code>. The <code>lwd</code> argument specifies the width of the lines.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot the Chicago night lights raster</span>
+<span class="kw">plot</span>(chi_lights, <span class="dt">col =</span> <span class="kw">viridis</span>(<span class="fl">1e3</span>))
+<span class="co"># Plot the police beats over the night lights raster</span>
+<span class="kw">lines</span>(chi_beats, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">lwd =</span> <span class="fl">0.8</span>)</code></pre></div>
+<p><img src="section12b_files/figure-html/plot%20of%20lights%20raster%20with%20beats-1.png" width="672" /></p>
+<p>Great.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> So what’s next?</p>
+</div>
+<div id="raster-parts" class="section level2">
+<h2>Raster parts</h2>
+<p>Before we get too far ahead of ourselves, let’s learn a little about how we can access the different parts of a raster. If you check the <code>names()</code> of our raster, you will find it is simply the name of the file that provided the raster. Unlike shapefiles, we will not learn too much using the <code>slots</code>. Instead, we will use specific functions from the <code>raster</code> package. If you want to access the values of the raster, you can use the <code>values()</code> function or the <code>getValues()</code> function. If you want to change the values within a raster, you should use the <code>setValues()</code> function. Finally, if you want to access the coordinates of the raster’s grid, use the <code>coordinates()</code> function. Examples:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># R&#39;s description of the raster</span>
+chi_lights</code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 115, 124, 14260  (nrow, ncol, ncell)
+## resolution  : 0.004166667, 0.004166667  (x, y)
+## extent      : -87.98958, -87.47292, 41.59375, 42.07292  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/edwardarubin/Dropbox/Teaching/ARE212/Section12b/chicagoNightLights.tif 
+## names       : chicagoNightLights 
+## values      : 0.3693645, 434.6022  (min, max)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># R&#39;s summary of the raster</span>
+chi_lights %&gt;%<span class="st"> </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>##         chicagoNightLights
+## Min.             0.3693645
+## 1st Qu.          9.7078307
+## Median          33.2180634
+## 3rd Qu.         67.7126541
+## Max.           434.6021729
+## NA&#39;s             0.0000000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The slot names</span>
+chi_lights %&gt;%<span class="st"> </span><span class="kw">slotNames</span>()</code></pre></div>
+<pre><code>##  [1] &quot;file&quot;     &quot;data&quot;     &quot;legend&quot;   &quot;title&quot;    &quot;extent&quot;   &quot;rotated&quot; 
+##  [7] &quot;rotation&quot; &quot;ncols&quot;    &quot;nrows&quot;    &quot;crs&quot;      &quot;history&quot;  &quot;z&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The first 6 values</span>
+chi_lights %&gt;%<span class="st"> </span><span class="kw">getValues</span>() %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>## [1] 25.68902 22.61487 26.09766 28.05734 39.12275 47.22555</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The first six coordinates</span>
+chi_lights %&gt;%<span class="st"> </span><span class="kw">coordinates</span>() %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>##              x        y
+## [1,] -87.98750 42.07083
+## [2,] -87.98333 42.07083
+## [3,] -87.97917 42.07083
+## [4,] -87.97500 42.07083
+## [5,] -87.97083 42.07083
+## [6,] -87.96667 42.07083</code></pre>
+<p>A histogram of the raster’s values (logged):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">light =</span> <span class="kw">getValues</span>(chi_lights)),
+  <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(light))) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">fill =</span> <span class="kw">viridis</span>(<span class="dv">20</span>)) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Count&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log(radiance)&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Distribution of light radiance near Chicago&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017, logged radiance&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section12b_files/figure-html/raster%20histogram-1.png" width="672" /></p>
+<p>It’s worth noting that this histogram includes a lot of low light due to Lake Michigan. I took the log of the radiance to get a bit more dispersion in the histogram.</p>
+</div>
+<div id="summarize-rasters-with-polygons" class="section level2">
+<h2>Summarize rasters with polygons</h2>
+<p>We generally want to take some sort of summary statistics of our raster. Often, we want these summary statistics at the level of some other spatial object—either a polygon or a point. Let’s see how this summarization works for polygons. Specifically, let’s take the average level of light within each of police beats in our police beat shapefile. For this task—and similar tasks—the <code>raster</code> package’s <code>extract()</code> function is your best friend.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> The <code>extract()</code> function wants the following arguments:</p>
+<ul>
+<li><code>x</code>: the raster from which you want to extract values</li>
+<li><code>y</code>: the points at which you would like to extract values; in the current context, <code>y</code> is our shapefile, but it could also be lines or points</li>
+<li><code>fun</code>: the function we will use to summarize the raster (here: <code>mean</code>)</li>
+<li><code>na.rm</code>: do you want to remove missing values (<code>NA</code>s)?</li>
+<li><code>df</code>: (optional) do you want a data frame (rather than a matrix)</li>
+<li><code>sp</code>: (optional) do you want the outputted results attached the the <code>data</code> slot of <code>y</code> (requires the <code>y</code> is an <code>sp</code> object, <em>i.e.</em>, spatial polygons or spatial lines.)</li>
+</ul>
+<p>Because we would end up joining the results of <code>extract()</code> to our spatial polygons data frame (<code>chi_beats</code>), I will go ahead and specify <code>sp = TRUE</code>.</p>
+<p>You can also apply <code>extract()</code> over multiple layers of raster stack. Our current raster has one layer, but you will often find multi-layer rasters called raster stacks (or raster bricks). Similar objects but with more layers.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
+<p><strong>Important note</strong>: The <code>extract()</code> function does not always do what you think it is going to do. It is written to be fairly flexible, which means it needs to make decisions. Some of the decisions the function must make:</p>
+<ul>
+<li>What counts as being <em>in</em> a polygon? Must the center of the cell be in the polygon, or is it enough that <em>any</em> part of the cell intersects the polygon?</li>
+<li>If you require the center of the cell to be within the polygon, what happens when a polygon does not intersect with any cells’ centroids?</li>
+<li>Should all cells count equally, or should we weight by the amount of the cell covered by a polygon?</li>
+</ul>
+<p>Many of these questions are especially relevant/important when your cells are large relative to your polygons. This is not the case in our current example. Unfortunately, it is often the case in real research.</p>
+<p>Alight, let’s summarize our night lights raster by taking the mean within each police beat. Finally, because we loaded the <code>magrittr</code> package after we loaded <code>raster</code> package—and because both packages have a function named <code>extract()</code>—<code>raster</code>’s version of extract has been masked by <code>magrittr</code>’s version. Thus we need to reference the <code>raster</code> package when we call <code>extract()</code>, <em>i.e.</em>, <code>raster::extract()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Take averages of lights raster within each police beat</span>
+beat_extract &lt;-<span class="st"> </span>raster::<span class="kw">extract</span>(
+  <span class="dt">x =</span> chi_lights,
+  <span class="dt">y =</span> chi_beats,
+  <span class="dt">fun =</span> mean,
+  <span class="dt">na.rm =</span> T,
+  <span class="dt">sp =</span> T)</code></pre></div>
+<p><strong>Note</strong>: <code>extract()</code> can take a little while—particularly when you have a high-resolution raster (many cells in given area) and many, high-resolution polygons.</p>
+</div>
+<div id="summarizing-rasters-with-points" class="section level2">
+<h2>Summarizing rasters with points</h2>
+<p>Now let’s carry out a similar task but with points rather than polygons.</p>
+<p>First, we need some points. We’ll load the crime locations that we used in our discussion of vector data. And <a href="setion12.html#aggregating_points_to_polygons">clean</a> them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read crime points data file</span>
+crime_df &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">paste0</span>(dir_12, <span class="st">&quot;chicagoCrime.rds&quot;</span>))
+<span class="co"># Convert to tbl_df</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Change names</span>
+<span class="kw">names</span>(crime_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;date&quot;</span>, <span class="st">&quot;primary_offense&quot;</span>,
+  <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;domestic&quot;</span>, <span class="st">&quot;beat&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;lon&quot;</span>)
+<span class="co"># Drop observations missing lat or lon</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(lat) &amp;<span class="st"> </span>!<span class="kw">is.na</span>(lon))
+<span class="co"># Take subset of crimes</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">subset</span>(primary_offense %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HOMICIDE&quot;</span>, <span class="st">&quot;NARCOTICS&quot;</span>))
+<span class="co"># Convert dates</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">mdy_hms</span>(date))
+<span class="co"># Define longitude and latitude as our coordinates</span>
+<span class="kw">coordinates</span>(crime_df) &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>lon +<span class="st"> </span>lat
+<span class="co"># Assing a CRS to the crime points data</span>
+<span class="kw">proj4string</span>(crime_df) &lt;-<span class="st"> </span><span class="kw">crs</span>(chi_beats)
+<span class="co"># Take the union of the beats polygons</span>
+chicago_union &lt;-<span class="st"> </span><span class="kw">gUnaryUnion</span>(chi_beats)
+<span class="co"># Check which crime points are inside of Chicago</span>
+test_points &lt;-<span class="st"> </span><span class="kw">over</span>(crime_df, chicago_union)
+<span class="co"># From 1 and NA to T and F (F means not in Chicago)</span>
+test_points &lt;-<span class="st"> </span>!<span class="kw">is.na</span>(test_points)
+crime_df &lt;-<span class="st"> </span>crime_df[<span class="kw">which</span>(test_points ==<span class="st"> </span>T), ]</code></pre></div>
+<p>Now we use <code>extract()</code> again, this time applying it so that we get a value from the raster at each of our crime-based points in <code>crime_df</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract &lt;-<span class="st"> </span>raster::<span class="kw">extract</span>(
+  <span class="dt">x =</span> chi_lights,
+  <span class="dt">y =</span> crime_df,
+  <span class="dt">fun =</span> mean,
+  <span class="dt">na.rm =</span> T,
+  <span class="dt">sp =</span> T)</code></pre></div>
+</div>
+<div id="rasters-in-ggplot2" class="section level2">
+<h2>Rasters in <code>ggplot2</code></h2>
+<p>So how does one plot a raster with <code>ggplot2</code>? As with spatial vector data, the problem is that <code>ggplot()</code> wants a data-frame-like object, and the raster is not a data-frame-like object. Lucky for us, <code>raster</code> provides the function <code>rasterToPoints()</code>, which does exactly what its name suggests: it creates a matrix of coordinates and values from a raster.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> Let’s create a data frame from the night lights data and then plot it in <code>ggplot2</code> using the <code>geom_raster()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert raster to matrix and then to data frame</span>
+lights_df &lt;-<span class="st"> </span>chi_lights %&gt;%<span class="st"> </span><span class="kw">rasterToPoints</span>() %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Plot with ggplot</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> lights_df,
+  <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> chicagoNightLights)) +
+<span class="st">  </span><span class="kw">geom_raster</span>() +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Lights at night in Chicago&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;D&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">axis.text =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p><img src="section12b_files/figure-html/df%20from%20raster-1.png" width="672" /></p>
+</div>
+<div id="masks" class="section level2">
+<h2>Masks</h2>
+<p>You may have noticed that our raster includes many locations that are not within Chicago’s police beats. The <code>crop()</code> function will only crop the raster to the extent of the police beats shapefile, so we will still end up with a rectangle with many grid squares outside of the polygons.</p>
+<p>The <code>mask()</code> function offers a solution to this problem. Masking means that we define any grid square in our raster not covered by some shape as <code>NA</code>. Thus, while we end up with the same extent as before, we now only have values for grid squares within a police beat in Chicago.</p>
+<p>Let’s try it. Specifically, we will <em>mask</em> our night lights data with the outline of Chicago (<code>chicago_union</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Mask night lights raster with Chicago&#39;s outline</span>
+lights_masked &lt;-<span class="st"> </span><span class="kw">mask</span>(<span class="dt">x =</span> chi_lights, <span class="dt">mask =</span> chicago_union)</code></pre></div>
+<p>Now let’s plot our masked raster to see the result.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert raster to matrix and then to data frame</span>
+masked_df &lt;-<span class="st"> </span>lights_masked %&gt;%<span class="st"> </span><span class="kw">rasterToPoints</span>() %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Plot with ggplot</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> masked_df,
+  <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> chicagoNightLights)) +
+<span class="st">  </span><span class="kw">geom_raster</span>() +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Lights at night in Chicago, masked&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;D&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">axis.text =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p><img src="section12b_files/figure-html/ggplot%20masked%20raster-1.png" width="672" /></p>
+<p>Using this masked night lights data, let’s compare the (approximate) densities of (logged) light for (1) all of Chicago, (2) homicide locations, and (3) narcotics offenses’ locations.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert crime_extract to a data frame</span>
+crime_extract %&lt;&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Density plots</span>
+<span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_density</span>(
+    <span class="dt">data =</span> masked_df,
+    <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(chicagoNightLights), <span class="dt">color =</span> <span class="st">&quot;All of Chicago&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;All of Chicago&quot;</span>),
+    <span class="dt">alpha =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">geom_density</span>(
+    <span class="dt">data =</span> <span class="kw">filter</span>(crime_extract, primary_offense ==<span class="st"> &quot;HOMICIDE&quot;</span>),
+    <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(chicagoNightLights), <span class="dt">color =</span> <span class="st">&quot;Homicide&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Homicide&quot;</span>),
+    <span class="dt">alpha =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">geom_density</span>(
+    <span class="dt">data =</span> <span class="kw">filter</span>(crime_extract, primary_offense ==<span class="st"> &quot;NARCOTICS&quot;</span>),
+    <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(chicagoNightLights), <span class="dt">color =</span> <span class="st">&quot;Narcotics&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Narcotics&quot;</span>),
+    <span class="dt">alpha =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Log(Light radiance)&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="st">&quot;&quot;</span>, <span class="dt">discrete =</span> T) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;&quot;</span>, <span class="dt">discrete =</span> T)</code></pre></div>
+<p><img src="section12b_files/figure-html/density%20comparison-1.png" width="672" /></p>
+<p>It actually looks like the crimes occur in locations with a bit more light.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> We can also check out the means:<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compare means</span>
+masked_df %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(chicagoNightLights) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>##  chicagoNightLights
+##  Min.   :  8.418   
+##  1st Qu.: 69.079   
+##  Median : 89.395   
+##  Mean   : 87.474   
+##  3rd Qu.:105.267   
+##  Max.   :434.602</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(primary_offense ==<span class="st"> &quot;HOMICIDE&quot;</span>) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(chicagoNightLights) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>##  chicagoNightLights
+##  Min.   : 13.36    
+##  1st Qu.: 85.61    
+##  Median : 96.42    
+##  Mean   : 99.05    
+##  3rd Qu.:109.40    
+##  Max.   :434.60</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(primary_offense ==<span class="st"> &quot;NARCOTICS&quot;</span>) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(chicagoNightLights) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>##  chicagoNightLights
+##  Min.   : 10.25    
+##  1st Qu.: 89.73    
+##  Median : 99.98    
+##  Mean   :103.29    
+##  3rd Qu.:113.39    
+##  Max.   :434.60</code></pre>
+<p>These numerical summaries are consistent with what we observed in the density plot above: the recorded crimes tend to happen in places that are brighter than the average point in Chicago. Of course, this observation is not causal and does not include standard errors/inference (or even a formal point estimate), so I wouldn’t recommend any policy decisions quite yet.</p>
+</div>
+<div id="creating-a-raster" class="section level2">
+<h2>Creating a raster</h2>
+<p>As we’ve discussed thus far, rasters are really just grids with values assigned to the grid cells. Thus, they are fairly simple to create.</p>
+<p>First, we need a grid. The function <code>expand.grid()</code> is a very nice function for creating a grid—it takes all possible combinations of the given variables and then returns an (ordered) matrix. Let’s create an 11-by-11 grid by taking all combinations of [-5, 5] and [-5, 5] (by 1).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Creating an 11-by-11 grid</span>
+our_mat &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">x =</span> -<span class="dv">5</span>:<span class="dv">5</span>, <span class="dt">y =</span> -<span class="dv">5</span>:<span class="dv">5</span>)
+<span class="co"># Check out the head</span>
+our_mat %&gt;%<span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)</code></pre></div>
+<pre><code>##     x  y
+## 1  -5 -5
+## 2  -4 -5
+## 3  -3 -5
+## 4  -2 -5
+## 5  -1 -5
+## 6   0 -5
+## 7   1 -5
+## 8   2 -5
+## 9   3 -5
+## 10  4 -5</code></pre>
+<p>Let’s now convert the matrix to a data frame and then add a column of random numbers (standard normal).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert to data frame</span>
+our_df &lt;-<span class="st"> </span>our_mat %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Set seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Add random numbers</span>
+our_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">rnorm</span>(<span class="kw">nrow</span>(our_df)))</code></pre></div>
+<p>Because <code>ggplot2</code> actually wants a data frame—rather than a raster—we can check our soon-to-be raster before it is finished.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plotting our raster data</span>
+<span class="kw">ggplot</span>(our_df, <span class="kw">aes</span>(x, y, <span class="dt">fill =</span> value)) +
+<span class="st">  </span><span class="kw">geom_raster</span>() +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Our (random) raster data&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Value&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_equal</span>() +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>),
+    <span class="dt">legend.key.height =</span> <span class="kw">unit</span>(<span class="dv">3</span>/<span class="dv">4</span>, <span class="st">&quot;cm&quot;</span>),
+    <span class="dt">panel.grid.major =</span> <span class="kw">element_blank</span>(),
+    <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p><img src="section12b_files/figure-html/ggplotting%20our%20raster-1.png" width="672" /></p>
+<p>Beautiful! I think someone should make a quilt out of this bad boy.</p>
+<p>Let’s finish converting this data frame into a raster. Once we have a data frame with coordinates and values (which we do), we can use the function <code>rasterFromXYZ()</code> (<code>raster</code> package) to convert the data frame into a raster object. <code>rasterFromXYZ()</code> will assume your <code>x</code> and <code>y</code> variables are the x and y coordinates. The function allows you to specify the resolution (<code>res</code>) and coordinate-reference system (<code>crs</code>), but because our raster is based in an imaginary world, we’ll ignore these arguments. <code>rasterFromXYZ()</code> also requires that the points are on a regular grid; if you cannot meet this requirement, see the function <code>rasterize()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Finish creating our raster</span>
+our_raster &lt;-<span class="st"> </span><span class="kw">rasterFromXYZ</span>(our_df)
+<span class="co"># See if it worked</span>
+our_raster</code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 11, 11, 121  (nrow, ncol, ncell)
+## resolution  : 1, 1  (x, y)
+## extent      : -5.5, 5.5, -5.5, 5.5  (xmin, xmax, ymin, ymax)
+## coord. ref. : NA 
+## data source : in memory
+## names       : value 
+## values      : -2.380358, 2.477111  (min, max)</code></pre>
+<p>It worked! A final check:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(our_raster, <span class="dt">col =</span> <span class="kw">viridis</span>(<span class="fl">1e3</span>),
+  <span class="dt">xlim =</span> <span class="kw">c</span>(-<span class="dv">5</span>,<span class="dv">5</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">5</span>,<span class="dv">5</span>))</code></pre></div>
+<p><img src="section12b_files/figure-html/plot%20our%20raster%20again-1.png" width="672" /></p>
+</div>
+</div>
+<div id="geocoding" class="section level1">
+<h1>Geocoding</h1>
+<p>Geocoding presents an entirely different task from those that we have covered thus far in our <em>tour de force</em> of spatial data. The term <em>geocoding</em> refers finding the the geographic coordinates for a location (or locations). Geocoding is useful for taking addresses and finding their latitudes and longitudes so that you can use them in conjunction with other spatial datasets. (<em>Reverse geocoding</em> refers beginning with geographic coordinates and finding addresses.) There are many services that offer geocoding, and some are better than others—and the quality may also vary with the region of the world. The importance of quality geocoding will also vary with the spatial resolution of the other data in your research—if you are working at the county level, you don’t have to worry, as almost any geocoder will be able place a street address in the correct county. If you want to geocode several addresses, this task is referred to as <em>batch geocoding</em>.</p>
+<p>There are many services/APIs that allow you to geocode, and most allow you to geocode for free up to some (moderate-ish) limit. Google maps is probably the most popular, but you will have to work with its API. ESRI (the company that makes ArcGIS) provides another popular geocoder, which you can access for free at the D-Lab. Finally, I’ve had decent success with <a href="https://geocod.io/">geocodio</a>, which has a <a href="https://geocod.io/compare/">pretty cool comparison across several geocoders</a> and is quite easy to use, <em>i.e.</em>, you upload a CSV file.</p>
+<p>As you may have guessed, you can also geocode using R (and an internet connection). You have a few options; I am opting for the <code>geocode()</code> function from the <code>ggmap</code> package. The main arguments to the function are:</p>
+<ul>
+<li><code>location</code>: the street address (or place name) as a single character string, <em>e.g.</em>, “123 Fake Street, Omaha, Nebraska 68043”. <code>location</code> can also be a vector of addresses.</li>
+<li><code>output</code>: the amount of output that you would like</li>
+<li><code>source</code>: the source used for geocoding; either <code>&quot;google&quot;</code> for Google or <code>&quot;dsk&quot;</code> for the Data Science Toolkit</li>
+</ul>
+<p>Alright, let’s try geocoding an address. We’ll give it a tricky one—the address of Giannini Hall, which is even difficult for pizza-delivery people who live in Berkeley. We will try both sources.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Geocode with Google</span>
+geo_google &lt;-<span class="st"> </span><span class="kw">geocode</span>(
+  <span class="st">&quot;207 Giannini Hall #3310 University of California Berkeley, CA 94720-3310&quot;</span>,
+  <span class="dt">output =</span> <span class="st">&quot;more&quot;</span>,
+  <span class="dt">source =</span> <span class="st">&quot;google&quot;</span>)</code></pre></div>
+<pre><code>## Information from URL : http://maps.googleapis.com/maps/api/geocode/json?address=207%20Giannini%20Hall%20#3310%20University%20of%20California%20Berkeley,%20CA%2094720-3310&amp;sensor=false</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Geocode with DST</span>
+geo_dsk &lt;-<span class="st"> </span><span class="kw">geocode</span>(
+  <span class="st">&quot;207 Giannini Hall #3310 University of California Berkeley, CA 94720-3310&quot;</span>,
+  <span class="dt">output =</span> <span class="st">&quot;more&quot;</span>,
+  <span class="dt">source =</span> <span class="st">&quot;dsk&quot;</span>)</code></pre></div>
+<pre><code>## Information from URL : http://www.datasciencetoolkit.org/maps/api/geocode/json?address=207%20Giannini%20Hall%20#3310%20University%20of%20California%20Berkeley,%20CA%2094720-3310&amp;sensor=false</code></pre>
+<p>First, let’s see how Google did.<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">geo_google</code></pre></div>
+<pre><code>##         lon      lat          type     loctype                 address
+## 1 -122.2623 37.87358 establishment approximate berkeley, ca 94720, usa
+##      north    south      east      west locality
+## 1 37.87493 37.87223 -122.2609 -122.2636 Berkeley
+##   administrative_area_level_2 administrative_area_level_1       country
+## 1              Alameda County                  California United States
+##   postal_code
+## 1       94720</code></pre>
+<p>It’s hard to tell from this print out, but it seems as though Google did well. You can at least see that Google stayed inside of the city that we gave them and identified the location as an ‘establishment.’</p>
+<p>Now let’s check the results from the Data Science Toolkit.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">geo_dsk</code></pre></div>
+<pre><code>##         lon      lat type     loctype
+## 1 -83.81968 34.31689 null approximate
+##                                                                    address
+## 1 207 Giannini Hall #3310 University of California Berkeley, CA 94720-3310
+##      north    south      east      west country
+## 1 34.51508 34.09528 -83.60658 -84.03168     USA</code></pre>
+<p>Seems less good….</p>
+<p>To see just how well/poorly this geocoding turned out, let’s plot both points on a map.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_google$lon, <span class="dt">lat =</span> geo_google$lat, <span class="dt">popup =</span> <span class="st">&quot;Google&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_dsk$lon, <span class="dt">lat =</span> geo_dsk$lat, <span class="dt">popup =</span> <span class="st">&quot;DSK&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">addProviderTiles</span>(providers$OpenStreetMap.Mapnik) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="dv">99</span>, <span class="dt">lat =</span> <span class="dv">38</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
+<div id="htmlwidget-e8c8a0acef8856ca1ff5" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e8c8a0acef8856ca1ff5">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[37.8735809,-122.2622649,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Google",null,null,null,null,null,null]},{"method":"addMarkers","args":[34.31689,-83.81968,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"DSK",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.Mapnik",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[34.31689,37.8735809],"lng":[-122.2622649,-83.81968]},"setView":[[38,-99],4,[]]},"evals":[],"jsHooks":[]}</script>
+<p>Ouch.</p>
+<p>Let’s zoom in on each point. First, Google’s geocoding.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_google$lon, <span class="dt">lat =</span> geo_google$lat, <span class="dt">popup =</span> <span class="st">&quot;Google&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">addProviderTiles</span>(providers$OpenStreetMap.HOT) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> geo_google$lon, <span class="dt">lat =</span> geo_google$lat, <span class="dt">zoom =</span> <span class="dv">17</span>)</code></pre></div>
+<div id="htmlwidget-0842e0d8042f1d7af3d3" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0842e0d8042f1d7af3d3">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[37.8735809,-122.2622649,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Google",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[37.8735809,37.8735809],"lng":[-122.2622649,-122.2622649]},"setView":[[37.8735809,-122.2622649],17,[]]},"evals":[],"jsHooks":[]}</script>
+<p>Impressive. I’m pretty sure Google found my desk.</p>
+<p>Now let’s see where the Data Science Toolkit geocoded Giannini Hall’s address.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_dsk$lon, <span class="dt">lat =</span> geo_dsk$lat, <span class="dt">popup =</span> <span class="st">&quot;DSK&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">addProviderTiles</span>(providers$OpenStreetMap.HOT) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> geo_dsk$lon, <span class="dt">lat =</span> geo_dsk$lat, <span class="dt">zoom =</span> <span class="dv">13</span>)</code></pre></div>
+<div id="htmlwidget-cfeab3151ecbfeb02551" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cfeab3151ecbfeb02551">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[34.31689,-83.81968,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"DSK",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[34.31689,34.31689],"lng":[-83.81968,-83.81968]},"setView":[[34.31689,-83.81968],13,[]]},"evals":[],"jsHooks":[]}</script>
+<p>Less impressive. This outcome demonstrates an important point for geocoding: you will not always get quality results, and it is really helpful to have a way to “check” your work. One way is to use several geocoding services to see if you are getting consistent results—though they may all make the same mistake.</p>
+</div>
+<div id="fun-tools-leaflet" class="section level1">
+<h1>Fun tools: Leaflet</h1>
+<p>For the maps above, I used the package <code>leaflet</code>. Leaflet is an awesome tool for making maps—especially if you are interested in interactive maps.<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> <a href="http://leafletjs.com">Leaflet</a> is actually a super popular JavaScript library used to produce interactive maps, but some folks at RStudio created the R package <code>leaflet</code> to allow R users to access the Leaflet library inside of R. Great, right?</p>
+<p>If you are interested in learning more about the <code>leaflet</code> package, I recommend <a href="https://rstudio.github.io/leaflet/">this tutorial</a> published by its creators. You will see that it covers many of the spatial data topicsl we have covered—rasters, polygons, choropleths, <em>etc</em>.</p>
+<p>As you saw above, <code>leaflet</code> makes use of piping in a way similar to <code>ggplot2</code>’s pluses (<code>+</code>). The syntax has a few other things in common, <em>i.e.</em>, you begin with the <code>leaflet()</code> function and then continue to add (pipe) layers/objects. If you want to add markers, as I did, you use <code>addMarkers()</code> and provide a longitude <code>lng</code>, a latitude <code>lat</code>, and a character label for the marker <code>popup</code>. In order to have actual map, you need to load some map tiles. To add map tiles to your map, use <code>addTiles()</code>, which uses the default map tiles,<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a> or <code>addProviderTiles()</code>, which accesses map tiles from a bunch of mapping services. There are many other options, like where the map is centered, how far you want to zoom, which projections you use, <em>etc</em>.</p>
+<p>As with <code>ggplot2</code>, you can also define your map as an object in R’s environment. I’ll leave you with six maps of the same place (Lincoln, Nebraska!) with different providers’ map tiles. I will first define a basic map without tiles, and then in each map, I will use a different set of tiles.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">leaflet</span>() %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">popup =</span> <span class="st">&quot;Lincoln, NE&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">12</span>)</code></pre></div>
+<p>CartoDB:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$CartoDB)</code></pre></div>
+<div id="htmlwidget-27febf648d0756db20ca" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-27febf648d0756db20ca">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["CartoDB",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
+<p>OpenMapSurfer’s roads map:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$OpenMapSurfer.Roads)</code></pre></div>
+<div id="htmlwidget-1904466911cb8184b4d4" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1904466911cb8184b4d4">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenMapSurfer.Roads",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
+<p>OpenStreeMap’s “HOT” map:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$OpenStreetMap.HOT)</code></pre></div>
+<div id="htmlwidget-0f56cd48d0378e030d99" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0f56cd48d0378e030d99">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
+<p>ESRI’s “World Imagery” map:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$Esri.WorldImagery)</code></pre></div>
+<div id="htmlwidget-b5a793ad353c7457666e" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b5a793ad353c7457666e">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
+<p>ESRI’s “World Terrain” map (zoomed out):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$Esri.WorldTerrain) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
+<div id="htmlwidget-f4385de1869541de50ac" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f4385de1869541de50ac">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["Esri.WorldTerrain",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
+<p>NASA’s “Viirs Earth At Night, 2012” map (zoomed out):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$NASAGIBS.ViirsEarthAtNight2012) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
+<div id="htmlwidget-9e6767f65004293a63d9" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9e6767f65004293a63d9">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["NASAGIBS.ViirsEarthAtNight2012",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This is exactly how pictures work, which is why you will sometimes see rasters in the same file formats as pictures from a camera—.jpeg, .tif, <em>etc.</em><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>See <a href="https://www.ncdc.noaa.gov/cdo-web/">NOAA</a>, <a href="https://www.esrl.noaa.gov/psd/data/gridded/data.narr.html">NARR</a>, and <a href="http://berkeleyearth.org/">Berkeley Earth</a> for examples.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Usually, your research question will dictate which dataset you need. Here we just need a with which we can play.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Not really <em>that</em> infamous. People have been using light at night, measured by satellites, to proxy for economic development, electricity penetration, and similar topics—particularly in settings where these data are otherwise unavailable (<em>e.g.</em>, the developing world). You might get a few eye rolls if you use these data, but they <em>are</em> pretty cool.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>For this task, I used the <code>crop()</code> function in the <code>raster</code> package to crop the raster and the <code>writeRaster()</code> function (also from the <code>raster</code> package) to save the new, cropped raster.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Creative naming, right?<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>If we were actually using these data for a research project, you would probably want to make sure that the shapefile and the raster match up (nearly) perfectly. They look decent, but you would probably want to spend a bit more time ensuring the projections/locations really do match. I’m going to assume they do.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>See <code>?raster::extract</code> for more information on the function.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>Like <a href="https://www.youtube.com/watch?v=GZpcwKEIRCI">Shrek</a>.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>You could also accomplish this task using the <code>getValues()</code> and <code>coordinates()</code> functions.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>I’m looking at the thicker lower tail for <em>All of Chicago</em>.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>I’m not logging here. Apologies for being inconsistent.<a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p>You are restricted to 2500 queries to Google each day.<a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p>Unfortunately, there is currently little opportunity for interactive maps in the world of academic economics.<a href="#fnref14">↩</a></p></li>
+<li id="fn15"><p>I had problems here.<a href="#fnref15">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

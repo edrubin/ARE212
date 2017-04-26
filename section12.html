@@ -972,21 +972,6 @@ beats_df %&lt;&gt;%<span class="st"> </span><span class="kw">left_join</span>(<s
 <h1>Projections</h1>
 <p>Let’s return to the <code>proj4string</code> slot for a moment. This slot contains the projection (coordinate reference system or CRS) used in creating the shapefile. <a href="https://xkcd.com/977/">Different projections</a> yield different sets of coordinates. Thus, if your projects entails multiple datasets—as most do—then you need to make sure that you are using a consistent projection across all of your datasets/files. If you do not, then (0, 0) in one of your datasets may actually be (180, 180) in another of your datasets—nothing will line up (or it will erroneously line up). Be careful here. For information on how to change projections, see the help files <code>?raster::crs</code>, <code>?rgdal::spTransform</code>, the <a href="https://cran.r-project.org/web/packages/proj4/proj4.pdf"><code>proj4</code> package</a>, and/or the <a href="http://proj4.org/">proj.4 website</a>).</p>
 </div>
-<div id="raster-data" class="section level1">
-<h1>Raster data</h1>
-<p>Next week.</p>
-<!-- TODO -->
-</div>
-<div id="geocoding" class="section level1">
-<h1>Geocoding</h1>
-<p>Next week.</p>
-<!-- TODO -->
-</div>
-<div id="qgis" class="section level1">
-<h1>QGIS</h1>
-<p>Next week. Maybe.</p>
-<!-- TODO -->
-</div>
 <div id="other-resources" class="section level1">
 <h1>Other resources</h1>
 <p>If you are interested in learing more about spatial data, check out <a href="http://globalpolicy.science/solomon-hsiang">Sol Hsiang</a>’s course, Public Policy 290.</p>
@@ -1017,7 +1002,7 @@ beats_df %&lt;&gt;%<span class="st"> </span><span class="kw">left_join</span>(<s
 <li id="fn6"><p>I know, too much. I just wanted to emphasize that you will hear different words for the same concept across disciplines.<a href="#fnref6">↩</a></p></li>
 <li id="fn7"><p>If it is taking too long, try saving the plot, rather than printing it to screen.<a href="#fnref7">↩</a></p></li>
 <li id="fn8"><p>You can use this <code>tidy()</code> function for tidying up all kinds of objects.<a href="#fnref8">↩</a></p></li>
-<li id="fn9"><p>See <code>?coor_map</code> for more information.<a href="#fnref9">↩</a></p></li>
+<li id="fn9"><p>See <code>?coord_map</code> for more information.<a href="#fnref9">↩</a></p></li>
 <li id="fn10"><p>In your actual research, you want to be careful with which observations are missing values—it is quite likely that latitude and longitude are not missing at random.<a href="#fnref10">↩</a></p></li>
 <li id="fn11"><p>The reason we take the union here is that we want a single polygon when testing whether the points are in Chicago. It makes life a bit easier.<a href="#fnref11">↩</a></p></li>
 <li id="fn12"><p>You could also make use of the bounding box of the shapefile for the exercise, but it would not be as clean—you might still have crimes that are outside of the police beats.<a href="#fnref12">↩</a></p></li>
