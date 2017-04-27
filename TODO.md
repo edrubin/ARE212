@@ -2,8 +2,10 @@
 
 - Add README about building the course website.
 - Trouble-shooting code
-  - `browse()`
+  - `browser()`
 - Maximum likelihood
 - Bootstrapping
 - Prediction intervals vs. confidence intervals
 - Tables with `stargazer` and/or `xtable`
+- `dplyr` and SQL
+- Data cleaning (`lubridate`, `stringr`, _etc._)

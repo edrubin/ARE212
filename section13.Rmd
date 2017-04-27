@@ -1,20 +1,416 @@
+---
+title: "Section 13: `data.table`"
+header-includes:
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: false
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+---
 
-# Ideas:
+<br>
 
-- Issues from the problem set:
-  - Delta method: derivative w.r.t. all parameters in model.
-- `data.table`
-- debugging (`browser()`)
-- `dplyr` and `SQL`
-- `stargazer`
+# Admin
 
+## Announcements
 
-# Nice tools for R
+1. Today is our last section!
+2. Office hours at usual time/place on Friday.
+3. Whoever submits your problem set on bCourses has access to my comments. The solutions are also available for problem sets 1–3 (and 4 will be up shortly).
+4. __From problem set 3__: Remember when you use the delta method that you need to take derivatives with respect to all of parameters in model. In the case of the problem in the problem set, each of the derivatives was equal to zero except one, but the derivation that many of you provided for the delta-method-based standard error of our estimator was no quite right.
 
-- http://ggplot2.tidyverse.org/reference/
-- https://www.rdocumentation.org
-- http://www.gadm.org/download
+## Last section
 
-# Fun tools: Vivaldi
+In our [previous section](section12.html), we discussed spatial—focusing on one of the two major classes of spatial data: vector data, which include polygons, lines, and points.
 
-Example: https://fieldguide.gizmodo.com/5-reasons-to-use-to-vivaldi-instead-of-chrome-or-firefo-1771284757
+## This week
+
+### Spatial data
+
+Today we will wrap up our discussion of spatial data, covering three topics:
+
+1. __Raster data__: our remaining major class of spatial data
+2. __Geocoding__: moving from addresses to geographic coordinates
+3. __Leaflet__: an awesome tools for creating interactive maps
+
+See [Section 12b](section12b.html) for this completion of spatial data.
+
+### `data.table`
+
+In the second portion of this section, we will R's `data.table` package and its uses for cleaning/prepping datasets. `data.table` is particularly useful for large datasets, so we will use it on a fairly large dataset.
+
+## What you will need
+
+__Packages__:
+
+- New: `data.table`
+- Old: magrittr`
+
+# `data.table`
+
+R's `data.table` [package](https://cran.r-project.org/web/packages/data.table/index.html) provides methods for fast (potentially grouped) manipulation of large datasets—aggregation, joins, modifications—without copying the dataset repeatedly. The syntax is not quite as clear as the "verbs" used by `dplyr` and the rest of the _hadleyverse_, but the efficiency benefits are substantial when you have large datsets.
+
+## R setup
+
+Let's get started. First, set up R.
+```{R, r setup}
+# General R setup ----
+# Options
+options(stringsAsFactors = F)
+# Load packages
+pacman::p_load(data.table, magrittr)
+# Add an option for data.table
+options(datatable.print.nrows = 20)
+```
+
+The option `options(datatable.print.nrows = 20)` tells R that we do not want to print the whole data table if it has more than 20 rows—a handy feature that prevents you from printing a billion rows to screen.^[`tbl_df`s have a similar feature. Plus, R will not actually let you print a billion rows to screen, but it will allow you to print 50,000, which is still a lot.]
+
+## Creating a data table
+
+Alright, let's create a data table.^[I'm going to write it "data table" rather than "data.table", since written English is a bit different than scripting/programming languages.] To create a data table—or to convert an existing data frame or matrix to a data table—you use the `data.table()` function just as you would use the `data.frame()` function. Let's create a simple data table with 30 rows and four columns named `a`, `b`, `c`, and `d`. _Note_: I'm going to generally use the suffix `_dt` to denote data tables in our R scripts.
+```{R, create data table}
+# Set the seed
+set.seed(12345)
+# Create our data table
+our_dt <- data.table(
+  a = 101:130,
+  b = rnorm(30),
+  c = runif(30),
+  d = rep(1:5))
+```
+
+So what is this data table object that we just created?
+```{R, check out our_dt}
+# Check the class
+our_dt %>% class()
+# Check the dimensions, length, and names
+our_dt %>% dim()
+our_dt %>% length()
+our_dt %>% names()
+```
+
+This data table is still a `data.frame`, but it is also a `data.table`—similar to how we previously created objects that simultaneously had the classes `data.frame`, `tbl_df`, and `tbl`. The dimensions, length, and names are exactly what we expected them to be. Good.
+
+Let's print the data table to screen.
+```{R, print our_dt}
+# Print our_dt to screen
+our_dt
+```
+
+I like this feature of data tables: you get to see the first and last five rows for each variable.
+
+## General syntax
+
+The general syntax for data tables is slightly different from what we've seen so far. The main idea for the syntax of a data table is `DT[i, j, by]`, where `DT` is our data table, `i` references the rows that we want, `j` references the columns, and `by` provides the variables with which we want group our data. If you want all of the rows, simply omit `i` (but keep the comma). Likewise for `j`. And if you do not want to group your data, then omit `by` (you do not need to include the comma between `j` and `by` if you do not use the `by` argument).
+
+## Indexing columns
+
+Let's talk about indexing columns/variables.
+
+### Accessing a column
+
+You can still use the `$` to access columns, but this practice is discouraged because it is less efficient and generalizable than `data.table`'s other methods for accessing columns.
+
+So how do you access columns? You define `j` as either the variable names or numbers. If we want to grab `b` (the second variable), we can define `j` as `b` or `"b"` or `2`. However, some of these methods will result in vector of the values in the `b` column, while others will result in a data table with only the column `b`. Finally, we can treat a data table (or data frame) as a list and reference a column with double square brackets and the column's name (_e.g._, `our_dt[["b"]]`) or number.
+
+Six options for grabbing the `b` variable:
+```{R, grab b from our_dt}
+our_dt$b
+our_dt[, b]
+our_dt[, "b"]
+our_dt[, 2]
+our_dt[["b"]]
+our_dt[[2]]
+```
+
+Finally, imagine inside of a function, you have an object named `my_col`, which references `"b"`, and you want to grab the column referenced by `my_col`. You cannot grab the column `b` using `our_dt[,my_col]`, because `data.table` will think you are referencing a column named `my_col` rather than looking at the value assigned to `my_col`. To tell `data.table` to look at the value inside of `my_col`, you have three options:
+
+- Use the list-style syntax: `our_dt[[my_col]]`
+- Add the argument `with = F` to the end of your indexing: `our_dt[, .my_col, with = F]`
+- Use double periods in front of `my_col`: `our_dt[, ..my_col]`
+
+Again, which option you choose affects the type of object that `data.table` returns.
+
+Let's see these solutions in action:
+```{R, my_col example, error = T}
+# Define 'my_col' as "b"
+my_col <- "b"
+# The erroneous use
+our_dt[, my_col]
+# The list use
+our_dt[[my_col]]
+# The 'with = F' option
+our_dt[, my_col, with = F]
+# The double-period option
+our_dt[, ..my_col]
+```
+
+### Accessing multiple columns
+
+The `[i,j,by]` syntax still applies for grabbing multiple columns, as does the `with = F` option. The big change here is that you do not want to use the `c()` function in conjunction with unquoted column names. Instead, use `list()` or simply `.()`. Let's grab the first two columns—`a` and `b`.
+
+```{R, our_dt multiple columns}
+# Using 'list'
+our_dt[, list(a, b)]
+# Using the period
+our_dt[, .(a, b)]
+```
+
+What about column numbers?
+```{R, our_dt column numbers}
+# List with numbers? No.
+our_dt[, list(1, 2)]
+# c() with numbers and 'with = F'? Yes.
+our_dt[, c(1, 2), with = F]
+```
+
+Again, if you want reference columns via another object, you need to use `with = F`.
+```{R, our_dt with F}
+# Define the object
+my_cols <- c("a", "b")
+# Access the columns using the object
+our_dt[, my_cols, with = F]
+```
+
+## Indexing rows
+
+If you want to simply grab rows by their number, you can do so just as you would with an ordinary data frame:
+```{R, simple row grab}
+# Grab some rows
+our_dt[c(1, 5, 7, 10), ]
+```
+
+You can begin to see the power of `data.table` and its notation when you want to select rows using some criteria, as you would do with `filter()` in `dplyr`. Let's grab values of `b` below 0 and values of `c` above 0.5.
+```{R, row index b and c}
+# Grab b < 0 and c > 0.5
+our_dt[(b < 0) & (c > 0.5),]
+```
+
+The parentheses here are not necessary—I just like them for ease of reading the code.
+
+The `data.table` package also provides a handy function `between()` that helps you filter values between a min and a max. Rather than grabbing values of `b` less than 0, let's restrict our rows to values of `b` between -0.25 and 0.25. Finally, in addition to the rows we reference, let's grab only columns `a` and `c`.
+```{R, row index bc grab ac}
+# Grab b in [-0.25,0.25] and c > 0.5
+our_dt[between(b, -0.25, 0.25) & (c > 0.5), .(a, c)]
+```
+
+To sample rows from your data table, you can apply R's `base` functions `sample()` and `sample.int()`. Sub-sampling^[Sampling? "Sub-sampling" seems redundant.] is a very useful tool when you are writing code to clean/analyze a huge dataset. Start on small subset of your data to write and test your code, then move up to the big leagues.
+
+To sample 10 rows from our (already small) data table:
+```{R, sample 10 our_dt}
+# Set the seed
+set.seed(12345)
+# Sample
+our_dt[sample(10),]
+```
+
+## Adding/manipulating columns
+
+You have two options for adding and manipulating columns in a data table.^[You could also stick with `$`, but, again, it is inefficient. If you are switching to `data.table` for its efficiency/speed, it probably makes sense to avoid inefficient uses.] The first is the rather strange syntax `:=`; the second is the function `set()`.
+
+Let's start with `:=` route for creating and manipulating variables. Recall the `i,j` notation we discussed above. As `j` denotes columns, we will create and manipulate columns in the `j` place of our data table. Perhaps more clearly, if we want to create a column of ones called `ones` in our data table, we write:
+```{R, column of ones, results = "hide"}
+# Define a column of ones
+our_dt[, ones := 1]
+```
+
+```{R, check ones}
+# Check our data frame
+our_dt
+```
+
+Notice that there is no re-defining of the data table using `<-` or `%<>%`. We simple define a new column, and then the column exists. This change is part of `data.table`'s efficiency.
+
+Similarly, if we want create a column named `abc` that is the product of the columns `a`, `b`, and `c`, then we write
+```{R, product of columns, results = "hide"}
+# Define abc
+our_dt[, abc := a * b * c]
+```
+
+```{R, check product}
+# Check our data frame
+our_dt
+```
+
+You can manipulate a column in the same way that you define a column, _e.g._,
+```{R, ones new, results = "hide"}
+# Re-define the column
+our_dt[, ones := 111]
+```
+
+```{R, check 111}
+# Check our data frame
+our_dt
+```
+
+To delete a column, you redefine the column as `NULL`. Let's delete the column `ones`.
+```{R, delete ones, results = "hide"}
+# Delete 'ones'
+our_dt[, ones := NULL]
+```
+
+```{R, check delete ones}
+our_dt
+```
+
+If you want to define/manipulate multiple columns, you add parentheses to `:=` and separate the new columns with commas. Let's delete `abc` and at the same time add the two-way products `ab` and `ac`.
+```{R, define multiple, results = "hide"}
+our_dt[, `:=`(
+  abc = NULL,
+  ab = a * b,
+  ac = a *c
+  )]
+```
+
+```{R, check define multiple}
+our_dt
+```
+
+As I mentioned above, you can also define and manipulate columns using the `data.table` function `set()`. `set()` also uses the `i,j` syntax. `set()` takes the following arguments:
+
+- `x`: the name of data table
+- `i`: the row numbers which you want to receive the new values (omit for all rows)
+- `j`: the name (or number) of the column
+- `value`: the value to assign
+
+Let's use `set()` to add back our column of ones... and then delete it.
+```{R, set ones}
+# Add column of ones using 'set'
+set(x = our_dt, j = "ones", value = 1)
+# Delete column of ones using 'set'
+set(x = our_dt, j = "ones", value = NULL)
+```
+
+`set()` is very helpful within a function, since it allows you to easily define the rows, column name (as a character), and values.
+
+## Setting names
+
+Continuing in the spirit of `set()`, `data.table` also provides a function to set column names. Why? Because `names(our_dt) <- `... is, again, an inefficient way to set the column names: it when you use `<-`, you are copying the entire data frame to simply change a few names.
+
+Let's imagine that we want to change all of our variable names to all capital letters. The function `toupper()` changes characters to uppercase, so we could write `names(our_dt) <- toupper(names(our_dt))`, but we want to be efficient, so let's use `setnames()`.
+
+```{R, uppercase names}
+# Change names to uppercase
+setnames(our_dt, toupper(names(our_dt)))
+```
+
+What if we only want to change a single name? `setnames()` still works! It accepts the arguments `old` and `new`, so we can single out the `old` variable name and replace it with a `new` name. Let's change `"AB"` to `"ab"`.
+```{R, change one name}
+# Change 'AB' to 'ab'
+setnames(our_dt, old = "AB", new = "ab")
+# Check our data table
+our_dt
+```
+
+Finally, let's change the names back to lowercase, using `tolower()`.
+```{R, lowercase names}
+# Change names back to lowercase
+setnames(our_dt, tolower(names(our_dt)))
+```
+
+## Summarizing columns
+
+`data.table`'s `i,j,by` syntax also allows you to quickly summarize variables. For instance, if you want to take the means of `a` and `b`:
+```{R, means of a and b}
+# Mean of 'a' and 'b'
+our_dt[, .(mean(a), mean(b))]
+```
+
+However, `V1` and `V2` are not the more informative names. With a few more keystrokes, we can add names:
+```{R, means of a and b with names}
+# Mean of 'a' and 'b', named
+our_dt[, .(mean_a = mean(a), mean_b = mean(b))]
+```
+
+Nice, right?
+
+What if we want to take the means of `a` and `b`, grouped by the variable `d` (which takes on the values 1, 2, 3, 4, and 5)? Enter the `by` part of `i,j,by`!
+```{R, means of a and b grouped by d}
+# Mean of 'a' and 'b' grouped by 'd'
+our_dt[, .(mean_a = mean(a), mean_b = mean(b)), by = d]
+```
+
+Hopefully you are starting to get on board with this `data.table` thing.
+
+`data.table` has a few special commands that are only accessible inside of the square brackets of a data table. One of them is `.N`, which gives the number of observations for the given data table/group. For instance, we can access the final observation of a data table using
+```{R, final observation}
+# Last observation
+our_dt[.N,]
+```
+
+We can also use `.N` as a summary statistic to count the number of observations within each group:
+```{R, lengths}
+our_dt[, .N, by = d]
+```
+
+You can also add summaries back into the data table, using the same notation we used above. For instance, if we wan to add the mean of `a`, using `d` to group, we simply type:
+```{R, add mean a}
+# Add means of 'a', grouped by 'd'
+our_dt[, mean_a_by_d := mean(a), by = d]
+```
+
+Finally, `data.table` as a useful function named `uniqueN()`, which is pretty much the combination of `unique()` and `length()`—it tells you the number of unique observations for whatever object you feed it.
+
+How many unique values of `d` do we have?
+```{R, unique ds}
+# Count the unique values of 'd'
+our_dt[,d] %>% uniqueN()
+```
+
+## Ordering
+
+Last—also in the spirit of `set()` and `setnames()`—you can set the order of rows using `setorder()` and the order of columns using `setcolorder()`.
+
+Let's order the rows of `our_dt` (_arrange_, in the `dplyr` world) by `d` and then by the reverse order (largest to smallest) of `a`:
+```{R, row orders}
+# Order by 'd' and then reversed 'a'
+setorder(our_dt, d, -a)
+# Check work
+our_dt
+```
+
+Again, there is no `<-` re-definition—the function does all of the work.
+
+For ordering columns, you give `setcolorder()` the name of the data table and a character vector (or vector of integers for indexes) of the column names in your desired order. Let's re-arrange our columns arbitrarily.
+```{R, column orders}
+# Change column order
+setcolorder(our_dt,
+  c("a", "ab", "ac", "mean_a_by_d", "b", "c", "d"))
+# Check work
+our_dt
+```
+
+Note that if you forget names, the function does not work.
+
+## More?
+
+We're only scratching the surface of the `data.table` package. The package also includes really efficient joins/merges (see `?data.table::merge`). The `merge()` function has some cool properties—left joins, right joins, cartesian products, _etc._—and you are also able to run rolling joins (using a different notation), which are awesome. Want more? You can add `leads` and `lags` easily with `shift()`, and the package includes `fread()` function for _fast reading_ (though I think `readr` is a bit more stable and at least as fast, in general). And there are still more features.
+
+`data.table` provides a number of great resources for learning:
+
+- [DataCamp](https://www.datacamp.com/courses/data-table-data-manipulation-r-tutorial)
+- [Introduction vignette](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html)
+- [Frequently asked questions regarding `data.table`](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-faq.html)
+- [More vignettes](https://cran.r-project.org/web/packages/data.table/index.html)
+
+I'm also happy to chat if you have questions, and I like coffee.^[Wink, wink.]
+
+# Other nice tools for R
+
+Here are a few more nice tools for R/research.
+
+- New [documentation website](http://ggplot2.tidyverse.org/reference/) for `ggplot2`!
+- A [nicer way](https://www.rdocumentation.org) to read/search R's documentation files.
+- For [administrative boundary shapefiles](http://www.gadm.org/download)—includes `.rds` format for reading straight into R!
+
+# Fun tools: SelectorGadget and `rvest`
+
+[`rvest`](https://github.com/hadley/rvest) provides a simple and powerful package for webscraping in R. [SelectorGadget](http://selectorgadget.com) provides an even more simple—and yet tremendously helpful—browser extension for finding CSS and xpath selectors. They make a great team.
+
+![](Images/selectorGadget.gif)
+SelectorGadget in action: selecting the table of cast members for The Lego Movie from IMDB.
+
+__Bonus feature__: [Vivalid](https://vivaldi.com) is a vastly customizable browser providing tab management and a host of other features not common to many other browsers.

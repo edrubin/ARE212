@@ -72,7 +72,7 @@ dir_12b <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/Section12b/"
 We need a raster.^[Usually, your research question will dictate which dataset you need. Here we just need a with which we can play.] I've decided we are going to look a small subset of the (in)famous [night(time) lights dataset](https://ngdc.noaa.gov/eog/viirs/download_dnb_composites.html).^[Not really _that_ infamous. People have been using light at night, measured by satellites, to proxy for economic development, electricity penetration, and similar topics—particularly in settings where these data are otherwise unavailable (_e.g._, the developing world). You might get a few eye rolls if you use these data, but they _are_ pretty cool.] You can download the night lights data in various ways, but they are all fairly large—like 520 million cells large. I've cropped the original night lights raster (for January 2017) so that it covers the Chicago area with a little room to spare.^[For this task, I used the `crop()` function in the `raster` package to crop the raster and the `writeRaster()` function (also from the `raster` package) to save the new, cropped raster.]
 
 Let's read in this raster (named `chicagoNightLights.tif`). For this task, we will use the `raster()` function from the `raster` package.^[Creative naming, right?] We will also load the police beats shapefile that we used in the previous section.
-```{R, read Chicago lights raster}
+```{R, read Chicago lights raster, messages = F}
 # Read the Chicago lights raster
 chi_lights <- raster(paste0(dir_12b, "chicagoNightLights.tif"))
 # Read the Chicago police beats shapefile
