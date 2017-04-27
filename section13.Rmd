@@ -21,6 +21,7 @@ output:
 2. Office hours at usual time/place on Friday.
 3. Whoever submits your problem set on bCourses has access to my comments. The solutions are also available for problem sets 1–3 (and 4 will be up shortly).
 4. __From problem set 3__: Remember when you use the delta method that you need to take derivatives with respect to all of parameters in model. In the case of the problem in the problem set, each of the derivatives was equal to zero except one, but the derivation that many of you provided for the delta-method-based standard error of our estimator was no quite right.
+5. Course evaluations are available!
 
 ## Last section
 
