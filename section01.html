@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -325,46 +325,11 @@ div.tocify {
       <a href="section01.html">Section 1</a>
     </li>
     <li>
-      <a href="section02.html">Section 2</a>
-    </li>
-    <li>
-      <a href="section03.html">Section 3</a>
-    </li>
-    <li>
-      <a href="section04.html">Section 4</a>
-    </li>
-    <li>
-      <a href="section05.html">Section 5</a>
-    </li>
-    <li>
-      <a href="section06.html">Section 6</a>
-    </li>
-    <li>
-      <a href="section07.html">Section 7</a>
-    </li>
-    <li>
-      <a href="section08.html">Section 8</a>
-    </li>
-    <li>
-      <a href="section09.html">Section 9</a>
-    </li>
-    <li>
-      <a href="section10.html">Section 10</a>
-    </li>
-    <li>
-      <a href="section11.html">Section 11</a>
-    </li>
-    <li>
-      <a href="section12.html">Section 12</a>
-    </li>
-    <li>
-      <a href="section12b.html">Section 12b</a>
-    </li>
-    <li>
-      <a href="section13.html">Section 13</a>
-    </li>
-    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
     </li>
   </ul>
 </li>
@@ -504,60 +469,26 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 <p>The function <code>dir()</code> allows you to see contents of a folder. <code>dir()</code> can help when you forget the name of the file you want. To see the contents of a folder, give the folder’s file path to <code>dir()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my ARE212 folder (dir_class stores the path)</span>
 <span class="kw">dir</span>(dir_class)</code></pre></div>
-<pre><code>##   [1] &quot;_site.yml&quot;             &quot;analyticstracking.php&quot;
-##   [3] &quot;contact.html&quot;          &quot;contact.Rmd&quot;          
-##   [5] &quot;courseInfo.html&quot;       &quot;courseInfo.Rmd&quot;       
-##   [7] &quot;footer.html&quot;           &quot;futureNotes.html&quot;     
-##   [9] &quot;futureNotes.Rmd&quot;       &quot;htmlScript.R&quot;         
-##  [11] &quot;Images&quot;                &quot;index.html&quot;           
-##  [13] &quot;index.Rmd&quot;             &quot;LatexKnitr&quot;           
-##  [15] &quot;latexKnitr_files&quot;      &quot;latexKnitr.html&quot;      
-##  [17] &quot;latexKnitr.Rmd&quot;        &quot;notes.html&quot;           
-##  [19] &quot;notes.Rmd&quot;             &quot;Papers&quot;               
-##  [21] &quot;pdfScript.R&quot;           &quot;resources.html&quot;       
-##  [23] &quot;resources.Rmd&quot;         &quot;Section00&quot;            
-##  [25] &quot;section00.html&quot;        &quot;section00.Rmd&quot;        
-##  [27] &quot;Section01&quot;             &quot;section01_files&quot;      
-##  [29] &quot;section01.html&quot;        &quot;section01.Rmd&quot;        
-##  [31] &quot;Section01.zip&quot;         &quot;Section02&quot;            
-##  [33] &quot;section02.html&quot;        &quot;section02.Rmd&quot;        
-##  [35] &quot;Section02.zip&quot;         &quot;Section03&quot;            
-##  [37] &quot;section03_cache&quot;       &quot;section03_files&quot;      
-##  [39] &quot;section03.html&quot;        &quot;section03.Rmd&quot;        
-##  [41] &quot;Section03.zip&quot;         &quot;Section04&quot;            
-##  [43] &quot;section04_cache&quot;       &quot;section04_files&quot;      
-##  [45] &quot;section04.html&quot;        &quot;section04.Rmd&quot;        
-##  [47] &quot;Section04.zip&quot;         &quot;Section05&quot;            
-##  [49] &quot;section05_cache&quot;       &quot;section05_files&quot;      
-##  [51] &quot;section05.html&quot;        &quot;section05.Rmd&quot;        
-##  [53] &quot;Section05.zip&quot;         &quot;Section06&quot;            
-##  [55] &quot;Section06 copy&quot;        &quot;section06_cache&quot;      
-##  [57] &quot;section06_files&quot;       &quot;section06.html&quot;       
-##  [59] &quot;section06.Rmd&quot;         &quot;Section06.zip&quot;        
-##  [61] &quot;Section07&quot;             &quot;section07_cache&quot;      
-##  [63] &quot;section07_files&quot;       &quot;section07.html&quot;       
-##  [65] &quot;section07.Rmd&quot;         &quot;Section07.zip&quot;        
-##  [67] &quot;Section08&quot;             &quot;section08_cache&quot;      
-##  [69] &quot;section08_files&quot;       &quot;section08.html&quot;       
-##  [71] &quot;section08.Rmd&quot;         &quot;Section08.zip&quot;        
-##  [73] &quot;Section09&quot;             &quot;section09_files&quot;      
-##  [75] &quot;section09.html&quot;        &quot;section09.Rmd&quot;        
-##  [77] &quot;Section09.zip&quot;         &quot;Section10&quot;            
-##  [79] &quot;section10_files&quot;       &quot;section10.html&quot;       
-##  [81] &quot;section10.Rmd&quot;         &quot;Section10.zip&quot;        
-##  [83] &quot;Section11&quot;             &quot;section11_cache&quot;      
-##  [85] &quot;section11_files&quot;       &quot;section11.html&quot;       
-##  [87] &quot;section11.Rmd&quot;         &quot;Section11.zip&quot;        
-##  [89] &quot;Section12&quot;             &quot;section12_cache&quot;      
-##  [91] &quot;section12_files&quot;       &quot;section12.html&quot;       
-##  [93] &quot;section12.Rmd&quot;         &quot;Section12.zip&quot;        
-##  [95] &quot;Section12b&quot;            &quot;section12b_cache&quot;     
-##  [97] &quot;section12b_files&quot;      &quot;section12b.html&quot;      
-##  [99] &quot;section12b.Rmd&quot;        &quot;Section13&quot;            
-## [101] &quot;section13.html&quot;        &quot;section13.Rmd&quot;        
-## [103] &quot;site_libs&quot;             &quot;syllabi.html&quot;         
-## [105] &quot;syllabi.Rmd&quot;           &quot;syllabusARE212.pdf&quot;   
-## [107] &quot;TODO.md&quot;</code></pre>
+<pre><code>##  [1] &quot;_site.yml&quot;             &quot;analyticstracking.php&quot;
+##  [3] &quot;contact.html&quot;          &quot;contact.Rmd&quot;          
+##  [5] &quot;courseInfo.html&quot;       &quot;courseInfo.Rmd&quot;       
+##  [7] &quot;footer.html&quot;           &quot;futureNotes.html&quot;     
+##  [9] &quot;futureNotes.Rmd&quot;       &quot;htmlScript.R&quot;         
+## [11] &quot;Images&quot;                &quot;index.html&quot;           
+## [13] &quot;index.Rmd&quot;             &quot;LatexKnitr&quot;           
+## [15] &quot;latexKnitr_files&quot;      &quot;latexKnitr.html&quot;      
+## [17] &quot;latexKnitr.Rmd&quot;        &quot;notes.html&quot;           
+## [19] &quot;notes.Rmd&quot;             &quot;Papers&quot;               
+## [21] &quot;pdfScript.R&quot;           &quot;README.html&quot;          
+## [23] &quot;README.md&quot;             &quot;resources.html&quot;       
+## [25] &quot;resources.Rmd&quot;         &quot;Section00&quot;            
+## [27] &quot;section00.html&quot;        &quot;section00.Rmd&quot;        
+## [29] &quot;Section01&quot;             &quot;section01_files&quot;      
+## [31] &quot;section01.html&quot;        &quot;section01.Rmd&quot;        
+## [33] &quot;Section01.zip&quot;         &quot;site_libs&quot;            
+## [35] &quot;Spring2017&quot;            &quot;syllabi.html&quot;         
+## [37] &quot;syllabi.Rmd&quot;           &quot;syllabusARE212.pdf&quot;   
+## [39] &quot;TODO.html&quot;             &quot;TODO.md&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my section 1 folder (dir_section1 stores the path)</span>
 <span class="kw">dir</span>(dir_section1)</code></pre></div>
 <pre><code>## [1] &quot;auto.csv&quot;      &quot;auto.dta&quot;      &quot;README.md&quot;     &quot;section01.pdf&quot;
@@ -590,18 +521,18 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 car_data &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="kw">paste0</span>(dir_section1, <span class="st">&quot;auto.dta&quot;</span>))</code></pre></div>
 <p>The <code>&lt;-</code> operator is central to everything you do in R. It assigns the value(s) on the right-hand side of the arrow to the name on the left-hand side. When reading R code aloud, people often replace the arrow with “gets”. The main thing to understand is that the contents of “auto.dta” are now assigned to the name <code>car_data</code>. To see this, simply type the name into the console (a bad idea with really big datasets, but this dataset is not big).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_data</code></pre></div>
-<pre><code>## # A tibble: 74 × 12
+<pre><code>## # A tibble: 74 x 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
-## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
-## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
-## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
-## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
-## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
-## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
-## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
-## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+##  1   AMC Concord  4099    22     3      2.5    11   2930    186    40
+##  2     AMC Pacer  4749    17     3      3.0    11   3350    173    40
+##  3    AMC Spirit  3799    22    NA      3.0    12   2640    168    35
+##  4 Buick Century  4816    20     3      4.5    16   3250    196    40
+##  5 Buick Electra  7827    15     4      4.0    20   4080    222    43
+##  6 Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+##  7    Buick Opel  4453    26    NA      3.0    10   2230    170    34
+##  8   Buick Regal  5189    20     3      2.0    16   3280    200    42
+##  9 Buick Riviera 10372    16     3      3.5    17   3880    207    43
 ## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
 ## # ... with 64 more rows, and 3 more variables: displacement &lt;dbl&gt;,
 ## #   gear_ratio &lt;dbl&gt;, foreign &lt;dbl+lbl&gt;</code></pre>
@@ -625,18 +556,18 @@ car_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span cl
 ## )</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># See that it looks the same as above</span>
 car_data</code></pre></div>
-<pre><code>## # A tibble: 74 × 12
+<pre><code>## # A tibble: 74 x 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
-## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
-## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
-## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
-## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
-## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
-## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
-## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
-## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+##  1   AMC Concord  4099    22     3      2.5    11   2930    186    40
+##  2     AMC Pacer  4749    17     3      3.0    11   3350    173    40
+##  3    AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+##  4 Buick Century  4816    20     3      4.5    16   3250    196    40
+##  5 Buick Electra  7827    15     4      4.0    20   4080    222    43
+##  6 Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+##  7    Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+##  8   Buick Regal  5189    20     3      2.0    16   3280    200    42
+##  9 Buick Riviera 10372    16     3      3.5    17   3880    207    43
 ## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
 ## # ... with 64 more rows, and 3 more variables: displacement &lt;dbl&gt;,
 ## #   gear_ratio &lt;dbl&gt;, foreign &lt;int&gt;</code></pre>
@@ -657,18 +588,18 @@ car_data</code></pre></div>
 ##   gear_ratio = col_double(),
 ##   foreign = col_integer()
 ## )</code></pre>
-<pre><code>## # A tibble: 74 × 12
+<pre><code>## # A tibble: 74 x 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
-## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
-## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
-## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
-## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
-## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
-## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
-## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
-## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+##  1   AMC Concord  4099    22     3      2.5    11   2930    186    40
+##  2     AMC Pacer  4749    17     3      3.0    11   3350    173    40
+##  3    AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+##  4 Buick Century  4816    20     3      4.5    16   3250    196    40
+##  5 Buick Electra  7827    15     4      4.0    20   4080    222    43
+##  6 Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+##  7    Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+##  8   Buick Regal  5189    20     3      2.0    16   3280    200    42
+##  9 Buick Riviera 10372    16     3      3.5    17   3880    207    43
 ## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
 ## # ... with 64 more rows, and 3 more variables: displacement &lt;dbl&gt;,
 ## #   gear_ratio &lt;dbl&gt;, foreign &lt;int&gt;</code></pre>
@@ -681,18 +612,18 @@ car_data</code></pre></div>
 <h2>Exploring the data</h2>
 <p>Let’s print the data into the console again.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_data</code></pre></div>
-<pre><code>## # A tibble: 74 × 12
+<pre><code>## # A tibble: 74 x 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
-## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
-## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
-## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
-## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
-## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
-## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
-## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
-## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+##  1   AMC Concord  4099    22     3      2.5    11   2930    186    40
+##  2     AMC Pacer  4749    17     3      3.0    11   3350    173    40
+##  3    AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+##  4 Buick Century  4816    20     3      4.5    16   3250    196    40
+##  5 Buick Electra  7827    15     4      4.0    20   4080    222    43
+##  6 Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+##  7    Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+##  8   Buick Regal  5189    20     3      2.0    16   3280    200    42
+##  9 Buick Riviera 10372    16     3      3.5    17   3880    207    43
 ## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
 ## # ... with 64 more rows, and 3 more variables: displacement &lt;dbl&gt;,
 ## #   gear_ratio &lt;dbl&gt;, foreign &lt;int&gt;</code></pre>
@@ -710,7 +641,7 @@ car_data</code></pre></div>
 ##  [9] &quot;turn&quot;         &quot;displacement&quot; &quot;gear_ratio&quot;   &quot;foreign&quot;</code></pre>
 <p>And what if we want to see the first six rows of the dataset? Use the <code>head()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(car_data)</code></pre></div>
-<pre><code>## # A tibble: 6 × 12
+<pre><code>## # A tibble: 6 x 12
 ##            make price   mpg rep78 headroom trunk weight length  turn
 ##           &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1   AMC Concord  4099    22     3      2.5    11   2930    186    40
@@ -723,25 +654,25 @@ car_data</code></pre></div>
 ## #   foreign &lt;int&gt;</code></pre>
 <p>What if we want to see the first 11 rows of the dataset? Use the <code>head()</code> function with its <code>n</code> argument.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(car_data, <span class="dt">n =</span> <span class="dv">11</span>)</code></pre></div>
-<pre><code>## # A tibble: 11 × 12
+<pre><code>## # A tibble: 11 x 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1    AMC Concord  4099    22     3      2.5    11   2930    186    40
-## 2      AMC Pacer  4749    17     3      3.0    11   3350    173    40
-## 3     AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
-## 4  Buick Century  4816    20     3      4.5    16   3250    196    40
-## 5  Buick Electra  7827    15     4      4.0    20   4080    222    43
-## 6  Buick LeSabre  5788    18     3      4.0    21   3670    218    43
-## 7     Buick Opel  4453    26   NaN      3.0    10   2230    170    34
-## 8    Buick Regal  5189    20     3      2.0    16   3280    200    42
-## 9  Buick Riviera 10372    16     3      3.5    17   3880    207    43
+##  1   AMC Concord  4099    22     3      2.5    11   2930    186    40
+##  2     AMC Pacer  4749    17     3      3.0    11   3350    173    40
+##  3    AMC Spirit  3799    22   NaN      3.0    12   2640    168    35
+##  4 Buick Century  4816    20     3      4.5    16   3250    196    40
+##  5 Buick Electra  7827    15     4      4.0    20   4080    222    43
+##  6 Buick LeSabre  5788    18     3      4.0    21   3670    218    43
+##  7    Buick Opel  4453    26   NaN      3.0    10   2230    170    34
+##  8   Buick Regal  5189    20     3      2.0    16   3280    200    42
+##  9 Buick Riviera 10372    16     3      3.5    17   3880    207    43
 ## 10 Buick Skylark  4082    19     3      3.5    13   3400    200    42
 ## 11  Cad. Deville 11385    14     3      4.0    20   4330    221    44
 ## # ... with 3 more variables: displacement &lt;dbl&gt;, gear_ratio &lt;dbl&gt;,
 ## #   foreign &lt;int&gt;</code></pre>
 <p>And for the last 7 rows of the dataset? Use the <code>tail()</code> function with its <code>n</code> argument.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tail</span>(car_data, <span class="dt">n =</span> <span class="dv">7</span>)</code></pre></div>
-<pre><code>## # A tibble: 7 × 12
+<pre><code>## # A tibble: 7 x 12
 ##             make price   mpg rep78 headroom trunk weight length  turn
 ##            &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Toyota Corolla  3748    31     5      3.0     9   2200    165    35
@@ -787,7 +718,7 @@ car_data</code></pre></div>
 <p>To grab the price variable (named <code>price</code>) from the <code>car_data</code> dataset, we type <code>car_data$price</code>. And to summarize the price variable:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(car_data$price)</code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##    3291    4220    5006    6165    6332   15910</code></pre>
+##    3291    4220    5006    6165    6332   15906</code></pre>
 </div>
 <div id="manipulating-the-data" class="section level2">
 <h2>Manipulating the data</h2>
@@ -799,35 +730,35 @@ car_data</code></pre></div>
 car_sub &lt;-<span class="st"> </span><span class="kw">select</span>(car_data, price, mpg, weight, length)
 <span class="co"># Print the dataset</span>
 car_sub</code></pre></div>
-<pre><code>## # A tibble: 74 × 4
+<pre><code>## # A tibble: 74 x 4
 ##    price   mpg weight length
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1   4099    22   2930    186
-## 2   4749    17   3350    173
-## 3   3799    22   2640    168
-## 4   4816    20   3250    196
-## 5   7827    15   4080    222
-## 6   5788    18   3670    218
-## 7   4453    26   2230    170
-## 8   5189    20   3280    200
-## 9  10372    16   3880    207
+##  1  4099    22   2930    186
+##  2  4749    17   3350    173
+##  3  3799    22   2640    168
+##  4  4816    20   3250    196
+##  5  7827    15   4080    222
+##  6  5788    18   3670    218
+##  7  4453    26   2230    170
+##  8  5189    20   3280    200
+##  9 10372    16   3880    207
 ## 10  4082    19   3400    200
 ## # ... with 64 more rows</code></pre>
 <p>You can see that we still have 74 rows but only four columns.</p>
 <p>Alternatively, you can choose which variables you would like to exclude from a dataset by placing a negative sign (dash) in front of the name</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(car_data, -price, -mpg, -weight, -length)</code></pre></div>
-<pre><code>## # A tibble: 74 × 8
+<pre><code>## # A tibble: 74 x 8
 ##             make rep78 headroom trunk  turn displacement gear_ratio
 ##            &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-## 1    AMC Concord     3      2.5    11    40          121       3.58
-## 2      AMC Pacer     3      3.0    11    40          258       2.53
-## 3     AMC Spirit   NaN      3.0    12    35          121       3.08
-## 4  Buick Century     3      4.5    16    40          196       2.93
-## 5  Buick Electra     4      4.0    20    43          350       2.41
-## 6  Buick LeSabre     3      4.0    21    43          231       2.73
-## 7     Buick Opel   NaN      3.0    10    34          304       2.87
-## 8    Buick Regal     3      2.0    16    42          196       2.93
-## 9  Buick Riviera     3      3.5    17    43          231       2.93
+##  1   AMC Concord     3      2.5    11    40          121       3.58
+##  2     AMC Pacer     3      3.0    11    40          258       2.53
+##  3    AMC Spirit   NaN      3.0    12    35          121       3.08
+##  4 Buick Century     3      4.5    16    40          196       2.93
+##  5 Buick Electra     4      4.0    20    43          350       2.41
+##  6 Buick LeSabre     3      4.0    21    43          231       2.73
+##  7    Buick Opel   NaN      3.0    10    34          304       2.87
+##  8   Buick Regal     3      2.0    16    42          196       2.93
+##  9 Buick Riviera     3      3.5    17    43          231       2.93
 ## 10 Buick Skylark     3      3.5    13    42          231       3.08
 ## # ... with 64 more rows, and 1 more variables: foreign &lt;int&gt;</code></pre>
 </div>
@@ -835,51 +766,51 @@ car_sub</code></pre></div>
 <h3><code>arrange()</code></h3>
 <p>We often want to arrange our dataset by one or more columns. For this task, <code>dplyr</code> offers the <code>arrange()</code> function. The notation is similar to that of select: the data object’s name followed by the variables with with you would like to arrange the object. Let’s arrange by price and mpg. The second dimension of sorting here is only for demonstration (it’s pointless in the actually arrangement).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(car_sub, price, mpg)</code></pre></div>
-<pre><code>## # A tibble: 74 × 4
+<pre><code>## # A tibble: 74 x 4
 ##    price   mpg weight length
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1   3291    20   2830    195
-## 2   3299    29   2110    163
-## 3   3667    24   2750    179
-## 4   3748    31   2200    165
-## 5   3798    35   2050    164
-## 6   3799    22   2640    168
-## 7   3829    22   2580    169
-## 8   3895    26   1830    142
-## 9   3955    19   3430    197
+##  1  3291    20   2830    195
+##  2  3299    29   2110    163
+##  3  3667    24   2750    179
+##  4  3748    31   2200    165
+##  5  3798    35   2050    164
+##  6  3799    22   2640    168
+##  7  3829    22   2580    169
+##  8  3895    26   1830    142
+##  9  3955    19   3430    197
 ## 10  3984    30   2120    163
 ## # ... with 64 more rows</code></pre>
 <p>Having used the <code>arrange()</code> function on our data, what happens if we view the dataset now?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub</code></pre></div>
-<pre><code>## # A tibble: 74 × 4
+<pre><code>## # A tibble: 74 x 4
 ##    price   mpg weight length
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1   4099    22   2930    186
-## 2   4749    17   3350    173
-## 3   3799    22   2640    168
-## 4   4816    20   3250    196
-## 5   7827    15   4080    222
-## 6   5788    18   3670    218
-## 7   4453    26   2230    170
-## 8   5189    20   3280    200
-## 9  10372    16   3880    207
+##  1  4099    22   2930    186
+##  2  4749    17   3350    173
+##  3  3799    22   2640    168
+##  4  4816    20   3250    196
+##  5  7827    15   4080    222
+##  6  5788    18   3670    218
+##  7  4453    26   2230    170
+##  8  5189    20   3280    200
+##  9 10372    16   3880    207
 ## 10  4082    19   3400    200
 ## # ... with 64 more rows</code></pre>
 <p>It is no longer arranged. This point is important. With nearly every function in R, you must assign the output of a function to an object if you want anything to change. Otherwise, you are simply printing your results to the console.</p>
 <p><code>arrange()</code> defaults to ascending ordering; if you would like descending ordering, use the <code>desc()</code> function on the variables that you would like to be descending.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(car_sub, <span class="kw">desc</span>(price), mpg)</code></pre></div>
-<pre><code>## # A tibble: 74 × 4
+<pre><code>## # A tibble: 74 x 4
 ##    price   mpg weight length
 ##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1  15906    21   4290    204
-## 2  14500    14   3900    204
-## 3  13594    12   4720    230
-## 4  13466    14   3830    201
-## 5  12990    14   3420    192
-## 6  11995    17   3170    193
-## 7  11497    12   4840    233
-## 8  11385    14   4330    221
-## 9  10372    16   3880    207
+##  1 15906    21   4290    204
+##  2 14500    14   3900    204
+##  3 13594    12   4720    230
+##  4 13466    14   3830    201
+##  5 12990    14   3420    192
+##  6 11995    17   3170    193
+##  7 11497    12   4840    233
+##  8 11385    14   4330    221
+##  9 10372    16   3880    207
 ## 10 10371    16   4030    206
 ## # ... with 64 more rows</code></pre>
 </div>
@@ -888,13 +819,13 @@ car_sub</code></pre></div>
 <p>To create more specific summaries of your data, <code>dplyr</code> offers the <code>summarize()</code> and <code>summarize_each()</code> functions.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> These functions are really more useful when you have grouped data, but it may be helpful to first see them here in a simpler setting.</p>
 <p>Imaging we want the mean and standard deviation of the price variable, we use the functions <code>mean()</code> and <code>sd()</code> in conjunction with <code>summarize()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(car_sub, <span class="kw">mean</span>(price), <span class="kw">sd</span>(price))</code></pre></div>
-<pre><code>## # A tibble: 1 × 2
+<pre><code>## # A tibble: 1 x 2
 ##   `mean(price)` `sd(price)`
 ##           &lt;dbl&gt;       &lt;dbl&gt;
 ## 1      6165.257    2949.496</code></pre>
 <p>You can even provide names for the newly created summaries.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(car_sub, <span class="dt">price_mean =</span> <span class="kw">mean</span>(price), <span class="dt">price_sd =</span> <span class="kw">sd</span>(price))</code></pre></div>
-<pre><code>## # A tibble: 1 × 2
+<pre><code>## # A tibble: 1 x 2
 ##   price_mean price_sd
 ##        &lt;dbl&gt;    &lt;dbl&gt;
 ## 1   6165.257 2949.496</code></pre>
@@ -954,40 +885,40 @@ x[<span class="dv">2</span>:<span class="dv">3</span>]</code></pre></div>
 <p>This indexing works with data objects, as well. We just have one more dimension to consider—we have rows and columns. Rows before columns, <em>i.e.</em>, <code>[row, column]</code> (but we don’t actually use the words).</p>
 <p>To grab the first row of <code>car_sub</code>, we put a 1 for the row index and leave the column blank.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[<span class="dv">1</span>, ]</code></pre></div>
-<pre><code>## # A tibble: 1 × 4
+<pre><code>## # A tibble: 1 x 4
 ##   price   mpg weight length
 ##   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1  4099    22   2930    186</code></pre>
 <p>To grab the first column of <code>car_sub</code>, we</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[, <span class="dv">1</span>]</code></pre></div>
-<pre><code>## # A tibble: 74 × 1
+<pre><code>## # A tibble: 74 x 1
 ##    price
 ##    &lt;dbl&gt;
-## 1   4099
-## 2   4749
-## 3   3799
-## 4   4816
-## 5   7827
-## 6   5788
-## 7   4453
-## 8   5189
-## 9  10372
+##  1  4099
+##  2  4749
+##  3  3799
+##  4  4816
+##  5  7827
+##  6  5788
+##  7  4453
+##  8  5189
+##  9 10372
 ## 10  4082
 ## # ... with 64 more rows</code></pre>
 <p>You can also use the name of a column as its index</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car_sub[, <span class="st">&quot;price&quot;</span>]</code></pre></div>
-<pre><code>## # A tibble: 74 × 1
+<pre><code>## # A tibble: 74 x 1
 ##    price
 ##    &lt;dbl&gt;
-## 1   4099
-## 2   4749
-## 3   3799
-## 4   4816
-## 5   7827
-## 6   5788
-## 7   4453
-## 8   5189
-## 9  10372
+##  1  4099
+##  2  4749
+##  3  3799
+##  4  4816
+##  5  7827
+##  6  5788
+##  7  4453
+##  8  5189
+##  9 10372
 ## 10  4082
 ## # ... with 64 more rows</code></pre>
 <p>We’ll do a lot more of this indexing stuff in the future.</p>
@@ -1058,7 +989,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

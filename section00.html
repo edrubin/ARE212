@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -178,40 +178,11 @@ $(document).ready(function () {
       <a href="section01.html">Section 1</a>
     </li>
     <li>
-      <a href="section02.html">Section 2</a>
-    </li>
-    <li>
-      <a href="section03.html">Section 3</a>
-    </li>
-    <li>
-      <a href="section04.html">Section 4</a>
-    </li>
-    <li>
-      <a href="section05.html">Section 5</a>
-    </li>
-    <li>
-      <a href="section06.html">Section 6</a>
-    </li>
-    <li>
-      <a href="section07.html">Section 7</a>
-    </li>
-    <li>
-      <a href="section08.html">Section 8</a>
-    </li>
-    <li>
-      <a href="section09.html">Section 9</a>
-    </li>
-    <li>
-      <a href="section10.html">Section 10</a>
-    </li>
-    <li>
-      <a href="section11.html">Section 11</a>
-    </li>
-    <li>
-      <a href="section12.html">Section 12</a>
-    </li>
-    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
     </li>
   </ul>
 </li>
@@ -264,9 +235,10 @@ $(document).ready(function () {
 <p>If you do not already have R and RStudio running on your computer, then you should install them both:</p>
 <ol style="list-style-type: decimal">
 <li><a href="https://cran.r-project.org">Download R</a>.</li>
-<li><a href="https://www.rstudio.com/products/rstudio/">Download RStudio</a>. RStudio is a super helpful IDE (integrated development environment) for R. Very helpful for learning and using R.</li>
+<li><a href="https://www.rstudio.com/products/rstudio/">Download RStudio</a>.</li>
 </ol>
-<p>If you already have R and RStudio on your computer, then you should make sure they are up to date. The <a href="https://cran.r-project.org">current R version</a> is 3.3.2 (a.k.a. <em>Sincere Pumpkin Patch</em>). You can check your version of R by typing <code>version</code> into the R console. The <a href="https://www.rstudio.com/products/rstudio/download/">current version</a> of RStudio is 1.0.136.</p>
+<p>RStudio is a super helpful IDE (integrated development environment) for R—it’s very helpful for both learning and using R.</p>
+<p>If you already have R and RStudio on your computer, then you should make sure they are up to date. The <a href="https://cran.r-project.org">current R version</a> is 3.4.3 (a.k.a. <em>Kite-Eating Tree</em>). You can check your version of R by typing <code>version</code> into the R console. The <a href="https://www.rstudio.com/products/rstudio/download/">current version</a> of RStudio is 1.1.383.</p>
 <p>I would also recommend making sure you have a working installation of <a href="https://www.latex-project.org/get/">LaTeX</a> (<a href="https://www.sharelatex.com">ShareLaTeX</a> is another nice tool that also has a lot of LaTeX help/tutorials). <a href="http://pandoc.org">Pandoc</a> is also also helpful.</p>
 </div>
 <div id="does-it-work" class="section level1">
@@ -275,7 +247,13 @@ $(document).ready(function () {
 </div>
 <div id="resources-for-r" class="section level1">
 <h1>Resources for R</h1>
-<p>I’ve compiled a pretty large set of <a href="resources.html">resources for R</a>. You probably don’t need them right now, but know they are there.</p>
+<p>I’ve compiled a pretty large set of <a href="resources.html">resources for R</a>. You probably don’t need them right now, but know they are there. However, the best resources for learning R are:</p>
+<ul>
+<li>Google (which will probably lead to StackOverflow)</li>
+<li>Time</li>
+<li>Your classmates</li>
+<li>Me</li>
+</ul>
 </div>
 <div id="basic-suggestions" class="section level1">
 <h1>Basic suggestions</h1>
@@ -283,7 +261,7 @@ $(document).ready(function () {
 <li>Nearly everything you do should be in an R script, as opposed to the command line. You will want to return to your code at some point, an R script makes this possible (plus you have to turn in your R script with your assignments).</li>
 <li>Comment your code.</li>
 <li>Be consistent with your coding conventions (especially naming).</li>
-<li>Be smart when naming files, folders, <em>etc.</em>.</li>
+<li>Be smart when naming files, folders, <em>etc.</em>. First, use names that are actually descriptive (<em>e.g.</em>, <code>CensusCountyDemographics.csv</code> <em>vs.</em> <code>cbn18319ddg890-7a.csv</code>). Second, I’d suggest choosing either camelcase (<code>WhatAGreatName.txt</code>) or replacing spaces with underscores (<code>what_a_great_name.txt</code>).</li>
 <li>Make your life easier by organizing your files, directories, and using R’s <code>paste0()</code> (or <code>paste()</code>). See examples in Section 1.</li>
 </ol>
 </div>
@@ -325,7 +303,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

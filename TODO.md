@@ -9,3 +9,4 @@
 - Tables with `stargazer` and/or `xtable`
 - `dplyr` and SQL
 - Data cleaning (`lubridate`, `stringr`, _etc._)
+- Google Earth Engine

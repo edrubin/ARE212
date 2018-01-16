@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section notes, spring 2017</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="../section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="../section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="../latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="../syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="../resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="../contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section notes, spring 2017</h1>
+
+</div>
+
+
+<p>Links to section notes and relevant files.</p>
+<p><strong>Note</strong>: I’ve updated the web-format (HTML) files, so they should run. The attached PDFs and ZIPs remain as they were in spring 2017.</p>
+<p>These notes (and I) owe a lot to previous GSIs for this class: <a href="https://www.fionaburlig.com/are212">Fiona Burlig</a>, <a href="https://github.com/kendonB/ARE212">Kenny Bell</a>, <a href="https://github.com/pbaylis/ARE212/">Patrick Baylis</a>, and <a href="https://github.com/danhammer/ARE212">Dan Hammer</a>. <br><br></p>
+<div id="section-0-setting-up-r" class="section level4">
+<h4><a href="section00.html"><strong>Section 0</strong></a>: Setting up R</h4>
+<p>Install R, RStudio, and other relevant programs; resources for R; general suggestions for coding.</p>
+<p><a href="Section00/section00.pdf">pdf</a> <br><br></p>
+</div>
+<div id="section-1-getting-started-with-r" class="section level4">
+<h4><a href="section01.html"><strong>Section 1</strong></a>: Getting started with R</h4>
+<p>Learning the basics of R: installing and loading packages; loading various data types (<code>haven</code> and <code>readr</code>); basic data summarization and manipulation (introduction to <code>dplyr</code>).</p>
+<p><a href="Section01/section01.pdf">pdf</a> | <a href="Section01/section01.R">R script</a> | <a href="Section01.zip">zip</a> <br><br></p>
+</div>
+<div id="section-2-matrix-madness" class="section level4">
+<h4><a href="section02.html"><strong>Section 2</strong></a>: Matrix madness</h4>
+<p>Vectors, matrices, and general mathematical usage of R.</p>
+<p><a href="Section02/section02.pdf">pdf</a> | <a href="Section02/section02.R">R script</a> | <a href="Section02.zip">zip</a> <br><br></p>
+</div>
+<div id="section-3-functions-and-loops" class="section level4">
+<h4><a href="section03.html"><strong>Section 3</strong></a>: Functions and loops</h4>
+<p>Writing your own (OLS) functions, using loops, and running simulations in R.</p>
+<p><a href="Section03/section03.pdf">pdf</a> | <a href="Section03/section03.R">R script</a> | <a href="Section03.zip">zip</a> <br><br></p>
+</div>
+<div id="section-4-fwl-and-model-fit" class="section level4">
+<h4><a href="section04.html"><strong>Section 4</strong></a>: FWL and model fit</h4>
+<p>Logical operators, optional arguments to your custom functions, Frisch-Waugh-Lovell (FWL) theorem, omitted variable bias, and measures of fit/overfitting.</p>
+<p><a href="Section04/section04.pdf">pdf</a> | <a href="Section04/section04.R">R script</a> | <a href="Section04.zip">zip</a> <br><br></p>
+</div>
+<div id="section-5-inference-and-parallelization" class="section level4">
+<h4><a href="section05.html"><strong>Section 5</strong></a>: Inference and parallelization</h4>
+<p>Statistical inference via hypothesis testing: <em>t</em> tests and <span class="math inline">\(F\)</span> tests. Plus simulation and parallelization.</p>
+<p><a href="Section05/section05.pdf">pdf</a> | <a href="Section05/section05.R">R script</a> | <a href="Section05.zip">zip</a> <br><br></p>
+</div>
+<div id="section-6-figures-with-ggplot2" class="section level4">
+<h4><a href="section06.html"><strong>Section 6</strong></a>: Figures with <code>ggplot2</code></h4>
+<p>Creating informative and aesthetically figures using R’s <code>ggplot2</code>—scatter plots, histograms, density plots, and more.</p>
+<p><a href="Section06/section06.pdf">pdf</a> | <a href="Section06/section06.R">R script</a> | <a href="Section06.zip">zip</a> <br><br></p>
+</div>
+<div id="section-7-gls-and-wls" class="section level4">
+<h4><a href="section07.html"><strong>Section 7</strong></a>: GLS and WLS</h4>
+<p>Generalized least squares (GLS), weighted least squares (WLS), and more simulations!</p>
+<p><a href="Section07/section07.pdf">pdf</a> | <a href="Section07/section07.R">R script</a> | <a href="Section07.zip">zip</a> <br><br></p>
+</div>
+<div id="section-8-ols-in-asymptopia" class="section level4">
+<h4><a href="section08.html"><strong>Section 8</strong></a>: OLS in asymptopia</h4>
+<p>OLS as <span class="math inline">\(N\)</span> gets (very) big. Also: simulations, coding efficiency, and new <code>ggplot2</code> techniques.</p>
+<p><a href="Section08/section08.pdf">pdf</a> | <a href="Section08/section08.R">R script</a> | <a href="Section08.zip">zip</a> <br><br></p>
+</div>
+<div id="section-9-standard-errors-vol.-i" class="section level4">
+<h4><a href="section09.html"><strong>Section 9</strong></a>: Standard errors, Vol. I</h4>
+<p>Calculating standard errors via analytical methods and via the Delta Method. Includes linear and nonlinear combinations of parameters. Plus making prettier tables.</p>
+<p><a href="Section09/section09.pdf">pdf</a> | <a href="Section09/section09.R">R script</a> | <a href="Section09.zip">zip</a> <br><br></p>
+</div>
+<div id="section-10-standard-errors-vol.-ii" class="section level4">
+<h4><a href="section10.html"><strong>Section 10</strong></a>: Standard errors, Vol. II</h4>
+<p>Calculating standard errors in various situations: spherical errors, heteroskedastic errors, temporally correlated errors, spatially correlated errors, clustered errors.</p>
+<p><a href="Section10/section10.pdf">pdf</a> | <a href="Section10/section10.R">R script</a> | <a href="Section10.zip">zip</a> <br><br></p>
+</div>
+<div id="section-11-instrumental-variables" class="section level4">
+<h4><a href="section11.html"><strong>Section 11</strong></a>: Instrumental variables</h4>
+<p>Instrumental variables (IV) and two-stage least squares (2SLS). Plus measurement error.</p>
+<p><a href="Section11/section11.pdf">pdf</a> | <a href="Section11/section11.R">R script</a> | <a href="Section11.zip">zip</a> <br><br></p>
+</div>
+<div id="section-12-spatial-data" class="section level4">
+<h4><a href="section12.html"><strong>Section 12</strong></a>: Spatial data</h4>
+<p>Spatial data. Shapefiles, points data, maps, and—more generally—R as a GIS.</p>
+<p><a href="Section12/section12.pdf">pdf</a> | <a href="Section12/section12.R">R script</a> | <a href="Section12.zip">zip</a> <br><br></p>
+</div>
+<div id="section-12b-spatial-data-continued" class="section level4">
+<h4><a href="section12b.html"><strong>Section 12b</strong></a>: Spatial data, continued</h4>
+<p>Spatial data. Rasters, geocoding, and mapping in R.</p>
+<p><a href="Section12b/section12b.pdf">pdf</a> | <a href="Section12b/section12b.R">R script</a> | <a href="Section12b.zip">zip</a> <br><br></p>
+</div>
+<div id="section-13-introduction-to-data.table" class="section level4">
+<h4><a href="section13.html"><strong>Section 13</strong></a>: Introduction to <code>data.table</code></h4>
+<p>An introduction to the <code>data.table</code> package (useful for working with large datasets).</p>
+<p><a href="Section13/section13.pdf">pdf</a> | <a href="Section13/section13.R">R script</a> | <a href="Section13.zip">zip</a> <br><br></p>
+</div>
+<div id="supplement-1-latex-and-knitr" class="section level4">
+<h4><a href="latexKnitr.html"><strong>Supplement 1</strong></a>: LaTeX and <code>knitr</code></h4>
+<p>Introductions to and resources for LaTeX and <code>knitr</code>.</p>
+<p><a href="LatexKnitr/latexKnitr.pdf">pdf</a> <br><br></p>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

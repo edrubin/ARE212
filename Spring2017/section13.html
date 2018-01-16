@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 13: data.table</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="../section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="../section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="../latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="../syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="../resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="../contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 13: <code>data.table</code></h1>
+
+</div>
+
+
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<div id="announcements" class="section level2">
+<h2>Announcements</h2>
+<ol style="list-style-type: decimal">
+<li>Today is our last section!</li>
+<li>Office hours at usual time/place on Friday.</li>
+<li>Whoever submits your problem set on bCourses has access to my comments. The solutions are also available for problem sets 1–3 (and 4 will be up shortly).</li>
+<li><strong>From problem set 3</strong>: Remember when you use the delta method that you need to take derivatives with respect to all of parameters in model. In the case of the problem in the problem set, each of the derivatives was equal to zero except one, but the derivation that many of you provided for the delta-method-based standard error of our estimator was no quite right.</li>
+<li>Course evaluations are available!</li>
+</ol>
+</div>
+<div id="last-section" class="section level2">
+<h2>Last section</h2>
+<p>In our <a href="section12.html">previous section</a>, we discussed spatial—focusing on one of the two major classes of spatial data: vector data, which include polygons, lines, and points.</p>
+</div>
+<div id="this-week" class="section level2">
+<h2>This week</h2>
+<div id="spatial-data" class="section level3">
+<h3>Spatial data</h3>
+<p>Today we will wrap up our discussion of spatial data, covering three topics:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Raster data</strong>: our remaining major class of spatial data</li>
+<li><strong>Geocoding</strong>: moving from addresses to geographic coordinates</li>
+<li><strong>Leaflet</strong>: an awesome tools for creating interactive maps</li>
+</ol>
+<p>See <a href="section12b.html">Section 12b</a> for this completion of spatial data.</p>
+</div>
+<div id="data.table" class="section level3">
+<h3><code>data.table</code></h3>
+<p>In the second portion of this section, we will R’s <code>data.table</code> package and its uses for cleaning/prepping datasets. <code>data.table</code> is particularly useful for large datasets, so we will use it on a fairly large dataset.</p>
+</div>
+</div>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p><strong>Packages</strong>:</p>
+<ul>
+<li>New: <code>data.table</code></li>
+<li>Old: magrittr`</li>
+</ul>
+</div>
+</div>
+<div id="data.table-1" class="section level1">
+<h1><code>data.table</code></h1>
+<p>R’s <code>data.table</code> <a href="https://cran.r-project.org/web/packages/data.table/index.html">package</a> provides methods for fast (potentially grouped) manipulation of large datasets—aggregation, joins, modifications—without copying the dataset repeatedly. The syntax is not quite as clear as the “verbs” used by <code>dplyr</code> and the rest of the <em>hadleyverse</em>, but the efficiency benefits are substantial when you have large datsets.</p>
+<div id="r-setup" class="section level2">
+<h2>R setup</h2>
+<p>Let’s get started. First, set up R.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># General R setup ----</span>
+<span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="co"># Load packages</span>
+pacman::<span class="kw">p_load</span>(data.table, magrittr)
+<span class="co"># Add an option for data.table</span>
+<span class="kw">options</span>(<span class="dt">datatable.print.nrows =</span> <span class="dv">20</span>)</code></pre></div>
+<p>The option <code>options(datatable.print.nrows = 20)</code> tells R that we do not want to print the whole data table if it has more than 20 rows—a handy feature that prevents you from printing a billion rows to screen.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+</div>
+<div id="creating-a-data-table" class="section level2">
+<h2>Creating a data table</h2>
+<p>Alright, let’s create a data table.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> To create a data table—or to convert an existing data frame or matrix to a data table—you use the <code>data.table()</code> function just as you would use the <code>data.frame()</code> function. Let’s create a simple data table with 30 rows and four columns named <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code>. <em>Note</em>: I’m going to generally use the suffix <code>_dt</code> to denote data tables in our R scripts.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Create our data table</span>
+our_dt &lt;-<span class="st"> </span><span class="kw">data.table</span>(
+  <span class="dt">a =</span> <span class="dv">101</span>:<span class="dv">130</span>,
+  <span class="dt">b =</span> <span class="kw">rnorm</span>(<span class="dv">30</span>),
+  <span class="dt">c =</span> <span class="kw">runif</span>(<span class="dv">30</span>),
+  <span class="dt">d =</span> <span class="kw">rep</span>(<span class="dv">1</span>:<span class="dv">5</span>))</code></pre></div>
+<p>So what is this data table object that we just created?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the class</span>
+our_dt %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;data.table&quot; &quot;data.frame&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the dimensions, length, and names</span>
+our_dt %&gt;%<span class="st"> </span><span class="kw">dim</span>()</code></pre></div>
+<pre><code>## [1] 30  4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt %&gt;%<span class="st"> </span><span class="kw">length</span>()</code></pre></div>
+<pre><code>## [1] 4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt %&gt;%<span class="st"> </span><span class="kw">names</span>()</code></pre></div>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;</code></pre>
+<p>This data table is still a <code>data.frame</code>, but it is also a <code>data.table</code>—similar to how we previously created objects that simultaneously had the classes <code>data.frame</code>, <code>tbl_df</code>, and <code>tbl</code>. The dimensions, length, and names are exactly what we expected them to be. Good.</p>
+<p>Let’s print the data table to screen.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print our_dt to screen</span>
+our_dt</code></pre></div>
+<pre><code>##       a          b          c d
+##  1: 101  0.5855288 0.79156780 1
+##  2: 102  0.7094660 0.25868432 2
+##  3: 103 -0.1093033 0.98598383 3
+##  4: 104 -0.4534972 0.75687374 4
+##  5: 105  0.6058875 0.97977825 5
+## ---                            
+## 26: 126  1.8050975 0.30503175 1
+## 27: 127 -0.4816474 0.82565686 2
+## 28: 128  0.6203798 0.50234464 3
+## 29: 129  0.6121235 0.80357263 4
+## 30: 130 -0.1623110 0.06063998 5</code></pre>
+<p>I like this feature of data tables: you get to see the first and last five rows for each variable.</p>
+</div>
+<div id="general-syntax" class="section level2">
+<h2>General syntax</h2>
+<p>The general syntax for data tables is slightly different from what we’ve seen so far. The main idea for the syntax of a data table is <code>DT[i, j, by]</code>, where <code>DT</code> is our data table, <code>i</code> references the rows that we want, <code>j</code> references the columns, and <code>by</code> provides the variables with which we want group our data. If you want all of the rows, simply omit <code>i</code> (but keep the comma). Likewise for <code>j</code>. And if you do not want to group your data, then omit <code>by</code> (you do not need to include the comma between <code>j</code> and <code>by</code> if you do not use the <code>by</code> argument).</p>
+</div>
+<div id="indexing-columns" class="section level2">
+<h2>Indexing columns</h2>
+<p>Let’s talk about indexing columns/variables.</p>
+<div id="accessing-a-column" class="section level3">
+<h3>Accessing a column</h3>
+<p>You can still use the <code>$</code> to access columns, but this practice is discouraged because it is less efficient and generalizable than <code>data.table</code>’s other methods for accessing columns.</p>
+<p>So how do you access columns? You define <code>j</code> as either the variable names or numbers. If we want to grab <code>b</code> (the second variable), we can define <code>j</code> as <code>b</code> or <code>&quot;b&quot;</code> or <code>2</code>. However, some of these methods will result in vector of the values in the <code>b</code> column, while others will result in a data table with only the column <code>b</code>. Finally, we can treat a data table (or data frame) as a list and reference a column with double square brackets and the column’s name (<em>e.g.</em>, <code>our_dt[[&quot;b&quot;]]</code>) or number.</p>
+<p>Six options for grabbing the <code>b</code> variable:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt$b</code></pre></div>
+<pre><code>##  [1]  0.5855288  0.7094660 -0.1093033 -0.4534972  0.6058875 -1.8179560
+##  [7]  0.6300986 -0.2761841 -0.2841597 -0.9193220 -0.1162478  1.8173120
+## [13]  0.3706279  0.5202165 -0.7505320  0.8168998 -0.8863575 -0.3315776
+## [19]  1.1207127  0.2987237  0.7796219  1.4557851 -0.6443284 -1.5531374
+## [25] -1.5977095  1.8050975 -0.4816474  0.6203798  0.6121235 -0.1623110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt[, b]</code></pre></div>
+<pre><code>##  [1]  0.5855288  0.7094660 -0.1093033 -0.4534972  0.6058875 -1.8179560
+##  [7]  0.6300986 -0.2761841 -0.2841597 -0.9193220 -0.1162478  1.8173120
+## [13]  0.3706279  0.5202165 -0.7505320  0.8168998 -0.8863575 -0.3315776
+## [19]  1.1207127  0.2987237  0.7796219  1.4557851 -0.6443284 -1.5531374
+## [25] -1.5977095  1.8050975 -0.4816474  0.6203798  0.6121235 -0.1623110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt[, <span class="st">&quot;b&quot;</span>]</code></pre></div>
+<pre><code>##              b
+##  1:  0.5855288
+##  2:  0.7094660
+##  3: -0.1093033
+##  4: -0.4534972
+##  5:  0.6058875
+## ---           
+## 26:  1.8050975
+## 27: -0.4816474
+## 28:  0.6203798
+## 29:  0.6121235
+## 30: -0.1623110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt[, <span class="dv">2</span>]</code></pre></div>
+<pre><code>##              b
+##  1:  0.5855288
+##  2:  0.7094660
+##  3: -0.1093033
+##  4: -0.4534972
+##  5:  0.6058875
+## ---           
+## 26:  1.8050975
+## 27: -0.4816474
+## 28:  0.6203798
+## 29:  0.6121235
+## 30: -0.1623110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt[[<span class="st">&quot;b&quot;</span>]]</code></pre></div>
+<pre><code>##  [1]  0.5855288  0.7094660 -0.1093033 -0.4534972  0.6058875 -1.8179560
+##  [7]  0.6300986 -0.2761841 -0.2841597 -0.9193220 -0.1162478  1.8173120
+## [13]  0.3706279  0.5202165 -0.7505320  0.8168998 -0.8863575 -0.3315776
+## [19]  1.1207127  0.2987237  0.7796219  1.4557851 -0.6443284 -1.5531374
+## [25] -1.5977095  1.8050975 -0.4816474  0.6203798  0.6121235 -0.1623110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt[[<span class="dv">2</span>]]</code></pre></div>
+<pre><code>##  [1]  0.5855288  0.7094660 -0.1093033 -0.4534972  0.6058875 -1.8179560
+##  [7]  0.6300986 -0.2761841 -0.2841597 -0.9193220 -0.1162478  1.8173120
+## [13]  0.3706279  0.5202165 -0.7505320  0.8168998 -0.8863575 -0.3315776
+## [19]  1.1207127  0.2987237  0.7796219  1.4557851 -0.6443284 -1.5531374
+## [25] -1.5977095  1.8050975 -0.4816474  0.6203798  0.6121235 -0.1623110</code></pre>
+<p>Finally, imagine inside of a function, you have an object named <code>my_col</code>, which references <code>&quot;b&quot;</code>, and you want to grab the column referenced by <code>my_col</code>. You cannot grab the column <code>b</code> using <code>our_dt[,my_col]</code>, because <code>data.table</code> will think you are referencing a column named <code>my_col</code> rather than looking at the value assigned to <code>my_col</code>. To tell <code>data.table</code> to look at the value inside of <code>my_col</code>, you have three options:</p>
+<ul>
+<li>Use the list-style syntax: <code>our_dt[[my_col]]</code></li>
+<li>Add the argument <code>with = F</code> to the end of your indexing: <code>our_dt[, .my_col, with = F]</code></li>
+<li>Use double periods in front of <code>my_col</code>: <code>our_dt[, ..my_col]</code></li>
+</ul>
+<p>Again, which option you choose affects the type of object that <code>data.table</code> returns.</p>
+<p>Let’s see these solutions in action:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define &#39;my_col&#39; as &quot;b&quot;</span>
+my_col &lt;-<span class="st"> &quot;b&quot;</span>
+<span class="co"># The erroneous use</span>
+our_dt[, my_col]</code></pre></div>
+<pre><code>## Error in `[.data.table`(our_dt, , my_col): j (the 2nd argument inside [...]) is a single symbol but column name &#39;my_col&#39; is not found. Perhaps you intended DT[,..my_col] or DT[,my_col,with=FALSE]. This difference to data.frame is deliberate and explained in FAQ 1.1.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The list use</span>
+our_dt[[my_col]]</code></pre></div>
+<pre><code>##  [1]  0.5855288  0.7094660 -0.1093033 -0.4534972  0.6058875 -1.8179560
+##  [7]  0.6300986 -0.2761841 -0.2841597 -0.9193220 -0.1162478  1.8173120
+## [13]  0.3706279  0.5202165 -0.7505320  0.8168998 -0.8863575 -0.3315776
+## [19]  1.1207127  0.2987237  0.7796219  1.4557851 -0.6443284 -1.5531374
+## [25] -1.5977095  1.8050975 -0.4816474  0.6203798  0.6121235 -0.1623110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The &#39;with = F&#39; option</span>
+our_dt[, my_col, with =<span class="st"> </span>F]</code></pre></div>
+<pre><code>##              b
+##  1:  0.5855288
+##  2:  0.7094660
+##  3: -0.1093033
+##  4: -0.4534972
+##  5:  0.6058875
+## ---           
+## 26:  1.8050975
+## 27: -0.4816474
+## 28:  0.6203798
+## 29:  0.6121235
+## 30: -0.1623110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The double-period option</span>
+our_dt[, ..my_col]</code></pre></div>
+<pre><code>##              b
+##  1:  0.5855288
+##  2:  0.7094660
+##  3: -0.1093033
+##  4: -0.4534972
+##  5:  0.6058875
+## ---           
+## 26:  1.8050975
+## 27: -0.4816474
+## 28:  0.6203798
+## 29:  0.6121235
+## 30: -0.1623110</code></pre>
+</div>
+<div id="accessing-multiple-columns" class="section level3">
+<h3>Accessing multiple columns</h3>
+<p>The <code>[i,j,by]</code> syntax still applies for grabbing multiple columns, as does the <code>with = F</code> option. The big change here is that you do not want to use the <code>c()</code> function in conjunction with unquoted column names. Instead, use <code>list()</code> or simply <code>.()</code>. Let’s grab the first two columns—<code>a</code> and <code>b</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Using &#39;list&#39;</span>
+our_dt[, <span class="kw">list</span>(a, b)]</code></pre></div>
+<pre><code>##       a          b
+##  1: 101  0.5855288
+##  2: 102  0.7094660
+##  3: 103 -0.1093033
+##  4: 104 -0.4534972
+##  5: 105  0.6058875
+## ---               
+## 26: 126  1.8050975
+## 27: 127 -0.4816474
+## 28: 128  0.6203798
+## 29: 129  0.6121235
+## 30: 130 -0.1623110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Using the period</span>
+our_dt[, .(a, b)]</code></pre></div>
+<pre><code>##       a          b
+##  1: 101  0.5855288
+##  2: 102  0.7094660
+##  3: 103 -0.1093033
+##  4: 104 -0.4534972
+##  5: 105  0.6058875
+## ---               
+## 26: 126  1.8050975
+## 27: 127 -0.4816474
+## 28: 128  0.6203798
+## 29: 129  0.6121235
+## 30: 130 -0.1623110</code></pre>
+<p>What about column numbers?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># List with numbers? No.</span>
+our_dt[, <span class="kw">list</span>(<span class="dv">1</span>, <span class="dv">2</span>)]</code></pre></div>
+<pre><code>##    V1 V2
+## 1:  1  2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># c() with numbers and &#39;with = F&#39;? Yes.</span>
+our_dt[, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), with =<span class="st"> </span>F]</code></pre></div>
+<pre><code>##       a          b
+##  1: 101  0.5855288
+##  2: 102  0.7094660
+##  3: 103 -0.1093033
+##  4: 104 -0.4534972
+##  5: 105  0.6058875
+## ---               
+## 26: 126  1.8050975
+## 27: 127 -0.4816474
+## 28: 128  0.6203798
+## 29: 129  0.6121235
+## 30: 130 -0.1623110</code></pre>
+<p>Again, if you want reference columns via another object, you need to use <code>with = F</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define the object</span>
+my_cols &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)
+<span class="co"># Access the columns using the object</span>
+our_dt[, my_cols, with =<span class="st"> </span>F]</code></pre></div>
+<pre><code>##       a          b
+##  1: 101  0.5855288
+##  2: 102  0.7094660
+##  3: 103 -0.1093033
+##  4: 104 -0.4534972
+##  5: 105  0.6058875
+## ---               
+## 26: 126  1.8050975
+## 27: 127 -0.4816474
+## 28: 128  0.6203798
+## 29: 129  0.6121235
+## 30: 130 -0.1623110</code></pre>
+</div>
+</div>
+<div id="indexing-rows" class="section level2">
+<h2>Indexing rows</h2>
+<p>If you want to simply grab rows by their number, you can do so just as you would with an ordinary data frame:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Grab some rows</span>
+our_dt[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">10</span>), ]</code></pre></div>
+<pre><code>##      a          b         c d
+## 1: 101  0.5855288 0.7915678 1
+## 2: 105  0.6058875 0.9797782 5
+## 3: 107  0.6300986 0.9487072 2
+## 4: 110 -0.9193220 0.9464308 5</code></pre>
+<p>You can begin to see the power of <code>data.table</code> and its notation when you want to select rows using some criteria, as you would do with <code>filter()</code> in <code>dplyr</code>. Let’s grab values of <code>b</code> below 0 and values of <code>c</code> above 0.5.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Grab b &lt; 0 and c &gt; 0.5</span>
+our_dt[(b &lt;<span class="st"> </span><span class="dv">0</span>) &amp;<span class="st"> </span>(c &gt;<span class="st"> </span><span class="fl">0.5</span>),]</code></pre></div>
+<pre><code>##      a          b         c d
+## 1: 103 -0.1093033 0.9859838 3
+## 2: 104 -0.4534972 0.7568737 4
+## 3: 109 -0.2841597 0.6003570 4
+## 4: 110 -0.9193220 0.9464308 5
+## 5: 111 -0.1162478 0.6883534 1
+## 6: 117 -0.8863575 0.9614473 2
+## 7: 118 -0.3315776 0.6549605 3
+## 8: 127 -0.4816474 0.8256569 2</code></pre>
+<p>The parentheses here are not necessary—I just like them for ease of reading the code.</p>
+<p>The <code>data.table</code> package also provides a handy function <code>between()</code> that helps you filter values between a min and a max. Rather than grabbing values of <code>b</code> less than 0, let’s restrict our rows to values of <code>b</code> between -0.25 and 0.25. Finally, in addition to the rows we reference, let’s grab only columns <code>a</code> and <code>c</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Grab b in [-0.25,0.25] and c &gt; 0.5</span>
+our_dt[<span class="kw">between</span>(b, -<span class="fl">0.25</span>, <span class="fl">0.25</span>) &amp;<span class="st"> </span>(c &gt;<span class="st"> </span><span class="fl">0.5</span>), .(a, c)]</code></pre></div>
+<pre><code>##      a         c
+## 1: 103 0.9859838
+## 2: 111 0.6883534</code></pre>
+<p>To sample rows from your data table, you can apply R’s <code>base</code> functions <code>sample()</code> and <code>sample.int()</code>. Sub-sampling<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> is a very useful tool when you are writing code to clean/analyze a huge dataset. Start on small subset of your data to write and test your code, then move up to the big leagues.</p>
+<p>To sample 10 rows from our (already small) data table:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Sample</span>
+our_dt[<span class="kw">sample</span>(<span class="dv">10</span>),]</code></pre></div>
+<pre><code>##       a          b         c d
+##  1: 108 -0.2761841 0.1494579 3
+##  2: 110 -0.9193220 0.9464308 5
+##  3: 107  0.6300986 0.9487072 2
+##  4: 109 -0.2841597 0.6003570 4
+##  5: 103 -0.1093033 0.9859838 3
+##  6: 101  0.5855288 0.7915678 1
+##  7: 102  0.7094660 0.2586843 2
+##  8: 104 -0.4534972 0.7568737 4
+##  9: 106 -1.8179560 0.2189478 1
+## 10: 105  0.6058875 0.9797782 5</code></pre>
+</div>
+<div id="addingmanipulating-columns" class="section level2">
+<h2>Adding/manipulating columns</h2>
+<p>You have two options for adding and manipulating columns in a data table.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> The first is the rather strange syntax <code>:=</code>; the second is the function <code>set()</code>.</p>
+<p>Let’s start with <code>:=</code> route for creating and manipulating variables. Recall the <code>i,j</code> notation we discussed above. As <code>j</code> denotes columns, we will create and manipulate columns in the <code>j</code> place of our data table. Perhaps more clearly, if we want to create a column of ones called <code>ones</code> in our data table, we write:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define a column of ones</span>
+our_dt[, ones :<span class="er">=</span><span class="st"> </span><span class="dv">1</span>]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check our data frame</span>
+our_dt</code></pre></div>
+<pre><code>##       a          b          c d ones
+##  1: 101  0.5855288 0.79156780 1    1
+##  2: 102  0.7094660 0.25868432 2    1
+##  3: 103 -0.1093033 0.98598383 3    1
+##  4: 104 -0.4534972 0.75687374 4    1
+##  5: 105  0.6058875 0.97977825 5    1
+## ---                                 
+## 26: 126  1.8050975 0.30503175 1    1
+## 27: 127 -0.4816474 0.82565686 2    1
+## 28: 128  0.6203798 0.50234464 3    1
+## 29: 129  0.6121235 0.80357263 4    1
+## 30: 130 -0.1623110 0.06063998 5    1</code></pre>
+<p>Notice that there is no re-defining of the data table using <code>&lt;-</code> or <code>%&lt;&gt;%</code>. We simple define a new column, and then the column exists. This change is part of <code>data.table</code>’s efficiency.</p>
+<p>Similarly, if we want create a column named <code>abc</code> that is the product of the columns <code>a</code>, <code>b</code>, and <code>c</code>, then we write</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define abc</span>
+our_dt[, abc :<span class="er">=</span><span class="st"> </span>a *<span class="st"> </span>b *<span class="st"> </span>c]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check our data frame</span>
+our_dt</code></pre></div>
+<pre><code>##       a          b          c d ones       abc
+##  1: 101  0.5855288 0.79156780 1    1  46.81206
+##  2: 102  0.7094660 0.25868432 2    1  18.71983
+##  3: 103 -0.1093033 0.98598383 3    1 -11.10044
+##  4: 104 -0.4534972 0.75687374 4    1 -35.69697
+##  5: 105  0.6058875 0.97977825 5    1  62.33171
+## ---                                           
+## 26: 126  1.8050975 0.30503175 1    1  69.37712
+## 27: 127 -0.4816474 0.82565686 2    1 -50.50478
+## 28: 128  0.6203798 0.50234464 3    1  39.89049
+## 29: 129  0.6121235 0.80357263 4    1  63.45325
+## 30: 130 -0.1623110 0.06063998 5    1  -1.27953</code></pre>
+<p>You can manipulate a column in the same way that you define a column, <em>e.g.</em>,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Re-define the column</span>
+our_dt[, ones :<span class="er">=</span><span class="st"> </span><span class="dv">111</span>]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check our data frame</span>
+our_dt</code></pre></div>
+<pre><code>##       a          b          c d ones       abc
+##  1: 101  0.5855288 0.79156780 1  111  46.81206
+##  2: 102  0.7094660 0.25868432 2  111  18.71983
+##  3: 103 -0.1093033 0.98598383 3  111 -11.10044
+##  4: 104 -0.4534972 0.75687374 4  111 -35.69697
+##  5: 105  0.6058875 0.97977825 5  111  62.33171
+## ---                                           
+## 26: 126  1.8050975 0.30503175 1  111  69.37712
+## 27: 127 -0.4816474 0.82565686 2  111 -50.50478
+## 28: 128  0.6203798 0.50234464 3  111  39.89049
+## 29: 129  0.6121235 0.80357263 4  111  63.45325
+## 30: 130 -0.1623110 0.06063998 5  111  -1.27953</code></pre>
+<p>To delete a column, you redefine the column as <code>NULL</code>. Let’s delete the column <code>ones</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Delete &#39;ones&#39;</span>
+our_dt[, ones :<span class="er">=</span><span class="st"> </span><span class="ot">NULL</span>]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt</code></pre></div>
+<pre><code>##       a          b          c d       abc
+##  1: 101  0.5855288 0.79156780 1  46.81206
+##  2: 102  0.7094660 0.25868432 2  18.71983
+##  3: 103 -0.1093033 0.98598383 3 -11.10044
+##  4: 104 -0.4534972 0.75687374 4 -35.69697
+##  5: 105  0.6058875 0.97977825 5  62.33171
+## ---                                      
+## 26: 126  1.8050975 0.30503175 1  69.37712
+## 27: 127 -0.4816474 0.82565686 2 -50.50478
+## 28: 128  0.6203798 0.50234464 3  39.89049
+## 29: 129  0.6121235 0.80357263 4  63.45325
+## 30: 130 -0.1623110 0.06063998 5  -1.27953</code></pre>
+<p>If you want to define/manipulate multiple columns, you add parentheses to <code>:=</code> and separate the new columns with commas. Let’s delete <code>abc</code> and at the same time add the two-way products <code>ab</code> and <code>ac</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(
+  <span class="dt">abc =</span> <span class="ot">NULL</span>,
+  <span class="dt">ab =</span> a *<span class="st"> </span>b,
+  <span class="dt">ac =</span> a *c
+  )]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt</code></pre></div>
+<pre><code>##       a          b          c d        ab         ac
+##  1: 101  0.5855288 0.79156780 1  59.13841  79.948348
+##  2: 102  0.7094660 0.25868432 2  72.36553  26.385800
+##  3: 103 -0.1093033 0.98598383 3 -11.25824 101.556335
+##  4: 104 -0.4534972 0.75687374 4 -47.16371  78.714869
+##  5: 105  0.6058875 0.97977825 5  63.61818 102.876716
+## ---                                                 
+## 26: 126  1.8050975 0.30503175 1 227.44229  38.434001
+## 27: 127 -0.4816474 0.82565686 2 -61.16922 104.858422
+## 28: 128  0.6203798 0.50234464 3  79.40861  64.300114
+## 29: 129  0.6121235 0.80357263 4  78.96393 103.660869
+## 30: 130 -0.1623110 0.06063998 5 -21.10043   7.883198</code></pre>
+<p>As I mentioned above, you can also define and manipulate columns using the <code>data.table</code> function <code>set()</code>. <code>set()</code> also uses the <code>i,j</code> syntax. <code>set()</code> takes the following arguments:</p>
+<ul>
+<li><code>x</code>: the name of data table</li>
+<li><code>i</code>: the row numbers which you want to receive the new values (omit for all rows)</li>
+<li><code>j</code>: the name (or number) of the column</li>
+<li><code>value</code>: the value to assign</li>
+</ul>
+<p>Let’s use <code>set()</code> to add back our column of ones… and then delete it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add column of ones using &#39;set&#39;</span>
+<span class="kw">set</span>(<span class="dt">x =</span> our_dt, <span class="dt">j =</span> <span class="st">&quot;ones&quot;</span>, <span class="dt">value =</span> <span class="dv">1</span>)
+<span class="co"># Delete column of ones using &#39;set&#39;</span>
+<span class="kw">set</span>(<span class="dt">x =</span> our_dt, <span class="dt">j =</span> <span class="st">&quot;ones&quot;</span>, <span class="dt">value =</span> <span class="ot">NULL</span>)</code></pre></div>
+<p><code>set()</code> is very helpful within a function, since it allows you to easily define the rows, column name (as a character), and values.</p>
+</div>
+<div id="setting-names" class="section level2">
+<h2>Setting names</h2>
+<p>Continuing in the spirit of <code>set()</code>, <code>data.table</code> also provides a function to set column names. Why? Because <code>names(our_dt) &lt;-</code>… is, again, an inefficient way to set the column names: it when you use <code>&lt;-</code>, you are copying the entire data frame to simply change a few names.</p>
+<p>Let’s imagine that we want to change all of our variable names to all capital letters. The function <code>toupper()</code> changes characters to uppercase, so we could write <code>names(our_dt) &lt;- toupper(names(our_dt))</code>, but we want to be efficient, so let’s use <code>setnames()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Change names to uppercase</span>
+<span class="kw">setnames</span>(our_dt, <span class="kw">toupper</span>(<span class="kw">names</span>(our_dt)))</code></pre></div>
+<p>What if we only want to change a single name? <code>setnames()</code> still works! It accepts the arguments <code>old</code> and <code>new</code>, so we can single out the <code>old</code> variable name and replace it with a <code>new</code> name. Let’s change <code>&quot;AB&quot;</code> to <code>&quot;ab&quot;</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Change &#39;AB&#39; to &#39;ab&#39;</span>
+<span class="kw">setnames</span>(our_dt, <span class="dt">old =</span> <span class="st">&quot;AB&quot;</span>, <span class="dt">new =</span> <span class="st">&quot;ab&quot;</span>)
+<span class="co"># Check our data table</span>
+our_dt</code></pre></div>
+<pre><code>##       A          B          C D        ab         AC
+##  1: 101  0.5855288 0.79156780 1  59.13841  79.948348
+##  2: 102  0.7094660 0.25868432 2  72.36553  26.385800
+##  3: 103 -0.1093033 0.98598383 3 -11.25824 101.556335
+##  4: 104 -0.4534972 0.75687374 4 -47.16371  78.714869
+##  5: 105  0.6058875 0.97977825 5  63.61818 102.876716
+## ---                                                 
+## 26: 126  1.8050975 0.30503175 1 227.44229  38.434001
+## 27: 127 -0.4816474 0.82565686 2 -61.16922 104.858422
+## 28: 128  0.6203798 0.50234464 3  79.40861  64.300114
+## 29: 129  0.6121235 0.80357263 4  78.96393 103.660869
+## 30: 130 -0.1623110 0.06063998 5 -21.10043   7.883198</code></pre>
+<p>Finally, let’s change the names back to lowercase, using <code>tolower()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Change names back to lowercase</span>
+<span class="kw">setnames</span>(our_dt, <span class="kw">tolower</span>(<span class="kw">names</span>(our_dt)))</code></pre></div>
+</div>
+<div id="summarizing-columns" class="section level2">
+<h2>Summarizing columns</h2>
+<p><code>data.table</code>’s <code>i,j,by</code> syntax also allows you to quickly summarize variables. For instance, if you want to take the means of <code>a</code> and <code>b</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Mean of &#39;a&#39; and &#39;b&#39;</span>
+our_dt[, .(<span class="kw">mean</span>(a), <span class="kw">mean</span>(b))]</code></pre></div>
+<pre><code>##       V1         V2
+## 1: 115.5 0.07880701</code></pre>
+<p>However, <code>V1</code> and <code>V2</code> are not the more informative names. With a few more keystrokes, we can add names:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Mean of &#39;a&#39; and &#39;b&#39;, named</span>
+our_dt[, .(<span class="dt">mean_a =</span> <span class="kw">mean</span>(a), <span class="dt">mean_b =</span> <span class="kw">mean</span>(b))]</code></pre></div>
+<pre><code>##    mean_a     mean_b
+## 1:  115.5 0.07880701</code></pre>
+<p>Nice, right?</p>
+<p>What if we want to take the means of <code>a</code> and <code>b</code>, grouped by the variable <code>d</code> (which takes on the values 1, 2, 3, 4, and 5)? Enter the <code>by</code> part of <code>i,j,by</code>!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Mean of &#39;a&#39; and &#39;b&#39; grouped by &#39;d&#39;</span>
+our_dt[, .(<span class="dt">mean_a =</span> <span class="kw">mean</span>(a), <span class="dt">mean_b =</span> <span class="kw">mean</span>(b)), by =<span class="st"> </span>d]</code></pre></div>
+<pre><code>##    d mean_a       mean_b
+## 1: 1  113.5  0.342157388
+## 2: 2  114.5  0.540776135
+## 3: 3  115.5 -0.061730962
+## 4: 4  116.5 -0.006290287
+## 5: 5  117.5 -0.420877223</code></pre>
+<p>Hopefully you are starting to get on board with this <code>data.table</code> thing.</p>
+<p><code>data.table</code> has a few special commands that are only accessible inside of the square brackets of a data table. One of them is <code>.N</code>, which gives the number of observations for the given data table/group. For instance, we can access the final observation of a data table using</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Last observation</span>
+our_dt[.N,]</code></pre></div>
+<pre><code>##      a         b          c d        ab       ac
+## 1: 130 -0.162311 0.06063998 5 -21.10043 7.883198</code></pre>
+<p>We can also use <code>.N</code> as a summary statistic to count the number of observations within each group:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_dt[, .N, by =<span class="st"> </span>d]</code></pre></div>
+<pre><code>##    d N
+## 1: 1 6
+## 2: 2 6
+## 3: 3 6
+## 4: 4 6
+## 5: 5 6</code></pre>
+<p>You can also add summaries back into the data table, using the same notation we used above. For instance, if we wan to add the mean of <code>a</code>, using <code>d</code> to group, we simply type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add means of &#39;a&#39;, grouped by &#39;d&#39;</span>
+our_dt[, mean_a_by_d :<span class="er">=</span><span class="st"> </span><span class="kw">mean</span>(a), by =<span class="st"> </span>d]</code></pre></div>
+<p>Finally, <code>data.table</code> as a useful function named <code>uniqueN()</code>, which is pretty much the combination of <code>unique()</code> and <code>length()</code>—it tells you the number of unique observations for whatever object you feed it.</p>
+<p>How many unique values of <code>d</code> do we have?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Count the unique values of &#39;d&#39;</span>
+our_dt[,d] %&gt;%<span class="st"> </span><span class="kw">uniqueN</span>()</code></pre></div>
+<pre><code>## [1] 5</code></pre>
+</div>
+<div id="ordering" class="section level2">
+<h2>Ordering</h2>
+<p>Last—also in the spirit of <code>set()</code> and <code>setnames()</code>—you can set the order of rows using <code>setorder()</code> and the order of columns using <code>setcolorder()</code>.</p>
+<p>Let’s order the rows of <code>our_dt</code> (<em>arrange</em>, in the <code>dplyr</code> world) by <code>d</code> and then by the reverse order (largest to smallest) of <code>a</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Order by &#39;d&#39; and then reversed &#39;a&#39;</span>
+<span class="kw">setorder</span>(our_dt, d, -a)
+<span class="co"># Check work</span>
+our_dt</code></pre></div>
+<pre><code>##       a          b          c d         ab         ac mean_a_by_d
+##  1: 126  1.8050975 0.30503175 1  227.44229  38.434001       113.5
+##  2: 121  0.7796219 0.87044788 1   94.33425 105.324194       113.5
+##  3: 116  0.8168998 0.61894754 1   94.76038  71.797915       113.5
+##  4: 111 -0.1162478 0.68835336 1  -12.90351  76.407223       113.5
+##  5: 106 -1.8179560 0.21894784 1 -192.70333  23.208471       113.5
+## ---                                                              
+## 26: 125 -1.5977095 0.14451190 5 -199.71369  18.063988       117.5
+## 27: 120  0.2987237 0.15009821 5   35.84684  18.011785       117.5
+## 28: 115 -0.7505320 0.04825135 5  -86.31118   5.548906       117.5
+## 29: 110 -0.9193220 0.94643075 5 -101.12542 104.107383       117.5
+## 30: 105  0.6058875 0.97977825 5   63.61818 102.876716       117.5</code></pre>
+<p>Again, there is no <code>&lt;-</code> re-definition—the function does all of the work.</p>
+<p>For ordering columns, you give <code>setcolorder()</code> the name of the data table and a character vector (or vector of integers for indexes) of the column names in your desired order. Let’s re-arrange our columns arbitrarily.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Change column order</span>
+<span class="kw">setcolorder</span>(our_dt,
+  <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;ab&quot;</span>, <span class="st">&quot;ac&quot;</span>, <span class="st">&quot;mean_a_by_d&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>))
+<span class="co"># Check work</span>
+our_dt</code></pre></div>
+<pre><code>##       a         ab         ac mean_a_by_d          b          c d
+##  1: 126  227.44229  38.434001       113.5  1.8050975 0.30503175 1
+##  2: 121   94.33425 105.324194       113.5  0.7796219 0.87044788 1
+##  3: 116   94.76038  71.797915       113.5  0.8168998 0.61894754 1
+##  4: 111  -12.90351  76.407223       113.5 -0.1162478 0.68835336 1
+##  5: 106 -192.70333  23.208471       113.5 -1.8179560 0.21894784 1
+## ---                                                              
+## 26: 125 -199.71369  18.063988       117.5 -1.5977095 0.14451190 5
+## 27: 120   35.84684  18.011785       117.5  0.2987237 0.15009821 5
+## 28: 115  -86.31118   5.548906       117.5 -0.7505320 0.04825135 5
+## 29: 110 -101.12542 104.107383       117.5 -0.9193220 0.94643075 5
+## 30: 105   63.61818 102.876716       117.5  0.6058875 0.97977825 5</code></pre>
+<p>Note that if you forget names, the function does not work.</p>
+</div>
+<div id="more" class="section level2">
+<h2>More?</h2>
+<p>We’re only scratching the surface of the <code>data.table</code> package. The package also includes really efficient joins/merges (see <code>?data.table::merge</code>). The <code>merge()</code> function has some cool properties—left joins, right joins, cartesian products, <em>etc.</em>—and you are also able to run rolling joins (using a different notation), which are awesome. Want more? You can add <code>leads</code> and <code>lags</code> easily with <code>shift()</code>, and the package includes <code>fread()</code> function for <em>fast reading</em> (though I think <code>readr</code> is a bit more stable and at least as fast, in general). And there are still more features.</p>
+<p><code>data.table</code> provides a number of great resources for learning:</p>
+<ul>
+<li><a href="https://www.datacamp.com/courses/data-table-data-manipulation-r-tutorial">DataCamp</a></li>
+<li><a href="https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">Introduction vignette</a></li>
+<li><a href="https://cran.r-project.org/web/packages/data.table/vignettes/datatable-faq.html">Frequently asked questions regarding <code>data.table</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/data.table/index.html">More vignettes</a></li>
+</ul>
+<p>I’m also happy to chat if you have questions, and I like coffee.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+</div>
+</div>
+<div id="other-nice-tools-for-r" class="section level1">
+<h1>Other nice tools for R</h1>
+<p>Here are a few more nice tools for R/research.</p>
+<ul>
+<li>New <a href="http://ggplot2.tidyverse.org/reference/">documentation website</a> for <code>ggplot2</code>!</li>
+<li>A <a href="https://www.rdocumentation.org">nicer way</a> to read/search R’s documentation files.</li>
+<li>For <a href="http://www.gadm.org/download">administrative boundary shapefiles</a>—includes <code>.rds</code> format for reading straight into R!</li>
+</ul>
+</div>
+<div id="fun-tools-selectorgadget-and-rvest" class="section level1">
+<h1>Fun tools: SelectorGadget and <code>rvest</code></h1>
+<p><a href="https://github.com/hadley/rvest"><code>rvest</code></a> provides a simple and powerful package for webscraping in R. <a href="http://selectorgadget.com">SelectorGadget</a> provides an even more simple—and yet tremendously helpful—browser extension for finding CSS and xpath selectors. They make a great team.</p>
+<p><img src="Images/selectorGadget.gif" /> SelectorGadget in action: selecting the table of cast members for The Lego Movie from IMDB.</p>
+<p><strong>Bonus feature</strong>: <a href="https://vivaldi.com">Vivalid</a> is a vastly customizable browser providing tab management and a host of other features not common to many other browsers.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><code>tbl_df</code>s have a similar feature. Plus, R will not actually let you print a billion rows to screen, but it will allow you to print 50,000, which is still a lot.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>I’m going to write it “data table” rather than “data.table”, since written English is a bit different than scripting/programming languages.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Sampling? “Sub-sampling” seems redundant.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>You could also stick with <code>$</code>, but, again, it is inefficient. If you are switching to <code>data.table</code> for its efficiency/speed, it probably makes sense to avoid inefficient uses.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Wink, wink.<a href="#fnref5">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

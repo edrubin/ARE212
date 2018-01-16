@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 6: Figures with ggplot2</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="../section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="../section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="../latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="../syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="../resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="../contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 6: Figures with <code>ggplot2</code></h1>
+
+</div>
+
+
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p><strong>Packages</strong>:</p>
+<ul>
+<li>Previously used: <code>dplyr</code>, <code>lfe</code>, <code>readr</code>, <code>magrittr</code> and <code>parallel</code></li>
+<li>New: <code>ggplot2</code>, <code>ggthemes</code>, <code>viridis</code></li>
+</ul>
+<p><strong>Data</strong>: The <code>auto.csv</code> <a href="Section06/auto.csv">file</a>.</p>
+</div>
+<div id="last-week" class="section level2">
+<h2>Last week</h2>
+<p>Last week we discussed statistical inference—specifically using <span class="math inline">\(t\)</span> and <span class="math inline">\(F\)</span> statistics to conduct hypothesis tests. We also talked about simulations and parallelizing your R code.</p>
+</div>
+<div id="this-week" class="section level2">
+<h2>This week</h2>
+<p>We will discuss how to utilize R’s powerful figure-making package <code>ggplot2</code>.</p>
+</div>
+</div>
+<div id="quality-figures" class="section level1">
+<h1>Quality figures</h1>
+<p>Economics journals are not always filled with the most aesthetically pleasing figures.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> To make matters worse, the same journals often feature fairly unhelpful images with equally uninformative captions. One might rationalize this behavior by saying that producing informative and aesthetically pleasing figures requires a lot of time and effort—and is just really hard.</p>
+<p>In this section—and in future sections—I hope to demonstrate that while producing informative and pleasing figures probably takes more time that producing uninformative and ugly figures, it does not take <em>that much</em> time and effort, once you learn the basics of <code>ggplot2</code>. There is the cost-side argument; now for the benefit-side argument….</p>
+<p>Figures <em>can</em> be very powerful. We have all seen bad figures that shed approximately zero light on their topic. Well-made figures can quickly and clearly communicate ideas that would take several paragraphs to describe. In general, most applied (empirical) economics papers should be able to describe the main results in a single graph.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Audiences generally love figures. And hopefully your papers and presentations are attempting to communicate to an audience.[Again, if this is not the case, as yourself why not. And try to fix it.]</p>
+<p>Finally, you might actually want to look at your data once in a while. Regression is a helpful tool, but don’t forget that there are other tools for analyzing your data. Here is a pretty famous example known as Anscombe’s Quartet.</p>
+<p>The setup:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Setup ----</span>
+<span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="co"># Packages</span>
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(ggthemes)</code></pre></div>
+<p>The plot (don’t worry about the syntax for now):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Reformat Anscombe&#39;s dataset</span>
+a_df &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(
+  dplyr<span class="op">::</span><span class="kw">select</span>(anscombe, <span class="dt">x =</span> x1, <span class="dt">y =</span> y1),
+  dplyr<span class="op">::</span><span class="kw">select</span>(anscombe, <span class="dt">x =</span> x2, <span class="dt">y =</span> y2),
+  dplyr<span class="op">::</span><span class="kw">select</span>(anscombe, <span class="dt">x =</span> x3, <span class="dt">y =</span> y3),
+  dplyr<span class="op">::</span><span class="kw">select</span>(anscombe, <span class="dt">x =</span> x4, <span class="dt">y =</span> y4))
+<span class="co"># Add group identifier</span>
+a_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">group =</span> <span class="kw">rep</span>(<span class="kw">paste0</span>(<span class="st">&quot;Dataset &quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">each =</span> <span class="dv">11</span>))
+<span class="co"># The plot</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> a_df, <span class="kw">aes</span>(x, y)) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Plot the points</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="co"># Add the regression line (without S.E. shading)</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x, <span class="dt">se =</span> F) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Change the theme</span>
+<span class="st">  </span><span class="kw">theme_pander</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">fill=</span><span class="ot">NA</span>, <span class="dt">size=</span><span class="dv">1</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Plot by group</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>group, <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">ncol =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Illustrating Anscombe&#39;s Quartet&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;Four very different datasets with the same regression line&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>So quality figures can take a little time and effort, but it is likely a use of your time and effort with particularly high yields. And you might learn something.</p>
+</div>
+<div id="ggplot2" class="section level1">
+<h1><code>ggplot2</code></h1>
+<p>Having sold you on the creating high-quality figures, let’s talk about R’s <code>ggplot2</code> package—many people’s go-to figure-making package in R.</p>
+<div id="why-ggplot2" class="section level2">
+<h2>Why <code>ggplot2</code>?</h2>
+<p>First, why aren’t we using R’s base plotting functions? While R’s base package for making graphs is comprehensive and fairly powerful, it has a few drawbacks:</p>
+<ul>
+<li>It is often a bit difficult to manipulate</li>
+<li>Parameters are not named in a helpful way (<em>e.g.</em> to change the line type, you need to remember its abbreviation, <code>lty</code>)</li>
+<li>Coloring or filling by group is not very straightforward</li>
+<li>Limited in scope, relative to <code>ggplot2</code> and the packages that support <code>ggplot2</code></li>
+<li>Saving is a bit strange</li>
+</ul>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>So, what is <code>ggplot2</code>?</p>
+<p><strong>Short answer</strong>: <code>ggplot2</code> it a package for creating plots in R.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p><strong>Longer answer</strong>: (copied from the <a href="http://ggplot2.org/"><code>ggplot2</code></a> home page) “ggplot2 is a plotting system for R, based on the grammar of graphics, which tries to take the good parts of base and lattice graphics and none of the bad parts. It takes care of many of the fiddly details that make plotting a hassle (like drawing legends) as well as providing a powerful model of graphics that makes it easy to produce complex multi-layered graphics.”</p>
+<p><strong>More information</strong>: <code>ggplot2</code> is yet another package created by Hadley Wickham—yes <em>the</em> <a href="http://hadley.nz/index.html">Hadley Wickham</a>.</p>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>Let’s load the packages and functions that we will want during this section.</p>
+<p>My setup…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Setup ----</span>
+<span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="co"># Packages</span>
+<span class="kw">library</span>(readr)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(ggthemes)
+<span class="kw">library</span>(viridis)
+<span class="co"># Set working directory</span>
+<span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section06&quot;</span>)
+<span class="co"># Load data</span>
+cars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;auto.csv&quot;</span>)</code></pre></div>
+<p>Our functions…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Functions ----</span>
+<span class="co"># Function to convert tibble, data.frame, or tbl_df to matrix</span>
+to_matrix &lt;-<span class="st"> </span><span class="cf">function</span>(the_df, vars) {
+  <span class="co"># Create a matrix from variables in var</span>
+  new_mat &lt;-<span class="st"> </span>the_df <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="co"># Select the columns given in &#39;vars&#39;</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="co"># Convert to matrix</span>
+<span class="st">    </span><span class="kw">as.matrix</span>()
+  <span class="co"># Return &#39;new_mat&#39;</span>
+  <span class="kw">return</span>(new_mat)
+}
+<span class="co"># Function for OLS coefficient estimates</span>
+b_ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, <span class="dt">intercept =</span> <span class="ot">TRUE</span>) {
+  <span class="co"># Require the &#39;dplyr&#39; package</span>
+  <span class="kw">require</span>(dplyr)
+  <span class="co"># Create the y matrix</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> y_var)
+  <span class="co"># Create the X matrix</span>
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> X_vars)
+  <span class="co"># If &#39;intercept&#39; is TRUE, then add a column of ones</span>
+  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) {
+    <span class="co"># Bind a column of ones to X</span>
+    X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+    <span class="co"># Name the new column &quot;intercept&quot;</span>
+    <span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;intercept&quot;</span>, X_vars)
+  }
+  <span class="co"># Calculate beta hat</span>
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>y
+  <span class="co"># Return beta_hat</span>
+  <span class="kw">return</span>(beta_hat)
+}
+<span class="co"># Function for OLS table</span>
+ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+  <span class="co"># Turn data into matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+  <span class="co"># Add intercept if requested</span>
+  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Calculate n and k for degrees of freedom</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># Estimate coefficients</span>
+  b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(data, y_var, X_vars, intercept)
+  <span class="co"># Calculate OLS residuals</span>
+  e &lt;-<span class="st"> </span>y <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>b
+  <span class="co"># Calculate s^2</span>
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) <span class="op">%*%</span><span class="st"> </span>e) <span class="op">/</span><span class="st"> </span>(n<span class="op">-</span>k)
+  <span class="co"># Inverse of X&#39;X</span>
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X)
+  <span class="co"># Standard error</span>
+  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 <span class="op">*</span><span class="st"> </span><span class="kw">diag</span>(XX_inv))
+  <span class="co"># Vector of _t_ statistics</span>
+  t_stats &lt;-<span class="st"> </span>(b <span class="op">-</span><span class="st"> </span><span class="dv">0</span>) <span class="op">/</span><span class="st"> </span>se
+  <span class="co"># Calculate the p-values</span>
+  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n<span class="op">-</span>k, <span class="dt">lower.tail =</span> F) <span class="op">*</span><span class="st"> </span><span class="dv">2</span>
+  <span class="co"># Nice table (data.frame) of results</span>
+  results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="co"># The rows have the coef. names</span>
+    <span class="dt">effect =</span> <span class="kw">rownames</span>(b),
+    <span class="co"># Estimated coefficients</span>
+    <span class="dt">coef =</span> <span class="kw">as.vector</span>(b) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>),
+    <span class="co"># Standard errors</span>
+    <span class="dt">std_error =</span> <span class="kw">as.vector</span>(se) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>),
+    <span class="co"># t statistics</span>
+    <span class="dt">t_stat =</span> <span class="kw">as.vector</span>(t_stats) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>),
+    <span class="co"># p-values</span>
+    <span class="dt">p_value =</span> <span class="kw">as.vector</span>(p_values) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">4</span>)
+    )
+  <span class="co"># Return the results</span>
+  <span class="kw">return</span>(results)
+}</code></pre></div>
+</div>
+<div id="basic-syntax" class="section level2">
+<h2>Basic syntax</h2>
+<p>Alright. Let’s talk about the syntax of <code>ggplot2</code>. As mentioned above, <code>ggplot2</code> is “based on the grammar of graphics.” What does that mean? It means that you will <em>build</em> plots like the English language <em>builds</em> sentences.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> In a sense, you will start with a subject—your data—and then apply different modifiers to it, creating layers in your plot and changing various plotting parameters.</p>
+<p>This syntax certainly deviates a bit from many other plotting methods out there, but once you see how it works, I think you will also see how clean and powerful it can be.</p>
+</div>
+<div id="ggplot" class="section level2">
+<h2><code>ggplot()</code></h2>
+<p>To start a plot, we use the function <code>ggplot()</code>. This function passes the data to the other layers of the plot. You can also use the <code>ggplot()</code> function to define which variable is your <code>x</code> variable (in terms of <code>x</code> and <code>y</code> axes), which variable is your <code>y</code> variable, and a number of other parameter tweaks.</p>
+<p>Let’s see what happens when we feed <code>ggplot()</code> our <code>cars</code> dataset and define <code>x</code> as weight and <code>y</code> as price.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>A blank plot. Well… not quite blank: we have labeled axes, corresponding to our definitions inside the <code>ggplot()</code> function. And we have a gray background—don’t worry, it is easy to change the background if you don’t like it.</p>
+<p>Also, notice that we defined the axes inside of a function called <code>aes()</code>, which is inside of the <code>ggplot()</code> function. We use the <code>aes()</code> function to “construct aesthetic mappings”—it tells <code>ggplot2</code> which variables we want to use from the dataset and how we want to use them. In the case above, we are telling <code>ggplot2</code> that we want to use two variables (weight and price) as the axes in the plot. You can also define aesthetic mapping using <code>aes()</code> it other layers.</p>
+</div>
+<div id="adding-geom-layers" class="section level2">
+<h2>Adding <code>geom</code> layers</h2>
+<p>So why is the graph above blank? It is blank because we have not added a plotting layer—we have only defined the dataset and defined the axes.</p>
+<p>Let’s add a layer. In <code>ggplot2</code>, we add layers with the addition sign (<code>+</code>). Many of the plotting layers begin with the suffix <code>geom_</code>. For instance, if we want to create a scatter plot, we will add the <code>geom_point()</code> function to our existing plot. Let’s try it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Hurray—we have something! And it is even a little interesting!</p>
+<p>Let’s read the R code, step-by-step, just as <code>ggplot2</code> reads it.</p>
+<ol style="list-style-type: decimal">
+<li>We create a new plot with the function <code>ggplot()</code>.</li>
+<li>We define our dataset to be the data stored in the <code>cars</code> object.</li>
+<li>Using the <code>aes()</code> function, we define our x-variable to be weight and our y-variable to be price.</li>
+<li>We add a layer that plots points for each observation in our dataset.</li>
+</ol>
+<p>What if we want to connect points with a line? We simply add a new layer using <code>geom_line()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>()</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>That was easy.</p>
+<p>Hopefully you are beginning to see how <code>ggplot2</code>’s syntax allows a lot of flexibility and customization. By definining the dataset with <code>ggplot()</code> and mapping the axes with <code>aes()</code> inside of <code>ggplot()</code>, the layers that create the points and lines know exactly what to do without any further specification.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>On thes other hand, this graph doesn’t really make any sense. It actually seems less informative than our previous graph. We don’t care about connecting dots.</p>
+</div>
+<div id="stat_function" class="section level2">
+<h2><code>stat_function()</code></h2>
+<p>While we don’t care about connecting dots, we <em>do</em> care about fitting a line through our points. Let’s find the line the best fits through these points using our old friend <code>ols()</code>. For now, we only care about the coefficients, so we will save them as <code>b</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regress price on weight (with an intercept)</span>
+b &lt;-<span class="st"> </span><span class="kw">ols</span>(<span class="dt">data =</span> cars, <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;weight&quot;</span>) <span class="op">%$%</span><span class="st"> </span>coef</code></pre></div>
+<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
+##   Use c() or as.vector() instead.</code></pre>
+<p>Now we will write a function that gives the predicted value of price for a given value of weight. This function will use the coefficients stored in <code>b</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">price_hat &lt;-<span class="st"> </span><span class="cf">function</span>(weight) b[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>b[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>weight</code></pre></div>
+<p>Next, we will replace the <code>geom_line()</code> layer in the plot above with a layer using the function <code>stat_function()</code>. The function <code>stat_function()</code> allows you to plot an arbitrary function. In our case, we have already defined the x-axis, so <code>ggplot2</code> will evaluate our function over the domain of the variable we defined as <code>x</code> (weight).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> price_hat)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>What if we want to change the color of the line to blue? Easy: inside of the layer that creates the line (<code>stat_function()</code>), we simply add the argument <code>color = &quot;blue&quot;</code>.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> price_hat, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>To make the line thicker, we can use <code>size</code>. <code>size</code> will also make the points bigger in <code>geom_point</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> price_hat, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="fl">1.5</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<div id="geom_smooth" class="section level2">
+<h2><code>geom_smooth()</code></h2>
+<p>Alternatively, we could add the best-fit regression line to a plot using the <code>geom_smooth()</code> geometry. We just need to make sure the define the method to be <code>lm</code> (linear model) or <code>geom_smooth()</code> will default to a different smoother. Again, because we have already defined the axes, we do not need to define a formula for the regression that <code>geom_smooth()</code> runs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>If we want to add a quadratic term to the best-fit line using <code>geom_smooth()</code>, we add a formula argument like we would use in <code>lm()</code> or <code>felm()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>As with many function in R—and especially in <code>ggplot2</code>—we can take advantage of additional options to tweak our graphs. For instance <code>geom_smooth()</code> automatically spits out 95-percent confidence interval. We can use the <code>level</code> argument to change the level of the confidence interval</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>),
+    <span class="dt">level =</span> <span class="fl">0.99</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Or we can remove the confidence interval by specifying <code>se = F</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>), <span class="dt">se =</span> F)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="more-aesthetics" class="section level2">
+<h2>More aesthetics</h2>
+<p>So far we’ve discussed two aesthetics: <code>x</code> and <code>y</code>, which define the two axes (if you only want to define one axis, just use <code>x</code>). There are a lot of other options for aesthetic mappings: color, size, shape, group, line type (<code>linetype</code>), <em>etc.</em></p>
+<p>In general, less is more when it comes to plotting: if your data only vary along two dimensions (<em>e.g.</em> price and weight), you probably only need to plot them using those two dimensions (as we did above with <code>geom_point()</code>). When you have a third dimension, you can use a third aesthetic/dimension to differentiate your two-dimensional plot. One option is to use color to distinguish this third dimension.</p>
+<div id="color" class="section level3">
+<h3>Color</h3>
+<p>As we discussed above, you can use <code>color</code> inside a layer to change the color of the layer. For instance, if we want to plot price and weight with purple points:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price, <span class="dt">group =</span> foreign)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;purple3&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>While the use of color above can make a plot marginally prettier, the real power of color in <code>ggplot2</code> is combining it with other dimensions of the data. For instance, we have a variable in our <code>cars</code> dataset (named <code>foreign</code>) that denotes whether a car is foreign or domestic. Currently the variable is an integer; let’s change it to logical (<code>T</code> if foreign).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cars <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">foreign =</span> foreign <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<p>Instead of telling R we want to change the color of the points to purple, let’s tell R to change the color of the point based upon the observation’s value of the variable <code>foreign</code>. Because we now want to map a variable to a graphical parameter (<code>color</code>), we need to imbed this call of <code>color = foreign</code> inside the <code>aes()</code> function, <em>i.e.</em>, <code>aes(color = foreign)</code>. We can place this mapping in the initial call to <code>ggplot()</code> or into a specific layer.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>Interesting. It looks like the relationship between weight and price might differ depending upon whether the car comes from a domestic or foreign company. Let’s add a quadratic regression line for each type of car.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>Nope—not quite what we want. We wanted separate lines for foreign and domestic cars, but we only got one line. What happened? Our mapping of <code>color</code> to the variable <code>foreign</code> is inside of a single layer (the layer created by <code>geom_point()</code>). If we want this mapping to apply to other layers, we should move the mapping to the original <code>ggplot()</code> instance:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price, <span class="dt">color =</span> foreign)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>Because the variable <code>foreign</code> is either <code>TRUE</code> or <code>FALSE</code>, <code>ggplot2</code> treats it as a factor/categorical variable. <code>ggplot2</code> treats both logical and character variables as categorical variables.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
+<p>When you map a continuous variable to <code>color</code>, instead of plotting discrete colors, <code>ggplot2</code> will give you a color scale. For example, let’s map the mileage variable <code>length</code> to color (instead of <code>foreign</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> length))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Interesting.</p>
+<p>Once again, <code>ggplot2</code>’s default color theme is not great, but we will soon cover how you can change the colors.</p>
+</div>
+<div id="size" class="section level3">
+<h3>Size</h3>
+<p>As we saw above, <code>size</code> can increase (or decrease) the plotting size of points and lines. As with <code>color</code>, you can use this aesthetic to tweak your plots, and you can also use it to depict another dimension of your data. To illustrate this idea, let’s again plot weight and price. Let’s return to mapping the foreign/domestic split to the color of the point. And now let’s map the mileage (<code>mpg</code>) of the car to the size of the point (<em>i.e.</em>, <code>size = mpg</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>We are now showing four dimensions of the data with a single plot on two axes. Pretty impressive.</p>
+</div>
+<div id="other-aesthetics" class="section level3">
+<h3>Other aesthetics</h3>
+<p>You have a bunch of other options aesthetics that work in similar ways—you can use them to adjust graphical parameters of your plot and/or to create additional dimensions of your figure:</p>
+<ul>
+<li>shape (<code>shape</code>): changes the shape of the points</li>
+<li>fill (<code>fill</code>): very similar to <code>color</code>; some geometries have color, others have fills, and still others have both colors and fills</li>
+<li>group (<code>group</code>): creates groups of objects for plotting—especially helpful for grouping series of lines</li>
+<li>line type (<code>linetype</code>): changes the type of line</li>
+<li>alpha (<code>alpha</code>): adjusts the opacity of the elements in your plot</li>
+</ul>
+<p>If you think that the points are beginning to overlap a little too much but you don’t want to change the size, you could try adjusting either <code>shape</code> or <code>alpha</code>.</p>
+<p>First, let’s change the shape to <code>shape = 1</code>. Because we adjusting <code>shape</code> and not mapping it to a specific variable, we need to place the <code>shape = 1</code> argument <strong>outside</strong> of the <code>aes()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">shape =</span> <span class="dv">1</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>Now let’s try using the default shape and instead set <code>alpha = 0.5</code>. This setting of <code>alpha</code> will make the plotted characters semi-transparent. Again, because we adjusting <code>alpha</code> and not mapping it to a specific variable, we need to place the <code>alpha = 0.5</code> argument <strong>outside</strong> of the <code>aes()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>I’m not sure which way is better for showing overlapping points, but I think both of these methods help show the overlapping points better than using default values.</p>
+</div>
+</div>
+<div id="labels" class="section level2">
+<h2>Labels</h2>
+<p>Clear and coherent labels and titles are an extremely important element of informative figures. To label the x- and y-axis, add the layers with the functions <code>xlab()</code> and <code>ylab()</code>. To add a title to your plot, add a layer with <code>ggtitle()</code>. <code>ggtitle()</code> also takes a second optional argument <code>subtitle</code>.</p>
+<p>Let’s label our plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+<div id="themes" class="section level2">
+<h2>Themes</h2>
+<p>If you want to change facets of your figure like the background, the size of the labels on the axis, or the position of the legend, you can add adjust elements inside <code>ggplot2</code>‘s theme. Or you can use a pre-built theme. <code>ggplot2</code> offers a few alternative themes (<em>e.g.</em>, <code>theme_bw()</code> or <code>theme_minimal()</code>). In addition, the package <code>ggthemes</code> (unsurprisingly) offers a number of ready-to-use themes (many are inspired by news websites’ themes—<em>e.g.</em>, <em>The Economist</em>, 538, and the WSJ).<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
+<p>One very simple theme from <code>ggthemes</code> is called <code>theme_pander()</code>. To use a theme (or any other theme), just add it to the end of your figure after you’ve created all of the layers:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_pander</span>()</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>If, for some reason, you want to make people think you used Stata to make this figure, you can use the <code>theme_stata()</code> theme.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_stata</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.ontop =</span> F)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>If you want even more freedom in changing the elements of your <code>ggplot2</code> theme, you can directly change them inside of <code>theme()</code>. Type <code>?theme</code> into your R console, and you will see all of the possible elements of <code>ggplot2</code>’s theme that you can edit. To change an element of the <code>ggplot2</code> theme, you need to define a new value for that element inside of <code>theme()</code> and add the <code>theme()</code> to the end of your plot. For example, to move your legend to the bottom of your figure, place <code>legend.position = &quot;bottom&quot;</code> inside of <code>theme()</code> and add it to your plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>You can remove the grey background of the figure using <code>panel.background = element_rect(fill = NA)</code> inside <code>theme()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+    <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>Pretty nice. But what if your advisor wants a box around the plot? We can use <code>panel.border</code> to add the border back into the theme. Let’s make it grey—specificaly <code>grey75</code>, which is a fairly light grey. Note that <code>ggplot2</code> accepts values of grey starting at <code>grey00</code> (a.k.a “black”) through <code>grey100</code> (a.k.a. “white”).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+    <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+    <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;grey75&quot;</span>))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>I like the lighter box, but now the ticks on the axes don’t match. We should probably change their color so they are a bit lighter than the border. For this task, we will edit the color in <code>axis.ticks</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+    <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+    <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;grey75&quot;</span>),
+    <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey85&quot;</span>))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p>We can also add a light grid to the background of the plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+    <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+    <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;grey75&quot;</span>),
+    <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey85&quot;</span>),
+    <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>),
+    <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>))</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p>Finally, I am going to remove the little grey boxes around the legend elements by setting <code>legend.key</code> to <code>element_blank()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+    <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+    <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;grey75&quot;</span>),
+    <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey85&quot;</span>),
+    <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>),
+    <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>),
+    <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p>Okay. I think the figure is looking better.</p>
+<p>If you figure out a set of settings for the <code>theme</code> that you really like, you can create your own <code>theme</code> object to apply to your figures, just like you would write a function to avoid typing the same thing repeatedly. Creating your own theme also ensures your figures will match each other.</p>
+<p>Let’s create our own theme based upon the values in the <code>theme()</code> above:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
+  <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+  <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+  <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;grey75&quot;</span>),
+  <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey85&quot;</span>),
+  <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>),
+  <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>),
+  <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p>That’s it! Now all we need to do is add <code>theme_ed</code> to the end of a figure.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+</div>
+<div id="more-control" class="section level2">
+<h2>More control</h2>
+<p>Our figure is looking pretty good right at this point, but there are a few things I do not love: (1) the colors and (2) the legend labels. To change elements in the legend (colors, titles, labels, <em>etc.</em>), you will typically add a layer to your plot using a function that begins with <code>scale_</code>. Examples of these <code>scale_</code> functions include—but are not limited to—<code>scale_color_gradientn()</code>, <code>scale_fill_manual()</code>, <code>scale_size_continuous()</code>.</p>
+<p>The general idea of these <code>scale_</code> functions is that the middle word is the mapped aesthetic (<code>size</code>, <code>color</code>, <code>shape</code>, <em>etc.</em>) and the last word determines how to create the scale (<em>e.g.</em>, is the scale discrete or continuous).</p>
+<p>To customize our discrete colorscale created by mapping the variable <code>foreign</code> to <code>color</code>, we will use <code>scale_color_manual()</code>. The <code>manual()</code> suffix is for discrete color scales; if we had mapped a continuous variable to <code>color</code>, we would use one of the <code>scale_</code> functions that end with <code>gradient</code>. The <code>scale_color_manual()</code> function needs three arguments:</p>
+<ol style="list-style-type: decimal">
+<li>the title of the scale for the legend</li>
+<li>a character vector of <code>values</code> that give the desired colors</li>
+<li>a character vector of <code>labels</code> that give the labels for the legend</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;grey70&quot;</span>, <span class="st">&quot;midnightblue&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>It is important to keep in mind that R defaults to alpha-numeric ordering. Our <code>foreign</code> variable takes on the values <code>TRUE</code> and <code>FALSE</code>, which means that R will place <code>FALSE</code> as the first item in the legend and <code>TRUE</code> as the second. So if we want to change the label associated with domestic cars, we need to consider how R has ordered the levels of <code>foreign</code> in the legend.</p>
+<p>If you are having problems deciding which colors to use, there are many pre-defined color themes (palettes) in R. One example in the base installation of R is <code>rainbow()</code>. If you give <code>rainbow()</code> an integer <span class="math inline">\(n\)</span>, it will return <span class="math inline">\(n\)</span> colors from the rainbow palette. There are also packages written exclusively for creating color palettes. One popular option is the package <code>RColorBrewer</code>. I’m a fan of the package <code>viridis</code> because it is color-blind friendly, honest, and pretty. To learn more about it, check out the <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">vignette on CRAN</a>. Let’s use the <code>viridis()</code> function (from the <code>viridis</code> package) to pick two colors for our figure.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> I am also going to increase the <code>alpha</code> value a bit to make the colors a little brighter.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.65</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">viridis</span>(<span class="dv">2</span>, <span class="dt">end =</span> <span class="fl">0.96</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_size_continuous</span>(<span class="st">&quot;Mileage&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p>Now, let’s change the title of the <code>mpg</code> variable in our legend. Because we’ve mapped <code>mpg</code> to <code>size</code>, and because <code>mpg</code> is a continuous variable, we will use the function <code>scale_size_continuous()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">size =</span> mpg), <span class="dt">alpha =</span> <span class="fl">0.65</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">viridis</span>(<span class="dv">2</span>, <span class="dt">end =</span> <span class="fl">0.96</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_size_continuous</span>(<span class="st">&quot;Mileage&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<p>Notice that order of the layers matters: because we changed <code>scale_size_continuous()</code> last, it now prints second in the legend (after <code>scale_color_manual()</code>).</p>
+<p>Finally, let’s add the quadratic regression lines without confidence intervals. I am going to move <code>color = foreign</code> from the <code>aes()</code> inside of <code>geom_point()</code> to the <code>aes()</code> inside <code>ggplot()</code> to force <code>ggplot2</code> to calculate the regression for domestic and foreign cars separately. We will also make the lines a bit thinner (<code>size = 0.5</code>) and dashed (<code>linetype = 2</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars,
+  <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> price, <span class="dt">color =</span> foreign)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.65</span>, <span class="kw">aes</span>(<span class="dt">size =</span> mpg)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>),
+    <span class="dt">se =</span> F, <span class="dt">size =</span> <span class="fl">0.5</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price (USD)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Trends in cars sold on the US market&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">viridis</span>(<span class="dv">2</span>, <span class="dt">end =</span> <span class="fl">0.96</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_size_continuous</span>(<span class="st">&quot;Mileage&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p>Alright. I think we’ve done enough with this one figure. Let’s talk about a few other geometries in the <code>ggplot2</code> library.</p>
+</div>
+<div id="histograms-and-density-plots" class="section level2">
+<h2>Histograms and density plots</h2>
+<p>Two common and related geometries are <code>geom_histogram()</code> and <code>geom_density()</code>. As you might guess, <code>geom_histogram()</code> creates histograms, and <code>geom_density()</code> creates smoothed density estimates. Let’s check out the histogram of weights from our <code>cars</code> data. The big differences here—compared to our figures above—are</p>
+<ol style="list-style-type: decimal">
+<li>We need to use <code>geom_histogram()</code> rather than <code>geom_point()</code></li>
+<li>We will only map the <code>x</code> to <code>weight</code> (no mapping for <code>y</code>).</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="section06_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p>Not terrible, but I think we have too many bins. Let’s tell <code>ggplot2</code> that we only want 15 bins. To change the number of bins, we can give <code>geom_histogram()</code> an optional argument of <code>bins</code>. Let’s also see what happens when we give <code>geom_histogram()</code> a color, <em>i.e.</em>, <code>color = &quot;seagreen3&quot;</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">15</span>, <span class="dt">color =</span> <span class="st">&quot;seagreen3&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<p>We now have 15 bins. You probably also noticed that each bin now has a sea green border. This colored border resulted from <code>color = &quot;seagreen3&quot;</code>. If we want to fill the histogram’s bins with a color, we should use the <code>fill</code> argument, <em>i.e.</em>, <code>fill = &quot;grey90&quot;</code>. Let’s try again.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">15</span>, <span class="dt">color =</span> <span class="st">&quot;seagreen3&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p>Okay, it worked. Not necessarily the prettiest graph in the world—I’m not sure what the green borders are adding to our figure—but the point is that <code>color</code> and <code>fill</code> do different things.</p>
+<p>What if we want to plot separate histograms for foreign and domestic cars? We need to map an aesthetic to the variable <code>foreign</code>, but which aesthetic do we want? Probably <code>fill</code>—color will only vary the border on the bins. Let’s map <code>fill</code> to <code>foreign</code> and see what happens.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">15</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> foreign)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<p>Strange. It looks like someone is about to lose at Tetris.</p>
+<p>To see what is going on here, compare this figure to the previous figure. Notice that the two figures have the same histogram shape—<code>ggplot2</code> is not creating separate histograms. Instead, <code>ggplot2</code> is <code>fill</code>-ing the histogram based upon the variable <code>foreign</code>—essentially stacking the histograms. We can tell <code>ggplot2</code> that want to let the histograms overlap—as opposed to stacking them—using the argument <code>position = &quot;identity&quot;</code> inside <code>geom_histogram()</code>:<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> foreign),
+    <span class="dt">bins =</span> <span class="dv">15</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.75</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<p>No you can see why <code>ggplot2</code> defaults to stacking—this figure does not really present a clear picture of what is going on. Let’s see if we can clean this figure up a bit.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">fill =</span> foreign),
+    <span class="dt">bins =</span> <span class="dv">15</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;grey70&quot;</span>, <span class="st">&quot;seagreen3&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;grey60&quot;</span>, <span class="st">&quot;seagreen3&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<p>That’s a bit better. What if we just drop one of the fills altogether? Instead of assigning a color in <code>scale_fill_manual()</code>, we can just assign <code>NA</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">fill =</span> foreign),
+    <span class="dt">bins =</span> <span class="dv">15</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;seagreen3&quot;</span>, <span class="st">&quot;grey70&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">&quot;grey60&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<p>Maybe. I still think the overlapping bins are a little confusing. Let’s try a density plot. We can essentially swap <code>geom_density()</code> for <code>geom_histogram()</code>. We just drop <code>bins = 15</code>, as the density plot does not have bins.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">color =</span> foreign, <span class="dt">fill =</span> foreign),
+    <span class="dt">alpha =</span> <span class="fl">0.4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;seagreen3&quot;</span>, <span class="st">&quot;grey70&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="st">&quot;Origin&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">&quot;grey60&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Domestic&quot;</span>, <span class="st">&quot;Foreign&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+<p>I would say this plot provides a lot more insight than any of the histograms we produced above.</p>
+<p>Notice that the <span class="math inline">\(y\)</span>-axis has changed from <em>count</em> to <em>density</em>, as we are now approximating a continuous distribution. You can force <code>ggplot2</code> to give you a density-based <span class="math inline">\(y\)</span>-axis for histograms by mapping the aesthetic <code>y</code> to <code>..density..</code>, which is a variable that <code>ggplot2</code> calculates in the process of making the plot. Using this option, we can plot a histogram and density plot in the same figure. And just for fun, let’s color each bin of the histogram a different color. Because we are not mapping a variable to the <code>color</code> aesthetic, our call to <code>color</code> needs to be outside of the <code>aes()</code> in <code>geom_histogram()</code>. I’m going to using 15 colors from <code>viridis()</code>, and I am going to reverse them using the <code>rev()</code> function. Handy, right?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..),
+    <span class="dt">bins =</span> <span class="dv">15</span>, <span class="dt">color =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="kw">rev</span>(<span class="kw">viridis</span>(<span class="dv">15</span>))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="st">&quot;grey55&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey80&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+<p>Well… it’s colorful, if nothing else. I’m not sure the individually colored bins provide much information.</p>
+</div>
+<div id="saving" class="section level2">
+<h2>Saving</h2>
+<p>Saving the your <code>ggplot2</code> figures is pretty straightforward: you use the <code>ggsave()</code> function. The arguments you will typically use in <code>ggsave()</code>:</p>
+<ul>
+<li><code>filename</code>: the name you wish to give your saved plot, including the suffix that denotes the file type (<em>e.g.</em>, <code>.png</code>, <code>.pdf</code>, or <code>.jpg</code>)</li>
+<li><code>plot</code>: the name of the plot to save. If you do not specify a plot, <code>ggsave()</code> will save the last plot that <code>ggplot2</code> displayed.</li>
+<li><code>path</code>: the path (dirctory) where you would like to save your figure. The default is the current working directory.</li>
+<li><code>width</code> and <code>height</code>: the dimensions of the outputted figure (the default is inches).</li>
+</ul>
+<p>Thus, if you want to save the last figure that <code>ggplot2</code> displayed as a PDF, we can write</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&quot;ourNewFigure.pdf&quot;</span>, <span class="dt">width =</span> <span class="dv">16</span>, <span class="dt">height =</span> <span class="dv">10</span>)</code></pre></div>
+<p>This line of R code will save the plot in our current working directory as a 16-by-10 (inch) PDF.</p>
+<p>You can also prevent a <code>ggplot2</code> figure from displaying on your screen by assigning it to a name like a normal object in R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">our_histogram &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> cars, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..),
+    <span class="dt">bins =</span> <span class="dv">15</span>, <span class="dt">color =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="kw">rev</span>(<span class="kw">viridis</span>(<span class="dv">15</span>))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="st">&quot;grey55&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey80&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Weight (lbs)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The distribution of weight for cars sold in the US&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;From the world-famous autos dataset&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p>The figure is now stored as <code>our_histogram</code> and did not print to the screen.</p>
+<p>Now we can save <code>our_histogram</code> to my desktop (as PNG):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&quot;anotherHistogram.png&quot;</span>, <span class="dt">plot =</span> our_histogram,
+  <span class="dt">path =</span> <span class="st">&quot;/Users/edwardarubin/Desktop&quot;</span>, <span class="dt">width =</span> <span class="dv">10</span>, <span class="dt">height =</span> <span class="dv">8</span>)</code></pre></div>
+</div>
+<div id="still-more" class="section level2">
+<h2>Still more</h2>
+<p>We have only scratched the surface of <code>ggplot2</code>. Check out the <a href="http://docs.ggplot2.org">documentation</a> for <code>ggplot2</code>: there are a lot of geometries and aesthetics that we have not covered here. I’ll leave you with a few examples:</p>
+<p>Daily average temperatures for each county in California, 2014–2015:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">filter</span>(weather_df, state <span class="op">==</span><span class="st"> &quot;06&quot;</span>),
+  <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> temp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> temp), <span class="dt">size =</span> <span class="fl">0.5</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Date&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Daily avg. temperature (F)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Average daily temperature for&quot;</span>,
+    <span class="st">&quot;each Californian county, 2014-2015&quot;</span>),
+    <span class="dt">subtitle =</span> <span class="st">&quot;Source: NARR&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;B&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),
+    <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>(),
+    <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<p>Now with lines.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">filter</span>(weather_df, state <span class="op">==</span><span class="st"> &quot;06&quot;</span>),
+  <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> temp, <span class="dt">group =</span> fips)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> temp), <span class="dt">size =</span> <span class="fl">0.5</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Date&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Daily avg. temperature (F)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Average daily temperature for&quot;</span>,
+    <span class="st">&quot;each Californian county, 2014-2015&quot;</span>),
+    <span class="dt">subtitle =</span> <span class="st">&quot;Source: NARR&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;B&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),
+    <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>(),
+    <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p>Comparing Alameda County’s average daily average temperature to the rest of the counties in California.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(
+    <span class="dt">data =</span> <span class="kw">filter</span>(weather_df, state <span class="op">==</span><span class="st"> &quot;06&quot;</span>, fips <span class="op">!=</span><span class="st"> &quot;06001&quot;</span>),
+    <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> temp),
+    <span class="dt">shape =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">size =</span> <span class="fl">0.6</span>, <span class="dt">color =</span> <span class="st">&quot;grey60&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(
+    <span class="dt">data =</span> <span class="kw">filter</span>(weather_df, state <span class="op">==</span><span class="st"> &quot;06&quot;</span>, fips <span class="op">==</span><span class="st"> &quot;06001&quot;</span>),
+    <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> temp),
+    <span class="dt">color =</span> <span class="st">&quot;grey20&quot;</span>, <span class="dt">size =</span> <span class="fl">0.7</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Date&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Daily avg. temperature (F)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Comparing Alameda County&#39;s daily temperatures</span><span class="ch">\n</span><span class="st">&quot;</span>,
+    <span class="st">&quot;to other Californian counties, 2014-2015&quot;</span>),
+    <span class="dt">subtitle =</span> <span class="st">&quot;Source: NARR&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;B&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),
+    <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>(),
+    <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
+<p>Map average temperature for each county in the US on 23 February 2014.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> us_shp,
+  <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">fill =</span> temp, <span class="dt">group =</span> group)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">color =</span> <span class="ot">NA</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Average temperature (F) on 23 February 2014&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Average temperature (F)&quot;</span>, <span class="dt">option =</span> <span class="st">&quot;B&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_map</span>(<span class="st">&quot;albers&quot;</span>, <span class="dv">30</span>, <span class="dv">40</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_map</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+    <span class="dt">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span>,
+    <span class="dt">legend.justification =</span> <span class="st">&quot;center&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_colorbar</span>(
+    <span class="dt">barwidth =</span> <span class="dv">20</span>,
+    <span class="dt">barheigh =</span> <span class="fl">1.5</span>,
+    <span class="dt">title.position =</span> <span class="st">&quot;top&quot;</span>))</code></pre></div>
+<pre><code>## Warning: `panel.margin` is deprecated. Please use `panel.spacing` property
+## instead</code></pre>
+<p><img src="section06_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
+</div>
+</div>
+<div id="plotting-functions" class="section level1">
+<h1>Plotting functions</h1>
+<p>In economics, we often want to just plot a function—for instance, a demand curve (or inverse demand curve). The easiest way to plot an arbitrary function in R is probably with the <code>curve()</code> function. Let’s define inverse demand and supply functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define the inverse demand and supply functions</span>
+inv_demand &lt;-<span class="st"> </span><span class="cf">function</span>(q) <span class="dv">10</span> <span class="op">-</span><span class="st"> </span>q
+inv_supply &lt;-<span class="st"> </span><span class="cf">function</span>(q) <span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span>q</code></pre></div>
+<p>And now plot them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot the inverse demand and supply functions</span>
+<span class="kw">curve</span>(<span class="dt">expr =</span> inv_demand, <span class="dt">from =</span> <span class="dv">0</span>, <span class="dv">10</span>,
+  <span class="dt">xlab =</span> <span class="st">&quot;Q&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;P&quot;</span>, <span class="dt">n =</span> <span class="dv">100</span>)
+<span class="kw">curve</span>(<span class="dt">expr =</span> inv_supply,
+  <span class="dt">from =</span> <span class="dv">0</span>, <span class="dv">10</span>, <span class="dt">add =</span> T)
+<span class="co"># Shift the supply back</span>
+<span class="kw">curve</span>(<span class="dt">expr =</span> <span class="kw">inv_supply</span>(x) <span class="op">+</span><span class="st"> </span><span class="dv">3</span>,
+  <span class="dt">from =</span> <span class="dv">0</span>, <span class="dv">10</span>, <span class="dt">add =</span> T, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<p><code>curve()</code> is very helpful for plotting functions quickly, but we can do it in <code>ggplot2</code>, as well. We will define the domain of our function in the inside of a <code>data.frame</code> in <code>ggplot()</code>. Then we will create layers that trace out our functions using <code>stat_function()</code>. We need to tell <code>stat_function()</code> the name of the function we want and the geometry (<code>geom</code>) that we want to use.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
+<span class="st">  </span><span class="co"># The inverse demand</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> inv_demand, <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># The inverse supply</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> inv_supply, <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># The shifted inverse supply curve</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">inv_supply</span>(x) <span class="op">+</span><span class="st"> </span><span class="dv">3</span>, <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>,
+    <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Labels and themes</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Quantity&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Classic economics figure&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
+<p>And if we want to annotate the equilibria in the picture, can we can use the <code>annotate()</code> function from <code>ggplot2</code>. First, let’s solve for the equilibria. I know how to do math, but since we are doing everything in R, we can have R solve for the equilibria for us using the <code>uniroot()</code> function. We will give <code>uniroot()</code> the difference of our two functions, and it will return the point at which the difference is (approximately) zero. (Note that it will give us the equilibrium quantity; we will then have to plug the quantity into the inverse demand or supply functions to get the equilibrium price.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The first equilibrium quantity</span>
+q1 &lt;-<span class="st"> </span><span class="kw">uniroot</span>(
+  <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw">inv_supply</span>(x) <span class="op">-</span><span class="st"> </span><span class="kw">inv_demand</span>(x),
+  <span class="dt">interval =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>))<span class="op">$</span>root
+p1 &lt;-<span class="st"> </span><span class="kw">inv_demand</span>(q1)
+<span class="co"># The second equilibrium equantity</span>
+q2 &lt;-<span class="st"> </span><span class="kw">uniroot</span>(
+  <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw">inv_supply</span>(x) <span class="op">+</span><span class="st"> </span><span class="dv">3</span> <span class="op">-</span><span class="st"> </span><span class="kw">inv_demand</span>(x),
+  <span class="dt">interval =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>))<span class="op">$</span>root
+p2 &lt;-<span class="st"> </span><span class="kw">inv_demand</span>(q2)</code></pre></div>
+<p>Finally, let’s annotate our figure—specifically, we will add points for each equilibrium and text to label the equilibria and lines.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
+<span class="st">  </span><span class="co"># The inverse demand</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> inv_demand, <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># The inverse supply</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> inv_supply, <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># The shifted inverse supply curve</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">inv_supply</span>(x) <span class="op">+</span><span class="st"> </span><span class="dv">3</span>, <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>,
+    <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Annotate!</span>
+<span class="st">  </span><span class="kw">annotate</span>(<span class="dt">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(q1, q2), <span class="dt">y =</span> <span class="kw">c</span>(p1, p2), <span class="dt">size =</span> <span class="fl">2.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">annotate</span>(<span class="dt">geom =</span> <span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(q1, q2), <span class="dt">y =</span> <span class="kw">c</span>(p1, p2) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>,
+    <span class="dt">label =</span> <span class="kw">c</span>(<span class="st">&quot;EQ[0]&quot;</span>, <span class="st">&quot;EQ[1]&quot;</span>), <span class="dt">parse =</span> T) <span class="op">+</span>
+<span class="st">  </span><span class="kw">annotate</span>(<span class="dt">geom =</span> <span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">9.5</span>,
+    <span class="dt">y =</span> <span class="kw">c</span>(<span class="kw">inv_supply</span>(<span class="fl">9.5</span>)<span class="op">-</span><span class="fl">0.7</span>, <span class="kw">inv_supply</span>(<span class="fl">9.5</span>)<span class="op">+</span><span class="dv">3</span><span class="op">-</span><span class="fl">0.7</span>, <span class="kw">inv_demand</span>(<span class="fl">9.5</span>)<span class="op">+</span><span class="fl">0.7</span>),
+    <span class="dt">label =</span> <span class="kw">c</span>(<span class="st">&quot;S[0]&quot;</span>, <span class="st">&quot;S[1]&quot;</span>, <span class="st">&quot;D&quot;</span>), <span class="dt">parse =</span> T) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Labels and themes</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Quantity&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Price&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Classic economics figure&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
+<p>In addition to plotting our own functions, <code>stat_function()</code> can be useful for plotting R’s functions. Let’s trace out the probability density function (pdf) of a random variable from a <span class="math inline">\(t\)</span> distribution with 29 degrees of freedom.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>,<span class="dv">4</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Plot the pdf</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">dt</span>(x, <span class="dt">df =</span> <span class="dv">29</span>),
+    <span class="dt">color =</span> <span class="st">&quot;grey75&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;The beautiful &quot;</span>, <span class="kw">italic</span>(t),
+    <span class="st">&quot; distribution&quot;</span>))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="kw">italic</span>(t))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
+<p>What if we want to shade the plot?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>,<span class="dv">4</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Plot the pdf</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">dt</span>(x, <span class="dt">df =</span> <span class="dv">29</span>),
+    <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey65&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;The beautiful &quot;</span>, <span class="kw">italic</span>(t),
+    <span class="st">&quot; distribution&quot;</span>))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="kw">italic</span>(t))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
+<p>That was a bit trickier than expected. Anyway, let’s try shading above <span class="math inline">\(t\)</span> of 2 and below <span class="math inline">\(t\)</span> of -2.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>,<span class="dv">4</span>))) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Plot the pdf</span>
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">dt</span>(x, <span class="dt">df =</span> <span class="dv">29</span>),
+    <span class="kw">aes</span>(x),
+    <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey75&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey75&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Shade below -2</span>
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">ifelse</span>(x <span class="op">&lt;=</span><span class="st"> </span><span class="op">-</span><span class="dv">2</span>, <span class="kw">dt</span>(x, <span class="dt">df =</span> <span class="dv">29</span>), <span class="ot">NA</span>),
+    <span class="kw">aes</span>(x),
+    <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>, <span class="dt">color =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="st">&quot;grey40&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># Shade above 2</span>
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw">ifelse</span>(x <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span>, <span class="kw">dt</span>(x, <span class="dt">df =</span> <span class="dv">29</span>), <span class="ot">NA</span>),
+    <span class="kw">aes</span>(x),
+    <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>, <span class="dt">color =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="st">&quot;grey40&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;The beautiful &quot;</span>, <span class="kw">italic</span>(t),
+    <span class="st">&quot; distribution&quot;</span>))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(<span class="kw">italic</span>(t))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;Density, &quot;</span>, <span class="kw">italic</span>(<span class="kw">f</span>(t))))) <span class="op">+</span>
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section06_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+<p>That was surprisingly difficult. I think what we are seeing here is that as we move away from figures that describe data, things become a bit more difficult. <code>ggplot2</code> can create just about any figure you can think of, but it is especially good at creating summaries of data.</p>
+</div>
+<div id="plotting-in-latex" class="section level1">
+<h1>Plotting in LaTeX</h1>
+<p>If you are interested in creating figures in LaTeX, you should check out <a href="https://www.sharelatex.com/learn/Pgfplots_package">ShareLaTeX’s guide</a> on the <code>tikz</code> and <code>Pgfplots</code> packages.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This sentence is probably true for most disciplines.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>If you cannot achieve this task, ask yourself why not. And try to fix it.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>You should install it (<code>install.package(&quot;ggplot2&quot;)</code>).<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>This paradigm is similar to the verb constructions in <code>dplyr</code>.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Note that you need to use the parentheses even if you are not going to put anything in them, <em>e.g.</em>, <code>geom_line()</code>.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Check out <a href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">this resource</a> for recognized color names in R.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>I’m not crazy about the default colors that <code>ggplot2</code> provides—they are not colorblind friendly and just leave a bit to be desired. We will discuss how you can change them later.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>See the <code>ggthemes</code> <a href="https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html">vignette</a> for a list and examples of the available themes.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>The <code>end = 0.96</code> argument in <code>viridis()</code> tells the function to choose the second color slightly before the <code>end</code> of the colors cale. The end of the color scale is a pretty bright yellow that does not always show up well on projectors.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>I also add <code>alpha = 0.75</code> so we can tell if the two histograms overlap.<a href="#fnref10">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

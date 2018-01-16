@@ -1,0 +1,41 @@
+name: ARE-212
+output_dir: .
+navbar:
+  title: ARE 212
+  type: inverse
+  left:
+  - text: Section notes
+    menu:
+    - text: Table of Contents
+      href: ../notes.html
+    - text: Section 0
+      href: ../section00.html
+    - text: Section 1
+      href: ../section01.html
+    - text: LaTeX and knitr
+      href: ../latexKnitr.html
+    - text: '---------'
+    - text: Spring 2017 Notes
+      href: notes.html
+  - text: Course Info
+    href: ../courseInfo.html
+  - text: Syllabi
+    href: ../syllabi.html
+  - text: R Resources
+    href: ../resources.html
+  right:
+  - icon: fa-envelope-o fa-lg
+    href: ../contact.html
+  - icon: fa-github-square fa-lg
+    href: https://github.com/edrubin/ARE212
+  - icon: fa-hand-peace-o fa-lg
+    href: https://edrub.in
+output:
+  html_document:
+    theme: flatly
+    highlight: pygments
+    include:
+      after_body: ../footer.html
+    lib_dir: site_libs
+    self_contained: no
+

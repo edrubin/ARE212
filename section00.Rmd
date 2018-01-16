@@ -9,9 +9,11 @@ Before our first section, please run make sure you have working and up-to-date i
 If you do not already have R and RStudio running on your computer, then you should install them both:
 
 1. [Download R](https://cran.r-project.org).
-2. [Download RStudio](https://www.rstudio.com/products/rstudio/). RStudio is a super helpful IDE (integrated development environment) for R. Very helpful for learning and using R.
+2. [Download RStudio](https://www.rstudio.com/products/rstudio/).
 
-If you already have R and RStudio on your computer, then you should make sure they are up to date. The [current R version](https://cran.r-project.org) is 3.3.2 (a.k.a. _Sincere Pumpkin Patch_). You can check your version of R by typing `version` into the R console. The [current version](https://www.rstudio.com/products/rstudio/download/) of RStudio is 1.0.136.
+RStudio is a super helpful IDE (integrated development environment) for R—it's very helpful for both learning and using R.
+
+If you already have R and RStudio on your computer, then you should make sure they are up to date. The [current R version](https://cran.r-project.org) is 3.4.3 (a.k.a. _Kite-Eating Tree_). You can check your version of R by typing `version` into the R console. The [current version](https://www.rstudio.com/products/rstudio/download/) of RStudio is 1.1.383.
 
 I would also recommend making sure you have a working installation of [LaTeX](https://www.latex-project.org/get/) ([ShareLaTeX](https://www.sharelatex.com) is another nice tool that also has a lot of LaTeX help/tutorials). [Pandoc](http://pandoc.org) is also also helpful.
 
@@ -21,12 +23,17 @@ Open RStudio. Type `1 + 1` in the console. Do you get `2`? If so, it looks like 
 
 # Resources for R
 
-I've compiled a pretty large set of [resources for R](resources.html). You probably don't need them right now, but know they are there.
+I've compiled a pretty large set of [resources for R](resources.html). You probably don't need them right now, but know they are there. However, the best resources for learning R are:
+
+- Google (which will probably lead to StackOverflow)
+- Time
+- Your classmates
+- Me
 
 # Basic suggestions
 
 0. Nearly everything you do should be in an R script, as opposed to the command line. You will want to return to your code at some point, an R script makes this possible (plus you have to turn in your R script with your assignments).
 1. Comment your code.
 2. Be consistent with your coding conventions (especially naming).
-3. Be smart when naming files, folders, _etc._.
+3. Be smart when naming files, folders, _etc._. First, use names that are actually descriptive (_e.g._, `CensusCountyDemographics.csv` _vs._ `cbn18319ddg890-7a.csv`). Second, I'd suggest choosing either camelcase (`WhatAGreatName.txt`) or replacing spaces with underscores (`what_a_great_name.txt`).
 4. Make your life easier by organizing your files, directories, and using R's `paste0()` (or `paste()`). See examples in Section 1.

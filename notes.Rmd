@@ -4,7 +4,7 @@ title: "Section notes"
 
 Links to section notes and relevant files.
 
-These notes (and I) owe a lot to previous GSIs for this class: [Fiona Burlig](https://www.fionaburlig.com/are212), [Kenny Bell](https://github.com/kendonB/ARE212), [Patrick Baylis](https://github.com/pbaylis/ARE212/), and [Dan Hammer](https://github.com/danhammer/ARE212).
+These notes (and I) owe a lot to previous GSIs for this class: [Fiona Burlig](https://www.fionaburlig.com/teaching/), [Kenny Bell](https://github.com/kendonB/ARE212), [Patrick Baylis](https://github.com/pbaylis/ARE212/), and [Dan Hammer](https://github.com/danhammer/ARE212).
 <br><br>
 
 #### [__Section 0__](section00.html): Setting up R
@@ -21,7 +21,7 @@ Learning the basics of R: installing and loading packages; loading various data 
 [pdf](Section01/section01.pdf) | [R script](Section01/section01.R) | [zip](Section01.zip)
 <br><br>
 
-#### [__Section 2__](section02.html): Matrix madness
+<!-- #### [__Section 2__](section02.html): Matrix madness
 
 Vectors, matrices, and general mathematical usage of R.
 
@@ -110,7 +110,7 @@ Spatial data. Rasters, geocoding, and mapping in R.
 An introduction to the `data.table` package (useful for working with large datasets).
 
 [pdf](Section13/section13.pdf) | [R script](Section13/section13.R) | [zip](Section13.zip)
-<br><br>
+<br><br> -->
 
 #### [__Supplement 1__](latexKnitr.html): LaTeX and `knitr`
 

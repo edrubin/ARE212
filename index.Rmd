@@ -2,4 +2,8 @@
 title: ARE 212
 ---
 
-Welcome.
+Welcome to the ARE 212 section website for __Spring 2018__.
+
+If you are looking for the ARE 212 section notes from __Spring 2017__, please go [__here__](Spring2017/notes.html).
+
+Thanks!

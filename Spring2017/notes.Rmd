@@ -1,0 +1,122 @@
+---
+title: "Section notes, spring 2017"
+---
+
+Links to section notes and relevant files.
+
+__Note__: I've updated the web-format (HTML) files, so they should run. The attached PDFs and ZIPs remain as they were in spring 2017.
+
+These notes (and I) owe a lot to previous GSIs for this class: [Fiona Burlig](https://www.fionaburlig.com/are212), [Kenny Bell](https://github.com/kendonB/ARE212), [Patrick Baylis](https://github.com/pbaylis/ARE212/), and [Dan Hammer](https://github.com/danhammer/ARE212).
+<br><br>
+
+#### [__Section 0__](section00.html): Setting up R
+
+Install R, RStudio, and other relevant programs; resources for R; general suggestions for coding.
+
+[pdf](Section00/section00.pdf)
+<br><br>
+
+#### [__Section 1__](section01.html): Getting started with R
+
+Learning the basics of R: installing and loading packages; loading various data types (`haven` and `readr`); basic data summarization and manipulation (introduction to `dplyr`).
+
+[pdf](Section01/section01.pdf) | [R script](Section01/section01.R) | [zip](Section01.zip)
+<br><br>
+
+#### [__Section 2__](section02.html): Matrix madness
+
+Vectors, matrices, and general mathematical usage of R.
+
+[pdf](Section02/section02.pdf) | [R script](Section02/section02.R) | [zip](Section02.zip)
+<br><br>
+
+#### [__Section 3__](section03.html): Functions and loops
+
+Writing your own (OLS) functions, using loops, and running simulations in R.
+
+[pdf](Section03/section03.pdf) | [R script](Section03/section03.R) | [zip](Section03.zip)
+<br><br>
+
+#### [__Section 4__](section04.html): FWL and model fit
+
+Logical operators, optional arguments to your custom functions, Frisch-Waugh-Lovell (FWL) theorem, omitted variable bias, and measures of fit/overfitting.
+
+[pdf](Section04/section04.pdf) | [R script](Section04/section04.R) | [zip](Section04.zip)
+<br><br>
+
+#### [__Section 5__](section05.html): Inference and parallelization
+
+Statistical inference via hypothesis testing: _t_ tests and $F$ tests. Plus simulation and parallelization.
+
+[pdf](Section05/section05.pdf) | [R script](Section05/section05.R) | [zip](Section05.zip)
+<br><br>
+
+#### [__Section 6__](section06.html): Figures with `ggplot2`
+
+Creating informative and aesthetically figures using R's `ggplot2`—scatter plots, histograms, density plots, and more.
+
+[pdf](Section06/section06.pdf) | [R script](Section06/section06.R) | [zip](Section06.zip)
+<br><br>
+
+#### [__Section 7__](section07.html): GLS and WLS
+
+Generalized least squares (GLS), weighted least squares (WLS), and more simulations!
+
+[pdf](Section07/section07.pdf) | [R script](Section07/section07.R) | [zip](Section07.zip)
+<br><br>
+
+#### [__Section 8__](section08.html): OLS in asymptopia
+
+OLS as $N$ gets (very) big. Also: simulations, coding efficiency, and new `ggplot2` techniques.
+
+[pdf](Section08/section08.pdf) | [R script](Section08/section08.R) | [zip](Section08.zip)
+<br><br>
+
+#### [__Section 9__](section09.html): Standard errors, Vol. I
+
+Calculating standard errors via analytical methods and via the Delta Method. Includes linear and nonlinear combinations of parameters. Plus making prettier tables.
+
+[pdf](Section09/section09.pdf) | [R script](Section09/section09.R) | [zip](Section09.zip)
+<br><br>
+
+#### [__Section 10__](section10.html): Standard errors, Vol. II
+
+Calculating standard errors in various situations: spherical errors, heteroskedastic errors, temporally correlated errors, spatially correlated errors, clustered errors.
+
+[pdf](Section10/section10.pdf) | [R script](Section10/section10.R) | [zip](Section10.zip)
+<br><br>
+
+#### [__Section 11__](section11.html): Instrumental variables
+
+Instrumental variables (IV) and two-stage least squares (2SLS). Plus measurement error.
+
+[pdf](Section11/section11.pdf) | [R script](Section11/section11.R) | [zip](Section11.zip)
+<br><br>
+
+#### [__Section 12__](section12.html): Spatial data
+
+Spatial data. Shapefiles, points data, maps, and—more generally—R as a GIS.
+
+[pdf](Section12/section12.pdf) | [R script](Section12/section12.R) | [zip](Section12.zip)
+<br><br>
+
+#### [__Section 12b__](section12b.html): Spatial data, continued
+
+Spatial data. Rasters, geocoding, and mapping in R.
+
+[pdf](Section12b/section12b.pdf) | [R script](Section12b/section12b.R) | [zip](Section12b.zip)
+<br><br>
+
+#### [__Section 13__](section13.html): Introduction to `data.table`
+
+An introduction to the `data.table` package (useful for working with large datasets).
+
+[pdf](Section13/section13.pdf) | [R script](Section13/section13.R) | [zip](Section13.zip)
+<br><br>
+
+#### [__Supplement 1__](latexKnitr.html): LaTeX and `knitr`
+
+Introductions to and resources for LaTeX and `knitr`.
+
+[pdf](LatexKnitr/latexKnitr.pdf)
+<br><br>
