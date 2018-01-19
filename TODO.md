@@ -1,6 +1,7 @@
 # TODO
 
 - Add README about building the course website.
+- Machine learning
 - Trouble-shooting code
   - `browser()`
 - Maximum likelihood

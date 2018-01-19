@@ -391,19 +391,23 @@ div.tocify {
 </div>
 <div id="packages-in-r" class="section level1">
 <h1>Packages in R</h1>
-<p>Open RStudio.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<p>While the base R installation helpful/powerful, R’s true potential comes from combining combining the core installation with its many packages generated through collaboration (see <a href="https://cran.r-project.org/web/packages/available_packages_by_name.html">CRAN’s list of packages</a><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>).</p>
+<p>Open RStudio. Make sure you are running the most recent versions of R and RStudio.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>While the base R installation helpful/powerful, R’s true potential comes from combining the core installation with the many, many packages generated through (open-source) collaboration (see <a href="https://cran.r-project.org/web/packages/available_packages_by_name.html">CRAN’s list of packages</a><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>).</p>
 <div id="installing-packages" class="section level2">
 <h2>Installing packages</h2>
-<p>Now, let’s install a few packages that will prove useful this semester…</p>
+<p>You can check which packages are currently installed by using the function <code>installed.packages()</code>. Ready to run your first function? Type <code>installed.packages()</code> into the R console and hit return. That’s a lot of information. Don’t worry about it for now.</p>
+<p>Alternatively (and more easily), you can check the <em>Packages</em> tab inside of RStudio.</p>
+<p><img src="Images/rStudioPackages.gif" /> The checked boxes denote the packages that are currently loaded.</p>
+<p>Now, let’s install a few packages that will prove useful this semester. We will use the creatively named <code>install.packages()</code> function. You just need to give the function that name(s) of the package(s) you want to install.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install the package named &quot;dplyr&quot;</span>
 <span class="kw">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>)
 <span class="co"># Install the packages named &quot;haven&quot; and &quot;readr&quot;</span>
 <span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;haven&quot;</span>, <span class="st">&quot;readr&quot;</span>))</code></pre></div>
 <p>A few things to notice here:</p>
-<ol style="list-style-type: decimal">
+<ol start="0" style="list-style-type: decimal">
+<li>You need an internet connection.</li>
 <li>The name of the function <code>install.packages()</code> is plural regardless of the number of packages.</li>
-<li>Each package’s name is surrounded by quotes (<em>e.g.</em> <code>&quot;haven&quot;</code>). These quotation marks are how R knows the difference between characters/strings and objects (objects hold values). R generally does not care whether you use single quote (<code>''</code>) or double quotes (<code>&quot;&quot;</code>), but you should be consistent.</li>
+<li>Each package’s name is surrounded by quotes (<em>e.g.</em>, <code>&quot;haven&quot;</code>). These quotation marks are how R knows the difference between characters/strings and objects (objects hold values). R generally does not care whether you use single quote (<code>''</code>) or double quotes (<code>&quot;&quot;</code>), but you should be consistent. If you ask me, I say double quotes.</li>
 <li>We can create a vector of packages using the combine function <code>c()</code>. Example: <code>c(1, 2, 3)</code> is a three-element vector whose elements are <code>1</code>, <code>2</code>, and <code>3</code>. Similarly, <code>c(&quot;haven&quot;, &quot;readr&quot;)</code> is a two-element vector whose elements are the <code>&quot;haven&quot;</code> and <code>&quot;readr&quot;</code>. Vectors are a big deal in R.</li>
 <li>The hashtag (<code>#</code>) is the symbol that creates comments in R.</li>
 </ol>
@@ -412,35 +416,69 @@ div.tocify {
 <h2>Loading packages</h2>
 <p>To check that the installations were successful, we will load the packages that we installed above.</p>
 <p>R uses the <code>library()</code> function to load a package (we give the name of the package as the argument to the function).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(haven)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(haven)
 <span class="kw">library</span>(readr)</code></pre></div>
 <p>Notice that we did not need to call the packages with quotations around their names (though it would still work).</p>
+</div>
+<div id="package-management-with-pacman" class="section level2">
+<h2>Package management with <code>pacman</code></h2>
+<p>Let’s install another package: the <code>pacman</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install the &#39;pacman&#39; package</span>
+<span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</code></pre></div>
+<p>Now load it…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the &#39;pacman&#39; package</span>
+<span class="kw">library</span>(pacman)</code></pre></div>
+<p>In addition to an excellent name, the <code>pacman</code> package is very meta: it’s a package to manage packages. You can use it to install, load, unload, and update your R packages. Plus it really streamlines your code. Rather than having to type <code>library(...)</code> every time you want to load a package, you can use <code>pacman</code>’s handy <code>p_load()</code> function. For instance,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(haven)
+<span class="kw">library</span>(readr)</code></pre></div>
+<p>becomes</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">p_load</span>(dplyr, haven, readr)</code></pre></div>
+<p>Another great feature of <code>p_load()</code>: if you try to load a package that is not installed on your machine, <code>p_load()</code> install the package for you, rather than throwing an error. For instance, let’s install and load one final package named <code>ggplot2</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">p_load</span>(ggplot2)</code></pre></div>
+<p>Installed and loaded. <em>That’s</em> service!</p>
 </div>
 </div>
 <div id="loading-data" class="section level1">
 <h1>Loading data</h1>
 <p>Loading a dataset in R requires three things:</p>
 <ol style="list-style-type: decimal">
-<li>The path of the data file (where the data exist on your computer)</li>
-<li>The name of the data file</li>
-<li>The proper function for the type of dataset (<em>e.g.</em> we use different functions for .csv and .dta files)</li>
+<li>The <strong>path</strong> of the data file (where the data exist on your computer)</li>
+<li>The <strong>name</strong> of the data file</li>
+<li>The proper <strong>function</strong> for the type of dataset (<em>e.g.</em>, we use different functions for .csv and .dta files)</li>
 </ol>
-<div id="file-paths" class="section level2">
-<h2>File paths</h2>
-<p>R wants file paths as character vectors (<em>i.e.</em> the file path surrounded by quotations). For example, <code>&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code> is the path to my folder for this course (on my computer).<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> <a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<div id="file-paths-and-navigation" class="section level2">
+<h2>File paths and navigation</h2>
+<p>R wants file paths as character vectors (<em>i.e.</em>, the file path surrounded by quotations). For example, <code>&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code> is the path to my folder for this course (on my computer).<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> <a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
 <p>To change the directory in R, use the <code>setwd()</code>. For instance, to change R’s directory to my course folder</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</span>)</code></pre></div>
 <p>To find R’s current working directory, simply type <code>getwd()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()</code></pre></div>
+<pre><code>## [1] &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code></pre>
+<p>To navigate your directory, you can combine <code>setwd()</code> with similar commands as you would in Linux, <em>i.e.</em>,</p>
+<ol style="list-style-type: decimal">
+<li><code>..</code> moves up one level</li>
+<li><code>~</code> returns to your home directory</li>
+<li>You can use full paths (<code>/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01</code>) or paths that begin in your current location (<code>Section01</code>)</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The current directory</span>
+<span class="kw">getwd</span>()</code></pre></div>
+<pre><code>## [1] &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Move up one level</span>
+<span class="kw">setwd</span>(<span class="st">&quot;..&quot;</span>)
+<span class="co"># Check the directory now</span>
+<span class="kw">getwd</span>()</code></pre></div>
+<pre><code>## [1] &quot;/Users/edwardarubin/Dropbox/Teaching&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Go home</span>
+<span class="kw">setwd</span>(<span class="st">&quot;~&quot;</span>)
+<span class="co"># Check the new working directory</span>
+<span class="kw">getwd</span>()</code></pre></div>
+<pre><code>## [1] &quot;/Users/edwardarubin&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now return to my ARE212 folder</span>
+<span class="kw">setwd</span>(<span class="st">&quot;Dropbox/Teaching/ARE212&quot;</span>)
+<span class="co"># Check the working directory</span>
+<span class="kw">getwd</span>()</code></pre></div>
 <pre><code>## [1] &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212&quot;</code></pre>
 <p>There are a few ways to deal with file paths and directories. One common way is to use <code>setwd()</code> at the top of your script (or invoke the function whenever you need to change directories).</p>
 <p>I find clearer to store the paths that I will use—at the start of my R script, I define the paths relevant to the files I use within the script. I prefer this method because it allows me to quickly update paths and easily access subfolders.</p>
@@ -448,7 +486,7 @@ div.tocify {
 dir_class &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/&quot;</span>
 <span class="co"># The path to my section 1 folder (Section01), which is inside my ARE 212 folder</span>
 dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_class, <span class="st">&quot;Section01/&quot;</span>)</code></pre></div>
-<p>Notice the use of the <code>paste0()</code> function here: we paste together the value of the object <code>dir_class</code> and the string <code>&quot;Section01&quot;</code>. The function <code>paste0()</code>, by default, pastes without any spaces in between the objects. The function <code>paste()</code> defaults to including a single space (you can feed the functions additional parameters to change these behaviors).</p>
+<p>Notice the use of the <code>paste0()</code> function here: we paste together the value of the <em>object</em> <code>dir_class</code> and the string <code>&quot;Section01&quot;</code>. The function <code>paste0()</code>, by default, pastes without any spaces in between the objects. The function <code>paste()</code> defaults to including a single space (you can feed the functions additional parameters to change these behaviors).</p>
 <p>As a quick example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Default use of paste0()</span>
 <span class="kw">paste0</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
@@ -462,7 +500,20 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Changing the separation parameter to &quot;+&quot;</span>
 <span class="kw">paste</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dt">sep =</span> <span class="st">&quot;+&quot;</span>)</code></pre></div>
 <pre><code>## [1] &quot;1+2+3&quot;</code></pre>
+<p>What do I mean by <em>object</em>? R holds the characters <code>&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/&quot;</code> in its memory and assigns to them (the object) the name <code>dir_class</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The object &#39;dir_class&#39;</span>
+dir_class</code></pre></div>
+<pre><code>## [1] &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The character vector</span>
+<span class="st">&quot;Section01/&quot;</span></code></pre></div>
+<pre><code>## [1] &quot;Section01/&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Paste them together</span>
+<span class="kw">paste0</span>(dir_class, <span class="st">&quot;Section01/&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/&quot;</code></pre>
 <p>Finally, notice that RStudio assists you with completing file paths (begin typing and press tab). This completion can be super useful.</p>
+<p>Example:<br />
+<img src="Images/rStudioTabDirectory.gif" /></p>
+<p>Nice, right?</p>
 </div>
 <div id="dir" class="section level2">
 <h2><code>dir()</code></h2>
@@ -487,8 +538,9 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 ## [31] &quot;section01.html&quot;        &quot;section01.Rmd&quot;        
 ## [33] &quot;Section01.zip&quot;         &quot;site_libs&quot;            
 ## [35] &quot;Spring2017&quot;            &quot;syllabi.html&quot;         
-## [37] &quot;syllabi.Rmd&quot;           &quot;syllabusARE212.pdf&quot;   
-## [39] &quot;TODO.html&quot;             &quot;TODO.md&quot;</code></pre>
+## [37] &quot;syllabi.Rmd&quot;           &quot;syllabus2017.pdf&quot;     
+## [39] &quot;syllabus2018.pdf&quot;      &quot;TODO.html&quot;            
+## [41] &quot;TODO.md&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look inside my section 1 folder (dir_section1 stores the path)</span>
 <span class="kw">dir</span>(dir_section1)</code></pre></div>
 <pre><code>## [1] &quot;auto.csv&quot;      &quot;auto.dta&quot;      &quot;README.md&quot;     &quot;section01.pdf&quot;
@@ -509,13 +561,15 @@ dir_section1 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_cl
 </div>
 <div id="functions-to-load-files" class="section level2">
 <h2>Functions to load files</h2>
-<p>There are a lot of ways to load (data) files in R. In this class, we will mostly stick to the packages <code>readr</code> and <code>haven</code>—in addition to R’s base functions. The <code>readr</code> package offers functions for mostly for reading delimited data files like CSVs, TSVs, and fixed-width files. The <code>haven</code> package offers functions for reading data files outputted from other statistical software like Stata, SPSS (or PSPP), and SAS.</p>
+<p>There are a lot of ways to load (data) files in R. In this class, we will mostly stick to the packages <code>readr</code> and <code>haven</code>—in addition to R’s base functions. The <code>readr</code> package offers functions for mostly for reading delimited data files like CSVs, TSVs, and fixed-width files. The <code>haven</code> package offers functions for reading data files outputted from other statistical software like Stata, SPSS (or PSPP), and SAS. R also has its own file types (<em>i.e.</em>, .rds and .rdata). Eventually, we will also talk about loading spatial data (<em>e.g.</em>, shapefiles and various rasters).</p>
 <p>Let’s start by reading the data stored in the auto.dta file. For this task, we’ll use the <code>read_dta()</code> funtion from the <code>haven</code> package. The <code>read_dta()</code> function needs only one argument: the file (including the path necessary to reach the file).</p>
 <p><strong>Note:</strong> To learn more about a function and the arguments it accepts, you can</p>
 <ol style="list-style-type: decimal">
 <li>Press tab (in RStudio) after typing the function’s name.</li>
-<li>Type a question mark and the function’s name into the console, <em>e.g.</em> <code>?read_dta</code>.</li>
+<li>Type a question mark and the function’s name into the console, <em>e.g.</em>, <code>?read_dta</code> (and then hit return).</li>
 </ol>
+<p>Example:<br />
+<img src="Images/rStudioTabFunction.gif" /></p>
 <p>Enough talk. Let’s finally load the file.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the .dta file</span>
 car_data &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="kw">paste0</span>(dir_section1, <span class="st">&quot;auto.dta&quot;</span>))</code></pre></div>
@@ -684,7 +738,7 @@ car_data</code></pre></div>
 ## 7      Volvo 260 11995    17     5      2.5    14   3170    193    37
 ## # ... with 3 more variables: displacement &lt;dbl&gt;, gear_ratio &lt;dbl&gt;,
 ## #   foreign &lt;int&gt;</code></pre>
-<p>RStudio also has a nice—though sometimes slow—data viewer. You can access the data viewer through the RStudi GUI or through the <code>View()</code> function, <em>e.g.</em> <code>View(car_data)</code>.</p>
+<p>RStudio also has a nice—though sometimes slow—data viewer. You can access the data viewer through the RStudi GUI or through the <code>View()</code> function, <em>e.g.</em>, <code>View(car_data)</code>.</p>
 </div>
 <div id="summarizing-the-data" class="section level2">
 <h2>Summarizing the data</h2>
@@ -716,7 +770,7 @@ car_data</code></pre></div>
 ## </code></pre>
 <p>However, we often just want to know about one variable. How do you grab a single variable in R? Use the <code>$</code>, of course. Specifically, type the name of the dataset, followed by <code>$</code>, followed by the name of the variable. Again, RStudio’s autocompletion using tab is your best friend here.</p>
 <p>To grab the price variable (named <code>price</code>) from the <code>car_data</code> dataset, we type <code>car_data$price</code>. And to summarize the price variable:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(car_data$price)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(car_data<span class="op">$</span>price)</code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##    3291    4220    5006    6165    6332   15906</code></pre>
 </div>
@@ -746,7 +800,7 @@ car_sub</code></pre></div>
 ## # ... with 64 more rows</code></pre>
 <p>You can see that we still have 74 rows but only four columns.</p>
 <p>Alternatively, you can choose which variables you would like to exclude from a dataset by placing a negative sign (dash) in front of the name</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(car_data, -price, -mpg, -weight, -length)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(car_data, <span class="op">-</span>price, <span class="op">-</span>mpg, <span class="op">-</span>weight, <span class="op">-</span>length)</code></pre></div>
 <pre><code>## # A tibble: 74 x 8
 ##             make rep78 headroom trunk  turn displacement gear_ratio
 ##            &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
@@ -816,7 +870,7 @@ car_sub</code></pre></div>
 </div>
 <div id="summarize" class="section level3">
 <h3><code>summarize()</code></h3>
-<p>To create more specific summaries of your data, <code>dplyr</code> offers the <code>summarize()</code> and <code>summarize_each()</code> functions.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> These functions are really more useful when you have grouped data, but it may be helpful to first see them here in a simpler setting.</p>
+<p>To create more specific summaries of your data, <code>dplyr</code> offers the <code>summarize()</code> and <code>summarize_each()</code> functions.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> These functions are really more useful when you have grouped data, but it may be helpful to first see them here in a simpler setting. For broad summaries, check out the function <code>summarize_all()</code>.</p>
 <p>Imaging we want the mean and standard deviation of the price variable, we use the functions <code>mean()</code> and <code>sd()</code> in conjunction with <code>summarize()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(car_sub, <span class="kw">mean</span>(price), <span class="kw">sd</span>(price))</code></pre></div>
 <pre><code>## # A tibble: 1 x 2
@@ -830,9 +884,9 @@ car_sub</code></pre></div>
 ##        &lt;dbl&gt;    &lt;dbl&gt;
 ## 1   6165.257 2949.496</code></pre>
 <p>Because these summaries were relatively simple, we could have just typed them out…</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(car_sub$price)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(car_sub<span class="op">$</span>price)</code></pre></div>
 <pre><code>## [1] 6165.257</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(car_sub$price)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(car_sub<span class="op">$</span>price)</code></pre></div>
 <pre><code>## [1] 2949.496</code></pre>
 </div>
 </div>
@@ -841,33 +895,33 @@ car_sub</code></pre></div>
 <p>A final way we often play with data is by making plots. R’s default plot functions are quite simple but leave a bit to be desired with respect to aesthetics. We will cover <code>ggplot()</code> later in the semester, but for now, let’s make a few quick plots.</p>
 <p>Let’s create a histogram of the cars’ milages. R’s <code>hist()</code> function works perfectly here. It only needs the variable of interest, but we can provide more parameters to make it pretty.</p>
 <p>First, the plan-vanilla plot</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(car_sub$mpg)</code></pre></div>
-<p><img src="section01_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(car_sub<span class="op">$</span>mpg)</code></pre></div>
+<p><img src="section01_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 <p>Now, a bit prettier. And let’s add a blue line for the median MPG (using the <code>abline()</code> function).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The histogram function</span>
 <span class="kw">hist</span>(
   <span class="co"># The variable for the histogram</span>
-  <span class="dt">x =</span> car_sub$mpg,
+  <span class="dt">x =</span> car_sub<span class="op">$</span>mpg,
   <span class="co"># The main title</span>
   <span class="dt">main =</span> <span class="st">&quot;Distribution of fuel economy&quot;</span>,
   <span class="co"># The x-axis label</span>
   <span class="dt">xlab =</span> <span class="st">&quot;MPG (miles per gallon)&quot;</span>)
 <span class="co"># The blue vertical line at the median MPG (lwd is line width)</span>
-<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">median</span>(car_sub$mpg), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)</code></pre></div>
-<p><img src="section01_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
-<p>Now let’s plot price and mileage. A scatterplot will work here, and R’s base <code>plot()</code> function will do just fine with a scatter plot. We will give it an x variable, a y variable, and the axis titles.</p>
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">median</span>(car_sub<span class="op">$</span>mpg), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)</code></pre></div>
+<p><img src="section01_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Let’s plot price and mileage. A scatterplot will work here, and R’s base <code>plot()</code> function will do just fine with a scatter plot. We will give it an x variable, a y variable, and the axis titles.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(
-  <span class="dt">x =</span> car_sub$mpg,
-  <span class="dt">y =</span> car_sub$price,
+  <span class="dt">x =</span> car_sub<span class="op">$</span>mpg,
+  <span class="dt">y =</span> car_sub<span class="op">$</span>price,
   <span class="dt">xlab =</span> <span class="st">&quot;Fuel economy (MPG)&quot;</span>,
   <span class="dt">ylab =</span> <span class="st">&quot;Price&quot;</span>)</code></pre></div>
-<p><img src="section01_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p><img src="section01_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p>Note: I really like clearly defining the arguments of functions. And I recommend it. I find it helps keep things straight, as order matters when you are not naming each argument.</p>
 </div>
 </div>
 <div id="indexing" class="section level1">
 <h1>Indexing</h1>
-<p>Nearly everything in R is numerically indexed. For instance, when we create a vector of numbers, as we did earlier, each element of the vector gets a numerical index (1, 2, 3, …). You can generally access the individual elements of objects using these indexes and square brackets behind the name of the object (<em>e.g.</em> <code>test[2]</code> grabs that second element of the object <code>test</code>).</p>
+<p>Nearly everything in R is numerically indexed. For instance, when we create a vector of numbers, as we did earlier, each element of the vector gets a numerical index (1, 2, 3, …). You can generally access the individual elements of objects using these indexes and square brackets behind the name of the object (<em>e.g.</em>, <code>test[2]</code> grabs that second element of the object <code>test</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a vector</span>
 x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>)
 <span class="co"># Grab the second element of x</span>
@@ -877,10 +931,10 @@ x[<span class="dv">2</span>]</code></pre></div>
 x[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>)]</code></pre></div>
 <pre><code>## [1] 5 7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Grab the second and third elements of x</span>
-x[<span class="dv">2</span>:<span class="dv">3</span>]</code></pre></div>
+x[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]</code></pre></div>
 <pre><code>## [1] 5 7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># See what 2:3 does</span>
-<span class="dv">2</span>:<span class="dv">3</span></code></pre></div>
+<span class="dv">2</span><span class="op">:</span><span class="dv">3</span></code></pre></div>
 <pre><code>## [1] 2 3</code></pre>
 <p>This indexing works with data objects, as well. We just have one more dimension to consider—we have rows and columns. Rows before columns, <em>i.e.</em>, <code>[row, column]</code> (but we don’t actually use the words).</p>
 <p>To grab the first row of <code>car_sub</code>, we put a 1 for the row index and leave the column blank.</p>
@@ -923,6 +977,10 @@ x[<span class="dv">2</span>:<span class="dv">3</span>]</code></pre></div>
 ## # ... with 64 more rows</code></pre>
 <p>We’ll do a lot more of this indexing stuff in the future.</p>
 </div>
+<div id="fun-challenge" class="section level1">
+<h1>Fun challenge</h1>
+<p>What happens if you give the <code>head()</code> or <code>tail()</code> functions an <code>n</code> that is negative? Can you replicate the behavior using indexing? Can you replicate the behavior of <code>tail()</code> using only the function <code>head()</code>?</p>
+</div>
 <div id="linear-algebra-puzzles" class="section level1">
 <h1>Linear algebra puzzles</h1>
 <p>Some <em>classic</em><a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> R-meets-linear algebra puzzles for your enjoyment. They may use some R concepts that we have not yet covered.</p>
@@ -937,14 +995,14 @@ x[<span class="dv">2</span>:<span class="dv">3</span>]</code></pre></div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>If you do not have the most recent versions of R (3.3.2, a.k.a. <em>Sincere Pumpkin Patch</em>) and RStudio (1.0.136), then please check out the directions in <a href="section00.html">Section 0</a>.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>If you do not have the most recent versions of R (3.4.3, a.k.a. <em>Kite-Eating Tree</em>) and RStudio (1.1.383), then please check out the directions in <a href="section00.html">Section 0</a>.<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>CRAN stands for [the] Comprehensive R Archive Network<a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>You can also access functions within a package without loading the whole package. Let’s say we want to load the <code>happy()</code> function from the <code>fake</code> package without loading the whole <code>fake</code> package. Just type <code>fake::happy()</code>. The double colon <code>::</code> is the key here. (<em>Note:</em> Not all functions from a package can be accessed this way.) This method also works well when packages overlap in the names that they use for functions.<a href="#fnref3">↩</a></p></li>
 <li id="fn4"><p>Windows users beware: when you copy the path from File Explorer, the slashes between folders may be in the wrong direction for R: you will need to either change the direction (from <code>\</code> to <code>/</code>) or double them (from <code>/</code> to <code>//</code>).<a href="#fnref4">↩</a></p></li>
 <li id="fn5"><p>Note: Mac (OSX) directories tend to start with “/Users/”, while Windows paths start with the name of the drive, for instance, “C:/”. If you’re using Linux, you probably don’t need my help here.<a href="#fnref5">↩</a></p></li>
 <li id="fn6"><p>The files are apparently <a href="http://www.stata-press.com/data/r9/u.html">classic Stata tutorial files</a>.<a href="#fnref6">↩</a></p></li>
 <li id="fn7"><p>If you have <em>really</em> big delimited files (csv, tsv, fixed, width, <em>etc.</em>), I recommend the <code>fread()</code> (fast read) function from the <code>data.table</code> package. The whole <code>data.table</code> package is awesome and fast—it’s just a bit less beginner friendly than <code>dplyr</code>.<a href="#fnref7">↩</a></p></li>
-<li id="fn8"><p>If leaving off the quotation marks makes you uncomfortable—or is actually inhibiting your programming—each <code>dplyr</code> function has a clone that uses standard evaluation. These standard evaluation clones have the same names as their counterparts but with an added underscore (<code>_</code>) at their ends (<em>e.g.</em> <code>select_()</code>).<a href="#fnref8">↩</a></p></li>
+<li id="fn8"><p>If leaving off the quotation marks makes you uncomfortable—or is actually inhibiting your programming—each <code>dplyr</code> function has a clone that uses standard evaluation. These standard evaluation clones have the same names as their counterparts but with an added underscore (<code>_</code>) at their ends (<em>e.g.</em>, <code>select_()</code>).<a href="#fnref8">↩</a></p></li>
 <li id="fn9"><p>If you are more comfortable with British English, you will be happy to know you can use the functions <code>summarise()</code> and <code>summarise_each()</code>.<a href="#fnref9">↩</a></p></li>
 <li id="fn10"><p>By classic, I mean they’ve shown up in this class’s section notes for several years.<a href="#fnref10">↩</a></p></li>
 </ol>

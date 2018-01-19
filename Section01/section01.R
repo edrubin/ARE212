@@ -1,32 +1,45 @@
 
 # Packages in R ----------------------------------------------------------------
-# Install packages
+# Install the package named "dplyr"
 install.packages("dplyr")
+# Install the packages named "haven" and "readr"
 install.packages(c("haven", "readr"))
-# Load the packages
+# Loading packages
 library(dplyr)
 library(haven)
 library(readr)
 
-# File paths -------------------------------------------------------------------
-# Check the current working directory
+# Package management with 'pacman' ---------------------------------------------
+# Install the 'pacman' package
+install.packages("pacman")
+# Load the 'pacman' package
+library(pacman)
+# p_load examples
+p_load(dplyr, haven, readr)
+p_load(ggplot2)
+
+# File directories -------------------------------------------------------------
+# File paths and navigation
+setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212")
 getwd()
-# Set the working directory
-setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/")
+# The current directory
+getwd()
+# Move up one level
+setwd("..")
+# Check the directory now
+getwd()
+# Go home
+setwd("~")
+# Check the new working directory
+getwd()
+# Now return to my ARE212 folder
+setwd("Dropbox/Teaching/ARE212")
 # Check the working directory
 getwd()
-# Store a directory
+# The path to my ARE 212 folder (ARE212)
 dir_class <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/"
-# Add a subfolder to the directory
+# The path to my section 1 folder (Section01), which is inside my ARE 212 folder
 dir_section1 <- paste0(dir_class, "Section01/")
-# Look at the files in the current directory
-dir()
-# Should be the same as
-dir(getwd())
-# Look at the files in the directory stored in dir_class
-dir(dir_class)
-
-# Examples with paste functions ------------------------------------------------
 # Default use of paste0()
 paste0(1, 2, 3)
 # Default use of paste()
@@ -35,58 +48,72 @@ paste(1, 2, 3)
 paste(1, 2, 3, sep = " ")
 # Changing the separation parameter to "+"
 paste(1, 2, 3, sep = "+")
+# The object 'dir_class'
+dir_class
+# The character vector
+"Section01/"
+# Paste them together
+paste0(dir_class, "Section01/")
+# Look inside my ARE212 folder (dir_class stores the path)
+dir(dir_class)
+# Look inside my section 1 folder (dir_section1 stores the path)
+dir(dir_section1)
+dir_section1
+# The object
+dir(dir_section1)
+# The object's value
+dir("/Users/edwardarubin/Dropbox/Teaching/ARE212/Section01/")
 
-# Load data files --------------------------------------------------------------
+# Loading files ----------------------------------------------------------------
 # Load the .dta file
 car_data <- read_dta(paste0(dir_section1, "auto.dta"))
-# Print the saved dataset in the console
+# Check the loaded data
 car_data
 # Load the .csv file
 car_data <- read_csv(paste0(dir_section1, "auto.csv"))
-# Print the saved dataset in the console
+# See that it looks the same as above
 car_data
+# Load the CSV
+read_csv("Section01/auto.csv")
 
-# Examining the data -----------------------------------------------------------
-# Names of the variables
+# Playing with data ------------------------------------------------------------
+# Print the data into the console again
+car_data
+# Variable names
 names(car_data)
-# Head of the dataset (first six lines)
+# First six observations
 head(car_data)
-# First 11 lines
+# First eleven observations
 head(car_data, n = 11)
-# Last 7 lines
+# Last seven observations
 tail(car_data, n = 7)
-# View the data in RStudio viewer
-View(car_data)
-# Summarize all variables
-summary(car_data)
-# Summarize price variable
-summary(car_data$price)
 
-# select-ing -------------------------------------------------------------------
+# Summarizing the data ---------------------------------------------------------
+# The 'summary' function
+summary(car_data)
+# Summarize only price
+summary(car_data$price)
 # Select our desired variables; define as car_sub
 car_sub <- select(car_data, price, mpg, weight, length)
 # Print the dataset
 car_sub
-
-# arrange-ing ------------------------------------------------------------------
-# Arrange by price and mpg (both ascending)
+select(car_data, -price, -mpg, -weight, -length)
+# Arrange by price and mpg
 arrange(car_sub, price, mpg)
-# Arrange by price (descending) and mpg (ascending)
+car_sub
+# Revese the price ordering
 arrange(car_sub, desc(price), mpg)
-
-# summarize-ing ----------------------------------------------------------------
-# Using summarize() to find the mean and standard deviation of price
+# The 'summarize' function
 summarize(car_sub, mean(price), sd(price))
-# Same thing but naming the outputs
 summarize(car_sub, price_mean = mean(price), price_sd = sd(price))
-# Mean and standard deviation somewhat manually
+# Mean and standard deviation functions
 mean(car_sub$price)
 sd(car_sub$price)
 
 # Plotting the data ------------------------------------------------------------
-# A simple histogram of mpg
+# Histogram
 hist(car_sub$mpg)
-# A prettier histogram of mpg
+# The histogram function
 hist(
   # The variable for the histogram
   x = car_sub$mpg,
@@ -96,9 +123,26 @@ hist(
   xlab = "MPG (miles per gallon)")
 # The blue vertical line at the median MPG (lwd is line width)
 abline(v = median(car_sub$mpg), col = "blue", lwd = 3)
-# Scatterplot of mpg and price
+# Scatter plot
 plot(
   x = car_sub$mpg,
   y = car_sub$price,
   xlab = "Fuel economy (MPG)",
   ylab = "Price")
+
+# Indexing ---------------------------------------------------------------------
+# Create a vector
+x <- c(3, 5, 7, 9)
+# Grab the second element of x
+x[2]
+# Grab the second and third elements of x
+x[c(2, 3)]
+# Grab the second and third elements of x
+x[2:3]
+# See what 2:3 does
+2:3
+# Indexing the car subset
+car_sub[1, ]
+car_sub[, 1]
+# Index using the name of a column as its index
+car_sub[, "price"]
