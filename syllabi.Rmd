@@ -2,5 +2,5 @@
 title: "Course syllabi"
 ---
 
-- [ARE 212 course syllabus](syllabusARE212.pdf)
+- [ARE 212 course syllabus](syllabus2018.pdf)
 - ARE 212 section syllabus
