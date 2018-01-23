@@ -2,6 +2,8 @@
 
 - Add README about building the course website.
 - Machine learning
+- Regular expressions
+- `recode()`
 - Trouble-shooting code
   - `browser()`
 - Maximum likelihood
