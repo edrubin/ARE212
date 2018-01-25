@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 2: R and matrix madness</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 2: R and matrix madness</h1>
+
+</div>
+
+
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<ol style="list-style-type: decimal">
+<li>The packages and <a href="Section01.zip">data files</a> from the previous lecture. The packages are <code>readr</code>, <code>dplyr</code>, and <code>haven</code>. (Run <code>install.packages(c(&quot;readr&quot;, &quot;dplyr&quot;, &quot;haven&quot;))</code>)</li>
+<li>The package <code>psych</code>. (Run <code>install.packages(&quot;psych&quot;)</code>.)</li>
+</ol>
+</div>
+<div id="summary-of-last-time" class="section level2">
+<h2>Summary of last time</h2>
+<ul>
+<li>Installing and loading packages</li>
+<li>File paths (finding, changing, defining)</li>
+<li>Loading data (<code>.dta</code> and <code>.csv</code>)</li>
+</ul>
+<p><strong>Follow up:</strong></p>
+<ul>
+<li>My office hours are Mondays 3:30pm–5:30pm, Giannini Hall, room 236.</li>
+<li>Review <a href="section01.html#indexing">last section’s notes on indexing</a>.</li>
+<li>To create a folder, use the <code>dir.create()</code> function. <em>E.g.</em> <code>dir.create(&quot;TestFolder&quot;)</code> should create a new folder named “TestFolder” in your current directory. To see if it worked, type <code>dir()</code>. You can also check whether a folder already exists using the <code>dir.exists()</code> function, <em>e.g.</em> <code>dir.exists(&quot;TestFolder&quot;)</code>.</li>
+<li>A shortcut to clear your RStudio console: <code>ctrl+L</code>.</li>
+<li>If you have any questions about LaTeX and knitr, please check out <a href="latexKnitr.html">my summary on using RStudio, LaTeX, and knitr</a>. I’m happy to field questions. Google works too.</li>
+</ul>
+</div>
+<div id="summary-of-this-section" class="section level2">
+<h2>Summary of this section</h2>
+<p>Data structures in R—vectors and matrices in detail.</p>
+</div>
+</div>
+<div id="data-structures-in-r" class="section level1">
+<h1>Data structures in R</h1>
+<p>As we discussed previously, when you load or create data in R, you create objects. As you could probably guess, there are different types of objects in R. For the most part, we will use four types of objects in this course. Today we will focus on vectors and matrices today.</p>
+<ol style="list-style-type: decimal">
+<li><strong>vectors</strong></li>
+<li><strong>matrices</strong></li>
+<li>data frames (or similar objects, like last lecture’s <code>tibble</code>)</li>
+<li>lists</li>
+</ol>
+<p>Each of these object types is a different way to store data. Each can take numbers or characters. And you can generally change the type of an object fairly easily. Plus, they all follow similar indexing rules,<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> which is quite nice.</p>
+<p>While these object types have much in common, they each act slightly differently, so it is important to keep track of your object types. Luckily, R provides us with the <code>class()</code> function, as well as <code>dim()</code> and <code>length()</code>, which both help us figure out the type of data object we have. You can also check the “Environment” tab in RStudio to see the objects that R currently holds in memory and their types.</p>
+<p>First, check the class of a number</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(<span class="dv">2</span>)</code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>Now, let’s check the class of a string of characters</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(<span class="st">&quot;Max Auffhammer&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+</div>
+<div id="vectors" class="section level1">
+<h1>Vectors</h1>
+<div id="numeric-vectors" class="section level2">
+<h2>Numeric vectors</h2>
+<p>Vectors are more-or-less the basic building block in R. Vectors are one dimensional, and they only need one element. One way to create a vector is using the <code>c()</code> (<em>combine</em>) function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a vector called &#39;vec&#39;</span>
+vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)
+<span class="co"># Print the vector named &#39;vec&#39;</span>
+vec</code></pre></div>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<p>To create (consecutive) sequences of (natural) numbers, you can use the colon (<code>:</code>), <em>e.g.</em> <code>1:5</code>. You can also use the <code>seq()</code> function, <em>e.g.</em>, <code>seq(from = 1, to = 5)</code> or <code>seq(from = 1, to = 5, by = 1)</code>, which gives you flexibility in the increments between numbers.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a vector of the sequence from 1 to 5 and store it as &#39;vec2&#39;</span>
+vec2 &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">5</span>
+<span class="co"># Print &#39;vec2&#39;</span>
+vec2</code></pre></div>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Are the two vectors&#39; elements equal?</span>
+vec2 ==<span class="st"> </span>vec</code></pre></div>
+<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Are the two vectors equal?</span>
+<span class="kw">all.equal</span>(vec, vec2)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Notice that using the double-equal sign (<code>==</code>) tests pairwise equality, while the function <code>all.equal()</code> tests equality between the two vectors.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create another numeric vector</span>
+vec3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">8</span>:<span class="dv">10</span>)
+<span class="co"># Print it</span>
+vec3</code></pre></div>
+<pre><code>## [1]  1  2  8  9 10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check element-wise equality</span>
+vec ==<span class="st"> </span>vec3</code></pre></div>
+<pre><code>## [1]  TRUE  TRUE FALSE FALSE FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check overall equality</span>
+<span class="kw">all.equal</span>(vec, vec3)</code></pre></div>
+<pre><code>## [1] &quot;Mean relative difference: 1.25&quot;</code></pre>
+</div>
+<div id="combining-vectors" class="section level2">
+<h2>Combining vectors</h2>
+<p>You can also create vectors out of vectors. The combine function <code>c()</code> simply concatenates the vectors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a new vector by combining &#39;vec2&#39; and &#39;vec3&#39;</span>
+vec23 &lt;-<span class="st"> </span><span class="kw">c</span>(vec2, vec3)
+<span class="co"># Print the new vector</span>
+vec23</code></pre></div>
+<pre><code>##  [1]  1  2  3  4  5  1  2  8  9 10</code></pre>
+<p>Recall that vectors are one-dimensional. Let’s explore our vector a bit using the functions <code>class()</code>, <code>is.vector()</code>, <code>dim()</code>, and <code>length()</code>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The class function</span>
+<span class="kw">class</span>(vec23)</code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The is.vector function</span>
+<span class="kw">is.vector</span>(vec23)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The dimension function</span>
+<span class="kw">dim</span>(vec23)</code></pre></div>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The length function</span>
+<span class="kw">length</span>(vec23)</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<p>Because vectors are one-dimensional, indexing the vectors requires only one input. Let’s grab the seventh element of the vector <code>vec23</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vec23[<span class="dv">7</span>]</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+</div>
+<div id="character-vectors" class="section level2">
+<h2>Character vectors</h2>
+<p>Finally, we can also create vectors of characters.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create the string vector using quotation marks</span>
+str_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Aren&#39;t&quot;</span>, <span class="st">&quot;vectors&quot;</span>, <span class="st">&quot;exciting&quot;</span>, <span class="st">&quot;?&quot;</span>)
+<span class="co"># Print it</span>
+str_vec</code></pre></div>
+<pre><code>## [1] &quot;Aren&#39;t&quot;   &quot;vectors&quot;  &quot;exciting&quot; &quot;?&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check its class</span>
+<span class="kw">class</span>(str_vec)</code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check if it is a vector</span>
+<span class="kw">is.vector</span>(str_vec)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Grab the third element</span>
+str_vec[<span class="dv">3</span>]</code></pre></div>
+<pre><code>## [1] &quot;exciting&quot;</code></pre>
+<p>What happens when you combine a vector of characters with a vector of numbers (or create a vector of both numbers and characters)?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a vector of the numeric vector &#39;vec&#39; and the character vector &#39;str_vec&#39;</span>
+mix_vec &lt;-<span class="st"> </span><span class="kw">c</span>(vec, str_vec)
+<span class="co"># Print the result</span>
+mix_vec</code></pre></div>
+<pre><code>## [1] &quot;1&quot;        &quot;2&quot;        &quot;3&quot;        &quot;4&quot;        &quot;5&quot;        &quot;Aren&#39;t&quot;  
+## [7] &quot;vectors&quot;  &quot;exciting&quot; &quot;?&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the class of the new vector</span>
+<span class="kw">class</span>(mix_vec)</code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+</div>
+</div>
+<div id="matrices" class="section level1">
+<h1>Matrices</h1>
+<p>It’s matrix time.</p>
+<div id="matrix" class="section level2">
+<h2><code>matrix()</code></h2>
+<p>R’s matrix function is aptly named <code>matrix()</code>. We will generally feed the matrix function two arguments:<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<ol style="list-style-type: decimal">
+<li><code>data</code>: the <em>stuff</em> inside the matrix</li>
+<li><code>ncol</code>: the number of columns<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></li>
+</ol>
+<p>To learn more about the matrix function, type <code>?matrix</code> in your console (or in the “Help” tab of RStudio). This help searching works for all loaded functions. If you do not find what you are looking for, try using two question marks, <code>??matrix</code>, which will perform a fuzzy search for the word.</p>
+</div>
+<div id="creating-matrices" class="section level2">
+<h2>Creating matrices</h2>
+<p>Let’s make a matrix. Specifically, let’s make a 3 <span class="math inline">\(\times\)</span> 2 matrix filled with the numbers between 1 and 6. Following Max’s notation, let’s call this matrix <span class="math inline">\(\mathbf{A}\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a 3x2 matrix filled with the sequence 1:6</span>
+A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">1</span>:<span class="dv">6</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)
+<span class="co"># Print it</span>
+A</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<p>What are the dimensions of <code>A</code>? What about its length? Is <code>A</code> a vector or a matrix?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The dimension of A</span>
+<span class="kw">dim</span>(A)</code></pre></div>
+<pre><code>## [1] 3 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The length of A</span>
+<span class="kw">length</span>(A)</code></pre></div>
+<pre><code>## [1] 6</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check if A is a vector</span>
+<span class="kw">is.vector</span>(A)</code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check if A is a matrix</span>
+<span class="kw">is.matrix</span>(A)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Finally, you can index any element of a matrix using its row <em>and</em> column. The way R prints matrices actually shows you exactly how to reference the row, the column, or the exact element.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print the matrix A</span>
+A</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print the second row of A</span>
+A[<span class="dv">2</span>,]</code></pre></div>
+<pre><code>## [1] 2 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print the second and third rows of A</span>
+A[<span class="dv">2</span>:<span class="dv">3</span>,]</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    2    5
+## [2,]    3    6</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print the first column of A</span>
+A[,<span class="dv">1</span>]</code></pre></div>
+<pre><code>## [1] 1 2 3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print the element in the second row and first column of A</span>
+A[<span class="dv">2</span>,<span class="dv">1</span>]</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+</div>
+<div id="transpose" class="section level2">
+<h2>Transpose</h2>
+<p>Define <span class="math inline">\(\mathbf{B} = \mathbf{A}&#39;\)</span>. How can we manually make the transpose of <span class="math inline">\(\mathbf{A}\)</span>? It should be 2 <span class="math inline">\(\times\)</span> 3. Let’s try</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print A</span>
+A</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># First attempt at B</span>
+B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">1</span>:<span class="dv">6</span>, <span class="dt">ncol =</span> <span class="dv">3</span>)
+<span class="co"># Print B</span>
+B</code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    3    5
+## [2,]    2    4    6</code></pre>
+<p>Nope. The dimensions are correct, but we want the first row to be 1, 2, 3—not 1, 3, 5. To tell R to fill the matrix by row, rather than by column (the default), use the argument <code>byrow</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Using the byrow option</span>
+B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">1</span>:<span class="dv">6</span>, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)
+<span class="co"># Print B</span>
+B</code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    4    5    6</code></pre>
+<p>That’s better.</p>
+<p>R has a much simpler way to transpose matrices: the <code>t()</code> function. Feed a matrix to the <code>t()</code> function, and the output will be the transpose of the matrix. Let’s verify.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check element by element</span>
+<span class="kw">t</span>(A) ==<span class="st"> </span>B</code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,] TRUE TRUE TRUE
+## [2,] TRUE TRUE TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check if all the element-by-element comparisons are TRUE</span>
+<span class="kw">all</span>(<span class="kw">t</span>(A) ==<span class="st"> </span>B)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check if the transpose of A is identical to B</span>
+<span class="kw">identical</span>(<span class="kw">t</span>(A), B)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="multiplication" class="section level2">
+<h2>Multiplication</h2>
+<p>In R, the matrix multiplication command is <code>%*%</code>. Admittedly, this notation is a little strange,<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> but <code>*</code> is already taken for scalar multiplication. Don’t get lazy here: R will still let you use <code>*</code> multiplication with matrices, but it will be <strong>elementwise</strong> multiplication—not matrix multiplication.</p>
+<p>As an example, here is the elementwise multiplication of <span class="math inline">\(\mathbf{A}\)</span> and itself, using the <code>*</code> operator</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print A as a reminder</span>
+A</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Elementwise multiplication of A and A</span>
+A *<span class="st"> </span>A</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1   16
+## [2,]    4   25
+## [3,]    9   36</code></pre>
+<p>The matrix multiplication of <span class="math inline">\(\mathbf{A}\)</span> and itself is not defined because <span class="math inline">\(\textbf{A}\)</span> does not conform with itself.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Matrix multiplication of A and itself</span>
+A %*%<span class="st"> </span>A</code></pre></div>
+<pre><code>## Error in A %*% A: non-conformable arguments</code></pre>
+<p>You can also multiply matrices by scalars using the <code>*</code> operator</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A *<span class="st"> </span><span class="dv">3</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    3   12
+## [2,]    6   15
+## [3,]    9   18</code></pre>
+<p>To see a matrix multiplication that actually works, let’s define a 2 <span class="math inline">\(\times\)</span> 2 matrix with the elements 1 through 4. Call it <span class="math inline">\(\mathbf{C}\)</span>. Calculate <span class="math inline">\(\mathbf{A}\times\mathbf{C}\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create C</span>
+C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">1</span>:<span class="dv">4</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)
+<span class="co"># Multiply A and C</span>
+A %*%<span class="st"> </span>C</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    9   19
+## [2,]   12   26
+## [3,]   15   33</code></pre>
+</div>
+<div id="identities-and-inverses" class="section level2">
+<h2>Identities and inverses</h2>
+<p>No discussion of matrices would be complete without identity matrices and inverses.</p>
+<p>In R, we create identity matrices using the function <code>diag()</code>. The argument to <code>diag()</code> is the number of rows/columns of the identity matrix. Because identity matrices are square, this argument is a single number.</p>
+<p>For a 5 <span class="math inline">\(\times\)</span> 5 identity matrix,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">diag</span>(<span class="dv">5</span>)</code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    1    0    0    0    0
+## [2,]    0    1    0    0    0
+## [3,]    0    0    1    0    0
+## [4,]    0    0    0    1    0
+## [5,]    0    0    0    0    1</code></pre>
+<p>Notice that if you apply the function <code>diag()</code> to an already-created matrix, it will grab the diagonal elements of that matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Grab the diagonal elements of the matrix C</span>
+<span class="kw">diag</span>(C)</code></pre></div>
+<pre><code>## [1] 1 4</code></pre>
+<p>R’s built-in function to take the inverse of a matrix is <code>solve()</code>. Give <code>solve()</code> an invertible matrix, and it will return the inverse of the matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Take the inverse of C</span>
+<span class="kw">solve</span>(C)</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]   -2  1.5
+## [2,]    1 -0.5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Multiply C by its inverse</span>
+C %*%<span class="st"> </span><span class="kw">solve</span>(C)</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    0
+## [2,]    0    1</code></pre>
+<p>The function <code>det()</code> will give you the determinant of a (square) matrix. To calculate the trace of a matrix, you need to load the <code>psych</code> package. Within the <code>psych</code> package is a function called <code>tr()</code> that will calculate the trace.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The determinant of a matrix</span>
+<span class="kw">det</span>(C)</code></pre></div>
+<pre><code>## [1] -2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The trace of a matrix using the psych package&#39;s tr()</span>
+<span class="kw">library</span>(psych)
+<span class="kw">tr</span>(C)</code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>What is another way to calculate the trace of a matrix using tools we’ve already learned?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">diag</span>(C))</code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>Combining <code>sum()</code> and <code>diag()</code> will give the trace of a matrix.</p>
+</div>
+<div id="adding-columns-or-rows" class="section level2">
+<h2>Adding columns or rows</h2>
+<p>You will often want to add an additional row or column to your matrix. <code>rbind()</code> and <code>cbind()</code> bind rows and columns onto existing matrices, respectively.</p>
+<p>Remember the matrix <span class="math inline">\(\mathbf{A}\)</span>?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<p>Let’s add a column of ones in front of the matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Bind a column of ones in front of the matrix A</span>
+<span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), A)</code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    1    4
+## [2,]    1    2    5
+## [3,]    1    3    6</code></pre>
+<p>What happens if we get a little lazy and type <code>1</code> instead of <code>c(1, 1, 1)</code>?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cbind</span>(<span class="dv">1</span>, A)</code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    1    4
+## [2,]    1    2    5
+## [3,]    1    3    6</code></pre>
+<p>R recycles the data given to make the dimensions match. This feature can be very helpful, but it might occasionally trip you up too. Be careful being lazy.</p>
+<p>Now, let’s bind the vector <code>c(3, 6)</code> to the end (bottom?) of A.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rbind</span>(A, <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">6</span>))</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6
+## [4,]    3    6</code></pre>
+<p>Finally, notice that you can bind matrices together (as long as the dimension match).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rbind</span>(A, C)</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6
+## [4,]    1    3
+## [5,]    2    4</code></pre>
+</div>
+</div>
+<div id="other-tools" class="section level1">
+<h1>Other tools</h1>
+<p>We do not have time to cover every function related to vectors and matrices, but here are a few more functions (or uses of functions we covered) that may prove useful.</p>
+<ul>
+<li><code>crossprod()</code> and <code>tcrossprod()</code> take cross products (<em>e.g.</em>, <span class="math inline">\(\mathbf{A}&#39;\times\mathbf{B}\)</span>).</li>
+<li><code>solve()</code> can also take two arguments, <code>a</code> and <code>b</code>, and returns the solution for <code>x</code> in the equation <code>a %*% x = b</code>.</li>
+<li><code>eigen()</code> gives the eigenvectors and eigenvalues of a matrix. <code>eigen(A)$vectors</code> will give you just the eigenvectors of <span class="math inline">\(\mathbf{A}\)</span>, and <code>eigen(A)$values</code> will give you only the eigenvalues of <span class="math inline">\(\mathbf{A}\)</span>.</li>
+<li>You can give <code>matrix()</code> a single number and specify both <code>ncol</code> and <code>nrow</code> to fill a matrix with the same number. For example, <code>matrix(data = 1, nrow = 3, ncol = 5)</code> creates a 3 <span class="math inline">\(\times\)</span> 5 matrix of ones.</li>
+<li>The function <code>sample()</code> will randomly sample a number of elements from a vector with or without replacement (without replacement is the default). For example, <code>sample(x = 1:100, size = 5, replace = TRUE)</code> will randomly draw five numbers from 1 to 100 with replacement. See <code>?sample</code> for more information. You should set your seed to make sampling replicable. The function <code>set.seed()</code> sets the seed.</li>
+</ul>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Check out <a href="section01.html#indexing">Section 1</a> for more on indexing.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>You can also use the <code>identical()</code> function, which is probably more appropriate, but beware: it is <em>very</em> picky. For instance, try <code>as.integer(1) == as.numeric(1)</code> and <code>all.equal(as.integer(1), as.numeric(1))</code> compare the results to <code>identical(as.integer(1), as.numeric(1))</code>. Picky! Might not always get you what you want. User beware.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Most object types/classes have an associated function like the <code>is.vector()</code> function. For example, <code>is.numeric()</code>, <code>is.integer()</code>, <code>is.character()</code>, <code>is.matrix()</code>, and <code>is.data.frame()</code>, to name a few.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Recall that we use quotation marks to create string/character vectors.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>The <code>matrix()</code> function, in fact, requires only one argument: <code>data</code>. Without specifying <code>ncol</code> or <code>nrow</code>, <code>matrix()</code> returns a <span class="math inline">\(n \times 1\)</span> matrix.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Alternatively, you can use <code>nrow</code> and omit <code>ncol</code>. Or use both… or neither.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>In case you are wondering: I did not choose this notation.<a href="#fnref7">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
