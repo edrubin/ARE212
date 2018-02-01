@@ -28,14 +28,14 @@ Vectors, matrices, and general mathematical usage of R.
 [pdf](Section02/section02.pdf) | [R script](Section02/section02.R) | [zip](Section02.zip)
 <br><br>
 
-<!-- #### [__Section 3__](section03.html): Functions and loops
+#### [__Section 3__](section03.html): Functions and loops
 
 Writing your own (OLS) functions, using loops, and running simulations in R.
 
 [pdf](Section03/section03.pdf) | [R script](Section03/section03.R) | [zip](Section03.zip)
 <br><br>
 
-#### [__Section 4__](section04.html): FWL and model fit
+<!-- #### [__Section 4__](section04.html): FWL and model fit
 
 Logical operators, optional arguments to your custom functions, Frisch-Waugh-Lovell (FWL) theorem, omitted variable bias, and measures of fit/overfitting.
 
