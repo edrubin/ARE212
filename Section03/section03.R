@@ -100,12 +100,11 @@ b_ols <- function(data, y, X) {
 
   # Select X variable data from 'data'
   X_data <- select_(data, .dots = X)
-  # Add a column of ones to X_data
-  X_data <- mutate_(X_data, "ones" = 1)
-  # Move the intercept column to the front
-  X_data <- select_(X_data, "ones", .dots = X)
   # Convert X_data to matrices
   X_data <- as.matrix(X_data)
+  # Add a column of ones to X_data
+  X_data <- cbind(1, X_data)
+  colnames(X_data)[1] <- "ones"
 
   # Calculate beta hat
   beta_hat <- solve(t(X_data) %*% X_data) %*% t(X_data) %*% y_data

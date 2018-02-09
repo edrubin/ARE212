@@ -16,8 +16,8 @@ navbar:
           href: section02.html
         - text: "Section 3"
           href: section03.html
-        # - text: "Section 4"
-        #   href: section04.html
+        - text: "Section 4"
+          href: section04.html
         # - text: "Section 5"
         #   href: section05.html
         # - text: "Section 6"

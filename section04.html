@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 4: FWL and model fit</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 4: FWL and model fit</h1>
+
+</div>
+
+
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<p><em>Reminder</em>: Office hours today from 1pm–3pm in Giannini 254.</p>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p><strong>Packages</strong>:</p>
+<ul>
+<li>Previously used: <code>dplyr</code>, <code>lfe</code>, and <code>readr</code></li>
+<li>New: <code>MASS</code></li>
+</ul>
+<p><strong>Data</strong>: The <code>auto.csv</code> file.</p>
+</div>
+<div id="last-week" class="section level2">
+<h2>Last week</h2>
+<p>In <a href="section03.html">Section 3</a>, we learned to write our own functions and started covering loops.</p>
+<div id="saving-plots" class="section level3">
+<h3>Saving plots</h3>
+<p>If you want to know how to save plots produced by the <code>plot()</code> function, see below. Soon, we will cover a function that I prefer to <code>plot()</code> (the function is from the package <code>ggplot2</code>), which has a different—easier—saving syntax. Nevertheless, here is the answer to saving a <code>plot()</code>.</p>
+<p>Saving as .jpeg</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Start the .jpeg driver</span>
+<span class="kw">jpeg</span>(<span class="st">&quot;your_plot.jpeg&quot;</span>)
+<span class="co"># Make the plot</span>
+<span class="kw">plot</span>(<span class="dt">x =</span> <span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">y =</span> <span class="dv">1</span>:<span class="dv">10</span>)
+<span class="co"># Turn off the driver</span>
+<span class="kw">dev.off</span>()</code></pre></div>
+<p>Saving as .pdf</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Start the .pdf driver</span>
+<span class="kw">pdf</span>(<span class="st">&quot;your_plot.pdf&quot;</span>)
+<span class="co"># Make the plot</span>
+<span class="kw">plot</span>(<span class="dt">x =</span> <span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">y =</span> <span class="dv">1</span>:<span class="dv">10</span>)
+<span class="co"># Turn off the driver</span>
+<span class="kw">dev.off</span>()</code></pre></div>
+<p>It is important to note that these methods for savings plots will not display the plot. <a href="www.stat.berkeley.edu/classes/s133/saving.html">This guide</a> from Berkeley’s Statistics Department describes other methods and drivers for saving plots produced by <code>plot()</code>.</p>
+<p>A final note/pitch for knitr: knitr will automatically produce your plots inside of the documents you are knitting.</p>
+</div>
+<div id="overfull-hbox" class="section level3">
+<h3>Overfull <code>\hbox</code></h3>
+<p>I few people have asked me about LaTeX/knitr warnings that look something like <code>Bad Box: test.tex: Overfull \hbox</code>. This warning tends to happen with code chunks where you have really long lines of code. The easiest solution, in most cases, is to simply break up your lines of code. Just make sure the way you break up the line of code doesn’t change the way your code executes.</p>
+<p>Let’s imagine you want to break up the following (somewhat strange) line of code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>) %&gt;%<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">4</span>) %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>() %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">V5 =</span> V1 *<span class="st"> </span>V2)</code></pre></div>
+<p>You do not want to break a line of code in a place where R could think the line is finished.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> For example</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>) %&gt;%<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">4</span>)
+  %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>() %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">V5 =</span> V1 *<span class="st"> </span>V2)</code></pre></div>
+<p>will generate an error because R finishes the line by defining <code>x</code> as a 4-column matrix and then moves to the next row. When it reaches the next row, R has no idea what to do with the pipe <code>%&gt;%</code>.</p>
+<p>One way that works for breaking up the line of code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>) %&gt;%<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">4</span>) %&gt;%
+<span class="st">  </span><span class="kw">tbl_df</span>() %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">V5 =</span> V1 *<span class="st"> </span>V2)</code></pre></div>
+<p>Another way that works for breaking up the line of code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>) %&gt;%
+<span class="st">  </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">4</span>) %&gt;%
+<span class="st">  </span><span class="kw">tbl_df</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">V5 =</span> V1 *<span class="st"> </span>V2)</code></pre></div>
+</div>
+</div>
+<div id="this-week" class="section level2">
+<h2>This week</h2>
+<p>We are first going to quickly cover logical operators and optional arguments to your custom functions. We will then talk about the Frisch-Waugh-Lovell (FWL) theorem, residuals, omitted variable bias, and measures of fit/overfitting.</p>
+</div>
+</div>
+<div id="general-extensions" class="section level1">
+<h1>General extensions</h1>
+<div id="logical-operators" class="section level2">
+<h2>Logical operators</h2>
+<p>You will probably need to use logical operators from time to time. We’ve already seen a few functions that produce logical variables, for instance, <code>is.matrix()</code>. There are a lot of other options. You can write <code>T</code> for <code>TRUE</code> (or <code>F</code> for <code>FALSE</code>). Here are some of the basics.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># I&#39;m not lying</span>
+T ==<span class="st"> </span><span class="ot">TRUE</span>
+## [1] TRUE
+<span class="kw">identical</span>(T, <span class="ot">TRUE</span>)
+## [1] TRUE
+
+<span class="co"># A nuance</span>
+<span class="ot">TRUE</span> ==<span class="st"> &quot;TRUE&quot;</span>
+## [1] TRUE
+<span class="kw">identical</span>(<span class="ot">TRUE</span>, <span class="st">&quot;TRUE&quot;</span>)
+## [1] FALSE
+
+<span class="co"># Greater/less than</span>
+<span class="dv">1</span> &gt;<span class="st"> </span><span class="dv">3</span>
+## [1] FALSE
+<span class="dv">1</span> &lt;<span class="st"> </span><span class="dv">1</span>
+## [1] FALSE
+<span class="dv">1</span> &gt;=<span class="st"> </span><span class="dv">3</span>
+## [1] FALSE
+<span class="dv">1</span> &lt;=<span class="st"> </span><span class="dv">1</span>
+## [1] TRUE
+
+<span class="co"># Alphabetization</span>
+<span class="st">&quot;Ed&quot;</span> &lt;<span class="st"> &quot;Everyone&quot;</span> <span class="co"># :(</span>
+## [1] TRUE
+<span class="st">&quot;A&quot;</span> &lt;<span class="st"> &quot;B&quot;</span>
+## [1] TRUE
+
+<span class="co"># NA is weird</span>
+<span class="ot">NA</span> ==<span class="st"> </span><span class="ot">NA</span>
+## [1] NA
+<span class="ot">NA</span> &gt;<span class="st"> </span><span class="dv">3</span>
+## [1] NA
+<span class="ot">NA</span> ==<span class="st"> </span>T
+## [1] NA
+<span class="kw">is.na</span>(<span class="ot">NA</span>)
+## [1] TRUE
+
+<span class="co"># Equals</span>
+T ==<span class="st"> </span>F
+## [1] FALSE
+(pi &gt;<span class="st"> </span><span class="dv">1</span>) ==<span class="st"> </span>T
+## [1] TRUE
+
+<span class="co"># And</span>
+(<span class="dv">3</span> &gt;<span class="st"> </span><span class="dv">2</span>) &amp;<span class="st"> </span>(<span class="dv">2</span> &gt;<span class="st"> </span><span class="dv">3</span>)
+## [1] FALSE
+
+<span class="co"># Or</span>
+(<span class="dv">3</span> &gt;<span class="st"> </span><span class="dv">2</span>) |<span class="st"> </span>(<span class="dv">2</span> &gt;<span class="st"> </span><span class="dv">3</span>)
+## [1] TRUE
+
+<span class="co"># Not (gives the opposite)</span>
+!<span class="st"> </span>T
+## [1] FALSE</code></pre></div>
+</div>
+<div id="optional-arguments" class="section level2">
+<h2>Optional arguments</h2>
+<p>Most of the functions we’ve been using in R have additional (optional) arguments that we have not been using. For example, we have been using the <code>read_csv()</code> function to read csv files. We have been passing the name of a file to the function (<em>e.g.</em>, <code>read.csv(&quot;my_file.csv&quot;)</code>), and the function then loads the file. However, if you look at the help file for <code>read_csv()</code>,<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> you will see that there are a lot of other arguments that the function accepts.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> What is going on with all of these other arguments? They are optional arguments—optional because they have default values.</p>
+<p>You will generally use the default values, but you will eventually hit a time where you want to change something. For instance, You may want to skip the first three lines of your csv file because they are not actually part of the dataset. It turns out there is an optional <code>skip</code> argument in the <code>read_csv()</code> function. It defaults to <code>0</code> (meaning it does not skip any lines), but if you typed <code>read_csv(&quot;my_file.csv&quot;, skip = 3)</code>, the function would skip the first three lines.</p>
+<p>While these optional arguments are helpful to know, I specifically want to tell you about them so you can include them in your own functions. Imagine a hypothetical world where you needed to write a function to estimate the OLS coefficients with and without an intercept. There are a few different ways you could go about this task—writing two functions, feeding the intercept to your function as one of the <span class="math inline">\(\mathbf{X}\)</span> variables, <em>etc.</em>—but I am going to show you how to do it with an additional argument to the OLS function we defined last time. Specifically, we are going to add an argument called <code>intercept</code> to our function, and we are going to set the default to <code>TRUE</code>, since regressions with intercepts tend to be our default in econometrics. The first line of our function should then look like <code>b_ols &lt;- function(data, y, X, intercept = TRUE)</code>. Notice that we have defined the value of <code>intercept</code> inside of our function—this is how you set the default value of an argument.</p>
+<p>Now, let’s update the <code>b_ols()</code> function from last time to incorporate the inclusion or exclusion of an intercept, as set by the <code>intercept</code> argument.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> <span class="ot">TRUE</span>) {
+  <span class="co"># Require the &#39;dplyr&#39; package</span>
+  <span class="kw">require</span>(dplyr)
+
+  <span class="co"># Create the y matrix</span>
+  y &lt;-<span class="st"> </span>data %&gt;%
+<span class="st">    </span><span class="co"># Select y variable data from &#39;data&#39;</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> y_var) %&gt;%
+<span class="st">    </span><span class="co"># Convert y_data to matrices</span>
+<span class="st">    </span><span class="kw">as.matrix</span>()
+
+  <span class="co"># Create the X matrix</span>
+  X &lt;-<span class="st"> </span>data %&gt;%
+<span class="st">    </span><span class="co"># Select X variable data from &#39;data&#39;</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> X_vars)
+
+  <span class="co"># If &#39;intercept&#39; is TRUE, then add a column of ones</span>
+  <span class="co"># and move the column of ones to the front of the matrix</span>
+  if (intercept ==<span class="st"> </span>T) {
+    <span class="co"># Bind on a column of ones</span>
+    X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+    <span class="co"># Name the column of ones</span>
+    <span class="kw">names</span>(X) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;ones&quot;</span>, X_vars)
+    }
+
+  <span class="co"># Convert X_data to a matrix</span>
+  X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(X)
+
+  <span class="co"># Calculate beta hat</span>
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>y
+
+  <span class="co"># If &#39;intercept&#39; is TRUE:</span>
+  <span class="co"># change the name of &#39;ones&#39; to &#39;intercept&#39;</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(beta_hat) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;intercept&quot;</span>, X_vars)
+
+  <span class="co"># Return beta_hat</span>
+  <span class="kw">return</span>(beta_hat)
+}</code></pre></div>
+<p>Let’s check that the function works. First, we will create a quick dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the &#39;dplyr&#39; package</span>
+<span class="kw">library</span>(dplyr)
+<span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Set the sample size</span>
+n &lt;-<span class="st"> </span><span class="dv">100</span>
+<span class="co"># Generate the x and error data from N(0,1)</span>
+the_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+  <span class="dt">x =</span> <span class="kw">rnorm</span>(n),
+  <span class="dt">e =</span> <span class="kw">rnorm</span>(n))
+<span class="co"># Calculate y = 3 + 1.5 x + e</span>
+the_data &lt;-<span class="st"> </span><span class="kw">mutate</span>(the_data, <span class="dt">y =</span> <span class="dv">3</span> +<span class="st"> </span><span class="fl">1.5</span> *<span class="st"> </span>x +<span class="st"> </span>e)
+<span class="co"># Plot to make sure things are going well.</span>
+<span class="kw">plot</span>(
+  <span class="co"># The variables for the plot</span>
+  <span class="dt">x =</span> the_data$x, <span class="dt">y =</span> the_data$y,
+  <span class="co"># Labels and title</span>
+  <span class="dt">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Our generated data&quot;</span>)</code></pre></div>
+<p><img src="section04_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Now, let’s run our regressions</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run b_ols with and intercept</span>
+<span class="kw">b_ols</span>(<span class="dt">data =</span> the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                  y
+## intercept 3.022053
+## x         1.594535</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">b_ols</span>(<span class="dt">data =</span> the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">intercept =</span> F)</code></pre></div>
+<pre><code>##         y
+## x 2.16881</code></pre>
+<p>Notice that <code>T</code> and <code>TRUE</code> are identical in R—as are <code>F</code> and <code>FALSE</code>.</p>
+<p>Let’s check our regressions with R’s canned function <code>felm()</code> (from the <code>lfe</code> package). Notice that you can specify a regression without an intercept using <code>-1</code> in the regression formula:<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lfe)
+<span class="co"># With an intercept:</span>
+<span class="kw">felm</span>(y ~<span class="st"> </span>x, <span class="dt">data =</span> the_data) %&gt;%<span class="st"> </span><span class="kw">summary</span>()
+## 
+## Call:
+##    felm(formula = y ~ x, data = the_data) 
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.20347 -0.60278 -0.01114  0.61898  2.60970 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  3.02205    0.10353   29.19   &lt;2e-16 ***
+## x            1.59454    0.09114   17.50   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.011 on 98 degrees of freedom
+## Multiple R-squared(full model): 0.7575   Adjusted R-squared: 0.755 
+## Multiple R-squared(proj model): 0.7575   Adjusted R-squared: 0.755 
+## F-statistic(full model):306.1 on 1 and 98 DF, p-value: &lt; 2.2e-16 
+## F-statistic(proj model): 306.1 on 1 and 98 DF, p-value: &lt; 2.2e-16
+<span class="co"># Without an intercept:</span>
+<span class="kw">felm</span>(y ~<span class="st"> </span>x -<span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> the_data) %&gt;%<span class="st"> </span><span class="kw">summary</span>()
+## 
+## Call:
+##    felm(formula = y ~ x - 1, data = the_data) 
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## 0.3592 2.0732 2.8736 3.7755 5.5697 
+## 
+## Coefficients:
+##   Estimate Std. Error t value Pr(&gt;|t|)    
+## x   2.1688     0.2757   7.867 4.62e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.132 on 99 degrees of freedom
+## Multiple R-squared(full model): -1.351   Adjusted R-squared: -1.375 
+## Multiple R-squared(proj model): -1.351   Adjusted R-squared: -1.375 
+## F-statistic(full model):-56.89 on 1 and 99 DF, p-value: 1 
+## F-statistic(proj model): 61.89 on 1 and 99 DF, p-value: 4.62e-12</code></pre></div>
+<p>Finally, let’s compare the two sets of predictions graphically:<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The estimates</span>
+b_w &lt;-<span class="st"> </span><span class="kw">b_ols</span>(<span class="dt">data =</span> the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">intercept =</span> T)
+b_wo &lt;-<span class="st"> </span><span class="kw">b_ols</span>(<span class="dt">data =</span> the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">intercept =</span> F)
+<span class="co"># Plot the points</span>
+<span class="kw">plot</span>(
+  <span class="co"># The variables for the plot</span>
+  <span class="dt">x =</span> the_data$x, <span class="dt">y =</span> the_data$y,
+  <span class="co"># Labels and title</span>
+  <span class="dt">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Our generated data&quot;</span>)
+<span class="co"># Plot the line from the &#39;with intercept&#39; regression in yellow</span>
+<span class="kw">abline</span>(<span class="dt">a =</span> b_w[<span class="dv">1</span>], <span class="dt">b =</span> b_w[<span class="dv">2</span>], <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)
+<span class="co"># Plot the line from the &#39;without intercept&#39; regression in purple</span>
+<span class="kw">abline</span>(<span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> b_w[<span class="dv">1</span>], <span class="dt">col =</span> <span class="st">&quot;purple4&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)
+<span class="co"># Add a legend</span>
+<span class="kw">legend</span>(<span class="dt">x =</span> <span class="kw">min</span>(the_data$x), <span class="dt">y =</span> <span class="kw">max</span>(the_data$y),
+  <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;with intercept&quot;</span>, <span class="st">&quot;w/o intercept&quot;</span>),
+  <span class="co"># Line widths</span>
+  <span class="dt">lwd =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>),
+  <span class="co"># Colors</span>
+  <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;lightblue&quot;</span>, <span class="st">&quot;purple4&quot;</span>),
+  <span class="co"># No box around the legend</span>
+  <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>)</code></pre></div>
+<p><img src="section04_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+</div>
+<div id="fwl-theorem" class="section level1">
+<h1>FWL theorem</h1>
+<p>As mentioned above, we are going to dive into the Frisch-Waugh-Lovell (FWL) theorem.</p>
+<div id="setting-up" class="section level2">
+<h2>Setting up</h2>
+<p>First, load a few packages and the ever-popular automobile dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Setup ----</span>
+<span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="co"># Load the packages</span>
+<span class="kw">library</span>(pacman)
+<span class="kw">p_load</span>(dplyr, lfe, readr, MASS)
+<span class="co"># Set the working directory</span>
+dir_data &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section04/&quot;</span>
+<span class="co"># Load the dataset from CSV</span>
+cars &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_data, <span class="st">&quot;auto.csv&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">read_csv</span>()</code></pre></div>
+<p>Next, because we often want to convert a <code>tbl_df</code>, <code>tibble</code>, or <code>data.frame</code> to a matrix, after selecting a few columns, let’s create function for this task. The function will accept:</p>
+<ol style="list-style-type: decimal">
+<li><code>data</code>: a dataset</li>
+<li><code>vars</code>: a vector of the name or names of variables that we want inside our matrix</li>
+</ol>
+<p>Write the function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to_matrix &lt;-<span class="st"> </span>function(the_df, vars) {
+  <span class="co"># Create a matrix from variables in var</span>
+  new_mat &lt;-<span class="st"> </span>the_df %&gt;%
+<span class="st">    </span><span class="co"># Select the columns given in &#39;vars&#39;</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) %&gt;%
+<span class="st">    </span><span class="co"># Convert to matrix</span>
+<span class="st">    </span><span class="kw">as.matrix</span>()
+  <span class="co"># Return &#39;new_mat&#39;</span>
+  <span class="kw">return</span>(new_mat)
+}</code></pre></div>
+<p>Note that we are using <code>select_()</code> here (with the <code>.dots</code> argument), rather than plain old <code>select()</code>. <code>select_(.dots = ...)</code> allows us to feed it a character vector of names.</p>
+<p>Now incorporate the function in the <code>b_ols()</code> function from above. This addition will really clean up the function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> <span class="ot">TRUE</span>) {
+  <span class="co"># Require the &#39;dplyr&#39; package</span>
+  <span class="kw">require</span>(dplyr)
+  <span class="co"># Create the y matrix</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> y_var)
+  <span class="co"># Create the X matrix</span>
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> X_vars)
+  <span class="co"># If &#39;intercept&#39; is TRUE, then add a column of ones</span>
+  if (intercept ==<span class="st"> </span>T) {
+    <span class="co"># Bind a column of ones to X</span>
+    X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+    <span class="co"># Name the new column &quot;intercept&quot;</span>
+    <span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;intercept&quot;</span>, X_vars)
+  }
+  <span class="co"># Calculate beta hat</span>
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>y
+  <span class="co"># Return beta_hat</span>
+  <span class="kw">return</span>(beta_hat)
+}</code></pre></div>
+<p>Does it work?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                  y
+## intercept 3.022053
+## x         1.594535</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">intercept =</span> F)</code></pre></div>
+<pre><code>##         y
+## x 2.16881</code></pre>
+<p>Yes!</p>
+</div>
+<div id="the-theorem" class="section level2">
+<h2>The theorem</h2>
+<p>The first few times I saw the Frisch-Waugh-Lovell theorem in practice, I did not appreciate it. However, I’ve become a pretty big fan of it—FWL is helpful in a number of ways.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> The theorem can give you some interesting insights into what is going on inside of OLS, how to interpret coefficients, and how to implement really messy regressions. We will focus on the first two points today….</p>
+<p>Recall that for an arbitrary regression</p>
+<p><span class="math display">\[ \mathbf{y} = \mathbf{X}_1 \beta_1 + \mathbf{X}_2 \beta_2 + \boldsymbol{\varepsilon} \]</span></p>
+<p>FWL tells us that we can estimate <span class="math inline">\(\beta_1\)</span> with <span class="math inline">\(\mathbf{b}_1\)</span> using</p>
+<p><span class="math display">\[ \mathbf{b}_1 = \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{y} - \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{X}_2 \mathbf{b}_2 \]</span></p>
+<p>Now define <span class="math inline">\(\mathbf{M}_2\)</span> as the residual-maker matrix, such that post-multiplying <span class="math inline">\(\mathbf{M}_2\)</span> by another matrix <span class="math inline">\(\mathbf{C}\)</span> (<em>i.e.</em>, <span class="math inline">\(\mathbf{M}_2\mathbf{C}\)</span>) will yield the residuals from regressing <span class="math inline">\(\mathbf{C}\)</span> onto <span class="math inline">\(\mathbf{X}_2\)</span>.</p>
+<p>Further, define <span class="math inline">\(\mathbf{X}_1^\ast = \mathbf{M}_2\mathbf{X}_1\)</span> and <span class="math inline">\(\mathbf{y}^\ast = \mathbf{M}_2\mathbf{y}\)</span>. These starred matrices are the respective matrices residualized on <span class="math inline">\(\mathbf{X}_2\)</span> (regressing the matrices on <span class="math inline">\(\mathbf{X}_2\)</span> and calculating the residuals).</p>
+<p>FWL tells us that we can write the estimate of <span class="math inline">\(\beta_1\)</span> as</p>
+<p><span class="math display">\[ \mathbf{b}_1 = \left(\mathbf{X}_1^{\ast\prime}\mathbf{X}_1^{\ast}\right)^{-1}\mathbf{X}_1^{\ast\prime}\mathbf{y}^{\ast}\]</span></p>
+<p>What does this expression tell us? We can recover the estimate for <span class="math inline">\(\beta_1\)</span> (<span class="math inline">\(\mathbf{b}_1\)</span>) by</p>
+<ol style="list-style-type: decimal">
+<li>running a regression of <span class="math inline">\(\mathbf{y}\)</span> on <span class="math inline">\(\mathbf{X}_1\)</span> and subtracting off an “adjustment”, or</li>
+<li>running a regression of a <em>residualized</em> <span class="math inline">\(\mathbf{y}\)</span> on a <em>residualized</em> <span class="math inline">\(\mathbf{X}_1\)</span>.</li>
+</ol>
+<p>The same procedure works for calculating <span class="math inline">\(\mathbf{b}_2\)</span>. Max’s course notes show the full derivation for FWL.</p>
+</div>
+<div id="in-practice" class="section level2">
+<h2>In practice</h2>
+<p>The first insight of FWL is that FWL generates the same estimate for <span class="math inline">\(\beta_1\)</span> as the standard OLS estimator <span class="math inline">\(\mathbf{b}\)</span> (for the equation)</p>
+<p><span class="math display">\[ \mathbf{y} = \mathbf{X}_1 \beta_1 + \mathbf{X}_2 \beta_2 + \boldsymbol{\varepsilon} \]</span></p>
+<p>The “algorithm” for estimating <span class="math inline">\(\beta_1\)</span> via FWL is</p>
+<ol style="list-style-type: decimal">
+<li>Regress <span class="math inline">\(\mathbf{y}\)</span> on <span class="math inline">\(\mathbf{X}_2\)</span>.</li>
+<li>Save the residuals. Call them <span class="math inline">\(\mathbf{e}_{\mathbf{y}\mathbf{X}_2}\)</span>.</li>
+<li>Regress <span class="math inline">\(\mathbf{X}_1\)</span> on <span class="math inline">\(\mathbf{X}_2\)</span>.</li>
+<li>Save the residuals. Call them <span class="math inline">\(\mathbf{e}_{\mathbf{X}_1\mathbf{X}_2}\)</span>.</li>
+<li>Regress <span class="math inline">\(\mathbf{e}_{\mathbf{y}\mathbf{X}_2}\)</span> on <span class="math inline">\(\mathbf{e}_{\mathbf{X}_1\mathbf{X}_2}\)</span>.</li>
+</ol>
+<p>You have to admit it is pretty impressive… or at least <em>slightly</em> surprising.</p>
+<p>Just in case you don’t believe me/FWL, let’s implement this algorithm using our trusty <code>b_ols()</code> function, regressing price on mileage and weight (with an intercept).</p>
+<p>Before we run any regressions, we should write a function that produces the residuals for a given regression. I will keep the same syntax (arguments) as the <code>b_ols()</code> and will name the function <code>resid_ols()</code>. Within the function, we will create the <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> matrices just as we do in <code>b_ols()</code>, and then we will use the residual-maker matrix <span class="math display">\[ \mathbf{I}_n - \mathbf{X} \left(\mathbf{X}^\prime \mathbf{X}\right)^{-1} \mathbf{X}^\prime \]</span> which we post-multiply by <span class="math inline">\(\mathbf{y}\)</span> to get the residuals from regressing <span class="math inline">\(\mathbf{y}\)</span> on <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resid_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> <span class="ot">TRUE</span>) {
+  <span class="co"># Require the &#39;dplyr&#39; package</span>
+  <span class="kw">require</span>(dplyr)
+  <span class="co"># Create the y matrix</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> y_var)
+  <span class="co"># Create the X matrix</span>
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> X_vars)
+  <span class="co"># If &#39;intercept&#39; is TRUE, then add a column of ones</span>
+  if (intercept ==<span class="st"> </span>T) {
+    <span class="co"># Bind a column of ones to X</span>
+    X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+    <span class="co"># Name the new column &quot;intercept&quot;</span>
+    <span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;intercept&quot;</span>, X_vars)
+  }
+  <span class="co"># Calculate the sample size, n</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  <span class="co"># Calculate the residuals</span>
+  resids &lt;-<span class="st"> </span>(<span class="kw">diag</span>(n) -<span class="st"> </span>X %*%<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X)) %*%<span class="st"> </span>y
+  <span class="co"># Return &#39;resids&#39;</span>
+  <span class="kw">return</span>(resids)
+}</code></pre></div>
+<p>Now, let’s follow the steps above (note that we can combine steps 1 and 2, since we have a function that takes residuals—likewise with steps 3 and 4).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Steps 1 and 2: Residualize &#39;price&#39; on &#39;weight&#39; and an intercept</span>
+e_yx &lt;-<span class="st"> </span><span class="kw">resid_ols</span>(<span class="dt">data =</span> cars, <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="st">&quot;weight&quot;</span>, <span class="dt">intercept =</span> T)
+<span class="co"># Steps 3 and 4: Residualize &#39;mpg&#39; on &#39;weight&#39; and an intercept</span>
+e_xx &lt;-<span class="st"> </span><span class="kw">resid_ols</span>(<span class="dt">data =</span> cars, <span class="dt">y_var =</span> <span class="st">&quot;mpg&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="st">&quot;weight&quot;</span>, <span class="dt">intercept =</span> T)
+<span class="co"># Combine the two sets of residuals into a data.frame</span>
+e_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">e_yx =</span> e_yx[,<span class="dv">1</span>], <span class="dt">e_xx =</span> e_xx[,<span class="dv">1</span>])
+<span class="co"># Step 5: Regress e_yx on e_xx without an intercept</span>
+<span class="kw">b_ols</span>(<span class="dt">data =</span> e_df, <span class="dt">y_var =</span> <span class="st">&quot;e_yx&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="st">&quot;e_xx&quot;</span>, <span class="dt">intercept =</span> F)</code></pre></div>
+<pre><code>##           e_yx
+## e_xx -49.51222</code></pre>
+<p>Finally, the standard OLS estimator—no residualization magic—to check our work:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">b_ols</span>(<span class="dt">data =</span> cars, <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))</code></pre></div>
+<pre><code>##                 price
+## intercept 1946.068668
+## mpg        -49.512221
+## weight       1.746559</code></pre>
+<p>Check:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">felm</span>(price ~<span class="st"> </span>mpg +<span class="st"> </span>weight, <span class="dt">data =</span> cars) %&gt;%<span class="st"> </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>## 
+## Call:
+##    felm(formula = price ~ mpg + weight, data = cars) 
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -3332  -1858   -504   1256   7507 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 1946.0687  3597.0496   0.541  0.59019   
+## mpg          -49.5122    86.1560  -0.575  0.56732   
+## weight         1.7466     0.6414   2.723  0.00813 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2514 on 71 degrees of freedom
+## Multiple R-squared(full model): 0.2934   Adjusted R-squared: 0.2735 
+## Multiple R-squared(proj model): 0.2934   Adjusted R-squared: 0.2735 
+## F-statistic(full model):14.74 on 2 and 71 DF, p-value: 4.425e-06 
+## F-statistic(proj model): 14.74 on 2 and 71 DF, p-value: 4.425e-06</code></pre>
+<p>Boom. There you have it: FWL in action. And it works.</p>
+<p>So what does this result reveal? I would say one key takeaway is that when we have multiple covariates (a.k.a. independent variables), the coefficient on variable <span class="math inline">\(x_k\)</span> represents the relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x_k\)</span> <em>after controlling for the other covariates</em>.</p>
+<p>Another reason FWL is such a powerful result is for computational purposes: if you have a huge dataset with many observations and many variables, but you only care about the coefficients on a few variables (<em>e.g.</em>, the case of individual fixed effects), then you can make use of FWL. Residualize the outcome variable and the covariates of interest on the covariates you do not care about. Then complete FWL. This process allows you to invert smaller matrices. Recall that you are inverting <span class="math inline">\(\mathbf{X}^{\prime}\mathbf{X}\)</span>, which means that the more variables you have, more larger the matrix you must invert. Matrix inversion is computationally intense,<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> so by reducing the number of variables in any given regression, you can reduce the computational resources necessary for your (awesome) regressions. R’s <code>felm()</code> and Stata’s <code>reghdfe</code> take advantage of this result (though they do something a bit different in practice, to speed things up even more).</p>
+</div>
+</div>
+<div id="omitted-variable-bias" class="section level1">
+<h1>Omitted variable bias</h1>
+<p>Before we move on from FWL, let’s return to an equation we breezed past above: <span class="math display">\[ \mathbf{b}_1 = \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{y} - \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{X}_2 \mathbf{b}_2 \]</span></p>
+<p>What does this equation tell us? We can recover the OLS estimate for <span class="math inline">\(\beta_1\)</span> by regressing <span class="math inline">\(\mathbf{y}\)</span> on <span class="math inline">\(\mathbf{X}_1\)</span>, minus an adjustment equal to <span class="math inline">\(\left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{X}_2 \mathbf{b}_2\)</span>.</p>
+<div id="orthogonal-covariates" class="section level2">
+<h2>Orthogonal covariates</h2>
+<p>Notice that if <span class="math inline">\(\mathbf{X}_1\)</span> and <span class="math inline">\(\mathbf{X}_2\)</span> are orthogonal (<span class="math inline">\(\mathbf{X}_1^\prime\mathbf{X}_2 = \mathbf{0}\)</span>), then the adjustment goes to zero. The FWL interpretation for this observation is that residualizing <span class="math inline">\(\mathbf{X}_1\)</span> on <span class="math inline">\(\mathbf{X}_2\)</span>—when the two matrices are orthogonal—will return <span class="math inline">\(\mathbf{X}_1\)</span>.</p>
+<p>Let’s confirm in R.</p>
+<p>First, we generate another dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Set the sample size</span>
+n &lt;-<span class="st"> </span><span class="fl">1e5</span>
+<span class="co"># Generate x1, x2, and error from ind. N(0,1)</span>
+the_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+  <span class="dt">x1 =</span> <span class="kw">rnorm</span>(n),
+  <span class="dt">x2 =</span> <span class="kw">rnorm</span>(n),
+  <span class="dt">e =</span> <span class="kw">rnorm</span>(n))
+<span class="co"># Calculate y = 1.5 x1 + 3 x2 + e</span>
+the_data &lt;-<span class="st"> </span><span class="kw">mutate</span>(the_data,
+  <span class="dt">y =</span> <span class="fl">1.5</span> *<span class="st"> </span>x1 +<span class="st"> </span><span class="dv">3</span> *<span class="st"> </span>x2 +<span class="st"> </span>e)</code></pre></div>
+<p>First run the regression of <code>y</code> on <code>x1</code>—omitting <code>x2</code>. Then run the regression of <code>y</code> on <code>x1</code> and <code>x2</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression omitting &#39;x2&#39;</span>
+<span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">intercept =</span> F)</code></pre></div>
+<pre><code>##          y
+## x1 1.50369</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression including &#39;x2&#39;</span>
+<span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">intercept =</span> F)</code></pre></div>
+<pre><code>##           y
+## x1 1.501565
+## x2 3.002701</code></pre>
+<p>Pretty good. Our variables <code>x1</code> and <code>x2</code> are not perfectly orthogonal, so the adjustment is not exactly zero—but it is very small.</p>
+</div>
+<div id="correlated-covariates" class="section level2">
+<h2>Correlated covariates</h2>
+<p>Return to the equation once more…. <span class="math display">\[ \mathbf{b}_1 = \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{y} - \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{X}_2 \mathbf{b}_2 \]</span></p>
+<p>We’ve already talked about the case where <span class="math inline">\(\mathbf{X}_1\)</span> and <span class="math inline">\(\mathbf{X_2}\)</span> are orthogonal. Let’s now think about the case where they are <strong>not</strong> orthogonal.</p>
+<p>The first observation to make is that the adjustment is now non-zero. What does a non-zero adjustment mean? In practice, it means that our results will differ—perhaps considerably—depending on whether we include or exclude the other covariates.</p>
+<p>Let’s see this case in action (in R).</p>
+<p>We need to generate another dataset, but this one needs <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> to be correlated (removing one of the I’s from I.I.D. normal). Specifically, we will generate two variables <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> from a multivariate normal distribution—allowing correlation between the variables. The <code>MASS</code> package offers the <code>mvrnorm()</code> function<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> for generating random variables from a multivariate normal distribution. To use the <code>mvrnorm()</code> function, we need to create a variance-covariance matrix for our variables. I’m going with a variance-covariance matrix with ones on the diagonal and <code>0.95</code> on the off-diagonal elements.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> Finally, we will feed the <code>mvrnorm()</code> function a two-element vector of means (into the argument <code>mu</code>), which tells the function our desired means for each of the variables it will generate (<span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>). Finally, the data-generating process (DGP) for our <span class="math inline">\(y\)</span> will be <span class="math display">\[ \mathbf{y} = \mathbf{1} + 2 \mathbf{x}_1 + 3 \mathbf{x}_2 + \boldsymbol{\varepsilon} \]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the MASS package</span>
+<span class="kw">library</span>(MASS)
+<span class="co"># Create a var-covar matrix</span>
+v_cov &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.95</span>, <span class="fl">0.95</span>, <span class="dv">1</span>), <span class="dt">nrow =</span> <span class="dv">2</span>)
+<span class="co"># Create the means vector</span>
+means &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>)
+<span class="co"># Define our sample size</span>
+n &lt;-<span class="st"> </span><span class="fl">1e5</span>
+<span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Generate x1 and x2</span>
+X &lt;-<span class="st"> </span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> n, <span class="dt">mu =</span> means, <span class="dt">Sigma =</span> v_cov, <span class="dt">empirical =</span> T)
+<span class="co"># Create a tibble for our data, add generate error from N(0,1)</span>
+the_data &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(X) %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">e =</span> <span class="kw">rnorm</span>(n))
+<span class="co"># Set the names</span>
+<span class="kw">names</span>(the_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;e&quot;</span>)
+<span class="co"># The data-generating process</span>
+the_data &lt;-<span class="st"> </span>the_data %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="dv">1</span> +<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span>x1 +<span class="st"> </span><span class="dv">3</span> *<span class="st"> </span>x2 +<span class="st"> </span>e)</code></pre></div>
+<p>Now that we have the data, we will run three regressions:</p>
+<ol style="list-style-type: decimal">
+<li><code>y</code> regressed on an intercept, <code>x1</code>, and <code>x2</code></li>
+<li><code>y</code> regressed on an intercept and <code>x1</code></li>
+<li><code>y</code> regressed on an intercept and <code>x2</code></li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression 1: y on int, x1, and x2</span>
+<span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                  y
+## intercept 1.012006
+## x1        1.995968
+## x2        3.000975</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression 2: y on int and x1</span>
+<span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                   y
+## intercept 16.767124
+## x1         4.846894</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression 3: y on int and x2</span>
+<span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x2&quot;</span>, <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                   y
+## intercept -7.969850
+## x2         4.897144</code></pre>
+<p>So what do we see here?</p>
+<p>First, the regression that matches the true data-generating process produces coefficient estimates that are pretty much spot on (we have a fairly large sample).</p>
+<p>Second, omitting one of the <span class="math inline">\(x\)</span> variables really messes up the coefficient estimate on the other variable. This “messing up” is what economists <em>omitted variable bias</em>. What’s going on? Look back at the “adjustment” we discussed above: by omitting one of the variables—say <span class="math inline">\(\mathbf{x}_2\)</span>—from our regression, we are omitting the adjustment. In other words: if there is a part (variable) of the data-generating process that you do not model, and the omitted variable is is correlated with a part that you <em>do</em> model, you are going to get the wrong answer.</p>
+<p>This result should make you at least a little uncomfortable. What about all those regressions you see in papers? How do we know there isn’t an omitted variable lurking in the background, biasing the results?<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a></p>
+</div>
+<div id="bad-controls" class="section level2">
+<h2>Bad controls</h2>
+<p>Let’s take one more lesson from FWL: what happens when we add variables to the regression that (1) are not part of the DGP, and (2) are correlated with variables in the DGP?<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a></p>
+<p>We will generate the data in a way similar to what we did above for omitted variable bias,<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a> but we will omit <span class="math inline">\(x_2\)</span> from the data-generating process. <span class="math display">\[ \mathbf{y} = \mathbf{1} + 2 \mathbf{x}_1 + \boldsymbol{\varepsilon} \]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a var-covar matrix</span>
+v_cov &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span> -<span class="st"> </span><span class="fl">1e-6</span>, <span class="dv">1</span> -<span class="st"> </span><span class="fl">1e-6</span>, <span class="dv">1</span>), <span class="dt">nrow =</span> <span class="dv">2</span>)
+<span class="co"># Create the means vector</span>
+means &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">5</span>)
+<span class="co"># Define our sample size</span>
+n &lt;-<span class="st"> </span><span class="fl">1e5</span>
+<span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Generate x1 and x2</span>
+X &lt;-<span class="st"> </span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> n, <span class="dt">mu =</span> means, <span class="dt">Sigma =</span> v_cov, <span class="dt">empirical =</span> T)
+<span class="co"># Create a tibble for our data, add generate error from N(0,1)</span>
+the_data &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(X) %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">e =</span> <span class="kw">rnorm</span>(n))
+<span class="co"># Set the names</span>
+<span class="kw">names</span>(the_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;e&quot;</span>)
+<span class="co"># The data-generating process</span>
+the_data &lt;-<span class="st"> </span>the_data %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="dv">1</span> +<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span>x1 +<span class="st"> </span>e)</code></pre></div>
+<p>Now we will run three more regressions:</p>
+<ol style="list-style-type: decimal">
+<li><code>y</code> regressed on an intercept and <code>x1</code> (the DGP)</li>
+<li><code>y</code> regressed on an intercept, <code>x1</code>, and <code>x2</code></li>
+<li><code>y</code> regressed on an intercept and <code>x2</code></li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression 1: y on int and x1 (DGP)</span>
+<span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                  y
+## intercept 1.016691
+## x1        1.996981</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression 2: y on int, x1, and x2</span>
+<span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                   y
+## intercept 1.0166882
+## x1        1.4387198
+## x2        0.5582615</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression 3: y on int and x2</span>
+<span class="kw">b_ols</span>(the_data, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x2&quot;</span>, <span class="dt">intercept =</span> T)</code></pre></div>
+<pre><code>##                  y
+## intercept 1.016695
+## x2        1.996980</code></pre>
+<p>What’s going on here? The regression that matches the true DGP yields the correct coefficient estimates, but when we add <span class="math inline">\(x_2\)</span> as a control, thinks start getting crazy. FWL helps us think about the problem here: the because <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are so strongly correlated,<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> when we “control for” <span class="math inline">\(x_2\)</span>, we remove meaningful variation—misattributing some of <span class="math inline">\(x_1\)</span>’s variation to <span class="math inline">\(x_2\)</span>. If you are in the game of prediction, this result is not really an issue. If you are in the game of inference on the coefficients, then this result should be further reason for caution.</p>
+</div>
+</div>
+<div id="the-r2-family" class="section level1">
+<h1>The R<span class="math inline">\(^2\)</span> family</h1>
+<p>As you’ve discussed in lecture and seen in your homework, R<sup>2</sup> is a very common measure of it. The three types of R<sup>2</sup> you will most often see are</p>
+<ul>
+<li><strong>Uncentered R<sup>2</sup></strong> (<span class="math inline">\(R^2_\text{uc}\)</span>) measures how much of the variance in the data is explained by our model (inclusive of the intercept), relative to predicting <span class="math inline">\(\mathbf{y} = 0\)</span>.</li>
+<li><strong>Centered R<sup>2</sup></strong> (plain old <span class="math inline">\(R^2\)</span>) measures how much of the variance in the data is explained by our model, relative to predicting <span class="math inline">\(\mathbf{y}=\bar y\)</span>.</li>
+<li><strong>Adjusted R<sup>2</sup></strong> (<span class="math inline">\(\bar{R}^2\)</span>) applies a penalty to the centered R<sup>2</sup> for adding covariates to the model.</li>
+</ul>
+<div id="formal-definitions" class="section level2">
+<h2>Formal definitions</h2>
+<p>We can write down the formal mathematical definitions for each of the types of R<sup>2</sup>. We are going to assume the model has an intercept.</p>
+<div id="uncentered-r2" class="section level3">
+<h3>Uncentered R<sup>2</sup></h3>
+<p><span class="math display">\[
+R^2_\text{uc} =
+  \dfrac{\hat{\mathbf{y}}^\prime \hat{\mathbf{y}}}{\mathbf{y}^\prime \mathbf{y}} =
+  1 - \dfrac{\mathbf{e}^\prime \mathbf{e}}{\mathbf{y}^\prime \mathbf{y}} =
+  1 - \dfrac{\sum_i (y_i - \hat{y}_i)^2}{\sum_i (y_i - 0)^2} =
+  1 - \dfrac{\text{SSR}}{\text{SST}_0}
+\]</span> where <span class="math inline">\(SST_0\)</span> is the total sum of squares <em>relative to zero</em>—this notation is a bit different from Max’s notes.</p>
+</div>
+<div id="centered-r2" class="section level3">
+<h3>Centered R<sup>2</sup></h3>
+<p>The formula is quite similar, but we are now demeaning by <span class="math inline">\(\bar{y}\)</span> instead of zero: <span class="math display">\[
+R^2 =
+  1 - \dfrac{\mathbf{e}^\prime \mathbf{e}}{\mathbf{y}^{\ast\prime} \mathbf{y}^{\ast}} =
+  1 - \dfrac{\sum_i (y_i - \hat{y}_i)^2}{\sum_i (y_i - \bar{y})^2} =
+  1 - \dfrac{\text{SSR}}{\text{SST}} =
+  \dfrac{\text{SSM}}{\text{SST}}
+\]</span> where <span class="math inline">\(SST\)</span> is the (standard definition of) total sum of squares, and <span class="math inline">\(\mathbf{y}^{\ast}\)</span> denotes the demeaned vector of <span class="math inline">\(\mathbf{y}\)</span>.</p>
+</div>
+<div id="adjusted-r2" class="section level3">
+<h3>Adjusted R<sup>2</sup></h3>
+<p><span class="math display">\[ \bar{R}^2 = 1 - \dfrac{n-1}{n-k}\left(1-R^2\right) \]</span> where <span class="math inline">\(n\)</span> is the number of observations and <span class="math inline">\(k\)</span> is the number of covariates.</p>
+</div>
+</div>
+<div id="r2-in-r" class="section level2">
+<h2>R<span class="math inline">\(^2\)</span> in R</h2>
+<p>We’ve covered the intuition and mathematics behind R<sup>2</sup>, let’s now apply what we know by calculating the three measures of R<sup>2</sup> in R. We’ll use the data in <code>auto.csv</code> (loaded above as <code>cars</code>).</p>
+<p>It will be helpful to have a function that creates the demeaning matrix <span class="math inline">\(\mathbf{A}\)</span>. Recall from Max’s notes that <span class="math inline">\(\mathbf{A}\)</span> is defined as <span class="math display">\[ \mathbf{A} = \mathbf{I}_n - \left(\dfrac{1}{n}\right)\mathbf{i}\mathbf{i}^\prime \]</span> where <span class="math inline">\(\mathbf{i}\)</span> is an <span class="math inline">\(n\)</span>-by-<span class="math inline">\(1\)</span> vectors of ones. When <span class="math inline">\(\mathbf{A}\)</span> is post-multiplied by an arbitrary <span class="math inline">\(n\)</span>-by-<span class="math inline">\(k\)</span> matrix <span class="math inline">\(\mathbf{Z}\)</span> (<em>e.g.</em>, <span class="math inline">\(\mathbf{A}\mathbf{Z}\)</span>) the result is an <span class="math inline">\(n\)</span>-by-<span class="math inline">\(k\)</span> matrix whose columns are the demeaned columns of <span class="math inline">\(\mathbf{Z}\)</span>.</p>
+<p>The function will accept <span class="math inline">\(N\)</span>, the desired number of rows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function that demeans the columns of Z</span>
+demeaner &lt;-<span class="st"> </span>function(N) {
+  <span class="co"># Create an N-by-1 column of 1s</span>
+  i &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">1</span>, <span class="dt">nrow =</span> N)
+  <span class="co"># Create the demeaning matrix</span>
+  A &lt;-<span class="st"> </span><span class="kw">diag</span>(N) -<span class="st"> </span>(<span class="dv">1</span>/N) *<span class="st"> </span>i %*%<span class="st"> </span><span class="kw">t</span>(i)
+  <span class="co"># Return A</span>
+  <span class="kw">return</span>(A)
+}</code></pre></div>
+<p>Now let’s write a function that spits out three values of R<sup>2</sup> we discussed above when we feed it the same inputs as our <code>b_ols()</code> function.<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a> We will make use of a few functions from above: <code>to_matrx()</code>, <code>resid_ols()</code>, <code>demeaner()</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Start the function</span>
+r2_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars) {
+  <span class="co"># Create y and X matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, <span class="dt">vars =</span> y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, <span class="dt">vars =</span> X_vars)
+  <span class="co"># Add intercept column to X</span>
+  X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Find N and K (dimensions of X)</span>
+  N &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  K &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># Calculate the OLS residuals</span>
+  e &lt;-<span class="st"> </span><span class="kw">resid_ols</span>(data, y_var, X_vars)
+  <span class="co"># Calculate the y_star (demeaned y)</span>
+  y_star &lt;-<span class="st"> </span><span class="kw">demeaner</span>(N) %*%<span class="st"> </span>y
+  <span class="co"># Calculate r-squared values</span>
+  r2_uc  &lt;-<span class="st"> </span><span class="dv">1</span> -<span class="st"> </span><span class="kw">t</span>(e) %*%<span class="st"> </span>e /<span class="st"> </span>(<span class="kw">t</span>(y) %*%<span class="st"> </span>y)
+  r2     &lt;-<span class="st"> </span><span class="dv">1</span> -<span class="st"> </span><span class="kw">t</span>(e) %*%<span class="st"> </span>e /<span class="st"> </span>(<span class="kw">t</span>(y_star) %*%<span class="st"> </span>y_star)
+  r2_adj &lt;-<span class="st"> </span><span class="dv">1</span> -<span class="st"> </span>(N<span class="dv">-1</span>) /<span class="st"> </span>(N-K) *<span class="st"> </span>(<span class="dv">1</span> -<span class="st"> </span>r2)
+  <span class="co"># Return a vector of the r-squared measures</span>
+  <span class="kw">return</span>(<span class="kw">c</span>(<span class="st">&quot;r2_uc&quot;</span> =<span class="st"> </span>r2_uc, <span class="st">&quot;r2&quot;</span> =<span class="st"> </span>r2, <span class="st">&quot;r2_adj&quot;</span> =<span class="st"> </span>r2_adj))
+}</code></pre></div>
+<p>And now we run the function and check it with <code>felm()</code>’s output</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Our r-squared function</span>
+<span class="kw">r2_ols</span>(<span class="dt">data =</span> cars, <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))</code></pre></div>
+<pre><code>##     r2_uc        r2    r2_adj 
+## 0.8698475 0.2933891 0.2734846</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Using &#39;felm&#39;</span>
+<span class="kw">felm</span>(price ~<span class="st"> </span>mpg +<span class="st"> </span>weight, cars) %&gt;%<span class="st"> </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>## 
+## Call:
+##    felm(formula = price ~ mpg + weight, data = cars) 
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -3332  -1858   -504   1256   7507 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 1946.0687  3597.0496   0.541  0.59019   
+## mpg          -49.5122    86.1560  -0.575  0.56732   
+## weight         1.7466     0.6414   2.723  0.00813 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2514 on 71 degrees of freedom
+## Multiple R-squared(full model): 0.2934   Adjusted R-squared: 0.2735 
+## Multiple R-squared(proj model): 0.2934   Adjusted R-squared: 0.2735 
+## F-statistic(full model):14.74 on 2 and 71 DF, p-value: 4.425e-06 
+## F-statistic(proj model): 14.74 on 2 and 71 DF, p-value: 4.425e-06</code></pre>
+<p>I’ll leave the regression-without-an-intercept fun to you.</p>
+</div>
+<div id="overfitting" class="section level2">
+<h2>Overfitting</h2>
+<p>R<sup>2</sup> is often used to measure the fit of your model. So why does Max keep telling you that maximal R<sup>2</sup> isn’t a very good goal?<a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a> The short answer: overfitting.</p>
+<p>If you have enough variables, you can probably find a way to fit your outcome variable pretty well,<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a> but it doesn’t actually mean you are going to be able to predict any better outside of your sample or that you are learning anything valuable about the data-generating process.</p>
+<p>As an aside, let’s imagine we want to use <code>dplyr</code>’s <code>select()</code> function now. Try <code>select(cars, rep78)</code> in your console. What happens? If you loaded <code>MASS</code> after <code>dplyr</code>, <code>MASS</code> has covered up <code>dplyr</code>’s <code>select()</code> function with its own—you may have noticed a message that said <code>The following object is masked from `package:dplyr`: select</code>. You can specify that you want <code>dplyr</code>’s function using the syntax <code>dplyr::select()</code>. We will use this functionality below.</p>
+<p>To see this idea in practice, let’s add 50 random variables to the cars dataset (and drop the <code>rep78</code> and <code>make</code> variables).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Find the number of observations in cars</span>
+n &lt;-<span class="st"> </span><span class="kw">nrow</span>(cars)
+<span class="co"># Fill an n-by-50 matrix with random numbers from N(0,1)</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+rand_mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="kw">rnorm</span>(n *<span class="st"> </span><span class="dv">50</span>, <span class="dt">sd =</span> <span class="dv">10</span>), <span class="dt">ncol =</span> <span class="dv">50</span>)
+<span class="co"># Convert rand_mat to tbl_df</span>
+rand_df &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(rand_mat)
+<span class="co"># Change names to x1 to x50</span>
+<span class="kw">names</span>(rand_df) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span>:<span class="dv">50</span>)
+<span class="co"># Bind cars and rand_df; convert to tbl_df; call it &#39;cars_rand&#39;</span>
+cars_rand &lt;-<span class="st"> </span><span class="kw">cbind</span>(cars, rand_df) %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Drop the variable &#39;rep78&#39; (it has NAs)</span>
+cars_rand &lt;-<span class="st"> </span>dplyr::<span class="kw">select</span>(cars_rand, -rep78, -make)</code></pre></div>
+<p>Now we are going to use the function <code>lapply()</code> (covered <a href="section03.html#lapply()">near the end of last section</a>) to progressively add variables to a regression where <code>price</code> is the outcome variable (there will always be an intercept).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">result_df &lt;-<span class="st"> </span><span class="kw">lapply</span>(
+  <span class="dt">X =</span> <span class="dv">2</span>:<span class="kw">ncol</span>(cars_rand),
+  <span class="dt">FUN =</span> function(k) {
+    <span class="co"># Apply the &#39;r2_ols&#39; function to columns 2:k</span>
+    r2_df &lt;-<span class="st"> </span><span class="kw">r2_ols</span>(
+      <span class="dt">data =</span> cars_rand,
+      <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+      <span class="dt">X_vars =</span> <span class="kw">names</span>(cars_rand)[<span class="dv">2</span>:k]) %&gt;%
+<span class="st">      </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">3</span>) %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+    <span class="co"># Set names</span>
+    <span class="kw">names</span>(r2_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;r2_uc&quot;</span>, <span class="st">&quot;r2&quot;</span>, <span class="st">&quot;r2_adj&quot;</span>)
+    <span class="co"># Add a column for k</span>
+    r2_df$k &lt;-<span class="st"> </span>k
+    <span class="co"># Return r2_df</span>
+    <span class="kw">return</span>(r2_df)
+  }) %&gt;%<span class="st"> </span><span class="kw">bind_rows</span>()</code></pre></div>
+<p>Let’s visualize R<sup>2</sup> and adjusted R<sup>2</sup> as we include more variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot unadjusted r-squared</span>
+<span class="kw">plot</span>(<span class="dt">x =</span> result_df$k, <span class="dt">y =</span> result_df$r2,
+  <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>,
+  <span class="dt">xlab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;k: number of columns in &quot;</span>, <span class="kw">bold</span>(<span class="st">&quot;X&quot;</span>))),
+  <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="st">&#39;R&#39;</span> ^<span class="st"> </span><span class="dv">2</span>))
+<span class="co"># Plot adjusted r-squared</span>
+<span class="kw">lines</span>(<span class="dt">x =</span> result_df$k, <span class="dt">y =</span> result_df$r2_adj,
+  <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;purple4&quot;</span>)
+<span class="co"># The legend</span>
+<span class="kw">legend</span>(<span class="dt">x =</span> <span class="dv">0</span>, <span class="dt">y =</span> <span class="kw">max</span>(result_df$r2),
+  <span class="dt">legend =</span> <span class="kw">c</span>(<span class="kw">expression</span>(<span class="st">&#39;R&#39;</span> ^<span class="st"> </span><span class="dv">2</span>),
+    <span class="kw">expression</span>(<span class="st">&#39;Adjusted R&#39;</span> ^<span class="st"> </span><span class="dv">2</span>)),
+  <span class="co"># Line widths</span>
+  <span class="dt">lwd =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>),
+  <span class="co"># Colors</span>
+  <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;lightblue&quot;</span>, <span class="st">&quot;purple4&quot;</span>),
+  <span class="co"># No box around the legend</span>
+  <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>)</code></pre></div>
+<p><img src="section04_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p>This figure demonstrates why R<sup>2</sup> is not a perfect descriptor for model fit: as we add variables that are <strong>pure noise</strong>, R<sup>2</sup> describes the fit as actually getting substantially better—every variable after the tenth column in <span class="math inline">\(\mathbf{X}\)</span> is randomly generated and surely has nothing to do with the price of a car. However, R<sup>2</sup> continues to increase… and even the adjusted R<sup>2</sup> doesn’t really give us a clear picture that the model is falling apart.</p>
+<p>If you are interested in a challenge, change the <code>r2_ols()</code> function so that it also spits out AIC and SIC and then re-run this simulation. You should find something like:</p>
+<p><img src="section04_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p>Here, BIC (aka SIC) appears to do the best job noticing when the data become poor.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Sorry for starting with the wrong way to break up a line of code.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><code>?read_csv</code>, assuming you have the <code>readr</code> package loaded.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>You will also notice that the file name that we feed to the function is read as the <code>file</code> argument. You can get the same result by typing <code>read_csv(&quot;my_file.csv&quot;)</code> or <code>read_csv(file = &quot;my_file.csv&quot;)</code>.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>I changed the names of the arguments in our function to be a bit more descriptive and easy to use.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Correspondingly, you can force an intercept using <code>+1</code> in the regression formula.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>See <a href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">here</a> for help with color names in R. You can also use html color codes.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>I googled “frisch waugh lovell fan club” but did not find anything: you should consider starting something formal.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>At least that is what I hear…<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>Akin to the univariate random normal generator <code>rnorm()</code>.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>We need a 2-by-2 variance-covariance matrix because we have two variables and thus need to specify the variance for each (the diagonal elements) and the covariance between the two variables.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>This class is not focused on causal inference—ARE 213 covers that topic—but it is still worth keeping omitted variable bias in mind, no matter which course you take.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>In some sense, this case is the opposite of <em>omitted variable bias</em>.<a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p>I’m going to increase the covariance and set the means of <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> equal.<a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p>The collinearity of the two covariates is another problem.<a href="#fnref14">↩</a></p></li>
+<li id="fn15"><p>I will assume <code>intercept</code> is always <code>TRUE</code> and thus will omit it.<a href="#fnref15">↩</a></p></li>
+<li id="fn16"><p>in econometrics and in life<a href="#fnref16">↩</a></p></li>
+<li id="fn17"><p>Remember the <a href="http://www.tylervigen.com/spurious-correlations">spurious correlation website</a> Max showed you?<a href="#fnref17">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
