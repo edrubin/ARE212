@@ -42,14 +42,14 @@ Logical operators, optional arguments to your custom functions, Frisch-Waugh-Lov
 [pdf](Section04/section04.pdf) | [R script](Section04/section04.R) | [zip](Section04.zip)
 <br><br>
 
-<!-- #### [__Section 5__](section05.html): Inference and parallelization
+#### [__Section 5__](section05.html): Inference and parallelization
 
 Statistical inference via hypothesis testing: _t_ tests and $F$ tests. Plus simulation and parallelization.
 
 [pdf](Section05/section05.pdf) | [R script](Section05/section05.R) | [zip](Section05.zip)
 <br><br>
 
-#### [__Section 6__](section06.html): Figures with `ggplot2`
+<!-- #### [__Section 6__](section06.html): Figures with `ggplot2`
 
 Creating informative and aesthetically figures using R's `ggplot2`—scatter plots, histograms, density plots, and more.
 
