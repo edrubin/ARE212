@@ -119,7 +119,7 @@ ols <- function(data, y_var, X_vars, intercept = T) {
   # Vector of _t_ statistics
   t_stats <- (b - 0) / se
   # Calculate the p-values
-  p_values = pt(q = abs(t_stats), df = n-k, lower.tail = F) * 2
+  p_values <- pt(q = abs(t_stats), df = n-k, lower.tail = F) * 2
   # Nice table (data.frame) of results
   results <- data.frame(
     # The rows have the coef. names
@@ -271,6 +271,12 @@ ols_sim <- function(n_sims, sample_size, seed = 12345) {
   # Return sim_df
   return(sim_df)
 }
+
+# Run the simulations ----
+# Run ols_sim for sample size of 10
+sim10 <- ols_sim(n_sims = 1e3, sample_size = 10)
+# Run ols_sim for sample size of 100
+sim100 <- ols_sim(n_sims = 1e3, sample_size = 100)
 
 # Plot the simulation results ----
 # Load ggplot2 and ggthemes packages
