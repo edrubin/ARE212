@@ -325,6 +325,21 @@ div.tocify {
       <a href="../section01.html">Section 1</a>
     </li>
     <li>
+      <a href="../section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="../section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="../section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="../section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="../section06.html">Section 6</a>
+    </li>
+    <li>
       <a href="../latexKnitr.html">LaTeX and knitr</a>
     </li>
     <li class="divider"></li>
@@ -448,11 +463,8 @@ div.tocify {
 <span class="co"># Options</span>
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
 <span class="co"># Load new packages</span>
-pacman::<span class="kw">p_load</span>(lubridate, rgdal, raster, broom, rgeos, GISTools)</code></pre></div>
-<pre><code>## 
-## The downloaded binary packages are in
-##  /var/folders/vg/54lzhglj26sgt9278lmnq3bc0000gn/T//Rtmpnzb2dE/downloaded_packages</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load old packages</span>
+pacman::<span class="kw">p_load</span>(lubridate, rgdal, raster, broom, rgeos, GISTools)
+<span class="co"># Load old packages</span>
 pacman::<span class="kw">p_load</span>(dplyr, ggplot2, ggthemes, magrittr, viridis)
 <span class="co"># My ggplot2 theme</span>
 theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
@@ -685,7 +697,7 @@ crime_df</code></pre></div>
 crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(lat) &amp;<span class="st"> </span>!<span class="kw">is.na</span>(lon))
 <span class="co"># Convert dates</span>
 crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">mdy_hms</span>(date))</code></pre></div>
-<pre><code>## Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone &#39;zone/tz/2017c.1.0/
+<pre><code>## Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone &#39;zone/tz/2018c.1.0/
 ## zoneinfo/America/Los_Angeles&#39;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check it out again</span>
 crime_df</code></pre></div>

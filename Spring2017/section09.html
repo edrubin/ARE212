@@ -325,6 +325,21 @@ div.tocify {
       <a href="../section01.html">Section 1</a>
     </li>
     <li>
+      <a href="../section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="../section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="../section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="../section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="../section06.html">Section 6</a>
+    </li>
+    <li>
       <a href="../latexKnitr.html">LaTeX and knitr</a>
     </li>
     <li class="divider"></li>
@@ -429,8 +444,9 @@ div.tocify {
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(viridis)
 <span class="kw">library</span>(gmodels)
-<span class="kw">library</span>(msm)
-<span class="co"># Directory</span>
+<span class="kw">library</span>(msm)</code></pre></div>
+<pre><code>## Warning: package &#39;msm&#39; was built under R version 3.4.3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Directory</span>
 <span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section09&quot;</span>)
 <span class="co"># My ggplot2 theme</span>
 theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
@@ -449,25 +465,25 @@ cars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <h3>Functions</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Functions ----</span>
 <span class="co"># Function to convert tibble, data.frame, or tbl_df to matrix</span>
-to_matrix &lt;-<span class="st"> </span><span class="cf">function</span>(the_df, vars) {
+to_matrix &lt;-<span class="st"> </span>function(the_df, vars) {
   <span class="co"># Create a matrix from variables in var</span>
-  new_mat &lt;-<span class="st"> </span>the_df <span class="op">%&gt;%</span>
+  new_mat &lt;-<span class="st"> </span>the_df %&gt;%
 <span class="st">    </span><span class="co"># Select the columns given in &#39;vars&#39;</span>
-<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) %&gt;%
 <span class="st">    </span><span class="co"># Convert to matrix</span>
 <span class="st">    </span><span class="kw">as.matrix</span>()
   <span class="co"># Return &#39;new_mat&#39;</span>
   <span class="kw">return</span>(new_mat)
 }
 <span class="co"># Function for OLS coefficient estimates</span>
-b_ols &lt;-<span class="st"> </span><span class="cf">function</span>(y, X) {
+b_ols &lt;-<span class="st"> </span>function(y, X) {
   <span class="co"># Calculate beta hat</span>
-  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>y
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>y
   <span class="co"># Return beta_hat</span>
   <span class="kw">return</span>(beta_hat)
 }
 <span class="co"># Function for OLS coef., SE, t-stat, and p-value</span>
-ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars) {
+ols &lt;-<span class="st"> </span>function(data, y_var, X_vars) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
@@ -481,17 +497,17 @@ ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, 
   <span class="co"># Update names</span>
   <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
   <span class="co"># Calculate OLS residuals</span>
-  e &lt;-<span class="st"> </span>y <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>b
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
   <span class="co"># Calculate s^2</span>
-  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) <span class="op">%*%</span><span class="st"> </span>e) <span class="op">/</span><span class="st"> </span>(n<span class="op">-</span>k)
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
   <span class="co"># Inverse of X&#39;X</span>
-  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X)
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
   <span class="co"># Standard error</span>
-  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 <span class="op">*</span><span class="st"> </span><span class="kw">diag</span>(XX_inv))
+  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 *<span class="st"> </span><span class="kw">diag</span>(XX_inv))
   <span class="co"># Vector of _t_ statistics</span>
-  t_stats &lt;-<span class="st"> </span>(b <span class="op">-</span><span class="st"> </span><span class="dv">0</span>) <span class="op">/</span><span class="st"> </span>se
+  t_stats &lt;-<span class="st"> </span>(b -<span class="st"> </span><span class="dv">0</span>) /<span class="st"> </span>se
   <span class="co"># Calculate the p-values</span>
-  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n<span class="op">-</span>k, <span class="dt">lower.tail =</span> F) <span class="op">*</span><span class="st"> </span><span class="dv">2</span>
+  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n-k, <span class="dt">lower.tail =</span> F) *<span class="st"> </span><span class="dv">2</span>
   <span class="co"># Nice table (data.frame) of results</span>
   results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
     <span class="co"># The rows have the coef. names</span>
@@ -525,8 +541,8 @@ ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, 
 ## 3    weight    1.746559    0.6413538  2.7232382 0.008129813</code></pre>
 <p>Can we make the results a bit prettier? Let’s grab the results and feed them to the <code>kable()</code> function from the <code>knitr</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regress price on MPG and weight</span>
-<span class="kw">ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</code></pre></div>
+<span class="kw">ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>)) %&gt;%
+<span class="st">  </span>knitr::<span class="kw">kable</span>()</code></pre></div>
 <pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
 ##   Use c() or as.vector() instead.</code></pre>
 <table>
@@ -565,11 +581,11 @@ ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, 
 </table>
 <p>Not bad, but we can do more.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regress price on MPG and weight</span>
-tmp_results &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))[,<span class="dv">2</span><span class="op">:</span><span class="dv">5</span>]</code></pre></div>
+tmp_results &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))[,<span class="dv">2</span>:<span class="dv">5</span>]</code></pre></div>
 <pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
 ##   Use c() or as.vector() instead.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">row.names</span>(tmp_results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Intercept&quot;</span>, <span class="st">&quot;MPG&quot;</span>, <span class="st">&quot;Weight&quot;</span>)
-knitr<span class="op">::</span><span class="kw">kable</span>(tmp_results,
+knitr::<span class="kw">kable</span>(tmp_results,
   <span class="dt">digits =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>),
   <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;$</span><span class="ch">\\</span><span class="st">widehat{</span><span class="ch">\\</span><span class="st">boldsymbol{</span><span class="ch">\\</span><span class="st">beta}}$&quot;</span>, <span class="st">&quot;S.E.&quot;</span>,
     <span class="st">&quot;___t___ stat&quot;</span>, <span class="st">&quot;___p___-Value&quot;</span>),
@@ -613,11 +629,11 @@ knitr<span class="op">::</span><span class="kw">kable</span>(tmp_results,
 </table>
 <p>Because I write the section notes in Rmarkdown, I am making use of Markdown formatting within the column names (<em>e.g.</em>, <code>___t___</code> creates a bolded, italicized <code>t</code>, <em>i.e.</em>, <strong><em>t</em></strong>). If you want LaTeX formatting, then you can set the <code>format</code> option to <code>&quot;latex&quot;</code>, to generate the LaTeX code for a table. You will also want to set <code>escape = F</code> if you want <code>knitr</code> to print the table as a table with LaTeX math expressions inside. I’m also using the <code>booktabs = T</code> argument, which creates prettier tables in LaTeX but also requires adding <code>\usepackage{booktabs}</code> to your preamble.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regress price on MPG and weight</span>
-tmp_results &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))[,<span class="dv">2</span><span class="op">:</span><span class="dv">5</span>]</code></pre></div>
+tmp_results &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))[,<span class="dv">2</span>:<span class="dv">5</span>]</code></pre></div>
 <pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
 ##   Use c() or as.vector() instead.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">row.names</span>(tmp_results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Intercept&quot;</span>, <span class="st">&quot;MPG&quot;</span>, <span class="st">&quot;Weight&quot;</span>)
-knitr<span class="op">::</span><span class="kw">kable</span>(tmp_results,
+knitr::<span class="kw">kable</span>(tmp_results,
   <span class="dt">format =</span> <span class="st">&quot;latex&quot;</span>,
   <span class="dt">digits =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>),
   <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;$</span><span class="ch">\\</span><span class="st">widehat{</span><span class="ch">\\</span><span class="st">boldsymbol{</span><span class="ch">\\</span><span class="st">beta}}$&quot;</span>, <span class="st">&quot;S.E.&quot;</span>,
@@ -626,7 +642,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(tmp_results,
   <span class="dt">row.names =</span> T,
   <span class="dt">caption =</span> <span class="st">&quot;Regressing price on mileage and weight&quot;</span>,
   <span class="dt">booktabs =</span> T
-  ) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>()</code></pre></div>
+  ) %&gt;%<span class="st"> </span><span class="kw">print</span>()</code></pre></div>
 <pre><code>## \begin{table}
 ## 
 ## \caption{\label{tab:unnamed-chunk-6}Regressing price on mileage and weight}
@@ -653,7 +669,7 @@ reg1 &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class
 <pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
 ##   Use c() or as.vector() instead.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># lc = 20 * b1 + 3000 * b2</span>
-(lc &lt;-<span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span>reg1[<span class="dv">2</span>,<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="dv">3000</span> <span class="op">*</span><span class="st"> </span>reg1[<span class="dv">3</span>,<span class="dv">2</span>])</code></pre></div>
+(lc &lt;-<span class="st"> </span><span class="dv">20</span> *<span class="st"> </span>reg1[<span class="dv">2</span>,<span class="dv">2</span>] +<span class="st"> </span><span class="dv">3000</span> *<span class="st"> </span>reg1[<span class="dv">3</span>,<span class="dv">2</span>])</code></pre></div>
 <pre><code>## [1] 4249.433</code></pre>
 <p><em>Aside</em>: Wrapping the definition of an object in parentheses forces R to print the object’s value.</p>
 <p>We have a point estimate. We’re done, right? Noooooo! Point estimates without standard errors should make you a bit suspicious. How precisely estimated is the point estimate? Is there any evidence it is significantly different from zero?</p>
@@ -679,7 +695,7 @@ reg1 &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class
 <p>Lucky for us, we’ve already calculated estimates for <span class="math inline">\(\mathop{\text{Var}} \left( b_1 \right)\)</span>, <span class="math inline">\(\mathop{\text{Var}} \left( b_2 \right)\)</span>, and <span class="math inline">\(\mathop{\text{Cov}} \left( b_1, b_2 \right)\)</span>: they are (some of) the elements of <span class="math inline">\(s^2 \left(\mathbf{X}^\prime \mathbf{X}\right)^{-1}\)</span>. (Specifically, they are the elements of the variance-covariance matrix once we remove the first row and column.)</p>
 <p>Let’s write a quick function that returns the variance-covariance matrix of <span class="math inline">\(\mathbf{b}\)</span>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Variance-covariance function for OLS beta hat</span>
-vcov_ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars) {
+vcov_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
@@ -693,11 +709,11 @@ vcov_ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_
   <span class="co"># Estimate coefficients</span>
   b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(y, X)
   <span class="co"># Calculate residuals</span>
-  e &lt;-<span class="st"> </span>y <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>b
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
   <span class="co"># Calculate s2 and convert to scalar</span>
-  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) <span class="op">%*%</span><span class="st"> </span>e <span class="op">/</span><span class="st"> </span>(n <span class="op">-</span><span class="st"> </span>k)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.vector</span>()
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e /<span class="st"> </span>(n -<span class="st"> </span>k)) %&gt;%<span class="st"> </span><span class="kw">as.vector</span>()
   <span class="co"># Calculate the variance-covariance matrix</span>
-  vcov_mat &lt;-<span class="st"> </span>s2 <span class="op">*</span><span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X)
+  vcov_mat &lt;-<span class="st"> </span>s2 *<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
   <span class="co"># Return the variance-covariance matrix</span>
   <span class="kw">return</span>(vcov_mat)
 }</code></pre></div>
@@ -722,32 +738,32 @@ reg1 &lt;-<span class="st"> </span><span class="kw">ols</span>(cars, <span class
 <pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
 ##   Use c() or as.vector() instead.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># lc = 20 * b1 + 3000 * b2</span>
-(lc &lt;-<span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span>reg1[<span class="dv">2</span>,<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="dv">3000</span> <span class="op">*</span><span class="st"> </span>reg1[<span class="dv">3</span>,<span class="dv">2</span>])</code></pre></div>
+(lc &lt;-<span class="st"> </span><span class="dv">20</span> *<span class="st"> </span>reg1[<span class="dv">2</span>,<span class="dv">2</span>] +<span class="st"> </span><span class="dv">3000</span> *<span class="st"> </span>reg1[<span class="dv">3</span>,<span class="dv">2</span>])</code></pre></div>
 <pre><code>## [1] 4249.433</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The variance-covariance matrix</span>
 vcov1 &lt;-<span class="st"> </span><span class="kw">vcov_ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))
 <span class="co"># The standard error for &#39;lc&#39;</span>
-(lc_se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">20</span><span class="op">^</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>vcov1[<span class="dv">2</span>,<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="dv">3000</span><span class="op">^</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>vcov1[<span class="dv">3</span>,<span class="dv">3</span>] <span class="op">+</span>
-<span class="st">  </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span><span class="dv">3000</span> <span class="op">*</span><span class="st"> </span>vcov1[<span class="dv">2</span>,<span class="dv">3</span>]))</code></pre></div>
+(lc_se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">20</span>^<span class="dv">2</span> *<span class="st"> </span>vcov1[<span class="dv">2</span>,<span class="dv">2</span>] +<span class="st"> </span><span class="dv">3000</span>^<span class="dv">2</span> *<span class="st"> </span>vcov1[<span class="dv">3</span>,<span class="dv">3</span>] +
+<span class="st">  </span><span class="dv">2</span> *<span class="st"> </span><span class="dv">20</span> *<span class="st"> </span><span class="dv">3000</span> *<span class="st"> </span>vcov1[<span class="dv">2</span>,<span class="dv">3</span>]))</code></pre></div>
 <pre><code>## [1] 3467.471</code></pre>
 <p>Let’s check our work using the canned <code>lm()</code> function in conjunction with the <code>estimable()</code> function<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> from the <code>gmodels</code> package that we previously loaded.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The <code>estimable()</code> function estimates the point estimate and the standard error for a linear combination of coefficients from an estimated model object <code>obj</code>. We pass <code>estimable()</code> the linear combination via its argument <code>cm</code>. In our case, <code>cm = c(0, 20, 3000)</code>, meaning we do not want the intercept, we want to multiply <span class="math inline">\(b_1\)</span> coefficient by 20, and we want to multiply the third coefficient <span class="math inline">\(b_2\)</span> by 3,000.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Estimate the model with &#39;lm&#39;</span>
-lm_est &lt;-<span class="st"> </span><span class="kw">lm</span>(price <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span>weight, <span class="dt">data =</span> cars)
+lm_est &lt;-<span class="st"> </span><span class="kw">lm</span>(price ~<span class="st"> </span>mpg +<span class="st"> </span>weight, <span class="dt">data =</span> cars)
 <span class="co"># Estimate the linear combination</span>
 <span class="kw">estimable</span>(<span class="dt">obj =</span> lm_est, <span class="dt">cm =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">3000</span>))</code></pre></div>
 <pre><code>##             Estimate Std. Error  t value DF  Pr(&gt;|t|)
 ## (0 20 3000) 4249.433   3467.471 1.225514 71 0.2244315</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Alternative test (no standard errors, though)</span>
-<span class="kw">waldtest</span>(lm_est, <span class="op">~</span><span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span><span class="dv">3000</span> <span class="op">*</span><span class="st"> </span>weight)</code></pre></div>
+<span class="kw">waldtest</span>(lm_est, ~<span class="st"> </span><span class="dv">20</span> *<span class="st"> </span>mpg +<span class="st"> </span><span class="dv">3000</span> *<span class="st"> </span>weight)</code></pre></div>
 <pre><code>##          p       chi2        df1        p.F          F        df2 
 ##  0.2203818  1.5018836  1.0000000  0.2244315  1.5018836 71.0000000 
 ## attr(,&quot;formula&quot;)
 ## ~20 * mpg + 3000 * weight
-## &lt;environment: 0x116a516b0&gt;</code></pre>
+## &lt;environment: 0x7fc36c91a750&gt;</code></pre>
 <p>I’ve also added <code>lfe</code>’s <code>waldtest()</code> function. It gives a point estimate and tests against zero but does not provide a standard error.</p>
 <p>How could we build our own <em>t</em> statistic?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Our t statistic</span>
-lc <span class="op">/</span><span class="st"> </span>lc_se</code></pre></div>
+lc /<span class="st"> </span>lc_se</code></pre></div>
 <pre><code>## [1] 1.225514</code></pre>
 <p><em>Quick summary</em>: our point estimate, while seemingly large, is not significantly different from zero.</p>
 </div>
@@ -792,12 +808,12 @@ lc <span class="op">/</span><span class="st"> </span>lc_se</code></pre></div>
 <p><span class="math display">\[ \sqrt{\mathstrut N} \big(\widehat{LC} - LC\big) \overset{d}{\longrightarrow} \mathop{N}\big(0, \mathbf{LC}_\beta \cdot \sigma^2 \left(\mathbf{X}^\prime \mathbf{X}\right)^{-1} \cdot \mathbf{LC}_\beta^\prime \big) \]</span></p>
 <p>Alright! We made it. Now let’s put this last statement in code (estimating <span class="math inline">\(\sigma^2\)</span> with <span class="math inline">\(s^2\)</span>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Remind ourselves of LC and its var-cov matrix</span>
-lc &lt;-<span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span>reg1[<span class="dv">2</span>,<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="dv">3000</span> <span class="op">*</span><span class="st"> </span>reg1[<span class="dv">3</span>,<span class="dv">2</span>]
+lc &lt;-<span class="st"> </span><span class="dv">20</span> *<span class="st"> </span>reg1[<span class="dv">2</span>,<span class="dv">2</span>] +<span class="st"> </span><span class="dv">3000</span> *<span class="st"> </span>reg1[<span class="dv">3</span>,<span class="dv">2</span>]
 vcov1 &lt;-<span class="st"> </span><span class="kw">vcov_ols</span>(cars, <span class="st">&quot;price&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;weight&quot;</span>))
 <span class="co"># Define our derivative matrix</span>
 deriv_mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">3000</span>), <span class="dt">nrow =</span> <span class="dv">1</span>)
 <span class="co"># Calculate the standard error of &#39;lc&#39; via delta method</span>
-lc_dm &lt;-<span class="st"> </span><span class="kw">sqrt</span>(deriv_mat <span class="op">%*%</span><span class="st"> </span>vcov1 <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(deriv_mat))</code></pre></div>
+lc_dm &lt;-<span class="st"> </span><span class="kw">sqrt</span>(deriv_mat %*%<span class="st"> </span>vcov1 %*%<span class="st"> </span><span class="kw">t</span>(deriv_mat))</code></pre></div>
 <p>Finally, let’s compare the two sets of standard errors—analytical and Delta Method</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Analytical s.e.</span>
 lc_se</code></pre></div>
@@ -833,16 +849,16 @@ lc_dm</code></pre></div>
 n &lt;-<span class="st"> </span><span class="dv">50</span>
 <span class="co"># Generate data</span>
 fake_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
-  <span class="dt">x =</span> <span class="kw">runif</span>(<span class="dt">n =</span> n, <span class="dt">min =</span> <span class="op">-</span><span class="dv">2</span>, <span class="dt">max =</span> <span class="dv">3</span>),
+  <span class="dt">x =</span> <span class="kw">runif</span>(<span class="dt">n =</span> n, <span class="dt">min =</span> -<span class="dv">2</span>, <span class="dt">max =</span> <span class="dv">3</span>),
   <span class="dt">e =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> n, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="kw">sqrt</span>(<span class="dv">10</span>))
-  ) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tbl_df</span>()
+  ) %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
 <span class="co"># Calculate y = 4 + 4x - 2x^2 + e</span>
-fake_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(
-  <span class="dt">x2 =</span> x<span class="op">^</span><span class="dv">2</span>,
-  <span class="dt">y =</span> <span class="dv">4</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span> <span class="op">*</span><span class="st"> </span>x <span class="op">-</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>x<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>e)</code></pre></div>
+fake_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
+  <span class="dt">x2 =</span> x^<span class="dv">2</span>,
+  <span class="dt">y =</span> <span class="dv">4</span> +<span class="st"> </span><span class="dv">4</span> *<span class="st"> </span>x -<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span>x^<span class="dv">2</span> +<span class="st"> </span>e)</code></pre></div>
 <p>Now we calculate <span class="math inline">\(\mathbf{b}_\text{OLS}\)</span> and the variance-covariance matrix of the OLS estimator</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Estimate coefficients</span>
-(b_fake &lt;-<span class="st"> </span><span class="kw">ols</span>(fake_df, <span class="st">&quot;y&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;x2&quot;</span>)) <span class="op">%$%</span><span class="st"> </span>coef)</code></pre></div>
+(b_fake &lt;-<span class="st"> </span><span class="kw">ols</span>(fake_df, <span class="st">&quot;y&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;x2&quot;</span>)) %$%<span class="st"> </span>coef)</code></pre></div>
 <pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
 ##   Use c() or as.vector() instead.</code></pre>
 <pre><code>## [1]  4.403845  3.975403 -1.792509</code></pre>
@@ -854,16 +870,16 @@ A_fake &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class=
   <span class="co"># The first entry of A()</span>
   <span class="dv">0</span>,
   <span class="co"># The second entry of A()</span>
-  <span class="op">-</span><span class="dv">1</span><span class="op">/</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>b_fake[<span class="dv">3</span>]),
+  -<span class="dv">1</span>/(<span class="dv">2</span> *<span class="st"> </span>b_fake[<span class="dv">3</span>]),
   <span class="co"># The third entry of A()</span>
-  b_fake[<span class="dv">2</span>]<span class="op">/</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>b_fake[<span class="dv">3</span>]<span class="op">^</span><span class="dv">2</span>)),
+  b_fake[<span class="dv">2</span>]/(<span class="dv">2</span> *<span class="st"> </span>b_fake[<span class="dv">3</span>]^<span class="dv">2</span>)),
   <span class="dt">nrow =</span> <span class="dv">1</span>)</code></pre></div>
 <p>Finally, we calculate <span class="math inline">\(\widehat{x}^\text{M} = \mathop{\mathbf{a}}(\mathbf{b}_\text{OLS})\)</span> and approximate<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> its standard error, using the Delta Method as we derived above</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Our estimate for the x that maximizes y</span>
-(x_m &lt;-<span class="st"> </span><span class="op">-</span><span class="st"> </span>b_fake[<span class="dv">2</span>] <span class="op">/</span><span class="st"> </span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>b_fake[<span class="dv">3</span>]))</code></pre></div>
+(x_m &lt;-<span class="st"> </span>-<span class="st"> </span>b_fake[<span class="dv">2</span>] /<span class="st"> </span>(<span class="dv">2</span> *<span class="st"> </span>b_fake[<span class="dv">3</span>]))</code></pre></div>
 <pre><code>## [1] 1.108893</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Our estimate for the standard error</span>
-(se_m &lt;-<span class="st"> </span><span class="kw">sqrt</span>(A_fake <span class="op">%*%</span><span class="st"> </span>v_fake <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(A_fake)))</code></pre></div>
+(se_m &lt;-<span class="st"> </span><span class="kw">sqrt</span>(A_fake %*%<span class="st"> </span>v_fake %*%<span class="st"> </span><span class="kw">t</span>(A_fake)))</code></pre></div>
 <pre><code>##           [,1]
 ## [1,] 0.1488887</code></pre>
 <p>Let’s confirm our results using some canned functions. We can estimate the coefficients with <code>felm()</code> and then calculate the Delta-Method based standard errors using the <code>deltamethod()</code> function from the <code>msm</code> package. The <code>deltamethod()</code> function wants three things:</p>
@@ -873,9 +889,9 @@ A_fake &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class=
 <li><code>cov</code>, the variance-covariance matrix of the parameters</li>
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Estimate the equation</span>
-felm_fake &lt;-<span class="st"> </span><span class="kw">felm</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> fake_df)
+felm_fake &lt;-<span class="st"> </span><span class="kw">felm</span>(y ~<span class="st"> </span>x +<span class="st"> </span>x2, <span class="dt">data =</span> fake_df)
 <span class="co"># Use the &#39;deltamethod&#39; function</span>
-<span class="kw">deltamethod</span>(<span class="dt">g =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="st"> </span>x2 <span class="op">/</span><span class="st"> </span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>x3),
+<span class="kw">deltamethod</span>(<span class="dt">g =</span> ~<span class="st"> </span>-<span class="st"> </span>x2 /<span class="st"> </span>(<span class="dv">2</span> *<span class="st"> </span>x3),
   <span class="dt">mean =</span> <span class="kw">coef</span>(felm_fake),
   <span class="dt">cov =</span> <span class="kw">vcov</span>(felm_fake))</code></pre></div>
 <pre><code>## [1] 0.1488887</code></pre>
@@ -894,23 +910,23 @@ se_m</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Force se_m to numeric</span>
 se_m &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(se_m)
 <span class="co"># Our plot</span>
-<span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="kw">ggplot</span>() +
 <span class="st">  </span><span class="co"># 95% confidence interval for maximal x</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> <span class="op">-</span><span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>,
-    <span class="dt">xmin =</span> x_m <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>se_m, <span class="dt">xmax =</span> x_m <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>se_m),
-    <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> -<span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>,
+    <span class="dt">xmin =</span> x_m -<span class="st"> </span><span class="fl">1.96</span> *<span class="st"> </span>se_m, <span class="dt">xmax =</span> x_m +<span class="st"> </span><span class="fl">1.96</span> *<span class="st"> </span>se_m),
+    <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.05</span>) +
 <span class="st">  </span><span class="co"># Plot the points</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> fake_df, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> fake_df, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) +
 <span class="st">  </span><span class="co"># Plot the predicted function</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) {
-    b_fake[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>b_fake[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>b_fake[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>x<span class="op">^</span><span class="dv">2</span>
-    }, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> function(x) {
+    b_fake[<span class="dv">1</span>] +<span class="st"> </span>b_fake[<span class="dv">2</span>] *<span class="st"> </span>x +<span class="st"> </span>b_fake[<span class="dv">3</span>] *<span class="st"> </span>x^<span class="dv">2</span>
+    }, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>) +
 <span class="st">  </span><span class="co"># Vertical line at the predicted max.</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> x_m, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> x_m, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="co"># Vertical line at the true max.</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) +
 <span class="st">  </span><span class="co"># Title</span>
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Estimating the maximum of a quadratic&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Estimating the maximum of a quadratic&quot;</span>) +
 <span class="st">  </span><span class="co"># Theme</span>
 <span class="st">  </span>theme_ed</code></pre></div>
 <p><img src="section09_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>

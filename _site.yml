@@ -20,8 +20,8 @@ navbar:
           href: section04.html
         - text: "Section 5"
           href: section05.html
-        # - text: "Section 6"
-        #   href: section06.html
+        - text: "Section 6"
+          href: section06.html
         # - text: "Section 7"
         #   href: section07.html
         # - text: "Section 8"

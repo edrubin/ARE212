@@ -325,6 +325,21 @@ div.tocify {
       <a href="../section01.html">Section 1</a>
     </li>
     <li>
+      <a href="../section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="../section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="../section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="../section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="../section06.html">Section 6</a>
+    </li>
+    <li>
       <a href="../latexKnitr.html">LaTeX and knitr</a>
     </li>
     <li class="divider"></li>
@@ -415,27 +430,27 @@ theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
   <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())
 
 <span class="co"># Function: Generate data ----</span>
-sim_fun &lt;-<span class="st"> </span><span class="cf">function</span>(i, n_g, g, var_cov, beta) {
+sim_fun &lt;-<span class="st"> </span>function(i, n_g, g, var_cov, beta) {
   <span class="co"># Start creating the dataset: generate X</span>
-  sim_dt &lt;-<span class="st"> </span><span class="kw">data.table</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(n_g <span class="op">*</span><span class="st"> </span>g))
+  sim_dt &lt;-<span class="st"> </span><span class="kw">data.table</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(n_g *<span class="st"> </span>g))
   <span class="co"># Generate the disturbances (in vector form)</span>
-  sim_dt[, v <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> g, <span class="dt">mu =</span> <span class="kw">rep</span>(<span class="dv">0</span>, n_g), <span class="dt">Sigma =</span> var_cov) <span class="op">%&gt;%</span>
+  sim_dt[, v :<span class="er">=</span><span class="st"> </span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> g, <span class="dt">mu =</span> <span class="kw">rep</span>(<span class="dv">0</span>, n_g), <span class="dt">Sigma =</span> var_cov) %&gt;%
 <span class="st">    </span><span class="co"># Rows are for a single cluster, so we transpose</span>
-<span class="st">    </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">c</span>()]
+<span class="st">    </span><span class="kw">t</span>() %&gt;%<span class="st"> </span><span class="kw">c</span>()]
   <span class="co"># Calcualte y; add group ID</span>
   sim_dt[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(
-    <span class="dt">y =</span> beta[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>beta[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>v,
-    <span class="dt">group_id =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span>g, <span class="dt">each =</span> n_g)
+    <span class="dt">y =</span> beta[<span class="dv">1</span>] +<span class="st"> </span>beta[<span class="dv">2</span>] *<span class="st"> </span>x +<span class="st"> </span>v,
+    <span class="dt">group_id =</span> <span class="kw">rep</span>(<span class="dv">1</span>:g, <span class="dt">each =</span> n_g)
     )]
   <span class="co"># Spherical-error inference</span>
-  est_sph &lt;-<span class="st"> </span><span class="kw">felm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> sim_dt) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summary</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">extract</span>(<span class="dv">2</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
+  est_sph &lt;-<span class="st"> </span><span class="kw">felm</span>(y ~<span class="st"> </span>x, <span class="dt">data =</span> sim_dt) %&gt;%
+<span class="st">    </span><span class="kw">summary</span>() %&gt;%<span class="st"> </span><span class="kw">coef</span>() %&gt;%<span class="st"> </span><span class="kw">extract</span>(<span class="dv">2</span>, <span class="dv">1</span>:<span class="dv">3</span>)
   <span class="co">#  inference</span>
-  est_het &lt;-<span class="st"> </span><span class="kw">felm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> sim_dt) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summary</span>(<span class="dt">robust =</span> T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">extract</span>(<span class="dv">2</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
+  est_het &lt;-<span class="st"> </span><span class="kw">felm</span>(y ~<span class="st"> </span>x, <span class="dt">data =</span> sim_dt) %&gt;%
+<span class="st">    </span><span class="kw">summary</span>(<span class="dt">robust =</span> T) %&gt;%<span class="st"> </span><span class="kw">coef</span>() %&gt;%<span class="st"> </span><span class="kw">extract</span>(<span class="dv">2</span>, <span class="dv">1</span>:<span class="dv">3</span>)
   <span class="co"># Cluster-robust inference</span>
-  est_cl &lt;-<span class="st"> </span><span class="kw">felm</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span><span class="dv">0</span> <span class="op">|</span><span class="st"> </span><span class="dv">0</span> <span class="op">|</span><span class="st"> </span>group_id, <span class="dt">data =</span> sim_dt) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summary</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">extract</span>(<span class="dv">2</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
+  est_cl &lt;-<span class="st"> </span><span class="kw">felm</span>(y ~<span class="st"> </span>x |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span>group_id, <span class="dt">data =</span> sim_dt) %&gt;%
+<span class="st">    </span><span class="kw">summary</span>() %&gt;%<span class="st"> </span><span class="kw">coef</span>() %&gt;%<span class="st"> </span><span class="kw">extract</span>(<span class="dv">2</span>, <span class="dv">1</span>:<span class="dv">3</span>)
   <span class="co"># Results data.table</span>
   res_dt &lt;-<span class="st"> </span><span class="kw">data.table</span>(<span class="kw">rbind</span>(est_sph, est_het, est_cl))
   <span class="kw">setnames</span>(res_dt, <span class="kw">c</span>(<span class="st">&quot;est&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;t_stat&quot;</span>))
@@ -458,9 +473,9 @@ beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">12
 <span class="co"># Set seed</span>
 <span class="kw">set.seed</span>(<span class="dv">12345</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run the simulation ----</span>
-sim_dt &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class="dt">X =</span> <span class="dv">1</span><span class="op">:</span><span class="fl">1e4</span>, <span class="dt">FUN =</span> sim_fun,
+sim_dt &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class="dt">X =</span> <span class="dv">1</span>:<span class="fl">1e4</span>, <span class="dt">FUN =</span> sim_fun,
   n_g, g, var_cov, beta,
-  <span class="dt">mc.cores =</span> <span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbindlist</span>()</code></pre></div>
+  <span class="dt">mc.cores =</span> <span class="dv">4</span>) %&gt;%<span class="st"> </span><span class="kw">rbindlist</span>()</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summary stats ----</span>
 sim_dt[, <span class="kw">mean</span>(se), by =<span class="st"> </span>method]</code></pre></div>
 <pre><code>##            method         V1
@@ -475,34 +490,34 @@ sim_dt[, <span class="kw">mean</span>(se), by =<span class="st"> </span>method]<
 <p>So we see that the means and medians of the three methods are quite close; what about the general distributions of the standard errors?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot results ----</span>
 <span class="co"># Distribution of standard errors</span>
-<span class="kw">ggplot</span>(<span class="dt">data =</span> sim_dt, <span class="kw">aes</span>(<span class="dt">x =</span> se, <span class="dt">fill =</span> method)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">color =</span> <span class="st">&quot;grey50&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Standard error&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) <span class="op">+</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> sim_dt, <span class="kw">aes</span>(<span class="dt">x =</span> se, <span class="dt">fill =</span> method)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">color =</span> <span class="st">&quot;grey50&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Standard error&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Distributions of standard errors by method&quot;</span>,
-    <span class="dt">subtitle =</span> <span class="st">&quot;Truth: spherical disturbances&quot;</span>) <span class="op">+</span>
+    <span class="dt">subtitle =</span> <span class="st">&quot;Truth: spherical disturbances&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Std. error method:&quot;</span>,
-    <span class="dt">discrete =</span> T, <span class="dt">direction =</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span>
+    <span class="dt">discrete =</span> T, <span class="dt">direction =</span> -<span class="dv">1</span>) +
 <span class="st">  </span>theme_ed</code></pre></div>
 <p><img src="section11_files/figure-html/histogram-1.png" width="672" /></p>
 <p>We see that while the means and medians are quite close, the distributions vary considerably in their tails.</p>
 <p>To see this point from a different perspective, let’s plot pairs of standard errors, where the x-axis is the spherical error (correct in this simulation) and the y-axis is the cluster-robust standard error.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Pairs of spherical and cluster-robust SE</span>
 pair_dt &lt;-<span class="st"> </span><span class="kw">merge</span>(
-  <span class="dt">x =</span> sim_dt[method <span class="op">==</span><span class="st"> &quot;spherical&quot;</span>, <span class="kw">list</span>(<span class="dt">se_sp =</span> se, iter)],
-  <span class="dt">y =</span> sim_dt[method <span class="op">==</span><span class="st"> &quot;cluster robust&quot;</span>, .(<span class="dt">se_cl =</span> se, iter)],
+  <span class="dt">x =</span> sim_dt[method ==<span class="st"> &quot;spherical&quot;</span>, <span class="kw">list</span>(<span class="dt">se_sp =</span> se, iter)],
+  <span class="dt">y =</span> sim_dt[method ==<span class="st"> &quot;cluster robust&quot;</span>, .(<span class="dt">se_cl =</span> se, iter)],
   <span class="dt">by =</span> <span class="st">&quot;iter&quot;</span>)
 <span class="co"># The plot</span>
-<span class="kw">ggplot</span>(<span class="dt">data =</span> pair_dt, <span class="kw">aes</span>(<span class="dt">x =</span> se_sp, <span class="dt">y =</span> se_cl)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.4</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F) <span class="op">+</span>
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Spherical S.E. (correct)&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Cluster-robust S.E. (arbitrary clusters)&quot;</span>) <span class="op">+</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> pair_dt, <span class="kw">aes</span>(<span class="dt">x =</span> se_sp, <span class="dt">y =</span> se_cl)) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.4</span>) +
+<span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Spherical S.E. (correct)&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Cluster-robust S.E. (arbitrary clusters)&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Comparing spherical and cluster-robust standard errors&quot;</span>,
-    <span class="dt">subtitle =</span> <span class="st">&quot;When disturbances are spherical&quot;</span>) <span class="op">+</span>
+    <span class="dt">subtitle =</span> <span class="st">&quot;When disturbances are spherical&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Std. error method:&quot;</span>,
-    <span class="dt">discrete =</span> T, <span class="dt">direction =</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span>theme_ed <span class="op">+</span>
+    <span class="dt">discrete =</span> T, <span class="dt">direction =</span> -<span class="dv">1</span>) +
+<span class="st">  </span>theme_ed +
 <span class="st">  </span><span class="kw">coord_equal</span>()</code></pre></div>
 <p><img src="section11_files/figure-html/plotting%20pairs-1.png" width="672" /></p>
 <p>The reason for the strange dimensions in the plot here: I am forcing the axes to have equal units, which emphasizes the much greater dispersion of the cluster-robust standard errors. The best-fit (blue) line is quite close to the 45-degree line (omitted): the cluster-robust errors are consistent for the true (spherical) standard errors, but they add a lot of noise (due to the off-diagonal entries).</p>
@@ -588,49 +603,49 @@ pair_dt &lt;-<span class="st"> </span><span class="kw">merge</span>(
 <p>Let’s check instrumental variables out in R. First, we will load <code>dplyr</code> and some of our previous functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function to convert tibble, data.frame, or tbl_df to matrix</span>
-to_matrix &lt;-<span class="st"> </span><span class="cf">function</span>(the_df, vars) {
+to_matrix &lt;-<span class="st"> </span>function(the_df, vars) {
   <span class="co"># Create a matrix from variables in var</span>
-  new_mat &lt;-<span class="st"> </span>the_df <span class="op">%&gt;%</span>
+  new_mat &lt;-<span class="st"> </span>the_df %&gt;%
 <span class="st">    </span><span class="co"># Select the columns given in &#39;vars&#39;</span>
-<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) %&gt;%
 <span class="st">    </span><span class="co"># Convert to matrix</span>
 <span class="st">    </span><span class="kw">as.matrix</span>()
   <span class="co"># Return &#39;new_mat&#39;</span>
   <span class="kw">return</span>(new_mat)
 }
 <span class="co"># Function for OLS coefficient estimates</span>
-b_ols &lt;-<span class="st"> </span><span class="cf">function</span>(y, X) {
+b_ols &lt;-<span class="st"> </span>function(y, X) {
   <span class="co"># Calculate beta hat</span>
-  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>y
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>y
   <span class="co"># Return beta_hat</span>
   <span class="kw">return</span>(beta_hat)
 }
 <span class="co"># Function for OLS coef., SE, t-stat, and p-value</span>
-ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
   <span class="co"># Add intercept</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
   <span class="co"># Calculate n and k for degrees of freedom</span>
   n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
   k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
   <span class="co"># Estimate coefficients</span>
   b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(y, X)
   <span class="co"># Update names</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
   <span class="co"># Calculate OLS residuals</span>
-  e &lt;-<span class="st"> </span>y <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>b
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
   <span class="co"># Calculate s^2</span>
-  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) <span class="op">%*%</span><span class="st"> </span>e) <span class="op">/</span><span class="st"> </span>(n<span class="op">-</span>k)
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
   <span class="co"># Inverse of X&#39;X</span>
-  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X)
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
   <span class="co"># Standard error</span>
-  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 <span class="op">*</span><span class="st"> </span><span class="kw">diag</span>(XX_inv))
+  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 *<span class="st"> </span><span class="kw">diag</span>(XX_inv))
   <span class="co"># Vector of _t_ statistics</span>
-  t_stats &lt;-<span class="st"> </span>(b <span class="op">-</span><span class="st"> </span><span class="dv">0</span>) <span class="op">/</span><span class="st"> </span>se
+  t_stats &lt;-<span class="st"> </span>(b -<span class="st"> </span><span class="dv">0</span>) /<span class="st"> </span>se
   <span class="co"># Calculate the p-values</span>
-  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n<span class="op">-</span>k, <span class="dt">lower.tail =</span> F) <span class="op">*</span><span class="st"> </span><span class="dv">2</span>
+  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n-k, <span class="dt">lower.tail =</span> F) *<span class="st"> </span><span class="dv">2</span>
   <span class="co"># Nice table (data.frame) of results</span>
   results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
     <span class="co"># The rows have the coef. names</span>
@@ -648,16 +663,16 @@ ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, 
   <span class="kw">return</span>(results)
 }
 <span class="co"># Function that demeans the columns of Z</span>
-demeaner &lt;-<span class="st"> </span><span class="cf">function</span>(N) {
+demeaner &lt;-<span class="st"> </span>function(N) {
   <span class="co"># Create an N-by-1 column of 1s</span>
   i &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">1</span>, <span class="dt">nrow =</span> N)
   <span class="co"># Create the demeaning matrix</span>
-  A &lt;-<span class="st"> </span><span class="kw">diag</span>(N) <span class="op">-</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>N) <span class="op">*</span><span class="st"> </span>i <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(i)
+  A &lt;-<span class="st"> </span><span class="kw">diag</span>(N) -<span class="st"> </span>(<span class="dv">1</span>/N) *<span class="st"> </span>i %*%<span class="st"> </span><span class="kw">t</span>(i)
   <span class="co"># Return A</span>
   <span class="kw">return</span>(A)
 }
 <span class="co"># Function to return OLS residuals</span>
-resid_ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+resid_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
   <span class="co"># Require the &#39;dplyr&#39; package</span>
   <span class="kw">require</span>(dplyr)
   <span class="co"># Create the y matrix</span>
@@ -665,36 +680,36 @@ resid_ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y
   <span class="co"># Create the X matrix</span>
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> X_vars)
   <span class="co"># Bind a column of ones to X</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
   <span class="co"># Calculate the sample size, n</span>
   n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
   <span class="co"># Calculate the residuals</span>
-  resids &lt;-<span class="st"> </span>y <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span><span class="kw">b_ols</span>(y, X)
+  resids &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span><span class="kw">b_ols</span>(y, X)
   <span class="co"># Return &#39;resids&#39;</span>
   <span class="kw">return</span>(resids)
 }
 <span class="co"># Function for OLS coef., SE, t-stat, and p-value</span>
-vcov_ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+vcov_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
   <span class="co"># Add intercept</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
   <span class="co"># Calculate n and k for degrees of freedom</span>
   n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
   k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
   <span class="co"># Estimate coefficients</span>
   b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(y, X)
   <span class="co"># Update names</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
   <span class="co"># Calculate OLS residuals</span>
-  e &lt;-<span class="st"> </span>y <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>b
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
   <span class="co"># Calculate s^2</span>
-  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) <span class="op">%*%</span><span class="st"> </span>e) <span class="op">/</span><span class="st"> </span>(n<span class="op">-</span>k)
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
   <span class="co"># Inverse of X&#39;X</span>
-  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X)
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
   <span class="co"># Return the results</span>
-  <span class="kw">return</span>(<span class="kw">as.numeric</span>(s2) <span class="op">*</span><span class="st"> </span>XX_inv)
+  <span class="kw">return</span>(<span class="kw">as.numeric</span>(s2) *<span class="st"> </span>XX_inv)
 }</code></pre></div>
 <p>For now we are going to stick to the case where the true data-generating process is</p>
 <p><span class="math display">\[ y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \varepsilon \]</span></p>
@@ -718,24 +733,24 @@ vcov_ols &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_
 <span class="co"># Define our sample size</span>
 n &lt;-<span class="st"> </span><span class="fl">1e4</span>
 <span class="co"># Define beta</span>
-beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">2</span>, <span class="op">-</span><span class="dv">3</span>)
+beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">2</span>, -<span class="dv">3</span>)
 <span class="co"># Define the means of x1, x2, and z</span>
-mean_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="op">-</span><span class="dv">5</span>)
+mean_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, -<span class="dv">5</span>)
 <span class="co"># Define the var-cov matrix</span>
 vcov_mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span>
   <span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.75</span>, <span class="fl">0.25</span>, <span class="fl">0.75</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.25</span>, <span class="dv">0</span>, <span class="dv">1</span>),
   <span class="dt">nrow =</span> <span class="dv">3</span>)
 <span class="co"># Generate the data for x1, x2, and z</span>
 gen_df &lt;-<span class="st"> </span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> n, <span class="dt">mu =</span> mean_vec, <span class="dt">Sigma =</span> vcov_mat,
-  <span class="dt">empirical =</span> T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tbl_df</span>()
+  <span class="dt">empirical =</span> T) %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
 <span class="co"># Change names</span>
 <span class="kw">names</span>(gen_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;z&quot;</span>)
 <span class="co"># Generate the error term and calculate y</span>
-gen_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(
+gen_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
   <span class="dt">e =</span> <span class="kw">rnorm</span>(n),
-  <span class="dt">y =</span> beta[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>beta[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>beta[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>x2 <span class="op">+</span><span class="st"> </span>e)</code></pre></div>
+  <span class="dt">y =</span> beta[<span class="dv">1</span>] +<span class="st"> </span>beta[<span class="dv">2</span>] *<span class="st"> </span>x1 +<span class="st"> </span>beta[<span class="dv">3</span>] *<span class="st"> </span>x2 +<span class="st"> </span>e)</code></pre></div>
 <p>Just to make sure everything worked:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(gen_df, x1, x2, z, e) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cor</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(gen_df, x1, x2, z, e) %&gt;%<span class="st"> </span><span class="kw">cor</span>()</code></pre></div>
 <pre><code>##            x1            x2             z            e
 ## x1 1.00000000  7.500000e-01  2.500000e-01 0.0116999490
 ## x2 0.75000000  1.000000e+00 -2.538700e-16 0.0051329951
@@ -768,18 +783,18 @@ gen_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="k
 <p>Just as we expected, omitted-variable bias rears its ugly head. When we omit one of the covariates, we no longer have a consistent estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span>, due to the fact that the covariates are correlated.</p>
 <p>Let’s write a quick function that calculates the IV estimator <span class="math inline">\(\mathbf{b}_\text{IV}\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function for IV coefficient estimates</span>
-b_iv &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, Z_vars, <span class="dt">intercept =</span> T) {
+b_iv &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span class="dt">intercept =</span> T) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
   Z &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, Z_vars)
   <span class="co"># Add intercept</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, Z)
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  if (intercept ==<span class="st"> </span>T) Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, Z)
   <span class="co"># Calculate beta hat</span>
-  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>X) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Z) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(Z) %*%<span class="st"> </span>y
   <span class="co"># Update names</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) <span class="kw">rownames</span>(beta_hat)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(beta_hat)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
   <span class="co"># Return beta_hat</span>
   <span class="kw">return</span>(beta_hat)
 }</code></pre></div>
@@ -790,8 +805,8 @@ b_iv &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var,
 ## x1          2.003279</code></pre>
 <p>Nice—this IV stuff seems to be working! Let’s check our work with the <code>felm()</code> function. As we <a href="section10.html#clustered_errors">discussed previously</a>, the syntax for <code>felm()</code> is a bit strange. However, it does allow for estimating using instrumental variables. Specifically, recall that the syntax is <code>felm(regression formula | fixed effects | IV formula | variables for clustering)</code>. Note that you want to put your IV formula in parentheses.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Checking our work with &#39;felm&#39;</span>
-<span class="kw">felm</span>(y <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span><span class="dv">0</span> <span class="op">|</span><span class="st"> </span>(x1 <span class="op">~</span><span class="st"> </span>z) <span class="op">|</span><span class="st"> </span><span class="dv">0</span>, <span class="dt">data =</span> gen_df) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summary</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>()</code></pre></div>
+<span class="kw">felm</span>(y ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span>(x1 ~<span class="st"> </span>z) |<span class="st"> </span><span class="dv">0</span>, <span class="dt">data =</span> gen_df) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>() %&gt;%<span class="st"> </span><span class="kw">coef</span>()</code></pre></div>
 <pre><code>##               Estimate Std. Error   t value      Pr(&gt;|t|)
 ## (Intercept) -25.012727  0.6320351 -39.57490 2.464953e-318
 ## `x1(fit)`     2.003279  0.1262493  15.86764  5.109912e-56</code></pre>
@@ -816,22 +831,22 @@ b_iv &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var,
 <h2>In R</h2>
 <p>Let’s write up a function for two-stage least squares in R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function for IV coefficient estimates</span>
-b_2sls &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, Z_vars, <span class="dt">intercept =</span> T) {
+b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span class="dt">intercept =</span> T) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
   Z &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, Z_vars)
   <span class="co"># Add intercept</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, Z)
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  if (intercept ==<span class="st"> </span>T) Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, Z)
   <span class="co"># Estimate the first stage</span>
-  b_stage1 &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>X
+  b_stage1 &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Z) %*%<span class="st"> </span>Z) %*%<span class="st"> </span><span class="kw">t</span>(Z) %*%<span class="st"> </span>X
   <span class="co"># Fit the first stage values</span>
-  X_hat &lt;-<span class="st"> </span>Z <span class="op">%*%</span><span class="st"> </span>b_stage1
+  X_hat &lt;-<span class="st"> </span>Z %*%<span class="st"> </span>b_stage1
   <span class="co"># Estimate the second stage</span>
-  b_stage2 &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X_hat) <span class="op">%*%</span><span class="st"> </span>X_hat) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(X_hat) <span class="op">%*%</span><span class="st"> </span>y
+  b_stage2 &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X_hat) %*%<span class="st"> </span>X_hat) %*%<span class="st"> </span><span class="kw">t</span>(X_hat) %*%<span class="st"> </span>y
   <span class="co"># Update names</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) <span class="kw">rownames</span>(b_stage2)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b_stage2)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
   <span class="co"># Return beta_hat</span>
   <span class="kw">return</span>(b_stage2)
 }</code></pre></div>
@@ -871,15 +886,15 @@ b_2sls &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_va
 <p><span class="math display">\[ \hat{\beta}_\text{1, IV} = \dfrac{\hat{\pi}_1}{\hat{\gamma}_1} \]</span></p>
 <p>Let’s confirm this fact in R. We will estimate the first stage (regressing <span class="math inline">\(x_1\)</span> on <span class="math inline">\(z\)</span>) and the reduced form (regressing <span class="math inline">\(y\)</span> on <span class="math inline">\(z\)</span>) using our old-fashioned OLS function. We will just grab the point estimates and will also ignore the intercept (hence the <code>coef[2]</code>, below).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The first stage</span>
-b_fs &lt;-<span class="st"> </span><span class="kw">ols</span>(gen_df, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;z&quot;</span>) <span class="op">%$%</span><span class="st"> </span>coef[<span class="dv">2</span>]</code></pre></div>
+b_fs &lt;-<span class="st"> </span><span class="kw">ols</span>(gen_df, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;z&quot;</span>) %$%<span class="st"> </span>coef[<span class="dv">2</span>]</code></pre></div>
 <pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
 ##   Use c() or as.vector() instead.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The reduced form</span>
-b_rf &lt;-<span class="st"> </span><span class="kw">ols</span>(gen_df, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;z&quot;</span>) <span class="op">%$%</span><span class="st"> </span>coef[<span class="dv">2</span>]</code></pre></div>
+b_rf &lt;-<span class="st"> </span><span class="kw">ols</span>(gen_df, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;z&quot;</span>) %$%<span class="st"> </span>coef[<span class="dv">2</span>]</code></pre></div>
 <pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
 ##   Use c() or as.vector() instead.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the ratio</span>
-b_rf <span class="op">/</span><span class="st"> </span>b_fs</code></pre></div>
+b_rf /<span class="st"> </span>b_fs</code></pre></div>
 <pre><code>## [1] 2.003279</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compare to beta-hat IV</span>
 <span class="kw">b_iv</span>(gen_df, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;z&quot;</span>)</code></pre></div>
@@ -899,20 +914,20 @@ b_rf <span class="op">/</span><span class="st"> </span>b_fs</code></pre></div>
 <p><span class="math display">\[ \mathbf{P_Z} = \mathbf{Z} \left( \mathbf{Z}^\prime \mathbf{Z} \right)^{-1} \mathbf{Z}^\prime \]</span></p>
 <p>Let’s update our <code>b_2sls()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function for IV coefficient estimates</span>
-b_2sls &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, Z_vars, <span class="dt">intercept =</span> T) {
+b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span class="dt">intercept =</span> T) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
   Z &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, Z_vars)
   <span class="co"># Add intercept</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, Z)
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  if (intercept ==<span class="st"> </span>T) Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, Z)
   <span class="co"># Calculate P_Z</span>
-  P_Z &lt;-<span class="st"> </span>Z <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z)
+  P_Z &lt;-<span class="st"> </span>Z %*%<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Z) %*%<span class="st"> </span>Z) %*%<span class="st"> </span><span class="kw">t</span>(Z)
   <span class="co"># Calculate b_2sls</span>
-  b &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>P_Z <span class="op">%*%</span><span class="st"> </span>X) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>P_Z <span class="op">%*%</span><span class="st"> </span>y
+  b &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>P_Z %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>P_Z %*%<span class="st"> </span>y
   <span class="co"># Update names</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
   <span class="co"># Return b</span>
   <span class="kw">return</span>(b)
 }</code></pre></div>
@@ -938,7 +953,7 @@ b_2sls &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_va
 <p>The residuals here follow our standard definition of residuals, <em>i.e.</em>, <span class="math inline">\(\mathbf{e} = \mathbf{y} - \mathbf{X} \mathbf{b}_\text{2SLS}\)</span>. These residuals <strong>are not</strong> the residuals from the second stage.</p>
 <p>Let’s add standard errors (and <em>t</em> statistics and <em>p</em>-values) to our 2SLS function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function for IV coefficient estimates</span>
-b_2sls &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_var, X_vars, Z_vars, <span class="dt">intercept =</span> T) {
+b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span class="dt">intercept =</span> T) {
   <span class="co"># Turn data into matrices</span>
   y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
   X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
@@ -947,26 +962,26 @@ b_2sls &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_va
   n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
   k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
   <span class="co"># Add intercept</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, Z)
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  if (intercept ==<span class="st"> </span>T) Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, Z)
   <span class="co"># Calculate P_Z</span>
-  P_Z &lt;-<span class="st"> </span>Z <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z)
+  P_Z &lt;-<span class="st"> </span>Z %*%<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Z) %*%<span class="st"> </span>Z) %*%<span class="st"> </span><span class="kw">t</span>(Z)
   <span class="co"># Calculate b_2sls</span>
-  b &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>P_Z <span class="op">%*%</span><span class="st"> </span>X) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>P_Z <span class="op">%*%</span><span class="st"> </span>y
+  b &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>P_Z %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>P_Z %*%<span class="st"> </span>y
   <span class="co"># Calculate OLS residuals</span>
-  e &lt;-<span class="st"> </span>y <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>b
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
   <span class="co"># Calculate s2</span>
-  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) <span class="op">%*%</span><span class="st"> </span>e) <span class="op">/</span><span class="st"> </span>(n <span class="op">-</span><span class="st"> </span>k)
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n -<span class="st"> </span>k)
   <span class="co"># Inverse of X&#39; Pz X</span>
-  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>P_Z <span class="op">%*%</span><span class="st"> </span>X)
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>P_Z %*%<span class="st"> </span>X)
   <span class="co"># Standard error</span>
-  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 <span class="op">*</span><span class="st"> </span><span class="kw">diag</span>(XX_inv))
+  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 *<span class="st"> </span><span class="kw">diag</span>(XX_inv))
   <span class="co"># Vector of _t_ statistics</span>
-  t_stats &lt;-<span class="st"> </span>(b <span class="op">-</span><span class="st"> </span><span class="dv">0</span>) <span class="op">/</span><span class="st"> </span>se
+  t_stats &lt;-<span class="st"> </span>(b -<span class="st"> </span><span class="dv">0</span>) /<span class="st"> </span>se
   <span class="co"># Calculate the p-values</span>
-  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n<span class="op">-</span>k, <span class="dt">lower.tail =</span> F) <span class="op">*</span><span class="st"> </span><span class="dv">2</span>
+  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n-k, <span class="dt">lower.tail =</span> F) *<span class="st"> </span><span class="dv">2</span>
   <span class="co"># Update names</span>
-  <span class="cf">if</span> (intercept <span class="op">==</span><span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
   <span class="co"># Nice table (data.frame) of results</span>
   results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
     <span class="co"># The rows have the coef. names</span>
@@ -992,7 +1007,7 @@ b_2sls &lt;-<span class="st"> </span><span class="cf">function</span>(data, y_va
 ## 1 Intercept -25.012727 0.6320035 -39.57688 2.291852e-318
 ## 2        x1   2.003279 0.1262430  15.86844  5.046509e-56</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># And felm</span>
-<span class="kw">felm</span>(y <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span><span class="dv">0</span> <span class="op">|</span><span class="st"> </span>(x1 <span class="op">~</span><span class="st"> </span>z), <span class="dt">data =</span> gen_df) <span class="op">%&gt;%</span>
+<span class="kw">felm</span>(y ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span>(x1 ~<span class="st"> </span>z), <span class="dt">data =</span> gen_df) %&gt;%
 <span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
 <pre><code>## 
 ## Call:
@@ -1066,10 +1081,10 @@ temp_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
   <span class="dt">e_b =</span> <span class="kw">rnorm</span>(n)
   )
 <span class="co"># Add more variables</span>
-temp_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(
-  <span class="dt">temp_a =</span> true_temp <span class="op">+</span><span class="st"> </span>e_a,
-  <span class="dt">temp_b =</span> <span class="dv">3</span> <span class="op">+</span><span class="st"> </span>true_temp <span class="op">+</span><span class="st"> </span>e_b,
-  <span class="dt">income =</span> <span class="dv">50</span> <span class="op">+</span><span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span>true_temp <span class="op">+</span><span class="st"> </span>e
+temp_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
+  <span class="dt">temp_a =</span> true_temp +<span class="st"> </span>e_a,
+  <span class="dt">temp_b =</span> <span class="dv">3</span> +<span class="st"> </span>true_temp +<span class="st"> </span>e_b,
+  <span class="dt">income =</span> <span class="dv">50</span> +<span class="st"> </span><span class="dv">3</span> *<span class="st"> </span>true_temp +<span class="st"> </span>e
   )</code></pre></div>
 <p>Now let’s run three regressions: (1) the regression that matches the DGP (temperature without measurement error); (2) regress income on station <em>A</em>’s temperature (should be biased toward zero); (3) instrument station <em>A</em>’s temperature with station <em>B</em>’s temperature.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># OLS for DGP</span>
