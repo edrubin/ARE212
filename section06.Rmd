@@ -10,11 +10,9 @@ output:
       smooth_scroll: true
 ---
 
-<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-
-[<span class="fa-layers fa-5x">
-  <i class="fas fa-folder"></i>
-  <span class="fa-layers-text fa-inverse" data-fa-transform="shrink-8 down-1" style="font-weight:200">zip</span>
+[<span class="fa-stack fa-4x">
+  <i class="fa fa-folder fa-stack-2x"></i>
+  <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i>
 </span>](Section06.zip)
 
 <br>
@@ -28,7 +26,7 @@ Let's start with some administrative tasks...
 First things first: if you haven't seen Black Panther yet, you should go see it.
 
 ![](Images/blackPanther.gif)
-\\
+\
 <br>
 
 ## Office hours
@@ -1015,7 +1013,7 @@ ggplot(data = us_shp,
 # Plotting functions
 
 In economics, we often want to just plot a function—for instance, a demand curve (or inverse demand curve). The easiest way to plot an arbitrary function in R is probably with the `curve()` function. Let's define inverse demand and supply functions.
-```{R}
+```{R fun_inv}
 # Define the inverse demand and supply functions
 inv_demand <- function(q) 10 - q
 inv_supply <- function(q) 1.5 * q

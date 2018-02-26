@@ -33,6 +33,7 @@ ggplot(data = a_df, aes(x, y)) +
 # Options
 options(stringsAsFactors = F)
 # Packages
+library(pacman)
 p_load(readr, dplyr, magrittr, ggplot2, ggthemes, viridis)
 # Set working directory
 dir_sec6 <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section06/"
