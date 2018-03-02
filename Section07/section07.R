@@ -7,13 +7,8 @@ ggplot2::qplot(x = rnorm(100), y = rnorm(100), geom = "point")
 # Options
 options(stringsAsFactors = F)
 # Packages
-library(dplyr)
-library(magrittr)
-library(parallel)
-library(ggplot2)
-library(ggthemes)
-library(viridis)
-library(lfe)
+library(pacman)
+p_load(dplyr, magrittr, parallel, ggplot2, ggthemes, viridis, lfe)
 # Directory
 setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212/Section07")
 # My ggplot2 theme
@@ -257,6 +252,8 @@ miss_df %>%
     col.names = c("Parameter", "Method", "Mean", "Std. Dev."))
 
 # Weighting in 'felm' ----
+# Check out 'weights' for 'felm'
+?felm
 # 1. 'felm' with our squared weights
 felm(y ~ x, data = pop_df, weights = pop_df$w^2)
 # 2. 'felm', re-defining our weights

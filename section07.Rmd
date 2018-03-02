@@ -4,7 +4,7 @@ header-includes:
 output:
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     number_sections: false
     toc_float:
       collapsed: false
@@ -164,13 +164,8 @@ First things first: my R setup
 # Options
 options(stringsAsFactors = F)
 # Packages
-library(dplyr)
-library(magrittr)
-library(parallel)
-library(ggplot2)
-library(ggthemes)
-library(viridis)
-library(lfe)
+library(pacman)
+p_load(dplyr, magrittr, parallel, ggplot2, ggthemes, viridis, lfe)
 # Directory
 setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section07")
 # My ggplot2 theme
@@ -508,12 +503,6 @@ b_ols(y = to_matrix(pop_df, "y_w"),
 
 Great! Now you can impress all of your friends with weighted regressions.
 
-# Survey
-
-If you can spare a minute, please fill out the following survey to help me better understand how section/learning R is going. Thank you in advance!
-
-[Launch the survey!](https://edrubin.typeform.com/to/BcECl6)
-
 # Fun tools: Atom
 
 As advertised above, henceforth I will try to include a new section in the notes about tools that I have found useful for research in applied economics (or in the life of a graduate student).
@@ -524,11 +513,11 @@ What do I do with Atom? Essentially everything. Atom has beautiful syntax highli
 
 Okay, so you see that you can do lots of things in Atom, but why would you want to? Well, in addition to being beautiful and _really, really_ customizable, Atom has a few features that most other text editors lack. My favorite: multiple cursors based upon word searching:
 
-![Multiple cursors in action.](Images/multiCursors.gif)
+![Multiple cursors in action.](Images/myMultipleCursors.gif)
 
 RStudio recently added multiple-cursor capabilities, but RStudio's multiple cursors are still nowhere near what Atom offers. For instance, check this out:^[This functionality requires the Atom package [sequential-number](https://atom.io/packages/sequential-number).]
 
-![Multiple cursors with customizable sequences of numbers!](Images/sequentialNumber.gif)
+![Multiple cursors with customizable sequences of numbers!](Images/mySequentialNumber.gif)
 
 Boom! If I had only known about Atom sooner....
 
@@ -536,4 +525,4 @@ Two other Atom features that I find hugely useful/productivity-enhancing are cus
 
 Anyway, Atom can help you with a lot of text editing tasks. And it's [pretty](https://atom.io/themes/duotone-dark-sea-syntax).
 
-![My Atom right now.](Images/myAtom.png)
+![My Atom right now.](Images/myAtom.gif)
