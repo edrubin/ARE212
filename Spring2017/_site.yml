@@ -50,4 +50,3 @@ output:
       after_body: ../footer.html
     lib_dir: site_libs
     self_contained: no
-
