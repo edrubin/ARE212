@@ -4,96 +4,55 @@ header-includes:
 output:
   html_document:
     toc: true
-    toc_depth: 3
+    toc_depth: 2
     number_sections: false
     toc_float:
       collapsed: false
       smooth_scroll: true
 ---
 
-[<span class="fa-stack fa-4x">
-  <i class="fa fa-folder fa-stack-2x"></i>
-  <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i>
-</span>](Section07.zip)
-
 <br>
 
 # Admin
-
-## Problem set 1 solutions
-
-The scripts (both `.Rnw` and `.Rmd`) to generate my solutions to problem set 1 are now available on bCourses.
-
-## Last week
-
-[Last week](section06.html) we discussed the fantastic figure-making package `ggplot2`.
-
-### Quick plots with `qplot`
-
-`ggplot2` has a helpful function named `qplot()`. `qplot()` is less customizable than the standard functions that you stack on top of `ggplot()`, and it deviates from the syntax. So why am I telling you about it? Because it is nice for making quick graphs.
-
-```{R qplot}
-ggplot2::qplot(x = rnorm(100), y = rnorm(100), geom = "point")
-```
-
-I still think the standard `ggplot() + ...` functionality is best, but if you want to make a quick plot, `qplot()` can be helpful.
-
-### Recycling custom themes
-
-Someone asked about re-using `ggplot2` themes. Let's imagine you've developed a stellar theme that you would like to apply to your current and future graphs. You have a few options.
-
-#### Option 1: Copy and paste
-
-First off, you can just copy the theme to the top of your R scripts. For example, copy and paste this `my_theme` theme at the top of your R script (after you've loaded `ggplot2`). It will now be available to all of your plots.
-```{R recyle1, eval = F}
-my_theme <- theme(
-  legend.position = "bottom",
-  panel.background = element_rect(fill = NA),
-  panel.border = element_rect(fill = NA, color = "grey75"),
-  axis.ticks = element_line(color = "grey85"),
-  panel.grid.major = element_line(color = "grey95", size = 0.2),
-  panel.grid.minor = element_line(color = "grey95", size = 0.2),
-  legend.key = element_blank())
-```
-
-#### Option 2: Save and call
-
-Alternatively, you can save the theme to its own R script and then load that script whenever you want to use the theme. For example, we could save the following script to `myTheme.R`.
-```{R recyle2, eval = F}
-# Ensure ggplot2 is loaded
-require(ggplot2)
-# Define the theme
-my_theme <- theme(
-  legend.position = "bottom",
-  panel.background = element_rect(fill = NA),
-  panel.border = element_rect(fill = NA, color = "grey75"),
-  axis.ticks = element_line(color = "grey85"),
-  panel.grid.major = element_line(color = "grey95", size = 0.2),
-  panel.grid.minor = element_line(color = "grey95", size = 0.2),
-  legend.key = element_blank())
-```
-
-Then when you want to use `my_theme` in one of your R scripts, simply load the `myTheme.R` file. To load the file, use the  `source()` function, _i.e._, `source("myTheme.R")`.^[Keep in mind that you will also need to direct R to the proper directory/folder.]
-
-#### Option 3: Your `.Rprofile`
-
-When R begins a new session, it loads several files.^[Read more about R startup [here](https://csgillespie.github.io/efficientR/3-3-r-startup.html#r-startup).] One of the files that R automatically loads is called `.Rprofile`. If you want R to automatically load specific objects, packages, and datasets when it starts up, you can add R code to the `.Rprofile` file for these tasks. Thus, you could load `ggplot2` and define your theme in your `.Rprofile` file, and it will always be available when you start up R.
-
-The downside to this option is your R scripts will no longer be self contained, which substantially restricts reproducibility and share-ability of your code. If you want to share code with someone, then they are going to need your `.Rprofile` in addition to your R scripts and datasets. For this reason, I try not to do much in my `.Rprofile` and instead do everything in the relevant R script(s).
 
 ## New this week
 
 Starting this week, I am going to introduce you to a few tools that I've found useful for empirically minded economic research.^[Don't worry: I'm not being paid to endorse any of these products.] Feel free to ask for specific topics or to make recommendations of your own. I'll include this part last in the section notes, as it is not as much of a priority as learning to code in R.
 
-## This week
+## Problem set 1
 
-This week we will cover generalized least squares (GLS), focusing on a special case called weighted least squares (WLS). And we will run more simulations (with pretty graphs)!
+After grading your problem sets, I have a few comments/requests:
+
+0. Overall, great job! Solid coding and, for the most part, nice discussions when the problem set requested them.
+1. Our strict exogeneity assumption is about the _conditional_ mean of the disturbance term. The _unconditional_ mean of the residuals will always be zero when you estimate via OLS with an intercept. The residuals will (generally) have a non-zero (_unconditional_) mean when you exclude the intercept.
+2. Our assumption about linearity is about the parameters and the disturbance—not the covariates (meaning squaring a covariate is fair game).
+3. When you demean your data, you've applied the FWL theorem and do not need an intercept.
+4. Please separate your answers outside of your R comments/code. And please don't answer the questions in your R comments.
 
 ## What you will need
 
 __Packages__:
 
 - Previously used: `dplyr`, `lfe`, `readr`, `magrittr`, `parallel`, `lfe`, `ggplot2`, `ggthemes`, `viridis`
+
+## Last week
+
+[Last week](section06.html) we discussed the fantastic figure-making package `ggplot2`.
+
+__Follow up__: `ggplot2` has a helpful function named `qplot()`. `qplot()` is less customizable than the standard functions that you stack on top of `ggplot()`, and it deviates from the syntax. So why am I telling you about it? Because it is nice for making quick graphs.
+
+
+```r
+ggplot2::qplot(x = rnorm(100), y = rnorm(100), geom = "point")
+```
+
+<img src="section07_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+
+I still think the standard `ggplot() + ...` functionality is best, but if you want to make a quick plot, `qplot()` can be helpful.
+
+## This week
+
+This week we will cover generalized least squares (GLS), focusing on a special case called weighted least squares (WLS). And we will run more simulations (with pretty graphs)!
 
 # GLS
 
@@ -164,13 +123,53 @@ Let's write a simulation in R that can compare OLS and WLS via their coefficient
 6. Compare the distributions via astute observation.
 
 First things first: my R setup
-```{R setup, collapse = T}
+
+```r
 # Setup ----
 # Options
 options(stringsAsFactors = F)
 # Packages
-library(pacman)
-p_load(dplyr, magrittr, parallel, ggplot2, ggthemes, viridis, lfe)
+library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
+library(magrittr)
+library(parallel)
+library(ggplot2)
+library(ggthemes)
+library(viridis)
+```
+
+```
+## Loading required package: viridisLite
+```
+
+```r
+library(lfe)
+```
+
+```
+## Loading required package: Matrix
+```
+
+```r
 # Directory
 setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section07")
 # My ggplot2 theme
@@ -185,7 +184,8 @@ theme_ed <- theme(
 ```
 
 Second things second: let's write a few functions that will be useful in this simulation.
-```{R functions, collapse = T}
+
+```r
 # Functions ----
 # Function to convert tibble, data.frame, or tbl_df to matrix
 to_matrix <- function(the_df, vars) {
@@ -217,7 +217,8 @@ We will use the same data-generating process (DGP) that Max used in his notes:
 Notice that this setup implicitly defines $\sigma^2 = 400$ and $\omega_i = \frac{1}{100}x_i^2$.
 
 Let's now create our population.
-```{R create_population}
+
+```r
 # Set the seed
 set.seed(12345)
 # Set population size, N
@@ -241,13 +242,15 @@ Let's also add the weights that we discussed previously, _i.e._,
 
 $$ w_i = \dfrac{1}{\sqrt{\omega_i (\mathbf{X})}} = \dfrac{10}{x} $$
 
-```{R add_weights}
+
+```r
 # Add weights
 pop_df %<>% mutate(w = 10/x)
 ```
 
 We should also apply the weights.
-```{R apply_weights}
+
+```r
 pop_df %<>% mutate(
   y_w = y * w,
   i_w = i * w,
@@ -257,7 +260,8 @@ pop_df %<>% mutate(
 Notice that we apply the weights to the entire observation—including the intercept (think of it as multiply both $\mathbf{y}$ and $\mathbf{X}$ by a weighting matrix).
 
 Now we want to write a function that takes care of a single iteration of the simulation. This function needs to draw a sample of size 1,000 and then estimate/return the OLS and WLS coefficients.^[To make our simulation as efficient as possible, I am keeping the things I do within a single iteration very simple. I also do as much as possible _outside_ the individual iterations, _e.g._, creating the population data.]
-```{R fun_one_run}
+
+```r
 # Function for a single iteration of the simulation
 one_run <- function(iter, population) {
   # Sample 1000 rows from the population
@@ -283,7 +287,8 @@ one_run <- function(iter, population) {
 ```
 
 Finally, we want to run the simulation 10,000 times. I'm going to parallelize to speed things up. You can skip this part, if you would like, but you may want to reduce the number of iterations that you run.
-```{R setup_cluster, message = F, cache = T, results = "hide"}
+
+```r
 # Make the cluster
 cl <- makeCluster(4)
 # Load functions on the cluster
@@ -299,7 +304,8 @@ clusterSetRNGStream(cl, 12345)
 ```
 
 Now run the `one_run()` function several (10,000) times.
-```{R run_simulation, cache = T, message = F}
+
+```r
 sim_df <- parLapply(
   cl = cl,
   X = 1:1e4,
@@ -308,13 +314,15 @@ sim_df <- parLapply(
 ```
 
 Finally, stop the cluster.
-```{R stop_cluster, message = F, cache = T}
+
+```r
 # Stop the cluster
 stopCluster(cl)
 ```
 
 If you are opting for the non-parallelized version:^[Again, if you are not going to run the simulation in parallel, you may want to run fewer than 10,000 iterations.]
-```{R example_non_parallel, eval = F}
+
+```r
 sim_df <- lapply(
   X = 1:1e4,
   FUN = one_run,
@@ -322,7 +330,8 @@ sim_df <- lapply(
 ```
 
 Let's check out the distributions of estimates for $\beta$. For a task like this one, I like `ggplot2`'s `geom_density()`.
-```{R dist_beta}
+
+```r
 ggplot(data = filter(sim_df, param == "coef"), aes(x = est)) +
   geom_vline(xintercept = 1.5, color = "grey70", size = 0.75) +
   geom_density(aes(fill = method, color = method), alpha = 0.7) +
@@ -336,16 +345,28 @@ ggplot(data = filter(sim_df, param == "coef"), aes(x = est)) +
   theme_ed
 ```
 
+<img src="section07_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+
 What do we see? Exactly what Max told us we would see (and showed us): both OLS and WLS are unbiased (both distributions are centered on the true parameter), but when we know $\boldsymbol{\Omega}(\mathbf{X})$, WLS (a special case of GLS) is more efficient—the distribution of estimates is tighter around the true value of the parameter.
 
-And for a numeric summary of the results:^[I use a few new functions below. `group_by()` allows us to specify by which variables we would like to group our data (helpful for `summarize()` and `mutate()`). `kable()` is a function from the `knitr` package that outputs simple tables (the default format is Markdown).]
-```{R wls_table}
+And for a numeric summarization of the results:^[I use a few new functions below. `group_by()` allows us to specify by which variables we would like to group our data (helpful for `summarize()` and `mutate()`). `kable()` is a function from the `knitr` package that outputs simple tables (the default format is Markdown).]
+
+```r
 sim_df %>%
   group_by(param, method) %>%
   summarize(mean(est), sd(est)) %>%
   knitr::kable(digits = 4,
     col.names = c("Parameter", "Method", "Mean", "Std. Dev."))
 ```
+
+
+
+Parameter   Method       Mean   Std. Dev.
+----------  -------  --------  ----------
+coef        ols        1.5061      0.1383
+coef        wls        1.5013      0.0637
+int         ols       -1.5054     92.6954
+int         wls        0.0021      3.4135
 
 __Question__: If GLS is so efficient, why don't more people use it?
 
@@ -360,7 +381,8 @@ __Answer__: Let's simulate it.
 We will stick with the same population as above, but now, we will mis-specify the weights. Specifically, instead of using the (correct) weights $w_i = \frac{10}{x_i}$, we will use the (incorrect) weights $v_i = \frac{10}{x^2}$.
 
 Let's add the $v_i$ weights to the population dataset and then apply them to our observations.
-```{R make_bad_weights}
+
+```r
 # Add the bad weights
 pop_df %<>% mutate(v = 10/x^2)
 # Weight the observations with the bad weights
@@ -371,7 +393,8 @@ pop_df %<>% mutate(
 ```
 
 Next, we need to update our `one_run()` function to produce estimates using these new (bad) weights.
-```{R fun_bad_weights}
+
+```r
 # Function for a single iteration of the simulation
 one_run <- function(iter, population) {
   # Sample 1000 rows from the population
@@ -401,7 +424,8 @@ one_run <- function(iter, population) {
 ```
 
 We're ready to run the simulation again.
-```{R run_bad_weights, message = F, cache = T, results = "hide"}
+
+```r
 # Make the cluster
 cl <- makeCluster(4)
 # Load functions on the cluster
@@ -425,7 +449,8 @@ stopCluster(cl)
 ```
 
 If you are not parallelizing:
-```{R non_parallel_bad_weights, eval = F}
+
+```r
 # Run the simulation 10,000 times
 miss_df <- lapply(
   X = 1:1e4,
@@ -434,7 +459,8 @@ miss_df <- lapply(
 ```
 
 Plot the results for the estimates of $\beta$.
-```{R plot_bad_weights}
+
+```r
 ggplot(data = filter(miss_df, param == "coef"), aes(x = est)) +
   geom_vline(xintercept = 1.5, color = "grey70", size = 0.75) +
   geom_density(aes(fill = method, color = method), alpha = 0.7) +
@@ -451,8 +477,11 @@ ggplot(data = filter(miss_df, param == "coef"), aes(x = est)) +
   theme_ed
 ```
 
+<img src="section07_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+
 Hmmm... it is not looking good for WLS (GLS) when we mis-specify the weights ($\boldsymbol{\Omega}(\mathbf{X})$). But it is a bit difficult to really see what's going on. Let's zoom in a bit (adding the `xlim()` function to our `ggplot()` allows us to control the $x$-axis limits).
-```{R zoom_plot_bad_weights}
+
+```r
 ggplot(data = filter(miss_df, param == "coef"), aes(x = est)) +
   geom_vline(xintercept = 1.5, color = "grey70", size = 0.75) +
   geom_density(aes(fill = method, color = method), alpha = 0.65) +
@@ -470,14 +499,32 @@ ggplot(data = filter(miss_df, param == "coef"), aes(x = est)) +
   theme_ed
 ```
 
+```
+## Warning: Removed 1290 rows containing non-finite values (stat_density).
+```
+
+<img src="section07_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+
 In numbers:
-```{R table_bad_weights}
+
+```r
 miss_df %>%
   group_by(param, method) %>%
   summarize(mean(est), sd(est)) %>%
   knitr::kable(digits = 4,
     col.names = c("Parameter", "Method", "Mean", "Std. Dev."))
 ```
+
+
+
+Parameter   Method        Mean   Std. Dev.
+----------  --------  --------  ----------
+coef        ols         1.5061      0.1383
+coef        wls         1.5013      0.0637
+coef        wls bad     1.3457      1.4279
+int         ols        -1.5054     92.6954
+int         wls         0.0021      3.4135
+int         wls bad     0.5225      6.2608
 
 Not so good. While GLS/WLS provide us with greater efficiency in estimators __when we know__ $\boldsymbol{\Omega}(\mathbf{X})$, this knowledge of $\boldsymbol{\Omega}(\mathbf{X})$ is an enormous assumption. Furthermore, when we are incorrect about this assumption—_i.e._, when we think we know $\boldsymbol{\Omega}(\mathbf{X})$ but in reality do not—GLS/WLS becomes very inefficient.
 
@@ -493,20 +540,57 @@ As you may guess, our favorite canned regression function (`felm()`) allows you 
 What is the difference between the weights? The weights we used above are the weights along the diagonal matrix $\mathbf{C}$ that transform $y$ and $\mathbf{X}$. `felm()` wants the weights on the diagonal of $\mathbf{W}$, which we previously defined as $\mathbf{W} = \mathbf{C}^{\prime}\mathbf{C}$.
 
 We will calculate the weighted least squares estimates four different ways.
-```{R felm_wls}
+
+```r
 # 1. 'felm' with our squared weights
 felm(y ~ x, data = pop_df, weights = pop_df$w^2)
+```
+
+```
+## (Intercept)           x 
+##      0.4777      1.4999
+```
+
+```r
 # 2. 'felm', re-defining our weights
 felm(y ~ x, data = pop_df, weights = (10/pop_df$x)^2)
+```
+
+```
+## (Intercept)           x 
+##      0.4777      1.4999
+```
+
+```r
 # 3. 'felm' with our transformed variables
 felm(y_w ~ -1 + i_w + x_w, data = pop_df)
+```
+
+```
+##    i_w    x_w 
+## 0.4777 1.4999
+```
+
+```r
 # 4. Using our 'b_ols' function on the transformed variables
 # (As we did in the simulation)
 b_ols(y = to_matrix(pop_df, "y_w"),
   X = to_matrix(pop_df, c("i_w", "x_w")))
 ```
 
+```
+##           y_w
+## i_w 0.4776918
+## x_w 1.4998995
+```
+
 Great! Now you can impress all of your friends with weighted regressions.
+
+# Survey
+
+If you can spare a minute, please fill out the following survey to help me better understand how section/learning R is going. Thank you in advance!
+
+[Launch the survey!](https://edrubin.typeform.com/to/BcECl6)
 
 # Fun tools: Atom
 
@@ -518,11 +602,11 @@ What do I do with Atom? Essentially everything. Atom has beautiful syntax highli
 
 Okay, so you see that you can do lots of things in Atom, but why would you want to? Well, in addition to being beautiful and _really, really_ customizable, Atom has a few features that most other text editors lack. My favorite: multiple cursors based upon word searching:
 
-![Multiple cursors in action.](Images/myMultipleCursors.gif)
+![Multiple cursors in action.](Images/multiCursors.gif)
 
 RStudio recently added multiple-cursor capabilities, but RStudio's multiple cursors are still nowhere near what Atom offers. For instance, check this out:^[This functionality requires the Atom package [sequential-number](https://atom.io/packages/sequential-number).]
 
-![Multiple cursors with customizable sequences of numbers!](Images/mySequentialNumber.gif)
+![Multiple cursors with customizable sequences of numbers!](Images/sequentialNumber.gif)
 
 Boom! If I had only known about Atom sooner....
 
@@ -530,4 +614,4 @@ Two other Atom features that I find hugely useful/productivity-enhancing are cus
 
 Anyway, Atom can help you with a lot of text editing tasks. And it's [pretty](https://atom.io/themes/duotone-dark-sea-syntax).
 
-![My Atom right now.](Images/myAtom.gif)
+![My Atom right now.](Images/myAtom.png)
