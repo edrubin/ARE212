@@ -63,14 +63,14 @@ Generalized least squares (GLS), weighted least squares (WLS), and more simulati
 [pdf](Section07/section07.pdf) | [R script](Section07/section07.R) | [zip](Section07.zip)
 <br><br>
 
-<!-- #### [__Section 8__](section08.html): OLS in asymptopia
+#### [__Section 8__](section08.html): OLS in asymptopia
 
 OLS as $N$ gets (very) big. Also: simulations, coding efficiency, and new `ggplot2` techniques.
 
 [pdf](Section08/section08.pdf) | [R script](Section08/section08.R) | [zip](Section08.zip)
 <br><br>
 
-#### [__Section 9__](section09.html): Standard errors, Vol. I
+<!-- #### [__Section 9__](section09.html): Standard errors, Vol. I
 
 Calculating standard errors via analytical methods and via the Delta Method. Includes linear and nonlinear combinations of parameters. Plus making prettier tables.
 

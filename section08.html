@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 8: OLS in asymptopia</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="section06.html">Section 6</a>
+    </li>
+    <li>
+      <a href="section07.html">Section 7</a>
+    </li>
+    <li>
+      <a href="section08.html">Section 8</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 8: OLS in asymptopia</h1>
+
+</div>
+
+
+<p><a href="Section08.zip"><span class="fa-stack fa-4x"> <i class="fa fa-folder fa-stack-2x"></i> <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i> </span></a></p>
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<div id="a-helpful-function" class="section level2">
+<h2>A helpful function</h2>
+<p>The <code>between()</code> function (in <code>dplyr</code>) gives you a shortcut to <code>(x &gt;= left) &amp; (x &lt;= right)</code>. Its syntax: <code>between(x, left, right)</code>, <em>e.g.</em>,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define x</span>
+x &lt;-<span class="st"> </span><span class="dv">3</span>
+<span class="co"># The &quot;normal&quot; way</span>
+(x &gt;=<span class="st"> </span><span class="dv">1</span>) &amp;<span class="st"> </span>(x &lt;=<span class="st"> </span><span class="dv">5</span>)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The &quot;between&quot; way</span>
+dplyr::<span class="kw">between</span>(x, <span class="dv">1</span>, <span class="dv">5</span>)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="last-week" class="section level2">
+<h2>Last week</h2>
+<p><a href="section07.html">Last week</a> we discussed generalized least squared (GLS) and focused on a special case of GLS: weighted least squares (WLS).</p>
+</div>
+<div id="this-week" class="section level2">
+<h2>This week</h2>
+<p>OLS in asymptopia: <span class="math inline">\(N\)</span> gets (very) big.</p>
+</div>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p><strong>Packages</strong>:</p>
+<ul>
+<li>New! (You probably need to install these packages):
+<ul>
+<li><code>gridExtra</code> arranges multiple plots on a page (<a href="https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html">vignette</a>)</li>
+<li><code>VGAM</code> offers more named distributions (we’ll used the Pareto)</li>
+</ul></li>
+<li>Previously used: <code>dplyr</code>, <code>lfe</code>, <code>readr</code>, <code>magrittr</code>, <code>parallel</code>, <code>lfe</code>, <code>ggplot2</code>, <code>ggthemes</code>, <code>viridis</code></li>
+</ul>
+</div>
+</div>
+<div id="asymptopia" class="section level1">
+<h1>Asymptopia</h1>
+<p>Up to this point in the course, we made a set of assumptions and then derived the statistical properties (<em>i.e.</em>, mean and variance) of estimators under these assumptions. We wanted our estimators to be unbiased and to have minimum variance (across the class of unbiased (linear) estimators).</p>
+<p>Asymptotics provides a different way of thinking about estimators. Rather than asking about the distributional properties of an estimator (essentially asking what would happen if we took an infinite number of samples and estimated our estimator in each sample), we now ask what happens to the estimator as the sample size grows toward infinity (<span class="math inline">\(N\rightarrow\inf\)</span>). Specifically, we really want to know if the estimator becomes indistinguishable from the parameter as <span class="math inline">\(N\)</span> approaches infinity. We will be really happy if the estimator approaches the parameter quickly. And we will want to know the distribution of the estimator in asymptopia (<em>e.g.</em>, asymptotic normality).</p>
+<div id="new-assumptions" class="section level2">
+<h2>New assumptions</h2>
+<p>We also relax a bunch of assumptions, either dropping them (<em>e.g.</em>, we no longer assume the error term is normally distributed) or replacing them with less restrictive assumption (<em>e.g.</em>, we replace strict exogeneity with population orthogonality <span class="math inline">\(\mathop{\boldsymbol{E}} \left[ \mathbf{x}_i^\prime \varepsilon_i \right] = 0\)</span>).</p>
+<p>Thus, our assumptions are:</p>
+<ol style="list-style-type: decimal">
+<li>Linearity in parameters/disturbance: <span class="math inline">\(y_i = \mathbf{x}_i^\prime \boldsymbol{\beta} + \varepsilon_i\)</span></li>
+<li><span class="math inline">\(y_i\)</span> and <span class="math inline">\(\mathbf{x}_i\)</span> are both i.i.d. random variables</li>
+<li>Population orthogonality between <span class="math inline">\(\mathbf{x}_i\)</span> and <span class="math inline">\(\varepsilon_i\)</span></li>
+<li>A (new) rank condition: <span class="math inline">\(\mathop{r}\left(\mathop{\boldsymbol{E}} \left[ \mathbf{x}_i^\prime \mathbf{x}_i \right]\right) = k\)</span></li>
+</ol>
+<p>We will also assume that the regression includes a constant.</p>
+</div>
+<div id="setting-up" class="section level2">
+<h2>Setting up</h2>
+<p>Let’s set up.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Setup ----</span>
+<span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="kw">options</span>(<span class="dt">scipen =</span> <span class="dv">10</span>)
+<span class="co"># Packages</span>
+<span class="kw">library</span>(pacman)
+<span class="kw">p_load</span>(dplyr, magrittr, parallel,
+  ggplot2, ggthemes, viridis, grid, gtable, gridExtra)
+<span class="co"># Directory</span>
+<span class="kw">setwd</span>(<span class="st">&quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section08&quot;</span>)
+<span class="co"># My ggplot2 theme</span>
+theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
+  <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+  <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+  <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;grey75&quot;</span>),
+  <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey85&quot;</span>),
+  <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>),
+  <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>),
+  <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p>And load our functions</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Functions ----</span>
+<span class="co"># Function to convert tibble, data.frame, or tbl_df to matrix</span>
+to_matrix &lt;-<span class="st"> </span>function(the_df, vars) {
+  <span class="co"># Create a matrix from variables in var</span>
+  new_mat &lt;-<span class="st"> </span>the_df %&gt;%
+<span class="st">    </span><span class="co"># Select the columns given in &#39;vars&#39;</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) %&gt;%
+<span class="st">    </span><span class="co"># Convert to matrix</span>
+<span class="st">    </span><span class="kw">as.matrix</span>()
+  <span class="co"># Return &#39;new_mat&#39;</span>
+  <span class="kw">return</span>(new_mat)
+}
+<span class="co"># Function for OLS coefficient estimates</span>
+b_ols &lt;-<span class="st"> </span>function(y, X) {
+  <span class="co"># Calculate beta hat</span>
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>y
+  <span class="co"># Return beta_hat</span>
+  <span class="kw">return</span>(beta_hat)
+}</code></pre></div>
+</div>
+<div id="recalling-results" class="section level2">
+<h2>Recalling results</h2>
+<p>Today we will confirm one of the crazier results that Max revealed in class: when our assumptions are valid (linearity, population orthogonality, and asymptotic full rank), <span class="math inline">\(\mathbf{b}\)</span>, the OLS estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span>,</p>
+<ol style="list-style-type: decimal">
+<li>is consistent for <span class="math inline">\(\boldsymbol{\beta}\)</span></li>
+<li>is asymptotically normally distributed—with mean <span class="math inline">\(\boldsymbol{\beta}\)</span> and variance <span class="math inline">\(\sigma^2 \left( \sum_i^N \mathbf{x}_i^\prime \mathbf{x}_i \right)^{-1}\)</span></li>
+</ol>
+</div>
+<div id="confirmation-by-simulation" class="section level2">
+<h2>Confirmation by simulation</h2>
+<p>We are going to use a simulation to confirm this result. Simulation provides statisticians/econometricians with a very powerful way to demonstrate potentially complex results. While simulations may not really <em>prove</em> hypotheses, simulation can help you quickly confirm or disprove suspicions. If the analytical proof is it all complicated, I will generally first write a simulation that demonstrates the idea.</p>
+<p>First, let’s use a simulation to “confirm” that OLS is consistent for <span class="math inline">\(\boldsymbol{\beta}\)</span>. Then we will compare the distribution of the OLS estimates for <span class="math inline">\(\boldsymbol{\beta}\)</span> to their theoretical asymptotic distribution.</p>
+</div>
+</div>
+<div id="simulation-consistency-of-ols" class="section level1">
+<h1>Simulation: Consistency of OLS</h1>
+<p>What will we need for this simulation?</p>
+<ol style="list-style-type: decimal">
+<li>A big population from which we can draw increasingly large samples.</li>
+<li>A function that draws a sample of <span class="math inline">\(n\)</span> from the population and estimates <span class="math inline">\(\mathbf{b}\)</span></li>
+</ol>
+<div id="create-the-population" class="section level2">
+<h2>Create the population</h2>
+<p>Now we create the population. Let’s stick with simple linear regression (the intercept plus one covariate).</p>
+<ol style="list-style-type: decimal">
+<li>We need a pretty big <span class="math inline">\(N\)</span> that will allow us to samples that are sufficiently large to get us into asymptopia. I’m going to go with a 100,000.</li>
+<li>Just to make sure normality of <span class="math inline">\(\mathbf{x}_i\)</span> or of <span class="math inline">\(\mathbf{\varepsilon}\)</span> is not driving our results, we will generate each variable from a non-normal distribution.</li>
+</ol>
+<ul>
+<li>We will draw <span class="math inline">\(x_i\)</span> from a uniform distribution on <span class="math inline">\([0,100]\)</span>.</li>
+<li>We will create three different sets of <span class="math inline">\(\varepsilon_i\)</span> to examine how the distribution of the disturbances affects the asymptotic distribution of <span class="math inline">\(\mathbf{b}\)</span>.
+<ul>
+<li>Standard normal: <span class="math inline">\(\mathop{N}(0,1)\)</span></li>
+<li>Uniform on <span class="math inline">\([-5 ,5]\)</span></li>
+<li>A Poisson with <span class="math inline">\(\lambda = 1\)</span> which we then demean by substracting 1</li>
+<li>A strange bimodal Gamma distribution that we will define below</li>
+</ul></li>
+</ul>
+<p>First, we will write a function that generates <span class="math inline">\(n\)</span> random variables from our bimodal Gamma distribution. This bimodal gamma will essentially flip a coin (Bernoulli) and then, based upon the coin’s outcome, draw a random variable from one of two different Gamma distributions. To simplify things, we will define the default “coin” to be fair (<em>i.e.</em>, you have a 50-50 chances of receiving a draw from either distribution).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rbigamma &lt;-<span class="st"> </span>function(n, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>)) {
+  <span class="co"># Draw n samples of T or F (our &#39;coin flip&#39;) with replacement</span>
+  flips &lt;-<span class="st"> </span>base::<span class="kw">sample</span>(<span class="dt">x =</span> <span class="kw">c</span>(T, F), <span class="dt">size =</span> n,
+    <span class="dt">replace =</span> T, <span class="dt">prob =</span> prob)
+  <span class="co"># Draw n samples from Gamma with shape=5 and scale=1 (mean=7)</span>
+  <span class="co"># substract the mean (7) from the draws</span>
+  gamma_7 &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dt">n =</span> n, <span class="dt">shape =</span> <span class="dv">7</span>, <span class="dt">scale =</span> <span class="dv">1</span>)
+  <span class="co"># Draw n samples from Gamma with shape=1 and scale=1 (mean=1)</span>
+  <span class="co"># substract the mean (1) from the draws</span>
+  gamma_1 &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dt">n =</span> n, <span class="dt">shape =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">1</span>)
+  <span class="co"># Combine the flips and the two gammas&#39; draws</span>
+  bi_gamma &lt;-<span class="st"> </span>flips *<span class="st"> </span>gamma_7 +<span class="st"> </span>(!flips) *<span class="st"> </span>gamma_1
+  <span class="co"># Demean the bimodal variables (weighting by &#39;prob&#39;)</span>
+  bi_gamma &lt;-<span class="st"> </span>bi_gamma -<span class="st"> </span><span class="dv">7</span> *<span class="st"> </span>prob[<span class="dv">1</span>] -<span class="st"> </span><span class="dv">1</span> *<span class="st"> </span>prob[<span class="dv">2</span>]
+}</code></pre></div>
+<p>Let’s check the <code>rbigamma()</code> function (draw 100,000 samples and see what they look like).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Histogram</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="kw">qplot</span>(<span class="kw">rbigamma</span>(<span class="fl">1e5</span>), <span class="dt">geom =</span> <span class="st">&quot;histogram&quot;</span>)</code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="section08_files/figure-html/check_rbigamma-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summary</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="kw">summary</span>(<span class="kw">rbigamma</span>(<span class="fl">1e5</span>))</code></pre></div>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## -3.999992 -3.294732 -0.829443  0.008318  2.696532 19.610945</code></pre>
+<p>Okay. Now it’s time to actually build the population!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Define the population size</span>
+N &lt;-<span class="st"> </span><span class="fl">1e5</span>
+<span class="co"># Define the true beta</span>
+beta &lt;-<span class="st"> </span><span class="dv">5</span>
+<span class="co"># Start the population</span>
+pop_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">ones   =</span> <span class="dv">1</span>,
+  <span class="dt">x      =</span> <span class="kw">runif</span>(N, <span class="dt">min =</span> <span class="dv">0</span>, <span class="dt">max =</span> <span class="dv">100</span>),
+  <span class="dt">e_norm =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> N),
+  <span class="dt">e_unif =</span> <span class="kw">runif</span>(<span class="dt">n =</span> N, <span class="dt">min =</span> -<span class="dv">5</span>, <span class="dt">max =</span> <span class="dv">5</span>),
+  <span class="dt">e_pois =</span> <span class="kw">rpois</span>(<span class="dt">n =</span> N, <span class="dt">lambda =</span> <span class="dv">1</span>) -<span class="st"> </span><span class="dv">1</span>,
+  <span class="dt">e_bg   =</span> <span class="kw">rbigamma</span>(<span class="dt">n =</span> N)
+  ) %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Calculate the outcome variable: y = 1 + beat * x + error</span>
+pop_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
+  <span class="dt">y_norm =</span> <span class="dv">1</span> +<span class="st"> </span>beta *<span class="st"> </span>x +<span class="st"> </span>e_norm,
+  <span class="dt">y_unif =</span> <span class="dv">1</span> +<span class="st"> </span>beta *<span class="st"> </span>x +<span class="st"> </span>e_unif,
+  <span class="dt">y_pois =</span> <span class="dv">1</span> +<span class="st"> </span>beta *<span class="st"> </span>x +<span class="st"> </span>e_pois,
+  <span class="dt">y_bg   =</span> <span class="dv">1</span> +<span class="st"> </span>beta *<span class="st"> </span>x +<span class="st"> </span>e_bg
+  )</code></pre></div>
+<p>Let’s take a look at the distribution of our various <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>. First, let’s plot them using <code>ggplot2</code> combined with the <code>arrangeGrob()</code> function form the <code>gridExtra</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Generate 4 colors from &#39;viridis&#39;</span>
+c4 &lt;-<span class="st"> </span><span class="kw">viridis</span>(<span class="dt">n =</span> <span class="dv">4</span>, <span class="dt">begin =</span> <span class="fl">0.1</span>, <span class="dt">end =</span> <span class="fl">0.8</span>)
+<span class="co"># Generate 4 slightly lighter colors from &#39;viridis&#39;</span>
+c4_l &lt;-<span class="st"> </span><span class="kw">viridis</span>(<span class="dt">n =</span> <span class="dv">4</span>, <span class="dt">begin =</span> <span class="fl">0.4</span>, <span class="dt">end =</span> <span class="dv">1</span>)
+<span class="co"># Make a plot for the normal disturbances</span>
+gg_norm &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> pop_df, <span class="kw">aes</span>(<span class="dt">x =</span> e_norm)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span> c4[<span class="dv">1</span>], <span class="dt">color =</span> c4_l[<span class="dv">1</span>],
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">30</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Normal&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Count&quot;</span>) +
+<span class="st">  </span>theme_ed
+<span class="co"># Make a plot for the uniform disturbances</span>
+gg_unif &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> pop_df, <span class="kw">aes</span>(<span class="dt">x =</span> e_unif)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span> c4[<span class="dv">2</span>], <span class="dt">color =</span> c4_l[<span class="dv">2</span>],
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">30</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Uniform&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Count&quot;</span>) +
+<span class="st">  </span>theme_ed
+<span class="co"># Make a plot for the poisson disturbances</span>
+gg_pois &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> pop_df, <span class="kw">aes</span>(<span class="dt">x =</span> e_pois)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span> c4[<span class="dv">3</span>], <span class="dt">color =</span> c4_l[<span class="dv">3</span>],
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">30</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Poisson&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Count&quot;</span>) +
+<span class="st">  </span>theme_ed
+<span class="co"># Make a plot for the bimodal gamma disturbances</span>
+gg_bg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> pop_df, <span class="kw">aes</span>(<span class="dt">x =</span> e_bg)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span> c4[<span class="dv">4</span>], <span class="dt">color =</span> c4_l[<span class="dv">4</span>],
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">30</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Bernoulli-Gamma&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Count&quot;</span>) +
+<span class="st">  </span>theme_ed
+<span class="co"># Combine the plots</span>
+gg_errors &lt;-<span class="st"> </span><span class="kw">arrangeGrob</span>(gg_norm, gg_unif, gg_pois, gg_bg,
+  <span class="co"># Two columns</span>
+  <span class="dt">ncol =</span> <span class="dv">2</span>,
+  <span class="co"># Title on top</span>
+  <span class="dt">top =</span> <span class="st">&quot;Distributions of our disturbances&quot;</span>)
+<span class="co"># Print the grid the screen</span>
+<span class="kw">grid.draw</span>(gg_errors)</code></pre></div>
+<p><img src="section08_files/figure-html/plot_errors-1.png" width="672" /></p>
+<p>Looking good! One takeaway: only one of these distributions looks normal—the normal one. Another observation: the Bernoulli-Gamma distribution looks a bit like a dinosaur.</p>
+<p>Just to make sure our means are approximately zero, let’s calculate the means. When you have a lot of variables, you can whittle down the variables by combining <code>dplyr</code>’s <code>select()</code> function with its sub-functions like <code>matches()</code>, <code>starts_with()</code>, <code>contains()</code>, <code>one_of()</code> and <code>ends_with()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_df %&gt;%<span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;e_&quot;</span>)) %&gt;%<span class="st"> </span><span class="kw">summarize_each</span>(<span class="dt">funs =</span> <span class="st">&quot;mean&quot;</span>)</code></pre></div>
+<pre><code>## `summarise_each()` is deprecated.
+## Use `summarise_all()`, `summarise_at()` or `summarise_if()` instead.
+## To map `funs` over all variables, use `summarise_all()`</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##          e_norm       e_unif  e_pois       e_bg
+##           &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+## 1 -0.0001166984 -0.006406174 0.00203 0.00278964</code></pre>
+<p>Works for me!</p>
+<p>Now let’s move on to writing the functions for our simulation.</p>
+</div>
+<div id="single-iteration-function" class="section level2">
+<h2>Single-iteration function</h2>
+<p>Our function for this simulation needs to accomplish two tasks:</p>
+<ol style="list-style-type: decimal">
+<li>Draw a sample of size <code>n</code> from population.</li>
+<li>Calculate <span class="math inline">\(\mathbf{b}\)</span> for the sample (and return the slope coefficient).</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">one_iter &lt;-<span class="st"> </span>function(n, data) {
+  <span class="co"># Draw &#39;n&#39; observations from &#39;data&#39;</span>
+  tmp_df &lt;-<span class="st"> </span><span class="kw">sample_n</span>(<span class="dt">tbl =</span> data, <span class="dt">size =</span> n)
+  <span class="co"># Define the X matrix (same across regressions)</span>
+  x_mat &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(tmp_df, <span class="kw">c</span>(<span class="st">&quot;ones&quot;</span>, <span class="st">&quot;x&quot;</span>))
+  <span class="co"># Estimate OLS for each &#39;y&#39;</span>
+  b_norm =<span class="st"> </span><span class="kw">b_ols</span>(
+    <span class="dt">y =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y_norm&quot;</span>),
+    <span class="dt">X =</span> x_mat)[<span class="dv">2</span>]
+  b_unif =<span class="st"> </span><span class="kw">b_ols</span>(
+    <span class="dt">y =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y_unif&quot;</span>),
+    <span class="dt">X =</span> x_mat)[<span class="dv">2</span>]
+  b_pois =<span class="st"> </span><span class="kw">b_ols</span>(
+    <span class="dt">y =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y_pois&quot;</span>),
+    <span class="dt">X =</span> x_mat)[<span class="dv">2</span>]
+  b_bg =<span class="st"> </span><span class="kw">b_ols</span>(
+    <span class="dt">y =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y_bg&quot;</span>),
+    <span class="dt">X =</span> x_mat)[<span class="dv">2</span>]
+  <span class="co"># Create a data.frame to return</span>
+  coef_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="co"># The estimates</span>
+    <span class="dt">est =</span> <span class="kw">c</span>(b_norm, b_unif, b_pois, b_bg),
+    <span class="co"># The distributions</span>
+    <span class="dt">dist =</span> <span class="kw">c</span>(<span class="st">&quot;normal&quot;</span>, <span class="st">&quot;uniform&quot;</span>, <span class="st">&quot;poisson&quot;</span>, <span class="st">&quot;bi-gamma&quot;</span>),
+    <span class="co"># The sample size</span>
+    <span class="dt">n =</span> n
+    )
+  <span class="co"># Return coef_df</span>
+  <span class="kw">return</span>(coef_df)
+}</code></pre></div>
+<p><strong>Note on efficiency</strong>: You want to avoid doing the same thing many times. For examples, my original function repeated <code>X = to_matrix(tmp_df, c(&quot;ones&quot;, &quot;x&quot;))</code> inside of each call to <code>b_ols()</code>. The new function only calls the command <code>to_matrix(tmp_df, c(&quot;ones&quot;, &quot;x&quot;))</code> once. When you are going to run a function 40,000 times, little inefficiencies can add up quickly: we just reduced the number of times R calculates <code>to_matrix(tmp_df, c(&quot;ones&quot;, &quot;x&quot;))</code> from 160,000 to 40,000. Pretty good.</p>
+</div>
+<div id="simulation-function" class="section level2">
+<h2>Simulation function</h2>
+<p>We now have a function (<code>one_iter()</code>) that runs a single iteration for the simulation for a given sample size (<code>n</code>) and a given dataset (<code>data</code>). Now, we will write a function (<code>run_sim()</code>) that runs <code>one_iter()</code> a specified number of times (<code>n_iter</code>) for a given sample size (still <code>n</code>) and a given dataset (still <code>data</code>). We will accomplish all of these tasks with a simple call to <code>mclapply()</code>, the Linux- and Mac-friendly parallelized version of <code>lapply()</code>.</p>
+<p>If you do not want to run this function in parallel, then set the <code>n_cores</code> argument equal to one when you run the function (or in the function definition), <em>i.e.</em>, <code>n_cores = 1</code>. <strong>Windows users:</strong> This function should still still work for you, but it will not be in parallel. If you want to run it in parallel, you can change the function to use <code>parLapply()</code>, as we did in the previous section. Apologies for using a function you cannot use; I wanted to share the alternate method for parallelization.</p>
+<p>Note the use of <code>rep()</code> below; <code>rep()</code> is a <em>very</em> useful function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">run_sim &lt;-<span class="st"> </span>function(n, n_iter, data, <span class="dt">n_cores =</span> <span class="dv">4</span>) {
+  <span class="co"># Required packages</span>
+  <span class="kw">require</span>(dplyr)
+  <span class="kw">require</span>(parallel)
+  <span class="kw">require</span>(magrittr)
+  <span class="co"># Run &#39;one_iter&#39; &#39;n_iter&#39; times with sample size &#39;n&#39;</span>
+  run_df &lt;-<span class="st"> </span><span class="kw">mclapply</span>(
+    <span class="dt">X =</span> <span class="kw">rep</span>(n, n_iter),
+    <span class="dt">FUN =</span> one_iter,
+    <span class="dt">data =</span> data,
+    <span class="dt">mc.cores =</span> n_cores) %&gt;%<span class="st"> </span><span class="kw">bind_rows</span>() %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+  <span class="co"># Return run_df</span>
+  <span class="kw">return</span>(run_df)
+}</code></pre></div>
+</div>
+<div id="samples-sizes" class="section level2">
+<h2>Samples sizes</h2>
+<p>We are nearly ready to run the simulation, but before we do, we need to decide our sample size(s) and number of iterations.</p>
+<ul>
+<li>We are going to take 10,000 samples for each sample size</li>
+<li>We are going to use sample sizes of 25, 100, 1,000, and 10,000.</li>
+</ul>
+<p>We <em>could</em> call the <code>run_sim()</code> function for each sample size, <em>e.g.</em>,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the seed (again)</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Run the simulation with n = 25</span>
+sim_25 &lt;-<span class="st"> </span><span class="kw">run_sim</span>(
+  <span class="dt">n      =</span> <span class="dv">25</span>,
+  <span class="dt">n_iter =</span> <span class="fl">1e4</span>,
+  <span class="dt">data   =</span> <span class="kw">select</span>(pop_df, -<span class="kw">starts_with</span>(<span class="st">&quot;e&quot;</span>)))
+<span class="co"># Run the simulation with n = 100</span>
+sim_100 &lt;-<span class="st"> </span><span class="kw">run_sim</span>(
+  <span class="dt">n      =</span> <span class="dv">100</span>,
+  <span class="dt">n_iter =</span> <span class="fl">1e4</span>,
+  <span class="dt">data   =</span> <span class="kw">select</span>(pop_df, -<span class="kw">starts_with</span>(<span class="st">&quot;e&quot;</span>)))
+<span class="co"># Run the simulation with n = 1,000</span>
+sim_1k &lt;-<span class="st"> </span><span class="kw">run_sim</span>(
+  <span class="dt">n      =</span> <span class="fl">1e3</span>,
+  <span class="dt">n_iter =</span> <span class="fl">1e4</span>,
+  <span class="dt">data   =</span> <span class="kw">select</span>(pop_df, -<span class="kw">starts_with</span>(<span class="st">&quot;e&quot;</span>)))
+<span class="co"># Run the simulation with n = 10,000</span>
+sim_10k &lt;-<span class="st"> </span><span class="kw">run_sim</span>(
+  <span class="dt">n      =</span> <span class="fl">1e4</span>,
+  <span class="dt">n_iter =</span> <span class="fl">1e4</span>,
+  <span class="dt">data   =</span> <span class="kw">select</span>(pop_df, -<span class="kw">starts_with</span>(<span class="st">&quot;e&quot;</span>)))
+<span class="co"># Combine simulations</span>
+sim_df &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(sim_25, sim_100, sim_1k, sim_10k)
+<span class="co"># Clean up</span>
+<span class="kw">rm</span>(sim_25, sim_100, sim_1k, sim_10k); <span class="kw">gc</span>()</code></pre></div>
+<p>But we are not going to run it that way—we want to be a bit more efficient. It might not be a bit deal here, but what if you wanted to run the simulation for 1,000 different sample sizes? You probably would not want to repeat what we just did above 1,000 times. We can instead modify a single line of the <code>run_sim()</code> function: change <code>rep(n, n_iter)</code> to <code>rep(n, each = n_iter)</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Note that this method forces you to run all sample sizes with the same number of iterations (if you do not want this behavior, you need to use a different function from <code>rep()</code>. <code>mapply()</code> combined with <code>rep()</code> would work, <em>e.g.</em>, <code>mapply(FUN = rep, 1:3, 4:6)</code>.).</p>
+<p>To see what we are doing, compare</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">1000</span>, <span class="dv">10000</span>), <span class="dv">3</span>)</code></pre></div>
+<pre><code>##  [1]    10    25  1000 10000    10    25  1000 10000    10    25  1000
+## [12] 10000</code></pre>
+<p>to</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">1000</span>, <span class="dv">10000</span>), <span class="dt">each =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code>##  [1]    10    10    10    25    25    25  1000  1000  1000 10000 10000
+## [12] 10000</code></pre>
+<p>Okay. Let’s update the <code>run_sim()</code> function, as discussed above</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">run_sim &lt;-<span class="st"> </span>function(n, n_iter, data, <span class="dt">n_cores =</span> <span class="dv">4</span>) {
+  <span class="co"># Required packages</span>
+  <span class="kw">require</span>(dplyr)
+  <span class="kw">require</span>(parallel)
+  <span class="kw">require</span>(magrittr)
+  <span class="co"># Run &#39;one_iter&#39; &#39;n_iter&#39; times with sample size &#39;n&#39;</span>
+  run_df &lt;-<span class="st"> </span><span class="kw">mclapply</span>(
+    <span class="dt">X =</span> <span class="kw">rep</span>(n, <span class="dt">each =</span> n_iter),
+    <span class="dt">FUN =</span> one_iter,
+    <span class="dt">data =</span> data,
+    <span class="dt">mc.cores =</span> n_cores) %&gt;%<span class="st"> </span><span class="kw">bind_rows</span>() %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+  <span class="co"># Return run_df</span>
+  <span class="kw">return</span>(run_df)
+}</code></pre></div>
+</div>
+<div id="run-the-simulation" class="section level2">
+<h2>Run the simulation</h2>
+<p>We are (finally) ready to run the simulation. So let’s get on with it!</p>
+<p><strong>Beware!</strong> This simulation takes some time to run: for each of the four sample sizes, we are applying <code>one_iter()</code> 10,000 times—resulting in 40,000 runs of <code>one_iter()</code>. And… for each of these 40,000 iterations, <code>one_iter()</code> samples from <code>pop_df</code> and calculates four coefficients (one for each of the distributions we used to generate the disturbances). Thus, in the end, we run 160,000 regressions. You can tell the simulation to use fewer iterations by changing <code>n_iter</code>. In addition, to make our code a bit more efficient (less computationally intensive), I use <code>select()</code> to grab only the variables we want in the <code>data</code> argument—we do not need the disturbances to run our regressions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the seed (again)</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Define our desired sample sizes</span>
+sizes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="fl">1e3</span>, <span class="fl">1e4</span>)
+<span class="co"># Run the simulation function &#39;run_sim()&#39;</span>
+sim_df &lt;-<span class="st"> </span><span class="kw">run_sim</span>(<span class="dt">n =</span> sizes, <span class="dt">n_iter =</span> <span class="fl">1e4</span>,
+  <span class="dt">data =</span> <span class="kw">select</span>(pop_df, -<span class="kw">starts_with</span>(<span class="st">&quot;e&quot;</span>)))</code></pre></div>
+</div>
+<div id="plot-results" class="section level2">
+<h2>Plot results</h2>
+<p>Now that we have the data from our simulation, let’s plot our results. Specifically, we will plot the distribution of coefficient estimates, by sample size, for each of the distributions of the disturbances.</p>
+<p>Let’s start with a single distribution—the simulations resulting from the normally distributed disturbances (<code>dist</code> or <code>&quot;normal&quot;</code> in our simulation dataset). We use our old friend <code>filter()</code> to grab the results from the normal disturbances. In addition, we will use the <code>stat = density</code> argument to <code>geom_line()</code> to draw lines for the densities of the distributions of the coefficient estimates. Finally, we will use <code>as.character(n)</code> for the <code>fill</code> to get different fill colors for the various sample sizes.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">filter</span>(sim_df, dist ==<span class="st"> &quot;normal&quot;</span>),
+  <span class="kw">aes</span>(<span class="dt">x =</span> est, <span class="dt">fill =</span> <span class="kw">as.character</span>(n))) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">size =</span> <span class="fl">0.05</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(b[OLS])) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Distribution of OLS coefficients&quot;</span>,
+    <span class="st">&quot;with normal disturbances&quot;</span>)) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Sample size:&quot;</span>, <span class="dt">discrete =</span> T,
+    <span class="dt">direction =</span> -<span class="dv">1</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section08_files/figure-html/plot_results-1.png" width="672" /></p>
+<p>Everything is looking good except for the order of the labels in the legend. What’s going on here? Because fed our sample sizes <code>n</code> to <code>ggplot()</code> as characters, R alphabetizes the levels when it creates the legend. For example,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Numeric:</span>
+<span class="dv">100</span> &lt;<span class="st"> </span><span class="dv">23</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Characters:</span>
+<span class="st">&quot;100&quot;</span> &lt;<span class="st"> &quot;23&quot;</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>While I tend to avoid using the <code>factor</code> class of objects, we’ve reached a case where factors will be very helpful. Specifically, factors will be useful in this task because they allow us to define both the levels and the labels of a variable. Let’s add a column to our simulation dataset, in which we copy the existing <code>n</code> column and convert it to a factor.</p>
+<p>The <code>factor()</code> function wants</p>
+<ol style="list-style-type: decimal">
+<li><code>x</code>, the vector that we want to convert to factor</li>
+<li><code>levels</code>, the values of <code>x</code></li>
+<li><code>labels</code>, the names we want to use for the values of <code>x</code></li>
+<li><code>ordered</code>, logical for whether the values of <code>x</code> are ordered</li>
+</ol>
+<p>We will also use a new function <code>prettyNum()</code> here that formats numbers. We will use it to add commas to numbers—you should really only do this for printing numbers/labels, which is why we are doing it now.</p>
+<p>For example,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prettyNum</span>(<span class="fl">1e4</span>, <span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> F)</code></pre></div>
+<pre><code>## [1] &quot;10,000&quot;</code></pre>
+<p>Okay, so let’s create this factor-version of <code>n</code> in <code>sim_df</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add a factor version of &#39;n&#39;</span>
+sim_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
+  <span class="dt">n_fac =</span> <span class="kw">factor</span>(
+    <span class="dt">x       =</span> n,
+    <span class="dt">levels  =</span> sizes,
+    <span class="dt">labels  =</span> <span class="kw">prettyNum</span>(sizes, <span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> F),
+    <span class="dt">ordered =</span> T)
+  )
+<span class="co"># Check our new variable</span>
+sim_df$n_fac %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>## [1] 25 25 25 25 25 25
+## Levels: 25 &lt; 100 &lt; 1,000 &lt; 10,000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_df$n_fac %&gt;%<span class="st"> </span><span class="kw">tail</span>()</code></pre></div>
+<pre><code>## [1] 10,000 10,000 10,000 10,000 10,000 10,000
+## Levels: 25 &lt; 100 &lt; 1,000 &lt; 10,000</code></pre>
+<p>Now we make the plot again…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">filter</span>(sim_df, dist ==<span class="st"> &quot;normal&quot;</span>),
+  <span class="kw">aes</span>(<span class="dt">x =</span> est, <span class="dt">fill =</span> n_fac)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">size =</span> <span class="fl">0.05</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(b[OLS])) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Distribution of OLS coefficients&quot;</span>,
+    <span class="st">&quot;with normal disturbances&quot;</span>)) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Sample size:&quot;</span>, <span class="dt">discrete =</span> T,
+    <span class="dt">direction =</span> -<span class="dv">1</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section08_files/figure-html/plot_again-1.png" width="672" /></p>
+<p>Much better.</p>
+<p>So what do we see here? Evidence of <span class="math inline">\(\mathbf{b}_\text{OLS}\)</span> converging to to the true parameter! In other words: OLS appears to be consistent… at least when the disturbances are normal.</p>
+<p>We want to know whether OLS is consistent when the disturbances are not normal, since we no longer assume the disturbances are normal. So let’s repeat this plot for each of the four distributions that generated the disturbances.</p>
+<p>Because factors really are pretty helpful with plots, let’s create another factor variable—this time it will be for our distribution variable <code>dist</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">dist_fac =</span> <span class="kw">factor</span>(
+  <span class="dt">x =</span> dist,
+  <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;bi-gamma&quot;</span>, <span class="st">&quot;normal&quot;</span>, <span class="st">&quot;poisson&quot;</span>, <span class="st">&quot;uniform&quot;</span>),
+  <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Bernoulli-Gamma&quot;</span>, <span class="st">&quot;Normal&quot;</span>, <span class="st">&quot;Poisson&quot;</span>, <span class="st">&quot;Uniform&quot;</span>)
+  ))</code></pre></div>
+<p>Now we plot. To create the previous plot for each distribution, we just need to change two things:</p>
+<ol style="list-style-type: decimal">
+<li>Use the full <code>sim_df</code> (remove the <code>filter()</code>)</li>
+<li>Add <code>facet_grid()</code>, which will create multiple plots based upon one or more variables. Specifically, we will use <code>facet_grid(dist_fac ~ .)</code>, which tells <code>ggplot2</code> to create a new plot (row) for each value of <code>dist_fac</code>. We will also specify <code>scales = &quot;free_y&quot;</code> to let the y-axis vary from plot to plot.</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> sim_df,
+  <span class="kw">aes</span>(<span class="dt">x =</span> est, <span class="dt">fill =</span> n_fac)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">size =</span> <span class="fl">0.05</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(b[OLS])) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Distribution of OLS coefficients&quot;</span>,
+    <span class="st">&quot;with normal disturbances&quot;</span>)) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Sample size:&quot;</span>, <span class="dt">discrete =</span> T,
+    <span class="dt">direction =</span> -<span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">facet_grid</span>(dist_fac ~<span class="st"> </span>., <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section08_files/figure-html/facet_plot-1.png" width="672" /></p>
+<p>Keeping in mind that we’ve allowed the y-axis to vary, what do these graphs tell us? First, it appears as though OLS is consistent in estimating the true parameter regardless of the distribution of the disturbances: as <span class="math inline">\(N\)</span> (sample size) approaches infinity in each of the plots, the distribution of the coefficients tightens around the true parameter value (5).</p>
+<p>Great!</p>
+<p>If you are more interested in numbers than pictures:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_df %&gt;%<span class="st"> </span><span class="kw">group_by</span>(dist_fac, n_fac) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(est), <span class="dt">std_dev =</span> <span class="kw">sd</span>(est)) %&gt;%
+<span class="st">  </span>knitr::<span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">4</span>,
+    <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Distribution&quot;</span>, <span class="st">&quot;N&quot;</span>, <span class="st">&quot;Mean&quot;</span>, <span class="st">&quot;Std. Dev.&quot;</span>))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Distribution</th>
+<th align="left">N</th>
+<th align="right">Mean</th>
+<th align="right">Std. Dev.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bernoulli-Gamma</td>
+<td align="left">25</td>
+<td align="right">5.0003</td>
+<td align="right">0.0260</td>
+</tr>
+<tr class="even">
+<td align="left">Bernoulli-Gamma</td>
+<td align="left">100</td>
+<td align="right">5.0002</td>
+<td align="right">0.0125</td>
+</tr>
+<tr class="odd">
+<td align="left">Bernoulli-Gamma</td>
+<td align="left">1,000</td>
+<td align="right">5.0001</td>
+<td align="right">0.0039</td>
+</tr>
+<tr class="even">
+<td align="left">Bernoulli-Gamma</td>
+<td align="left">10,000</td>
+<td align="right">5.0002</td>
+<td align="right">0.0012</td>
+</tr>
+<tr class="odd">
+<td align="left">Normal</td>
+<td align="left">25</td>
+<td align="right">5.0002</td>
+<td align="right">0.0073</td>
+</tr>
+<tr class="even">
+<td align="left">Normal</td>
+<td align="left">100</td>
+<td align="right">5.0001</td>
+<td align="right">0.0035</td>
+</tr>
+<tr class="odd">
+<td align="left">Normal</td>
+<td align="left">1,000</td>
+<td align="right">5.0001</td>
+<td align="right">0.0011</td>
+</tr>
+<tr class="even">
+<td align="left">Normal</td>
+<td align="left">10,000</td>
+<td align="right">5.0001</td>
+<td align="right">0.0003</td>
+</tr>
+<tr class="odd">
+<td align="left">Poisson</td>
+<td align="left">25</td>
+<td align="right">4.9999</td>
+<td align="right">0.0072</td>
+</tr>
+<tr class="even">
+<td align="left">Poisson</td>
+<td align="left">100</td>
+<td align="right">4.9999</td>
+<td align="right">0.0035</td>
+</tr>
+<tr class="odd">
+<td align="left">Poisson</td>
+<td align="left">1,000</td>
+<td align="right">4.9999</td>
+<td align="right">0.0011</td>
+</tr>
+<tr class="even">
+<td align="left">Poisson</td>
+<td align="left">10,000</td>
+<td align="right">4.9999</td>
+<td align="right">0.0003</td>
+</tr>
+<tr class="odd">
+<td align="left">Uniform</td>
+<td align="left">25</td>
+<td align="right">4.9999</td>
+<td align="right">0.0209</td>
+</tr>
+<tr class="even">
+<td align="left">Uniform</td>
+<td align="left">100</td>
+<td align="right">4.9999</td>
+<td align="right">0.0101</td>
+</tr>
+<tr class="odd">
+<td align="left">Uniform</td>
+<td align="left">1,000</td>
+<td align="right">4.9998</td>
+<td align="right">0.0031</td>
+</tr>
+<tr class="even">
+<td align="left">Uniform</td>
+<td align="left">10,000</td>
+<td align="right">4.9999</td>
+<td align="right">0.0010</td>
+</tr>
+</tbody>
+</table>
+<p>Again, we see that for each distribution, as <span class="math inline">\(N\)</span> increases, the standard deviation of the coefficient estimates diminishes.</p>
+</div>
+</div>
+<div id="simulation-asymptotic-distribution" class="section level1">
+<h1>Simulation: Asymptotic distribution</h1>
+<p>The second remarkable aspect of OLS’s asymptotics is the convergence in distribution of <span class="math inline">\(\mathbf{b}\)</span> to a normally distributed random variable. Let’s check this feature too.</p>
+<p>For this task, we will only look at the largest sample size from our simulation—10,000—since we need the asymptotics to kick in.</p>
+<p>Our “check” of the asymptotic distribution will involve 1. Plot the histograms of coefficient estimates for each of the disurbance-generating distributions 2. Plot a smoothed density over the histograms (sort of superfluous to step 1) 3. Plot the normal density function over the histograms—with mean <span class="math inline">\(\boldsymbol{\beta}\)</span> and variance <span class="math inline">\(\sigma^2 \left( \sum_i^N \mathbf{x}_i^\prime \mathbf{x}_i \right)^{-1}\)</span></p>
+<p>We are going to cheat a little bit and grab the standard deviation from our coefficient estimates, rather than calculating it analytically.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Let’s do this step now.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summaries of our point estimates</span>
+est_df &lt;-<span class="st"> </span>sim_df %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n ==<span class="st"> </span><span class="fl">1e4</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(dist) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_est =</span> <span class="kw">mean</span>(est), <span class="dt">sd_est =</span> <span class="kw">sd</span>(est))</code></pre></div>
+<p>Now for the plot. We will again make use of <code>filter()</code> to grab the coefficient estimates for only the 10,000-obseration samples. We will (again) make four plots and plot them together using <code>arrangeGrob()</code> and <code>grid.draw()</code>.</p>
+<p>Make the four individual plots:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Normal disturbances</span>
+sim_norm &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> est),
+  <span class="dt">data =</span> <span class="kw">filter</span>(sim_df, dist ==<span class="st"> &quot;normal&quot;</span>, n ==<span class="st"> </span><span class="fl">1e4</span>)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..),
+    <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>,
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">50</span>) +
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>,
+    <span class="dt">color =</span> <span class="st">&quot;violetred2&quot;</span>, <span class="dt">size =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="dt">fun =</span> dnorm,
+    <span class="dt">color =</span> <span class="st">&quot;slateblue4&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>,
+    <span class="dt">args =</span> <span class="kw">list</span>(
+      <span class="dt">mean =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;normal&quot;</span>)$mean_est,
+      <span class="dt">sd =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;normal&quot;</span>)$sd_est)
+    ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Normal&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span>theme_ed
+<span class="co"># Uniform disturbances</span>
+sim_unif &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> est),
+  <span class="dt">data =</span> <span class="kw">filter</span>(sim_df, dist ==<span class="st"> &quot;uniform&quot;</span>, n ==<span class="st"> </span><span class="fl">1e4</span>)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..),
+    <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>,
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">50</span>) +
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>,
+    <span class="dt">color =</span> <span class="st">&quot;violetred2&quot;</span>, <span class="dt">size =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="dt">fun =</span> dnorm,
+    <span class="dt">color =</span> <span class="st">&quot;slateblue4&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>,
+    <span class="dt">args =</span> <span class="kw">list</span>(
+      <span class="dt">mean =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;uniform&quot;</span>)$mean_est,
+      <span class="dt">sd =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;uniform&quot;</span>)$sd_est)
+    ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Uniform&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span>theme_ed
+<span class="co"># Uniform disturbances</span>
+sim_pois &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> est),
+  <span class="dt">data =</span> <span class="kw">filter</span>(sim_df, dist ==<span class="st"> &quot;poisson&quot;</span>, n ==<span class="st"> </span><span class="fl">1e4</span>)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..),
+    <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>,
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">50</span>) +
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>,
+    <span class="dt">color =</span> <span class="st">&quot;violetred2&quot;</span>, <span class="dt">size =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="dt">fun =</span> dnorm,
+    <span class="dt">color =</span> <span class="st">&quot;slateblue4&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>,
+    <span class="dt">args =</span> <span class="kw">list</span>(
+      <span class="dt">mean =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;poisson&quot;</span>)$mean_est,
+      <span class="dt">sd =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;poisson&quot;</span>)$sd_est)
+    ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Poisson&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span>theme_ed
+<span class="co"># Uniform disturbances</span>
+sim_bg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> est),
+  <span class="dt">data =</span> <span class="kw">filter</span>(sim_df, dist ==<span class="st"> &quot;bi-gamma&quot;</span>, n ==<span class="st"> </span><span class="fl">1e4</span>)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..),
+    <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>,
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">50</span>) +
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>,
+    <span class="dt">color =</span> <span class="st">&quot;violetred2&quot;</span>, <span class="dt">size =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="dt">fun =</span> dnorm,
+    <span class="dt">color =</span> <span class="st">&quot;slateblue4&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>,
+    <span class="dt">args =</span> <span class="kw">list</span>(
+      <span class="dt">mean =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;bi-gamma&quot;</span>)$mean_est,
+      <span class="dt">sd =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;bi-gamma&quot;</span>)$sd_est)
+    ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Bernoulli-Gamma&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p>Arrange the plots together:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># &#39;Join&#39; the plots</span>
+gg_sim &lt;-<span class="st"> </span><span class="kw">arrangeGrob</span>(
+  sim_norm, sim_unif, sim_pois, sim_bg,
+  <span class="co"># Two columns</span>
+  <span class="dt">ncol =</span> <span class="dv">2</span>,
+  <span class="co"># Title on top</span>
+  <span class="dt">top =</span> <span class="kw">textGrob</span>(<span class="kw">expression</span>(<span class="kw">paste</span>(
+    <span class="st">&quot;Asymptotic distributions of &quot;</span>, b[OLS])),
+    <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fontsize =</span> <span class="dv">16</span>, <span class="dt">font =</span> <span class="dv">3</span>), <span class="dt">check =</span> T),
+  <span class="dt">left =</span> <span class="kw">textGrob</span>(<span class="st">&quot;Density&quot;</span>, <span class="dt">vjust =</span> <span class="dv">2</span>, <span class="dt">rot =</span> <span class="dv">90</span>),
+  <span class="dt">bottom =</span> <span class="kw">textGrob</span>(<span class="kw">expression</span>(b[OLS]), <span class="dt">vjust =</span> -<span class="dv">1</span>)
+  )
+<span class="co"># Print the grid the screen</span>
+<span class="kw">grid.draw</span>(gg_sim)</code></pre></div>
+<p><img src="section08_files/figure-html/arrange_four_plots-1.png" width="768" /></p>
+<p>I’d say the distributions look pretty normal. But if you want a more rigorous test than <em>Ed’s histogram-based opinion</em>, you have a few options, <em>e.g.</em>, the Kolmogorov-Smirnov test and the Shapiro-Wilk test. R has built-in functions for these tests (<code>shapiro.test()</code> and <code>ks.test()</code>), and since we are not officially covering these tests in ARE 212, we’ll use the canned versions of the function.</p>
+<p>The Shapiro-Wilk test function will accept up to 5,000 estimates, so we will randomly sample 5,000 of our coefficient estimates from the Poisson-generated sample (with a sample size of 10,000)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># The Shapiro-Wilk test</span>
+sim_df %&gt;%
+<span class="st">  </span><span class="co"># Subset for Poisson and n = 10,000</span>
+<span class="st">  </span><span class="kw">filter</span>(dist ==<span class="st"> &quot;poisson&quot;</span>, n ==<span class="st"> </span><span class="fl">1e4</span>) %&gt;%
+<span class="st">  </span><span class="co"># Sample 5,000 of the rows</span>
+<span class="st">  </span><span class="kw">sample_n</span>(<span class="dt">size =</span> <span class="fl">5e3</span>) %$%
+<span class="st">  </span><span class="co"># Grab the variable &#39;est&#39;</span>
+<span class="st">  </span>est %&gt;%
+<span class="st">  </span><span class="co"># The actual Shaprio-Wilk test function</span>
+<span class="st">  </span><span class="kw">shapiro.test</span>()</code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  .
+## W = 0.99969, p-value = 0.6792</code></pre>
+<p>We can use our full sample for the Kolmogorov-Smirnov test function, but we need to give it a mean and variance for the normal distribution against which we are testing our data (as we did above in the plots).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ks.test</span>(
+  <span class="dt">x =</span> <span class="kw">filter</span>(sim_df, dist ==<span class="st"> &quot;poisson&quot;</span>, n ==<span class="st"> </span><span class="fl">1e4</span>)$est,
+  <span class="dt">y =</span> <span class="st">&quot;pnorm&quot;</span>,
+  <span class="dt">mean =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;poisson&quot;</span>)$mean_est,
+  <span class="dt">sd =</span> <span class="kw">filter</span>(est_df, dist ==<span class="st"> &quot;poisson&quot;</span>)$sd_est)</code></pre></div>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  filter(sim_df, dist == &quot;poisson&quot;, n == 10000)$est
+## D = 0.0067788, p-value = 0.7477
+## alternative hypothesis: two-sided</code></pre>
+<p>Both tests fail to reject the null hypothesis that our data are normally distributed.</p>
+</div>
+<div id="are-we-in-asymptopia" class="section level1">
+<h1>Are we in asymptopia?</h1>
+<p>Finally, let’s repeat our simulation with disturbances that are less well behaved. Enter the Pareto distribution. The Pareto distribution offers the unique feature of having infinite variance for certain parameter values.</p>
+<p>Why do we care about infinite variance? We care because the Lindeberg-Levy Central Limit Theorem (CLT) requires finite variance. And why do we care about what the Lindeberg-Levy CLT requires? We care about what the Lindeberg-Levy CLT requires because we use it to prove the asymptotic normality of <span class="math inline">\(\mathbf{b}\)</span>. Specifically, we use the Lindeberg-Levy CLT to to prove the asymptotic distribution of <span class="math inline">\(\mathbf{x}_i^\prime \varepsilon_i\)</span>, which requires finite variance of <span class="math inline">\(\mathbf{x}_i^\prime \varepsilon_i\)</span>. In short: when we allow <span class="math inline">\(\varepsilon_i\)</span> to have infinite variance, we lose the Lindeberg-Levy CLT and asymptotic normality of <span class="math inline">\(\mathbf{b}\)</span>.</p>
+<p>We will now use the <code>VGAM</code> package for its <code>rpareto()</code> function. If we set its parameters <code>scale = 2</code> and <code>shape = 1</code>, then the variance of our variable is infinite. See it in action with 10 million draws:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">p_load</span>(VGAM)
+<span class="kw">rpareto</span>(<span class="dt">n =</span> <span class="fl">1e7</span>, <span class="dt">scale =</span> <span class="dv">2</span>, <span class="dt">shape =</span> <span class="dv">1</span>) %&gt;%<span class="st"> </span><span class="kw">var</span>()</code></pre></div>
+<pre><code>## [1] 15345753</code></pre>
+<p>Big variance!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the VGAM package</span>
+<span class="kw">p_load</span>(VGAM)
+<span class="co"># Set the seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Define the population size</span>
+N_par &lt;-<span class="st"> </span><span class="fl">1e6</span>
+<span class="co"># Create a population</span>
+par_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">e =</span> <span class="kw">rpareto</span>(N_par, <span class="dt">scale =</span> <span class="dv">2</span>, <span class="dt">shape =</span> <span class="dv">1</span>))
+<span class="co"># Demean our disturbances</span>
+par_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">e =</span> e -<span class="st"> </span><span class="kw">mean</span>(e))
+<span class="co"># Add x and ones</span>
+par_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
+  <span class="dt">ones =</span> <span class="dv">1</span>,
+  <span class="dt">x    =</span> <span class="kw">runif</span>(N_par, <span class="dv">0</span>, <span class="dv">100</span>),
+  <span class="dt">y    =</span> <span class="dv">1</span> +<span class="st"> </span><span class="dv">5</span> *<span class="st"> </span>x +<span class="st"> </span>e
+  ) %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()</code></pre></div>
+<p>Let’s check the percentiles of our Pareto-distributed disturbances</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(par_df$e, <span class="dt">probs =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>))</code></pre></div>
+<pre><code>##             0%            10%            20%            30%            40% 
+##     -27.551417     -27.330677     -27.051920     -26.694963     -26.220252 
+##            50%            60%            70%            80%            90% 
+##     -25.551901     -24.551344     -22.869922     -19.531406      -9.511747 
+##           100% 
+## 2701207.741665</code></pre>
+<p>Pretty crazy stuff.</p>
+<p>Define new simulation functions:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">one_par &lt;-<span class="st"> </span>function(n, data) {
+  <span class="co"># Draw &#39;n&#39; observations from &#39;data&#39;</span>
+  tmp_df &lt;-<span class="st"> </span><span class="kw">sample_n</span>(<span class="dt">tbl =</span> data, <span class="dt">size =</span> n)
+  <span class="co"># Estimate OLS</span>
+  b_par =<span class="st"> </span><span class="kw">b_ols</span>(
+    <span class="dt">y   =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="st">&quot;y&quot;</span>),
+    <span class="dt">X   =</span> <span class="kw">to_matrix</span>(tmp_df, <span class="kw">c</span>(<span class="st">&quot;ones&quot;</span>, <span class="st">&quot;x&quot;</span>)))[<span class="dv">2</span>]
+  <span class="co"># Create a data.frame to return</span>
+  coef_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="co"># The estimates</span>
+    <span class="dt">est =</span> b_par,
+    <span class="co"># The sample size</span>
+    <span class="dt">n =</span> n
+    )
+  <span class="co"># Return coef_df</span>
+  <span class="kw">return</span>(coef_df)
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">run_par &lt;-<span class="st"> </span>function(n, n_iter, data, <span class="dt">n_cores =</span> <span class="dv">4</span>) {
+  <span class="co"># Required packages</span>
+  <span class="kw">require</span>(dplyr)
+  <span class="kw">require</span>(parallel)
+  <span class="kw">require</span>(magrittr)
+  <span class="co"># Run &#39;one_par&#39; &#39;n_iter&#39; times with sample size &#39;n&#39;</span>
+  run_df &lt;-<span class="st"> </span><span class="kw">mclapply</span>(
+    <span class="dt">X =</span> <span class="kw">rep</span>(n, <span class="dt">each =</span> n_iter),
+    <span class="dt">FUN =</span> one_par,
+    <span class="dt">data =</span> data,
+    <span class="dt">mc.cores =</span> n_cores) %&gt;%<span class="st"> </span><span class="kw">bind_rows</span>() %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+  <span class="co"># Return run_df</span>
+  <span class="kw">return</span>(run_df)
+}</code></pre></div>
+<p>Now let’s run the simulation 10,000 times with sample sizes of 10,000.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">par_10k &lt;-<span class="st"> </span><span class="kw">run_par</span>(
+  <span class="dt">n      =</span> <span class="fl">1e4</span>,
+  <span class="dt">n_iter =</span> <span class="fl">1e4</span>,
+  <span class="dt">data   =</span> par_df)</code></pre></div>
+<p>What does the distribution of parameters from this simulation look like?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Pareto disturbances</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> par_10k, <span class="kw">aes</span>(<span class="dt">x =</span> est)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..),
+    <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>,
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">50</span>) +
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>,
+    <span class="dt">color =</span> <span class="st">&quot;violetred2&quot;</span>, <span class="dt">size =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="dt">fun =</span> dnorm,
+    <span class="dt">color =</span> <span class="st">&quot;slateblue4&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>,
+    <span class="dt">args =</span> <span class="kw">list</span>(
+      <span class="dt">mean =</span> <span class="kw">mean</span>(par_10k$est),
+      <span class="dt">sd =</span> <span class="kw">sd</span>(par_10k$est))
+    ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Distribution of coefficients from Pareto disturbances&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;Sample size of 10,000&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(b[OLS])) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section08_files/figure-html/plot_pareto_10k-1.png" width="672" /></p>
+<p>This distribution does not look very close to normal.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ks.test</span>(
+  <span class="dt">x    =</span> par_10k$est,
+  <span class="dt">y    =</span> <span class="st">&quot;pnorm&quot;</span>,
+  <span class="dt">mean =</span> <span class="kw">mean</span>(par_10k$est),
+  <span class="dt">sd   =</span> <span class="kw">sd</span>(par_10k$est))</code></pre></div>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  par_10k$est
+## D = 0.31667, p-value &lt; 2.2e-16
+## alternative hypothesis: two-sided</code></pre>
+<p>Kolmogorov and Smirnov agree: not normal.</p>
+<p>Just to make sure we cannot solve the problem with more data, let’s try sample sizes of 100,000.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">par_100k &lt;-<span class="st"> </span><span class="kw">run_par</span>(
+  <span class="dt">n      =</span> <span class="fl">1e5</span>,
+  <span class="dt">n_iter =</span> <span class="fl">1e4</span>,
+  <span class="dt">data   =</span> par_df)</code></pre></div>
+<p>What does the distribution of coefficients look like now?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Pareto disturbances</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> par_100k, <span class="kw">aes</span>(<span class="dt">x =</span> est)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..),
+    <span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey65&quot;</span>,
+    <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">bins =</span> <span class="dv">50</span>) +
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>,
+    <span class="dt">color =</span> <span class="st">&quot;violetred2&quot;</span>, <span class="dt">size =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="dt">fun =</span> dnorm,
+    <span class="dt">color =</span> <span class="st">&quot;slateblue4&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>,
+    <span class="dt">args =</span> <span class="kw">list</span>(
+      <span class="dt">mean =</span> <span class="kw">mean</span>(par_100k$est),
+      <span class="dt">sd =</span> <span class="kw">sd</span>(par_10k$est))
+    ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Distribution of coefficients from Pareto disturbances&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;Sample size of 100,000&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="kw">expression</span>(b[OLS])) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section08_files/figure-html/plot_pareto_100k-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ks.test</span>(
+  <span class="dt">x    =</span> par_100k$est,
+  <span class="dt">y    =</span> <span class="st">&quot;pnorm&quot;</span>,
+  <span class="dt">mean =</span> <span class="kw">mean</span>(par_100k$est),
+  <span class="dt">sd   =</span> <span class="kw">sd</span>(par_100k$est))</code></pre></div>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  par_100k$est
+## D = 0.23409, p-value &lt; 2.2e-16
+## alternative hypothesis: two-sided</code></pre>
+<p>Not so normal, my friends. The takeaway? Assumptions matter: we need finite variance to get asymptotic normality.</p>
+<hr />
+</div>
+<div id="fun-tools-fira-code" class="section level1">
+<h1>Fun tools: Fira Code</h1>
+<p><a href="https://github.com/tonsky/FiraCode">Fira Code</a> is a “monospaced font with programming ligatures”. As you probably know, most programming is done in a monospaced font. However, some character combinations look a bit weird in monospaced fonts, <em>e.g.</em>, R’s famous <code>&lt;-</code>, or <code>&lt;=</code>, or <code>!=</code> (and some combinations look a bit strange in regardless of monospacing). Ligatures attempt to correct for some of this strangeness by connecting the characters a bit. I find it makes spending my entire life staring at a monospaced screen a bit more enjoyable.</p>
+<p>Here’s a side-by-side comparison.</p>
+<p><img src="Images/firaCodeLigatures.png" /> Ligatures!</p>
+</div>
+<div id="data-cleaning-resources" class="section level1">
+<h1>Data-cleaning resources</h1>
+<p>A few people asked me about data cleaning in R. First off—in my opinion—R is fantastic for cleaning data. Here are a few of my favorite packages:</p>
+<ul>
+<li><code>data.table</code>: particularly good with large datasets. Similar to <code>dplyr</code> but with a different syntax. (<a href="https://github.com/Rdatatable/data.table/wiki/Getting-started">website</a>)</li>
+<li><code>stringr</code>: quick and relatively straightforward string (character) manipulation. (<a href="https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html">vignette</a>)</li>
+<li><code>lubridate</code>: for dates (<a href="https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html">vignette</a>)</li>
+</ul>
+<p>I’ve also heard good things about <code>tidyr</code> for reshaping, which is part of the <a href="http://tidyverse.org">tidyverse</a>.</p>
+<p>The folks at RStudio also provide a <a href="https://www.rstudio.com/resources/cheatsheets/">bunch of cheatsheets</a> for things ranging from <a href="https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-import-cheatsheet.pdf">importing data</a> to <a href="https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf">data visualization</a> <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">data wrangling</a> to <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown</a> to <a href="https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf">regular expressions</a>.</p>
+<p>Last, UC Berkeley’s D-Lab has a lot of resources, including training sessions and experts who will meet with you and answer your questions. I’ll try to cover as much as I can in our approximately 50 weekly minutes in section, but in case you need more, D-Lab is a great place to start.</p>
+<p><strong>D-Lab</strong></p>
+<ul>
+<li><a href="http://dlab.berkeley.edu/training">Training schedule</a>, including upcoming sessions in data wrangling, machine learing, and <code>ggplot2</code></li>
+<li><a href="http://dlab.berkeley.edu/services">Other services</a></li>
+</ul>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The function actually would have worked already for multiple sample sizes, but this change makes that fact—and the results—much clearer.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>It’s not really cheating—we haven’t reached infinity yet, and we want the distributions to have a hope of matching.<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
