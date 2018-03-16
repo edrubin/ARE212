@@ -70,14 +70,14 @@ OLS as $N$ gets (very) big. Also: simulations, coding efficiency, and new `ggplo
 [pdf](Section08/section08.pdf) | [R script](Section08/section08.R) | [zip](Section08.zip)
 <br><br>
 
-<!-- #### [__Section 9__](section09.html): Standard errors, Vol. I
+#### [__Section 9__](section09.html): Standard errors, Vol. I
 
 Calculating standard errors via analytical methods and via the Delta Method. Includes linear and nonlinear combinations of parameters. Plus making prettier tables.
 
 [pdf](Section09/section09.pdf) | [R script](Section09/section09.R) | [zip](Section09.zip)
 <br><br>
 
-#### [__Section 10__](section10.html): Standard errors, Vol. II
+<!-- #### [__Section 10__](section10.html): Standard errors, Vol. II
 
 Calculating standard errors in various situations: spherical errors, heteroskedastic errors, temporally correlated errors, spatially correlated errors, clustered errors.
 
