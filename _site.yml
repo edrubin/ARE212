@@ -1,64 +1,59 @@
-name: "ARE-212"
-output_dir: "."
+name: ARE-212
+output_dir: .
 navbar:
-  title: "ARE 212"
+  title: ARE 212
   type: inverse
   left:
-    - text: "Section notes"
-      menu:
-        - text: "Table of Contents"
-          href: notes.html
-        - text: "Section 0"
-          href: section00.html
-        - text: "Section 1"
-          href: section01.html
-        - text: "Section 2"
-          href: section02.html
-        - text: "Section 3"
-          href: section03.html
-        - text: "Section 4"
-          href: section04.html
-        - text: "Section 5"
-          href: section05.html
-        - text: "Section 6"
-          href: section06.html
-        - text: "Section 7"
-          href: section07.html
-        - text: "Section 8"
-          href: section08.html
-        - text: "Section 9"
-          href: section09.html
-        # - text: "Section 10"
-        #   href: section10.html
-        # - text: "Section 11"
-        #   href: section11.html
-        # - text: "Section 12"
-        #   href: section12.html
-        # - text: "Section 12b"
-        #   href: section12b.html
-        # - text: "Section 13"
-        #   href: section13.html
-        - text: "LaTeX and knitr"
-          href: latexKnitr.html
-        - text: "---------"
-        - text: "Spring 2017 Notes"
-          href: Spring2017/notes.html
-    - text: "Course Info"
-      href: courseInfo.html
-    - text: "Syllabi"
-      href: syllabi.html
-    - text: "R Resources"
-      href: resources.html
+  - text: Section notes
+    menu:
+    - text: Table of Contents
+      href: notes.html
+    - text: Section 0
+      href: section00.html
+    - text: Section 1
+      href: section01.html
+    - text: Section 2
+      href: section02.html
+    - text: Section 3
+      href: section03.html
+    - text: Section 4
+      href: section04.html
+    - text: Section 5
+      href: section05.html
+    - text: Section 6
+      href: section06.html
+    - text: Section 7
+      href: section07.html
+    - text: Section 8
+      href: section08.html
+    - text: Section 9
+      href: section09.html
+    - text: Section 10
+      href: section10.html
+    - text: LaTeX and knitr
+      href: latexKnitr.html
+    - text: '---------'
+    - text: Spring 2017 Notes
+      href: Spring2017/notes.html
+  - text: Course Info
+    href: courseInfo.html
+  - text: Syllabi
+    href: syllabi.html
+  - text: R Resources
+    href: resources.html
   right:
-    - icon: fa-envelope-o fa-lg
-      href: contact.html
-    - icon: fa-github-square fa-lg
-      href: https://github.com/edrubin/ARE212
-    - icon: fa-hand-peace-o fa-lg
-      href: https://edrub.in
+  - icon: fa-envelope-o fa-lg
+    href: contact.html
+  - icon: fa-github-square fa-lg
+    href: https://github.com/edrubin/ARE212
+  - icon: fa-hand-peace-o fa-lg
+    href: https://edrub.in
 output:
   html_document:
     theme: flatly
     highlight: pygments
     include:
       after_body: footer.html
+    lib_dir: site_libs
+    self_contained: no
+

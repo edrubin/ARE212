@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 10: Standard errors, Vol. II</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="section06.html">Section 6</a>
+    </li>
+    <li>
+      <a href="section07.html">Section 7</a>
+    </li>
+    <li>
+      <a href="section08.html">Section 8</a>
+    </li>
+    <li>
+      <a href="section09.html">Section 9</a>
+    </li>
+    <li>
+      <a href="section10.html">Section 10</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 10: Standard errors, Vol. II</h1>
+
+</div>
+
+
+<p><a href="Section09.zip"><span class="fa-stack fa-4x"> <i class="fa fa-folder fa-stack-2x"></i> <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i> </span></a></p>
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<div id="announcements" class="section level2">
+<h2>Announcements</h2>
+<ol style="list-style-type: decimal">
+<li>No office hours next week (see item 2).</li>
+<li>Spring break next week.</li>
+</ol>
+</div>
+<div id="last-week" class="section level2">
+<h2>Last week</h2>
+<p><a href="section09.html">Last week</a> we discussed standard errors. Specifically, we derived standard errors for linear combinations of the OLS estimator using (1) analytically derived formulas and (2) the Delta Method. We then applied the Delta Method for nonlinear combinations of the OLS estimator.</p>
+</div>
+<div id="this-week" class="section level2">
+<h2>This week</h2>
+<p>More standard errors! We return to our (restrictive) assumption of spherical errors and then relax this assumption to allow for heteroskedasticity and correlated disturbances.</p>
+</div>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p><strong>Packages</strong>:</p>
+<ul>
+<li>New:
+<ul>
+<li><code>sandwich</code></li>
+<li><code>HistData</code></li>
+<li><code>robustbase</code></li>
+<li><code>tidyr</code></li>
+</ul></li>
+<li>Old:
+<ul>
+<li><code>dplyr</code>, <code>lfe</code>, <code>magrittr</code>, <code>ggplot2</code>, and <code>viridis</code></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="standard-errors" class="section level1">
+<h1>Standard errors</h1>
+<p>I hope you are starting to see that standard errors (and inference) are really important. Thus far, we have tended to assume spherical disturbances—possibly allowing for heteroskedasticity. However, the world is not always this simple. There are times—many times—where assuming each of your disturbances is independent from each of your other disturbances does not seem reasonable. For instance, if you have repeated observations from the same unit (<em>e.g.</em>, monthly observations for each state in the United States), it seems likely that the disturbances will correlated within states—not to mention correlation of neighboring states. Let’s think about how we can adjust our model to incorporate this reality.</p>
+<div id="on-the-significance-of-significance" class="section level2">
+<h2>On the significance of significance</h2>
+<p>There’s been a lot<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> of discussion lately on (1) the incentives journals (and academia, more generally) set for researchers, (2) a culture of mining datasets to find statistical (and surprising) results, (3) a strange asymmetry for the importance of p-values just below 0.05, and (4) a replication crisis in the social sciences. Obviously these four parts are related.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<p>In this vein—and on the topic of inference—Alberto Abadie recently issued an interesting NBER working paper on the importance of “null results” and the inflation of the importance of rejecting the null.</p>
+<p><em>Statistical Non-Significance in Empirical Economics</em></p>
+<p><strong>Abstract</strong>: Significance tests are probably the most common form of inference in empirical economics, and significance is often interpreted as providing greater informational content than non-significance. In this article we show, however, that rejection of a point null often carries very little information, while failure to reject may be highly informative. This is particularly true in empirical contexts that are typical and even prevalent in economics, where data sets are large (and becoming larger) and where there are rarely reasons to put substantial prior probability on a point null. Our results challenge the usual practice of conferring point null rejections a higher level of scientific significance than non-rejections. In consequence, we advocate a visible reporting and discussion of non-significant results in empirical practice.</p>
+<p>Andrew Gelman has a nice <a href="http://andrewgelman.com/2017/02/06/not-kill-statistical-significance-makes-stronger-fallacy/">blog post</a> and paper on a similar common misunderstanding in inference: <em>that which does not kill my result makes it stronger</em>.</p>
+<p>In my opinion, these topics are pretty serious and are definitely worth keeping in mind when you conduct your own research.</p>
+</div>
+<div id="the-basics" class="section level2">
+<h2>The basics</h2>
+<p>Back to standard errors. Let’s (briefly) review.</p>
+<p>We define (and estimate) the standard error (s.e.) of an arbitrary estimator <span class="math inline">\(\hat\theta\)</span> as <span class="math inline">\(\sqrt{\mathop{\widehat{\text{Var}}}\left(\hat{\theta}\right)}\)</span>.</p>
+<p>In the case of OLS, we assume a data-generating process of</p>
+<p><span class="math display">\[ \mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon} \]</span></p>
+<p>and our estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span> is</p>
+<p><span class="math display">\[ \mathbf{b} = \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \mathbf{y} \]</span></p>
+<p>The variance of this estimator is</p>
+<p><span class="math display">\[ \mathop{\text{Var}} \left( \mathbf{b} | \mathbf{X} \right) = \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \boldsymbol{\Sigma} \mathbf{X} \left( \mathbf{X}^\prime \mathbf{X} \right)^\prime \]</span></p>
+<p>We know <span class="math inline">\(\mathbf{X}\)</span>. The challenge here is that <span class="math inline">\(\boldsymbol{\Sigma}\)</span>—the variance-covariance matrix of the disturbances—is generally unknown. Let’s write out <span class="math inline">\(\boldsymbol{\Sigma}\)</span>:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p><span class="math display">\[ \boldsymbol{\Sigma} = \left[\begin{array}{cccc}
+\mathop{\text{Var}}\left(\varepsilon_1\right) &amp;
+\mathop{\text{Cov}}\left(\varepsilon_1, \varepsilon_2\right) &amp;
+\cdots &amp;
+\mathop{\text{Cov}}\left(\varepsilon_1, \varepsilon_N\right) \\
+\mathop{\text{Cov}}\left(\varepsilon_2, \varepsilon_1 \right) &amp;
+\mathop{\text{Var}}\left(\varepsilon_2\right) &amp;
+\cdots &amp;
+\mathop{\text{Cov}}\left(\varepsilon_2, \varepsilon_N\right) \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\mathop{\text{Cov}}\left(\varepsilon_N, \varepsilon_1\right) &amp;
+\mathop{\text{Cov}}\left(\varepsilon_N, \varepsilon_2\right) &amp;
+\cdots &amp;
+\mathop{\text{Var}}\left(\varepsilon_N\right)
+\end{array}\right]
+\]</span></p>
+<p>which we can write a bit more simply</p>
+<p><span class="math display">\[ \boldsymbol{\Sigma} = \left[\begin{array}{cccc}
+\varepsilon_1^2 &amp;
+\varepsilon_1 \varepsilon_2 &amp;
+\cdots &amp;
+\varepsilon_1 \varepsilon_N \\
+\varepsilon_2 \varepsilon_1 &amp;
+\varepsilon_2^2 &amp;
+\cdots &amp;
+\varepsilon_2 \varepsilon_N \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\varepsilon_N \varepsilon_1 &amp;
+\varepsilon_N \varepsilon_2 &amp;
+\cdots &amp;
+\varepsilon_N^2
+\end{array}\right]
+\]</span></p>
+<p>To estimate <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, we make assumptions.</p>
+</div>
+<div id="spherical-errors" class="section level2">
+<h2>Spherical errors</h2>
+<p>We started this course by assuming spherical errors, <em>i.e.</em>, the disturbances (errors) are independently and identically distributed. In other words, we assumed <span class="math inline">\(\mathop{\text{Var}}\left( \varepsilon_i \right) = \sigma^2\)</span> and <span class="math inline">\(\mathop{\text{Cov}}\left(\varepsilon_i, \varepsilon_j\right) = 0\)</span> for <span class="math inline">\(i\neq j\)</span>.</p>
+<p>Under the spherical-error assumption, we get a very simple form for <span class="math inline">\(\boldsymbol{\Sigma}\)</span> (plugging in the implied values of variance and covariance):</p>
+<p><span class="math display">\[ \boldsymbol{\Sigma} = \left[\begin{array}{cccc}
+\sigma^2 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; \sigma^2 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; \sigma^2
+\end{array}\right] \]</span></p>
+<p>Under the assumption of spherical errors, the variance of the OLS estimator becomes</p>
+<p><span class="math display">\[ \begin{aligned}
+\mathop{\text{Var}_\text{Sph}} \left(\mathbf{b} | \mathbf{X}\right)
+&amp;= \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \boldsymbol{\Sigma} \mathbf{X} \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \\
+&amp;= \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \sigma^2 \mathbf{I}_N \mathbf{X} \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \\
+&amp;= \sigma^2 \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \mathbf{X} \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \\
+&amp;= \sigma^2 \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1}
+\end{aligned}
+\]</span></p>
+<p>This result should look familiar: we have been using it quite a bit this semester. To estimate the variance of this estimator, we just need an estimate for <span class="math inline">\(\sigma^2\)</span>. Let’s stick with <span class="math inline">\(s^2 = \dfrac{\mathbf{e}^\prime \mathbf{e}}{n-k}\)</span>. Therefore our estimate for the standard error of the j<sup>th</sup> coefficient is</p>
+<p><span class="math display">\[ \widehat{\mathop{\text{s.e.}}} \left( b_j | \mathbf{X} \right) = \sqrt{ s^2 \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1}_{jj} } \]</span></p>
+</div>
+<div id="to-the-data-pt.-1" class="section level2">
+<h2>To the data, pt. 1</h2>
+<p>As econometricians love to say, let’s take this to the data. We don’t have data yet, so let’s find some. <code>ggplot2</code> has a (somewhat) interesting dataset on approximately 54,000 diamonds.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(ggplot2::diamonds)</code></pre></div>
+<pre><code>## # A tibble: 6 x 10
+##   carat       cut color clarity depth table price     x     y     z
+##   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
+## 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
+## 3  0.23      Good     E     VS1  56.9    65   327  4.05  4.07  2.31
+## 4  0.29   Premium     I     VS2  62.4    58   334  4.20  4.23  2.63
+## 5  0.31      Good     J     SI2  63.3    58   335  4.34  4.35  2.75
+## 6  0.24 Very Good     J    VVS2  62.8    57   336  3.94  3.96  2.48</code></pre>
+<p>Our setup:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="kw">options</span>(<span class="dt">scipen =</span> <span class="dv">10</span>)
+<span class="co"># Packages</span>
+<span class="kw">library</span>(pacman)
+<span class="kw">p_load</span>(tidyr, dplyr, lfe, magrittr, ggplot2, viridis, sandwich)
+<span class="co"># My ggplot2 theme</span>
+theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
+  <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+  <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+  <span class="co"># panel.border = element_rect(fill = NA, color = &quot;grey75&quot;),</span>
+  <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p>Our functions:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function to convert tibble, data.frame, or tbl_df to matrix</span>
+to_matrix &lt;-<span class="st"> </span>function(the_df, vars) {
+  <span class="co"># Create a matrix from variables in var</span>
+  new_mat &lt;-<span class="st"> </span>the_df %&gt;%
+<span class="st">    </span><span class="co"># Select the columns given in &#39;vars&#39;</span>
+<span class="st">    </span><span class="kw">select_</span>(<span class="dt">.dots =</span> vars) %&gt;%
+<span class="st">    </span><span class="co"># Convert to matrix</span>
+<span class="st">    </span><span class="kw">as.matrix</span>()
+  <span class="co"># Return &#39;new_mat&#39;</span>
+  <span class="kw">return</span>(new_mat)
+}
+<span class="co"># Function for OLS coefficient estimates</span>
+b_ols &lt;-<span class="st"> </span>function(y, X) {
+  <span class="co"># Calculate beta hat</span>
+  beta_hat &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>y
+  <span class="co"># Return beta_hat</span>
+  <span class="kw">return</span>(beta_hat)
+}
+<span class="co"># Function for OLS coef., SE, t-stat, and p-value</span>
+ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+  <span class="co"># Turn data into matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+  <span class="co"># Add intercept</span>
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Calculate n and k for degrees of freedom</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># Estimate coefficients</span>
+  b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(y, X)
+  <span class="co"># Update names</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  <span class="co"># Calculate OLS residuals</span>
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
+  <span class="co"># Calculate s^2</span>
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
+  s2 %&lt;&gt;%<span class="st"> </span><span class="kw">as.numeric</span>()
+  <span class="co"># Inverse of X&#39;X</span>
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
+  <span class="co"># Standard error</span>
+  se &lt;-<span class="st"> </span><span class="kw">sqrt</span>(s2 *<span class="st"> </span><span class="kw">diag</span>(XX_inv))
+  <span class="co"># Vector of _t_ statistics</span>
+  t_stats &lt;-<span class="st"> </span>(b -<span class="st"> </span><span class="dv">0</span>) /<span class="st"> </span>se
+  <span class="co"># Calculate the p-values</span>
+  p_values =<span class="st"> </span><span class="kw">pt</span>(<span class="dt">q =</span> <span class="kw">abs</span>(t_stats), <span class="dt">df =</span> n-k, <span class="dt">lower.tail =</span> F) *<span class="st"> </span><span class="dv">2</span>
+  <span class="co"># Nice table (data.frame) of results</span>
+  results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="co"># The rows have the coef. names</span>
+    <span class="dt">effect =</span> <span class="kw">rownames</span>(b),
+    <span class="co"># Estimated coefficients</span>
+    <span class="dt">coef =</span> <span class="kw">as.vector</span>(b),
+    <span class="co"># Standard errors</span>
+    <span class="dt">std_error =</span> <span class="kw">as.vector</span>(se),
+    <span class="co"># t statistics</span>
+    <span class="dt">t_stat =</span> <span class="kw">as.vector</span>(t_stats),
+    <span class="co"># p-values</span>
+    <span class="dt">p_value =</span> <span class="kw">as.vector</span>(p_values)
+    )
+  <span class="co"># Return the results</span>
+  <span class="kw">return</span>(results)
+}
+<span class="co"># Function that demeans the columns of Z</span>
+demeaner &lt;-<span class="st"> </span>function(N) {
+  <span class="co"># Create an N-by-1 column of 1s</span>
+  i &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">1</span>, <span class="dt">nrow =</span> N)
+  <span class="co"># Create the demeaning matrix</span>
+  A &lt;-<span class="st"> </span><span class="kw">diag</span>(N) -<span class="st"> </span>(<span class="dv">1</span>/N) *<span class="st"> </span>i %*%<span class="st"> </span><span class="kw">t</span>(i)
+  <span class="co"># Return A</span>
+  <span class="kw">return</span>(A)
+}
+<span class="co"># Function to return OLS residuals</span>
+resid_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+  <span class="co"># Require the &#39;dplyr&#39; package</span>
+  <span class="kw">require</span>(dplyr)
+  <span class="co"># Create the y matrix</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> y_var)
+  <span class="co"># Create the X matrix</span>
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(<span class="dt">the_df =</span> data, <span class="dt">vars =</span> X_vars)
+  <span class="co"># Bind a column of ones to X</span>
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Calculate the sample size, n</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  <span class="co"># Calculate the residuals</span>
+  resids &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span><span class="kw">b_ols</span>(y, X)
+  <span class="co"># Return &#39;resids&#39;</span>
+  <span class="kw">return</span>(resids)
+}
+<span class="co"># Function for OLS coef., SE, t-stat, and p-value</span>
+vcov_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+  <span class="co"># Turn data into matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+  <span class="co"># Add intercept</span>
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Calculate n and k for degrees of freedom</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># Estimate coefficients</span>
+  b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(y, X)
+  <span class="co"># Update names</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  <span class="co"># Calculate OLS residuals</span>
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
+  <span class="co"># Calculate s^2</span>
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
+  s2 %&lt;&gt;%<span class="st"> </span><span class="kw">as.numeric</span>()
+  <span class="co"># Inverse of X&#39;X</span>
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
+  <span class="co"># Return the results</span>
+  <span class="kw">return</span>(<span class="kw">as.numeric</span>(s2) *<span class="st"> </span>XX_inv)
+}</code></pre></div>
+<p>Okay. Let’s regress the <code>price</code> of a diamond on <code>carat</code> and <code>depth</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The estimated coefficients</span>
+<span class="kw">ols</span>(<span class="dt">data =</span> diamonds,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;carat&quot;</span>, <span class="st">&quot;depth&quot;</span>))[,<span class="dv">1</span>:<span class="dv">2</span>]</code></pre></div>
+<pre><code>##      effect      coef
+## 1 Intercept 4045.3332
+## 2     carat 7765.1407
+## 3     depth -102.1653</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The estimated variance-covariance matrix</span>
+vcov_spherical &lt;-<span class="st"> </span><span class="kw">vcov_ols</span>(<span class="dt">data =</span> diamonds,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;carat&quot;</span>, <span class="st">&quot;depth&quot;</span>))
+<span class="co"># Get the standard errors</span>
+vcov_spherical %&gt;%<span class="st"> </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()</code></pre></div>
+<pre><code>##                 carat      depth 
+## 286.205390  14.009367   4.635278</code></pre>
+<p>Let’s check our work—with <code>felm()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">felm</span>(price ~<span class="st"> </span>carat +<span class="st"> </span>depth, <span class="dt">data =</span> diamonds) %&gt;%<span class="st"> </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>## 
+## Call:
+##    felm(formula = price ~ carat + depth, data = diamonds) 
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18238.9   -801.6    -19.6    546.3  12683.7 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 4045.333    286.205   14.13   &lt;2e-16 ***
+## carat       7765.141     14.009  554.28   &lt;2e-16 ***
+## depth       -102.165      4.635  -22.04   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1542 on 53937 degrees of freedom
+## Multiple R-squared(full model): 0.8507   Adjusted R-squared: 0.8507 
+## Multiple R-squared(proj model): 0.8507   Adjusted R-squared: 0.8507 
+## F-statistic(full model):1.536e+05 on 2 and 53937 DF, p-value: &lt; 2.2e-16 
+## F-statistic(proj model): 1.536e+05 on 2 and 53937 DF, p-value: &lt; 2.2e-16</code></pre>
+<p>Things at least match. But how good is our assumption about spherical errors? One way to check the assumption is to look for trends in the residuals; if we see any funnels, then the constant-variance part of spherical errors is likely violated.</p>
+<p>First, we will add the OLS residuals to the dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add OLS residuals to the diamonds dataset</span>
+diamonds %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">e_ols =</span>
+  <span class="kw">resid_ols</span>(<span class="dt">data =</span> diamonds,
+    <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+    <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;carat&quot;</span>, <span class="st">&quot;depth&quot;</span>)) %&gt;%<span class="st"> </span><span class="kw">as.numeric</span>()
+  )</code></pre></div>
+<p>Now, let’s plot the residuals separately against our covariates: <code>carat</code> and then <code>depth</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Residuals against carat</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> diamonds, <span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">y =</span> e_ols)) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="kw">viridis</span>(<span class="dv">1</span>), <span class="dt">shape =</span> <span class="dv">21</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Carat (covariate #1)&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;OLS residual&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Residuals and carat&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section10_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Residuals against depth</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> diamonds, <span class="kw">aes</span>(<span class="dt">x =</span> depth, <span class="dt">y =</span> e_ols)) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="kw">viridis</span>(<span class="dv">1</span>), <span class="dt">shape =</span> <span class="dv">21</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Depth (covariate #2)&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;OLS residual&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Residuals and depth&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section10_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p>Looks like we may have an issue with heteroskedasticity: we have pretty clear changes in the variance of our residuals over the domains of our covariates.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> In addition to heteroskedasticity, there are some other disturbing trends in our residuals. Implication: we are probably violating the spherical errors assumption, which means our standard errors are probably wrong.</p>
+</div>
+<div id="robust-to-heteroskedasticity" class="section level2">
+<h2>Robust to heteroskedasticity</h2>
+<p><strong>The bad news</strong>: We need to do a little more math.</p>
+<p><strong>The good news</strong>: All is not lost. We can use heteroskedasticity-robust estimators for our variance-covariance matrix.</p>
+<p>For the moment, we are going to stick with our assumption of independent disturbances, but we now will allow the disturbances to have different variances—we are relaxing the requirement/assumption of homoskedasticity. Therefore, <span class="math inline">\(\boldsymbol{\Sigma}\)</span> now looks like</p>
+<p><span class="math display">\[ \boldsymbol{\Sigma} = \left[\begin{array}{cccc}
+\sigma_1^2 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; \sigma_2^2 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; \sigma_N^2
+\end{array}\right] \]</span></p>
+<p>This change may not seem very big. However, because we do not know the <span class="math inline">\(N\)</span> <span class="math inline">\(\sigma_i^2\)</span>s, we need to estimate them. But we only have <span class="math inline">\(N\)</span> observations. And we are already estimating <span class="math inline">\(k\)</span> coefficients. Thus, we can quickly run out of degrees of freedom if we are not careful. Enter: Eicker/Huber/White: we can use the residual <span class="math inline">\(e_i^2\)</span> as a non-parametric estimate for <span class="math inline">\(\sigma_i^2\)</span>!</p>
+<p>The our new estimator for the variance of <span class="math inline">\(\mathbf{b}\)</span> is</p>
+<p><span class="math display">\[ \begin{aligned}
+\widehat{\mathop{\text{Var}_\text{Het}}} \left(\mathbf{b} | \mathbf{X}\right)
+&amp;= \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \hat{\boldsymbol{\Sigma}} \mathbf{X} \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \\
+&amp;= \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \left( \sum_i \mathbf{x}^\prime_i \mathbf{x}_i e_i^2 \right) \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1}
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{x}_i\)</span> is the i<sup>th</sup> row of <span class="math inline">\(\mathbf{X}\)</span> (which is <span class="math inline">\(k\times 1\)</span>).<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>This estimator is often called a <em>sandwich estimator</em> because it has “meat” <span class="math inline">\(\left( \sum_i \mathbf{x}^\prime_i \mathbf{x} e_i^2 \right)\)</span> <em>sandwiched</em> between two pieces of “bread” <span class="math inline">\(\left( \mathbf{X}^\prime \mathbf{X} \right)^{-1}\)</span>. Plus, it is delicious. Hopefully this fact helps explain the name of the R package <code>sandwich</code>.</p>
+<p>When using this estimator, people often call their standard errors “robust”<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> or “heteroskedasticity robust”. You should use the latter term, because it is actually informative.</p>
+<p>Let’s write a new function that calculates the heteroskedasticity-robust variance-covariance matrix. The <code>Reduce()</code> function is very useful here: it will sum up a list of matrices.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vcov_white &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt">intercept =</span> T) {
+  <span class="co"># Turn data into matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+  <span class="co"># Add intercept</span>
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Calculate n and k for degrees of freedom</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># Estimate coefficients</span>
+  b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(y, X)
+  <span class="co"># Update names</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  <span class="co"># Calculate OLS residuals</span>
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
+  <span class="co"># Inverse of X&#39;X</span>
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
+  <span class="co"># For each row, calculate x_i&#39; x_i e_i^2; then sum</span>
+  sigma_hat &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dt">X =</span> <span class="dv">1</span>:n, <span class="dt">FUN =</span> function(i) {
+    <span class="co"># Define x_i</span>
+    x_i &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">as.vector</span>(X[i,]), <span class="dt">nrow =</span> <span class="dv">1</span>)
+    <span class="co"># Return x_i&#39; x_i e_i^2</span>
+    <span class="kw">return</span>(<span class="kw">t</span>(x_i) %*%<span class="st"> </span>x_i *<span class="st"> </span>e[i]^<span class="dv">2</span>)
+  }) %&gt;%<span class="st"> </span><span class="kw">Reduce</span>(<span class="dt">f =</span> <span class="st">&quot;+&quot;</span>, <span class="dt">x =</span> .)
+  <span class="co"># Return the results</span>
+  <span class="kw">return</span>(XX_inv %*%<span class="st"> </span>sigma_hat %*%<span class="st"> </span>XX_inv)
+}</code></pre></div>
+<p>Now, let’s compare the heteroskedasticity-robust standard errors to the spherical-assuming standard errors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Spherical:</span>
+<span class="kw">vcov_ols</span>(<span class="dt">data =</span> diamonds,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;carat&quot;</span>, <span class="st">&quot;depth&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()</code></pre></div>
+<pre><code>##                 carat      depth 
+## 286.205390  14.009367   4.635278</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Het. robust:</span>
+<span class="kw">vcov_white</span>(<span class="dt">data =</span> diamonds,
+  <span class="dt">y_var =</span> <span class="st">&quot;price&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;carat&quot;</span>, <span class="st">&quot;depth&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()</code></pre></div>
+<pre><code>##                 carat      depth 
+## 369.166140  25.104229   5.945381</code></pre>
+<p>And let’s check our work using <code>felm</code>. We can access the heteroskedasticity-robust standard errors using <code>robust = TRUE</code> within the <code>summary()</code> function.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">felm</span>(price ~<span class="st"> </span>carat +<span class="st"> </span>depth, <span class="dt">data =</span> diamonds) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>(<span class="dt">robust =</span> T) %&gt;%<span class="st"> </span><span class="kw">coef</span>() %&gt;%<span class="st"> </span><span class="kw">extract</span>(., <span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">2</span>)</code></pre></div>
+<pre><code>## (Intercept)       carat       depth 
+##  369.176406   25.104927    5.945546</code></pre>
+<p>Pretty impressive. The first thing to note: our standard errors are now larger. Another thing to note: the Eicker-Huber-White heteroskedasticity-robust standard errors rely upon asymptotics; when we do not reach asymptopia—<em>i.e.</em>, when we have finite sample sizes—the E-H-W standard errors can be biased toward zero.</p>
+</div>
+<div id="time-series-correlation" class="section level2">
+<h2>Time-series correlation</h2>
+<p>While the Eicker-Huber-White heteroskedasticity-robust standard errors certainly provide an improvement in many situations, they do not deal with all possible issues. For instance, they do not deal with correlated disturbances. In the extreme case, you might have a time series where you’ve recorded data repeatedly on one individual. In this case, assuming independence across observations can be very inaccurate—one year’s shocks can easily correlate with the following year’s shocks in many settings.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
+<p>Thus, in many settings, we need to relax the independence-across-observations assumption. Newey and West help us here. For a nice depiction of time-series data, let’s check out one of the original time-series datasets: Playfair’s wheat and wages series. For this dataset, we turn to the <code>Wheat</code> dataset in the <code>HistData</code> package. This data <a href="https://visage.co/wp-content/uploads/2014/12/playfair-wheat-chart.jpg">originates</a> from <a href="https://www.wikiwand.com/en/William_Playfair">William Playfair</a>’s depiction of wages and wheat production. If you don’t know Playfair, then you should check him out—he invented line, area, bar, and pie charts. Pretty cool. There’s even a <a href="https://www.amazon.com/Lines-Bars-Circles-Playfair-Invented/dp/1771385707">children’s book about Playfair</a>, though it’s not a best seller (yet)—and the existence of a children’s book is a pretty strange standard to measure things.</p>
+<p>Let’s load and plot the data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the &#39;HistData&#39; package</span>
+<span class="kw">library</span>(HistData)
+<span class="co"># Load Playfair&#39;s wheat data</span>
+wheat_df &lt;-<span class="st"> </span>Wheat %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Drop the rows missing a value</span>
+wheat_df %&lt;&gt;%<span class="st"> </span><span class="kw">na.omit</span>()
+<span class="co"># Long to wide table</span>
+wheat_gg &lt;-<span class="st"> </span>wheat_df %&gt;%<span class="st"> </span><span class="kw">gather</span>(Series, Price, Wheat:Wages)
+<span class="co"># Playfair&#39;s graph</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> wheat_gg, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> Price, <span class="dt">color =</span> Series, <span class="dt">linetype =</span> Series)) +
+<span class="st">  </span><span class="kw">geom_point</span>() +
+<span class="st">  </span><span class="kw">geom_line</span>() +
+<span class="st">  </span><span class="kw">geom_point</span>() +
+<span class="st">  </span><span class="kw">geom_line</span>() +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Year&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Wage/Price (Shillings)&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Playfair&#39;s wheat and wages time series&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="st">&quot;Series&quot;</span>,
+    <span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Wages&quot;</span>, <span class="st">&quot;Price of wheat&quot;</span>)
+  ) +
+<span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="st">&quot;Series:&quot;</span>,
+    <span class="dt">option =</span> <span class="st">&quot;B&quot;</span>,
+    <span class="dt">discrete =</span> T, <span class="dt">end =</span> .<span class="dv">8</span>, <span class="dt">direction =</span> -<span class="dv">1</span>,
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Wages&quot;</span>, <span class="st">&quot;Price of wheat&quot;</span>)
+  )</code></pre></div>
+<p><img src="section10_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><em>Note</em>: I used the <code>gather()</code> function from <code>tidyr</code> to move from a wide table to a long table.</p>
+<p>There appears to be a link between <span class="math inline">\(t-1\)</span>, <span class="math inline">\(t\)</span>, and <span class="math inline">\(t+1\)</span>—serial correlation amongst our <span class="math inline">\(y_i\)</span> is a reason to worry about correlation across the disturbances. So what do we do?</p>
+<p>Recall that essentially everything we are doing in this section is an attempt to get a reasonable estimate for <span class="math inline">\(\boldsymbol{\Sigma}\)</span>. Suppose we have <span class="math inline">\(T\)</span> observations (the number of time periods is the number of observations here). If we have non-zero covariance (correlation) between the observations in time <span class="math inline">\(t\)</span> and time <span class="math inline">\(s\)</span>, then we can write</p>
+<p><span class="math display">\[ \mathbf{X}^\prime \boldsymbol{\Sigma} \mathbf{X} = \dfrac{1}{T} \sum_{t=1}^T\sum_{s=1}^T \rho_{|t-s|} \mathbf{x}^\prime_t \mathbf{x}_s \]</span></p>
+<p>where <span class="math inline">\(\rho_{|t-s|}\)</span> is the serial correlation between observations <span class="math inline">\(|t-s|\)</span> periods apart.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> Newey and West provide an estimator for this <em>sandwich meat</em>:</p>
+<p><span class="math display">\[ \mathbf{X}^\prime\hat{\Sigma}\mathbf{X} = \dfrac{1}{T} \sum_t e_t^2 \mathbf{x}^\prime_t \mathbf{x}_t + \dfrac{1}{T} \sum_{j = 1}^L \sum_{t = j + 1}^T \left( 1 - \dfrac{j}{L + 1} \right) e_t e_{t-j} \left( \mathbf{x}^\prime_t \mathbf{x}_{t-j} + \mathbf{x}^\prime_{t-j} \mathbf{x}_t \right) \]</span></p>
+<p>Wow. That’s pretty serious matrix math.</p>
+<p>Let’s break it down a little. The first sum is our old friend the Eicker-Huber-White estimator. We use the E-H-W part on the diagonal of our matrix. For the off-diagonal elements of our sandwich’s meat, we use the second part of the estimator above. We are still going to use the residuals to get at this correlation. Specifically, as <span class="math inline">\(j\)</span> gets larger (and thus <em>farther</em> from <span class="math inline">\(t\)</span>), we give the correlation between <span class="math inline">\(e_t\)</span> and <span class="math inline">\(e_{t-j}\)</span> less weight. Finally, we need to choose a <span class="math inline">\(J\)</span>—the maximum distance (between time periods) for which we allow non-zero covariance. Max suggests <span class="math inline">\(T/4\)</span>.</p>
+<p>This estimator gets a sort of cool name: the HAC (Heteroskedasticity-Autocorrelation-Robust) estimator. (It accounts for both heteroskedasticity and autocorrelation, nesting the E-H-W estimator.)</p>
+<p>Let’s code up this HAC estimator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vcov_hac &lt;-<span class="st"> </span>function(data, y_var, X_vars, L, <span class="dt">intercept =</span> T) {
+  <span class="co"># Turn data into matrices</span>
+  y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+  X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+  <span class="co"># Add intercept</span>
+  if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+  <span class="co"># Calculate n and k for degrees of freedom</span>
+  n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+  k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+  <span class="co"># Estimate coefficients</span>
+  b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(y, X)
+  <span class="co"># Update names</span>
+  if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+  <span class="co"># Calculate OLS residuals</span>
+  e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
+  <span class="co"># Inverse of X&#39;X</span>
+  XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
+  <span class="co"># The first term</span>
+  S_o &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dt">X =</span> <span class="dv">1</span>:n, <span class="dt">FUN =</span> function(i) {
+    <span class="co"># Define x_i</span>
+    x_i &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">as.vector</span>(X[i,]), <span class="dt">nrow =</span> <span class="dv">1</span>)
+    <span class="co"># Return x_i&#39; x_i e_i^2</span>
+    <span class="kw">return</span>(<span class="kw">t</span>(x_i) %*%<span class="st"> </span>x_i *<span class="st"> </span>e[i]^<span class="dv">2</span>)
+  }) %&gt;%<span class="st"> </span><span class="kw">Reduce</span>(<span class="dt">f =</span> <span class="st">&quot;+&quot;</span>, <span class="dt">x =</span> .)
+  S_o &lt;-<span class="st"> </span>S_o /<span class="st"> </span>n
+  <span class="co"># The second term</span>
+  S_more &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dt">X =</span> <span class="dv">1</span>:L, <span class="dt">FUN =</span> function(j) {
+    <span class="kw">lapply</span>(<span class="dt">X =</span> (j<span class="dv">+1</span>):n, <span class="dt">FUN =</span> function(t) {
+      <span class="co"># Grab the rows of X that we need</span>
+      x_t &lt;-<span class="st"> </span><span class="kw">matrix</span>(X[t,], <span class="dt">nrow =</span> <span class="dv">1</span>)
+      x_tj &lt;-<span class="st"> </span><span class="kw">matrix</span>(X[t-j,], <span class="dt">nrow =</span> <span class="dv">1</span>)
+      <span class="co"># The calculation</span>
+      (<span class="dv">1</span> -<span class="st"> </span>j /<span class="st"> </span>(L +<span class="st"> </span><span class="dv">1</span>)) *<span class="st"> </span>e[t] *<span class="st"> </span>e[t-j] *<span class="st"> </span>(
+        <span class="kw">t</span>(x_t) %*%<span class="st"> </span>x_tj +<span class="st"> </span><span class="kw">t</span>(x_tj) %*%<span class="st"> </span>x_t)
+      }) %&gt;%<span class="st"> </span><span class="kw">Reduce</span>(<span class="dt">f =</span> <span class="st">&quot;+&quot;</span>, <span class="dt">x =</span> .)
+    }) %&gt;%<span class="st"> </span><span class="kw">Reduce</span>(<span class="dt">f =</span> <span class="st">&quot;+&quot;</span>, <span class="dt">x =</span> .)
+  S_more &lt;-<span class="st"> </span>S_more /<span class="st"> </span>n
+  <span class="co"># The full sandwich</span>
+  S_star &lt;-<span class="st"> </span>S_o +<span class="st"> </span>S_more
+  <span class="co"># Return the results</span>
+  <span class="kw">return</span>(n *<span class="st"> </span>XX_inv %*%<span class="st"> </span>S_star %*%<span class="st"> </span>XX_inv)
+}</code></pre></div>
+<p>Let’s run our function now. We can check our work with the <code>NeweyWest()</code> function from the <code>sandwich</code> package. You can probably guess where they got the name for the package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Choose a lag</span>
+the_lag &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="kw">nrow</span>(wheat_df) /<span class="st"> </span><span class="dv">4</span>)
+<span class="co"># The spherical standard errors</span>
+<span class="kw">vcov_ols</span>(wheat_df, <span class="st">&quot;Wheat&quot;</span>, <span class="st">&quot;Wages&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()</code></pre></div>
+<pre><code>##               Wages 
+## 3.2586783 0.2383758</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The standard errors from our HAC robust function</span>
+<span class="kw">vcov_hac</span>(wheat_df, <span class="st">&quot;Wheat&quot;</span>, <span class="st">&quot;Wages&quot;</span>, the_lag) %&gt;%
+<span class="st">  </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()</code></pre></div>
+<pre><code>##               Wages 
+## 5.4757134 0.4717777</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Estimate the model using &#39;lm&#39;</span>
+wheat_reg &lt;-<span class="st"> </span><span class="kw">lm</span>(Wheat ~<span class="st"> </span>Wages, <span class="dt">data =</span> wheat_df)
+<span class="co"># Use the NeweyWest function</span>
+<span class="kw">NeweyWest</span>(wheat_reg, <span class="dt">lag =</span> the_lag, <span class="dt">prewhite =</span> F) %&gt;%
+<span class="st">  </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()</code></pre></div>
+<pre><code>## (Intercept)       Wages 
+##   5.4757134   0.4717777</code></pre>
+<p>Two takeaways:</p>
+<ol style="list-style-type: decimal">
+<li>Our estimator matches the canned routine!</li>
+<li>The standard errors increase when we correct for heteroskedasticity and autocorrelation using the Newey-West HAC robust variance-covariance estimator.</li>
+</ol>
+</div>
+<div id="spatially-correlated-errors" class="section level2">
+<h2>Spatially correlated errors</h2>
+<p>Time is a dimension. There are also other dimensions.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> Thus, we might expect that the disturbances correlate in other dimensions. Specifically, one may expect disturbances to correlate in space.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> Timothy Conley <a href="http://www.dictionaryofeconomics.com/article?id=pde2008_S000450">has developed</a> some methods for dealing with correlation in space (2-dimensional space—not outer space, though that would be cool).</p>
+<p>We are going to skip spatially correlated errors for now;<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> I just wanted to let you know there are similar methods for correlation in space. Sol Hsiang (here at UC Berkeley at GSPP) has some <a href="http://globalpolicy.science/code/">code</a> for integrating Conely’s spatial-correlation robust variance-covariance estimator in Matlab and Stata. <a href="http://www.trfetzer.com/using-r-to-estimate-spatial-hac-errors-per-conley/">Thiemo Fetzer</a> and <a href="https://darinchristensen.com/#posts">Darin Christensen</a> have some similar tools for R.</p>
+<p>A quick picture motivating spatial correlation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(datasets::quakes, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat)) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">size =</span> mag), <span class="dt">shape =</span> <span class="dv">21</span>,
+    <span class="dt">fill =</span> <span class="st">&quot;#AA5585&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;#661141&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Longitude&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Latitude&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Earthquakes off Fiji, since 1964&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_size_continuous</span>(<span class="st">&quot;Magnitude&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section10_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="clustered-errors" class="section level2">
+<h2>Clustered errors</h2>
+<p>Thanks in large part to <a href="http://www.jstor.org/stable/25098683">Bertrand, Duflo, and Mullainathan</a>, cluster-robust standard errors have become the norm in applied microeconometrics (in the last decade). If you’ve heard someone say, “I cluster my (standard) errors at <em><some level></em>,” then you’ve seen these cluster-robust standard errors.</p>
+<p>The idea behind cluster-robust standard errors is fairly simple. Rather than assuming independence between all observations—and rather than assigning a specific correlation structure—we allow (arbitrary) correlation between observations within a group and assume independence between groups.</p>
+<p>For example, consider a context where you have observations across 50 villages. If we define our “groups” as the villages, then we allow non-zero correlation amongst the disturbances for observations from the <em>same</em> village. We assume independence between the disturbances for observations from different villages.</p>
+<p>More formally, let’s assume the data-generating process is</p>
+<p><span class="math display">\[ y_{i,g} = \mathbf{x}_{i,g}\boldsymbol{\beta} + \varepsilon_{i,g} \]</span></p>
+<p>where <span class="math inline">\(i = 1,\ldots,N\)</span> indexes individuals, and <span class="math inline">\(g = 1,\ldots,G\)</span> indexes groups. We still assume <span class="math inline">\(\mathop{\boldsymbol{E}}\left[ \varepsilon_{i,g} | \mathbf{x}_{i,g} \right] = 0\)</span>. We will add a new assumption:<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a> <span class="math inline">\(\mathop{\boldsymbol{E}}\left[ \varepsilon_{i,g} \varepsilon_{j,h} | \mathbf{x}_{i,g},\mathbf{x}_{j,h} \right] = 0\)</span> when <span class="math inline">\(g\neq h\)</span>.</p>
+<p>If we stack the observations for the <span class="math inline">\(g\)</span><sup>th</sup> cluster, then we can rewrite the DGP as</p>
+<p><span class="math display">\[ \mathbf{y}_{g} = \mathbf{X}_{g}\boldsymbol{\beta} + \boldsymbol{\varepsilon}_{g} \]</span></p>
+<p>where <span class="math inline">\(\mathbf{y}_g\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}_g\)</span> are <span class="math inline">\(N_g\times 1\)</span>, <span class="math inline">\(\mathbf{X}_g\)</span> is <span class="math inline">\(N_g\times k\)</span>, and <span class="math inline">\(\boldsymbol{\beta}\)</span> is still <span class="math inline">\(k\times 1\)</span>.</p>
+<p>Stacking all of the groups yields the standard matrix notation that we’ve seen a few times before</p>
+<p><span class="math display">\[ \mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon} \]</span></p>
+<p>Let’s write out the OLS estimator and make a clever substitution.</p>
+<p><span class="math display">\[\begin{aligned}
+\mathbf{b}_\text{OLS}
+&amp;= \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \mathbf{y} \\
+&amp;= \left( \sum_{g=1}^G \mathbf{X}_g^\prime \mathbf{X}_g \right)^{-1} \sum_{g=1}^G \mathbf{X}^\prime_g \mathbf{y}_g
+\end{aligned}\]</span></p>
+<p>The estimator hasn’t changed; we are just writing it in a new way. Our assumption that disturbances are uncorrelated across groups and correlated within groups <em>does</em> have implications on the variance-covariance matrix of <span class="math inline">\(\mathbf{b}_\text{OLS}\)</span>. Let’s write out the <span class="math inline">\(\boldsymbol{\Sigma}\)</span> implied by these assumptions: a block-diagonal matrix of the form</p>
+<p><span class="math display">\[ \boldsymbol{\Sigma} = \left[\begin{array}{cccc}
+\boldsymbol{\Omega}_1 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; \boldsymbol{\Omega}_2 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; \boldsymbol{\Omega}_G
+\end{array}\right] \]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\Omega}_g\)</span> is <span class="math inline">\(N_g\times N_g\)</span>. Specifically,</p>
+<p><span class="math display">\[ \boldsymbol{\Omega}_g = \left[\begin{array}{cccc}
+\varepsilon_1^g \varepsilon_1^g &amp;
+\varepsilon_1^g \varepsilon_2^g &amp;
+\cdots &amp;
+\varepsilon_1^g \varepsilon_{N_g}^g \\
+\varepsilon_2^g \varepsilon_1^g &amp;
+\varepsilon_2^g \varepsilon_2^g &amp;
+\cdots &amp;
+\varepsilon_2^g \varepsilon_{N_g}^g \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\varepsilon_N^g \varepsilon_1^g &amp;
+\varepsilon_N^g \varepsilon_2^g &amp;
+\cdots &amp;
+\varepsilon_N^g \varepsilon_{N_g}^g \\
+\end{array}\right] \]</span></p>
+<p>Let’s write out the “meat” for our sandwich (estimator), using the summation over groups.</p>
+<p><span class="math display">\[ \mathbf{X}^\prime \boldsymbol{\Sigma} \mathbf{X} = \sum_{g = 1}^G \mathbf{X}^\prime_g \boldsymbol{\varepsilon}_g \boldsymbol{\varepsilon}^\prime_g \mathbf{X}_g \]</span></p>
+<p>As usual, we need an estimator for the meat.<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> The standard meat estimator in this setting of “clustered” disturbances is White’s</p>
+<p><span class="math display">\[ \mathbf{X}^\prime\hat{\boldsymbol{\Sigma}}\mathbf{X} = \sum_{g=1}^G \mathbf{X}^\prime_g \mathbf{e}_g \mathbf{e}^\prime_g \mathbf{X}_g \]</span></p>
+<p>As is the case with all of our sandwich estimators, this estimator relies upon asymptotics. In this case, asymptotics require <span class="math inline">\(G\)</span>, the number of clusters, to get big. People tend to say 40 or 50 clusters is the <em>minimum</em> number of clusters you should have to use this estimator.<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a></p>
+<p>So why is everyone correcting for clustered errors (and using this method)? One of the appealing features of this method is that this method allows for arbitrary correlation between observations in the same cluster—we are not forcing structure on the within-cluster variance-covariance matrix of the disturbances. Groups are also a fairly intuitive way to think about correlated disturbances: you can imagine a way in which individuals within the same village will encounter shared shocks. Clustering also works (very) well in a panel setting, where you have repeated observations on a number of individuals. Plus it nests the heteroskedasticity-robust method of Eicker-Huber-White.</p>
+<p>What are the challenges to clustering your errors? One major challenge is that you need a good number of clusters. A second challenge is the parametric assumption regarding the block-diagonal shape of the variance-covariance matrix of the disturbances: we assumed independent disturbances for individuals in separate clusters. Thus, you need a decent reason to think the disturbances are independent for individuals in separate groups (<em>e.g.</em>, villages).</p>
+<p>In short, cluster-robust robust standard errors are a great tool, but, as with any tool, you should use it responsibly and thoughtfully.</p>
+<p>Let’s code up a function to estimate the cluster-robust variance-covariance matrix. As the equation above suggests, this process is actually much simpler than the Newey-West estimator. The only new variable in our function is <code>cluster_var</code>, which gives the variable on which we would like to cluster our data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vcov_cluster &lt;-<span class="st"> </span>function(data, y_var, X_vars,
+  cluster_var, <span class="dt">intercept =</span> T) {
+    <span class="co"># Turn data into matrices</span>
+    y &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, y_var)
+    X &lt;-<span class="st"> </span><span class="kw">to_matrix</span>(data, X_vars)
+    <span class="co"># Add intercept</span>
+    if (intercept ==<span class="st"> </span>T) X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, X)
+    <span class="co"># Calculate n and k for degrees of freedom</span>
+    n &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)
+    k &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)
+    <span class="co"># Estimate coefficients</span>
+    b &lt;-<span class="st"> </span><span class="kw">b_ols</span>(y, X)
+    <span class="co"># Update names</span>
+    if (intercept ==<span class="st"> </span>T) <span class="kw">rownames</span>(b)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Intercept&quot;</span>
+    <span class="co"># Calculate OLS residuals</span>
+    e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
+    <span class="co"># Inverse of X&#39;X</span>
+    XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
+    <span class="co"># Find the levels of the variable on which we are clustering</span>
+    cl_levels &lt;-<span class="st"> </span>data[, cluster_var] %&gt;%<span class="st"> </span><span class="kw">unique</span>() %&gt;%<span class="st"> </span><span class="kw">unlist</span>()
+    <span class="co"># Calculate the meat, iterating over the clusters</span>
+    meat_hat &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dt">X =</span> cl_levels, <span class="dt">FUN =</span> function(g) {
+      <span class="co"># Find the row indices for the current cluster</span>
+      indices &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">unlist</span>(data[, cluster_var]) ==<span class="st"> </span>g)
+      <span class="co"># Grab the current cluster&#39;s rows from X and e</span>
+      X_g &lt;-<span class="st"> </span>X[indices,]
+      e_g &lt;-<span class="st"> </span>e[indices] %&gt;%<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">1</span>)
+      <span class="co"># Calculate this cluster&#39;s part of the meat estimate</span>
+      <span class="kw">return</span>(<span class="kw">t</span>(X_g) %*%<span class="st"> </span>e_g %*%<span class="st"> </span><span class="kw">t</span>(e_g) %*%<span class="st"> </span>X_g)
+      }) %&gt;%<span class="st"> </span><span class="kw">Reduce</span>(<span class="dt">f =</span> <span class="st">&quot;+&quot;</span>, <span class="dt">x =</span> .) /<span class="st"> </span>n
+    <span class="co"># Find the number of clusters</span>
+    G &lt;-<span class="st"> </span><span class="kw">length</span>(cl_levels)
+    <span class="co"># Degrees-of-freedom correction</span>
+    df_c &lt;-<span class="st"> </span>G/(G<span class="dv">-1</span>) *<span class="st"> </span>(n<span class="dv">-1</span>)/(n-k)
+    <span class="co"># Return the results</span>
+    <span class="kw">return</span>(df_c *<span class="st"> </span>n *<span class="st"> </span>XX_inv %*%<span class="st"> </span>meat_hat %*%<span class="st"> </span>XX_inv)
+  }</code></pre></div>
+<p><em>Note</em>: This form of the estimator makes a (finite-sample) degrees-of-freedom correction:</p>
+<p><span class="math display">\[ c = \dfrac{G}{G-1} \times \dfrac{N-1}{N-k} \]</span></p>
+<p>Let’s find some data so that we can see this new variance-covariance estimator in action. We’ll use the <code>NOxEmissions</code> dataset from the <code>robustbase</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the &#39;robustbase&#39; package</span>
+<span class="kw">library</span>(robustbase)
+<span class="co"># Load the &#39;NOxEmissions&#39; dataset</span>
+nox_df &lt;-<span class="st"> </span>NOxEmissions %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Change names</span>
+<span class="kw">names</span>(nox_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;date&quot;</span>, <span class="st">&quot;log_nox&quot;</span>, <span class="st">&quot;log_nox_cars&quot;</span>, <span class="st">&quot;wind&quot;</span>)</code></pre></div>
+<p>We will now regress the log of NO<sub>x</sub> on the (square root of) wind speed. We will also cluster on the date of the observation. This clustering takes care of disturbances that correlated within a calendar day but assumes independence between disturbances on different dates. This assumption might not be the greatest assumption in the world, but let’s go with it for now.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vcov_cluster</span>(
+  <span class="dt">data =</span> nox_df,
+  <span class="dt">y_var =</span> <span class="st">&quot;log_nox&quot;</span>,
+  <span class="dt">X_vars =</span> <span class="st">&quot;wind&quot;</span>,
+  <span class="dt">cluster_var =</span> <span class="st">&quot;date&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()</code></pre></div>
+<pre><code>##                  wind 
+## 0.06475863 0.04775083</code></pre>
+<p>Let’s check our work using the <code>felm()</code> function. To specify cluster-robust standard errors, we use <code>felm()</code>’s strange notation where we divide “parts” of the regression using vertical bars (<code>|</code>). Specifically, <code>felm()</code> takes the following format: <code>felm(regression formula | fixed effects | IV formula | variables for clustering)</code>. Up to this point, we’ve inputed the regression formula; now we want to add a variable for clustering. Because we do not have any fixed effects or an IV (instrumental variables) formula, we fill those parts with zeroes.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">felm</span>(log_nox ~<span class="st"> </span>wind |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span>date, <span class="dt">data =</span> nox_df) %&gt;%
+<span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>## 
+## Call:
+##    felm(formula = log_nox ~ wind | 0 | 0 | date, data = nox_df) 
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.7835 -0.5210  0.1240  0.6296  2.0484 
+## 
+## Coefficients:
+##             Estimate Cluster s.e. t value Pr(&gt;|t|)    
+## (Intercept)  5.55885      0.06476   85.84   &lt;2e-16 ***
+## wind        -0.86443      0.04775  -18.10   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8464 on 8086 degrees of freedom
+## Multiple R-squared(full model): 0.1849   Adjusted R-squared: 0.1848 
+## Multiple R-squared(proj model): 0.1849   Adjusted R-squared: 0.1848 
+## F-statistic(full model, *iid*): 1834 on 1 and 8086 DF, p-value: &lt; 2.2e-16 
+## F-statistic(proj model): 327.7 on 1 and 337 DF, p-value: &lt; 2.2e-16</code></pre>
+<p>Boom. Well done.</p>
+<p>Let’s create a table of our coefficients and their standard errors under our different assumptions. We will focus on (1) standard errors using the spherical-errors assumption, (2) E-H-W heteroskedasticity-robust standard errors, and (3) cluster-robust standard errors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The results under spherical errors</span>
+our_table &lt;-<span class="st"> </span><span class="kw">ols</span>(nox_df, <span class="st">&quot;log_nox&quot;</span>, <span class="st">&quot;wind&quot;</span>)[, <span class="dv">1</span>:<span class="dv">3</span>]
+our_table$effect &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Intercept&quot;</span>, <span class="st">&quot;Wind&quot;</span>)
+<span class="co"># Heteroskedasticity-robust</span>
+se_white &lt;-<span class="st"> </span><span class="kw">vcov_white</span>(nox_df, <span class="st">&quot;log_nox&quot;</span>, <span class="st">&quot;wind&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()
+<span class="co"># Cluster-robust</span>
+se_cluster &lt;-<span class="st"> </span><span class="kw">vcov_cluster</span>(nox_df, <span class="st">&quot;log_nox&quot;</span>, <span class="st">&quot;wind&quot;</span>, <span class="st">&quot;date&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">diag</span>() %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()
+<span class="co"># Add new columns to the table</span>
+our_table %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(se_white, se_cluster)
+<span class="co"># Print results table</span>
+knitr::<span class="kw">kable</span>(our_table,
+  <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Effect&quot;</span>, <span class="st">&quot;Coef.&quot;</span>, <span class="st">&quot;S.E. (Sph. Errors)&quot;</span>,
+    <span class="st">&quot;S.E. (Het. Robust)&quot;</span>, <span class="st">&quot;S.E. (Cluster Robust)&quot;</span>),
+  <span class="dt">digits =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>),
+  <span class="dt">align =</span> <span class="kw">c</span>(<span class="st">&quot;l&quot;</span>, <span class="kw">rep</span>(<span class="st">&quot;r&quot;</span>, <span class="dv">4</span>)),
+  <span class="dt">caption =</span> <span class="st">&quot;Comparing standard errors&quot;</span>)</code></pre></div>
+<table>
+<caption>Comparing standard errors</caption>
+<thead>
+<tr class="header">
+<th align="left">Effect</th>
+<th align="right">Coef.</th>
+<th align="right">S.E. (Sph. Errors)</th>
+<th align="right">S.E. (Het. Robust)</th>
+<th align="right">S.E. (Cluster Robust)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">5.559</td>
+<td align="right">0.0291</td>
+<td align="right">0.0308</td>
+<td align="right">0.0648</td>
+</tr>
+<tr class="even">
+<td align="left">Wind</td>
+<td align="right">-0.864</td>
+<td align="right">0.0202</td>
+<td align="right">0.0227</td>
+<td align="right">0.0478</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="duplicated-data" class="section level2">
+<h2>Duplicated data</h2>
+<p>Another way you may see cluster-robust standard errors presented is via the idea <em>duplicated data</em>. Put simply, if we duplicate each observation in our dataset, there is no reason the standard errors on our coefficients should decrease—we are not adding any information about the unknown parameters. However, if we are using the spherical-errors assuming estimator, then our standard errors will mechanically decrease.</p>
+<p>To see this fact a bit more formally, recall the estimator for the (conditional) variance of <span class="math inline">\(\mathbf{b}\)</span> under the assumption of spherical errors:</p>
+<p><span class="math display">\[ \begin{aligned}
+\widehat{\mathop{\text{Var}}}\left( \mathbf{b} | \mathbf{X} \right)
+&amp;= s^2 \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \\
+&amp;= \dfrac{\mathbf{e}^\prime \mathbf{e}}{n-k} \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \\
+&amp;= \dfrac{\sum_{i=1}^n e_i^2}{n-k} \left( \sum_{i=1}^n \mathbf{x}^\prime_i \mathbf{x}_i \right)^{-1}
+\end{aligned} \]</span></p>
+<p>Now imagine you duplicate every observation in your dataset. The OLS estimator <span class="math inline">\(\mathbf{b}\)</span> will not change.<a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a> Because <span class="math inline">\(\mathbf{b}\)</span> does not change, the residuals do not change (we just have twice as many of them). Thus we can calculate the new variance of our doubled dataset as</p>
+<p><span class="math display">\[
+\widehat{\mathop{\text{Var}}}\left( \mathbf{b}_\text{dup} | \mathbf{X} \right)
+= \dfrac{\sum_{i=1}^{2n}e_i^2}{2n-k} \left( \sum_{i=1}^{2n} \mathbf{x}^\prime_i \mathbf{x}_i \right)^{-1}
+\]</span></p>
+<p>We can simplify this formula, since half of the observations are the duplicates of the other half of the observations:</p>
+<p><span class="math display">\[ \begin{aligned}
+\widehat{\mathop{\text{Var}}}\left( \mathbf{b}_\text{dup} | \mathbf{X} \right)
+&amp;= \dfrac{2\cdot\sum_{i=1}^{n}e_i^2}{2n-k} \left( 2\cdot\sum_{i=1}^{n} \mathbf{x}^\prime_i \mathbf{x}_i \right)^{-1} \\
+&amp;= \dfrac{\sum_{i=1}^{n}e_i^2}{2n-k} \left( \sum_{i=1}^{n} \mathbf{x}^\prime_i \mathbf{x}_i \right)^{-1} \\
+&amp;= \dfrac{n-k}{2n-k} \widehat{\mathop{\text{Var}}}\left( \mathbf{b} | \mathbf{X} \right)
+\end{aligned} \]</span></p>
+<p>In English: when we duplicate our data, the spherical-errors based estimator decreases the estimated variance for a coefficient by <span class="math inline">\(\dfrac{n-k}{2n-k}\)</span>, which means our standard errors decrease by <span class="math inline">\(\sqrt{\dfrac{n-k}{2n-k}}\)</span>.</p>
+<p>To see this fact in practice, let’s create a dataset and the run a regression on the dataset and on a duplicated version of the dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Sample size</span>
+N &lt;-<span class="st"> </span><span class="dv">100</span>
+<span class="co"># Set seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># The dataset</span>
+one_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(N)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">1</span>:N, <span class="dt">e =</span> <span class="kw">rnorm</span>(N), <span class="dt">y =</span> <span class="dv">3</span> +<span class="st"> </span><span class="dv">5</span> *<span class="st"> </span>x +<span class="st"> </span>e) %&gt;%
+<span class="st">  </span><span class="kw">tbl_df</span>()
+<span class="co"># The duplicated version of the dataset</span>
+two_df &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(one_df, one_df)
+<span class="co"># Regression on the dataset</span>
+<span class="kw">lm</span>(y ~<span class="st"> </span>x, one_df) %&gt;%<span class="st"> </span><span class="kw">summary</span>() %&gt;%<span class="st"> </span><span class="kw">coef</span>()</code></pre></div>
+<pre><code>##             Estimate Std. Error  t value     Pr(&gt;|t|)
+## (Intercept) 3.022053  0.1035259 29.19127 3.864263e-50
+## x           5.094535  0.0911382 55.89901 3.793988e-76</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression on the duplicated dataset</span>
+<span class="kw">lm</span>(y ~<span class="st"> </span>x, two_df) %&gt;%<span class="st"> </span><span class="kw">summary</span>() %&gt;%<span class="st"> </span><span class="kw">coef</span>()</code></pre></div>
+<pre><code>##             Estimate Std. Error  t value      Pr(&gt;|t|)
+## (Intercept) 3.022053 0.07283324 41.49278  1.280281e-99
+## x           5.094535 0.06411813 79.45545 3.778481e-152</code></pre>
+<p>You can see that the standard errors in the second (duplicated) regression are approximately 70% of the orginal standard errors, which matches our calculations, since</p>
+<p><span class="math display">\[ \sqrt{\dfrac{n-k}{2n-k}} = \sqrt{\dfrac{98}{198}} \approx 0.7035 \]</span></p>
+<p>How does clustering the errors at the level of observation (<code>id</code> in the dataset) do? We will compare the heteroskedasticity-robust estimator (Eicker-Huber-White) with the cluster-robust estimator, since creating clusters with one observation in them does not make sense (and because the cluster-robust estimator is also robust to heteroskedasticity).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression on the datset; het.-robust est.</span>
+<span class="kw">felm</span>(y ~<span class="st"> </span>x |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span><span class="dv">0</span>, one_df) %&gt;%<span class="st"> </span><span class="kw">summary</span>(<span class="dt">robust =</span> T) %&gt;%<span class="st"> </span><span class="kw">coef</span>()</code></pre></div>
+<pre><code>##             Estimate Robust s.e  t value     Pr(&gt;|t|)
+## (Intercept) 3.022053 0.09947206 30.38093 1.133629e-51
+## x           5.094535 0.07875794 64.68599 3.374108e-82</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Regression on the duplicated datset; cluster-robust est.</span>
+<span class="kw">felm</span>(y ~<span class="st"> </span>x |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span>id, two_df) %&gt;%<span class="st"> </span><span class="kw">summary</span>() %&gt;%<span class="st"> </span><span class="kw">coef</span>()</code></pre></div>
+<pre><code>##             Estimate Cluster s.e.  t value      Pr(&gt;|t|)
+## (Intercept) 3.022053   0.09921800 30.45872  1.181212e-76
+## x           5.094535   0.07855679 64.85162 2.480426e-135</code></pre>
+<p>Nice! We get very nearly the same standard errors after duplicating our dataset, if we cluster properly. This clustering thing makes some sense.</p>
+<p>In summary, when you are controlling for within-cluster correlation, you are not allowing highly-correlated observations to get the same credit (reduce the standard errors) as would entirely uncorrelated observations. However, this cluster-robust variance-covariance estimator is not a solve all; you still need to be careful about your assumptions (and your data).</p>
+</div>
+</div>
+<div id="fun-tools-markdown" class="section level1">
+<h1>Fun tools: Markdown</h1>
+<p><a href="https://www.wikiwand.com/en/Markdown">Markdown</a> is a simple (lightweight) markup language. What’s a markup language? Think LaTeX or html—it’s a language in which you <em>mark up</em> your text, while you write, to provide formatting. The great thing about Markdown is its simplicity: if you want <strong>bold text</strong>, you write <code>__bold text__</code> or <code>**bold text**</code>. <em>Italicized text</em>? <code>_Italicized text_</code> (or <code>*Italicized text*</code>). And so on. I find Markdown very helpful for a number of tasks: taking notes, writing emails (via <a href="http://markdown-here.com/">browser extension</a> or <a href="http://www.boxyapp.co/">Boxy</a>), and even writing these section notes.<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a> Using <a href="pandoc.org/">Pandoc</a>—or a host of other apps—you can convert Markdown to just about any type of file—html or PDF… even Word or LaTeX!</p>
+<p><img src="Images/markdown.png" /> Markdown screenshot.</p>
+<p>If you would like some places you can learn more about the basics of Markdown (the basics are really are there is):</p>
+<ul>
+<li><a href="http://www.markdowntutorial.com/">Markdown tutorial</a></li>
+<li><a href="http://commonmark.org/help/">CommonMark cheatsheet and tutorial</a></li>
+<li><a href="https://guides.github.com/features/mastering-markdown/">Github’s guide to mastering Markdown</a></li>
+<li><a href="https://daringfireball.net/projects/markdown/basics">Daring Fireball’s Markdown basics</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">RStudio’s Rmarkdown cheatsheet</a></li>
+</ul>
+<p>And here are a few (live) online Markdown editors. Pretty helpful for learning. Also generally helpful.</p>
+<ul>
+<li><a href="http://dillinger.io/">dillinger.io</a></li>
+<li><a href="https://stackedit.io/">StackEdit</a></li>
+<li><a href="http://markdownlivepreview.com/">Markdown Live Preview</a></li>
+</ul>
+<p>Finally, three resources for creating presentation slides via Markown (I’m sticking with LaTeX/Beamer for now):<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a></p>
+<ul>
+<li><a href="https://remarkjs.com/#1">remark</a></li>
+<li><a href="https://yhatt.github.io/marp/">Marp</a></li>
+<li><a href="https://www.swipe.to/markdown/">swipe</a></li>
+<li><a href="https://www.decksetapp.com/">Deckset</a></li>
+</ul>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Depending on your definition of “a lot.”<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>For some examples: Andrea Gelman has written a lot about the Brian Wansink scandal(s): <a href="http://andrewgelman.com/2017/02/03/pizzagate-curious-incident-researcher-response-people-pointing-150-errors-four-papers-2/">1</a>, <a href="http://andrewgelman.com/2018/02/27/no-researchers-not-typically-set-prove-specific-hypothesis-study-begins/">2</a>, <a href="http://andrewgelman.com/2018/03/13/fear-many-people-drawing-wrong-lessons-wansink-saga-focusing-procedural-issues-p-hacking-rather-scientifically-important-concerns-2/">3</a>, <a href="http://andrewgelman.com/2018/03/13/fear-many-people-drawing-wrong-lessons-wansink-saga-focusing-procedural-issues-p-hacking-rather-scientifically-important-concerns-2/">4</a>, <a href="http://andrewgelman.com/2018/03/22/not-just-emperor-no-clothes-like-emperor-standing-public-square-fifteen-years-screaming-im-naked-im-naked-look-scientific-e/">5</a>. The NYT also has covered these issues a few times, <em>e.g.</em>, <a href="https://www.nytimes.com/2017/05/29/upshot/science-needs-a-solution-for-the-temptation-of-positive-results">reproducibility</a>.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Each of these variances and covariances is conditional on <span class="math inline">\(\mathbf{X}\)</span>.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Is it just me, or does the second graph look a lot like a nose? Sort of a Rorschach test, I guess.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Notation <span class="math inline">\(\mathbf{x}_i\)</span> varies—is it a row-vector or a column-vector? Just make sure the dimensions conform.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Robust to what? Heteroskedasticity? Outliers? Noise? Dependence? Change? Long lists?<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>I hear there is a <code>, robust</code> option in Stata.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>Max’s notes make the interesting point that this serial dependence in the error term may result (1) from true, structural dependences in the disturbances, and/or (2) serial correlation within an omitted variable (<em>serial correlation via misspecifation</em>).<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>Again, I am assuming <span class="math inline">\(\mathbf{x}_t\)</span> is a <span class="math inline">\(1\times k\)</span> row vector, which makes <span class="math inline">\(\mathbf{x}^\prime_t \mathbf{x}_t\)</span> a <span class="math inline">\(k\times k\)</span> matrix. Apologies for the confusion notation.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>I know: I continue to impress you with my amazing observational powers.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>Tobler’s first law of geography: “everything is related to everything else, but near things are more related than distant things.” Tobler W., (1970) “A computer movie simulating urban growth in the Detroit region”. <em>Economic Geography</em>, 46(2): 234-240.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>The cluster-robust standard errors that we dicuss below is one way people often attempt to deal with spatially correlated errors. How successfully this strategy “deals” with the problem depends upon the setting.<a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p>This new assumption actually relaxes the spherical-error assumption.<a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p>The phrase “estimated meat” does not strike me as very appetizing. On the other hand, it might make a good band name. You’re welcome.<a href="#fnref14">↩</a></p></li>
+<li id="fn15"><p>Don’t despair if you have fewer than 40: check out <a href="http://www.mitpressjournals.org/doi/pdf/10.1162/rest.90.3.414">Cameron, Gelbach, and Miller</a> on bootstrap-based methods for cluster-robust inference. In short: wild clustered bootstrap.<a href="#fnref15">↩</a></p></li>
+<li id="fn16"><p>I’ll leave it to you to prove it. The intuition is that you have no new information.<a href="#fnref16">↩</a></p></li>
+<li id="fn17"><p>There are a number of different <em>flavors</em> or Markdown. I’m using Rmarkdown. Github using <em>Github-flavored</em> Markdown.<a href="#fnref17">↩</a></p></li>
+<li id="fn18"><p>You can also use <a href="http://rmarkdown.rstudio.com/ioslides_presentation_format.html">Rmarkdown with ioslides</a>.<a href="#fnref18">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

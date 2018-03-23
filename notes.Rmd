@@ -77,14 +77,14 @@ Calculating standard errors via analytical methods and via the Delta Method. Inc
 [pdf](Section09/section09.pdf) | [R script](Section09/section09.R) | [zip](Section09.zip)
 <br><br>
 
-<!-- #### [__Section 10__](section10.html): Standard errors, Vol. II
+#### [__Section 10__](section10.html): Standard errors, Vol. II
 
 Calculating standard errors in various situations: spherical errors, heteroskedastic errors, temporally correlated errors, spatially correlated errors, clustered errors.
 
 [pdf](Section10/section10.pdf) | [R script](Section10/section10.R) | [zip](Section10.zip)
 <br><br>
 
-#### [__Section 11__](section11.html): Instrumental variables
+<!-- #### [__Section 11__](section11.html): Instrumental variables
 
 Instrumental variables (IV) and two-stage least squares (2SLS). Plus measurement error.
 
