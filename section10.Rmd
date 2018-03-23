@@ -51,7 +51,7 @@ I hope you are starting to see that standard errors (and inference) are really i
 
 ## On the significance of significance
 
-There's been a lot^[Depending on your definition of "a lot."] of discussion lately on (1) the incentives journals (and academia, more generally) set for researchers, (2) a culture of mining datasets to find statistical (and surprising) results, (3) a strange asymmetry for the importance of p-values just below 0.05, and (4) a replication crisis in the social sciences. Obviously these four parts are related.^[For some examples: Andrea Gelman has written a lot about the Brian Wansink scandal(s): [1][1], [2][2], [3][4], [4][4], [5][5]. The NYT also has covered these issues a few times, _e.g._, [reproducibility][6].]
+There's been a lot^[Depending on your definition of "a lot."] of discussion lately on (1) the incentives journals (and academia, more generally) set for researchers, (2) a culture of mining datasets to find statistical (and surprising) results, (3) a strange asymmetry for the importance of p-values just below 0.05, and (4) a replication crisis in the social sciences. Obviously these four parts are related.^[For some examples: Andrew Gelman has written a lot about the Brian Wansink scandal(s): [1][1], [2][2], [3][4], [4][4], [5][5]. The NYT also has covered these issues a few times, _e.g._, [reproducibility][6].]
 
 In this vein—and on the topic of inference—Alberto Abadie recently issued an interesting NBER working paper on the importance of "null results" and the inflation of the importance of rejecting the null.
 
