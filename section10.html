@@ -461,7 +461,7 @@ div.tocify {
 <p>and our estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span> is</p>
 <p><span class="math display">\[ \mathbf{b} = \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \mathbf{y} \]</span></p>
 <p>The variance of this estimator is</p>
-<p><span class="math display">\[ \mathop{\text{Var}} \left( \mathbf{b} | \mathbf{X} \right) = \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \boldsymbol{\Sigma} \mathbf{X} \left( \mathbf{X}^\prime \mathbf{X} \right)^\prime \]</span></p>
+<p><span class="math display">\[ \mathop{\text{Var}} \left( \mathbf{b} | \mathbf{X} \right) = \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \mathbf{X}^\prime \boldsymbol{\Sigma} \mathbf{X} \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} \]</span></p>
 <p>We know <span class="math inline">\(\mathbf{X}\)</span>. The challenge here is that <span class="math inline">\(\boldsymbol{\Sigma}\)</span>—the variance-covariance matrix of the disturbances—is generally unknown. Let’s write out <span class="math inline">\(\boldsymbol{\Sigma}\)</span>:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
 <p><span class="math display">\[ \boldsymbol{\Sigma} = \left[\begin{array}{cccc}
 \mathop{\text{Var}}\left(\varepsilon_1\right) &amp;
@@ -539,7 +539,7 @@ div.tocify {
 <span class="kw">options</span>(<span class="dt">scipen =</span> <span class="dv">10</span>)
 <span class="co"># Packages</span>
 <span class="kw">library</span>(pacman)
-<span class="kw">p_load</span>(tidyr, dplyr, lfe, magrittr, ggplot2, viridis, sandwich)
+<span class="kw">p_load</span>(dplyr, lfe, magrittr, ggplot2, viridis, sandwich)
 <span class="co"># My ggplot2 theme</span>
 theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
   <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
@@ -812,7 +812,7 @@ wheat_df &lt;-<span class="st"> </span>Wheat %&gt;%<span class="st"> </span><spa
 <span class="co"># Drop the rows missing a value</span>
 wheat_df %&lt;&gt;%<span class="st"> </span><span class="kw">na.omit</span>()
 <span class="co"># Long to wide table</span>
-wheat_gg &lt;-<span class="st"> </span>wheat_df %&gt;%<span class="st"> </span><span class="kw">gather</span>(Series, Price, Wheat:Wages)
+wheat_gg &lt;-<span class="st"> </span>wheat_df %&gt;%<span class="st"> </span>tidyr::<span class="kw">gather</span>(Series, Price, Wheat:Wages)
 <span class="co"># Playfair&#39;s graph</span>
 <span class="kw">ggplot</span>(<span class="dt">data =</span> wheat_gg, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> Price, <span class="dt">color =</span> Series, <span class="dt">linetype =</span> Series)) +
 <span class="st">  </span><span class="kw">geom_point</span>() +
@@ -823,7 +823,7 @@ wheat_gg &lt;-<span class="st"> </span>wheat_df %&gt;%<span class="st"> </span><
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Wage/Price (Shillings)&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Playfair&#39;s wheat and wages time series&quot;</span>) +
 <span class="st">  </span>theme_ed +
-<span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="st">&quot;Series&quot;</span>,
+<span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="st">&quot;Series:&quot;</span>,
     <span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),
     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Wages&quot;</span>, <span class="st">&quot;Price of wheat&quot;</span>)
   ) +

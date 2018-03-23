@@ -4,7 +4,8 @@
 options(stringsAsFactors = F)
 options(scipen = 10)
 # Packages
-p_load(tidyr, dplyr, lfe, magrittr, ggplot2, viridis, sandwich)
+library(pacman)
+p_load(dplyr, lfe, magrittr, ggplot2, viridis, sandwich)
 # My ggplot2 theme
 theme_ed <- theme(
   legend.position = "bottom",
@@ -215,7 +216,7 @@ wheat_df <- Wheat %>% tbl_df()
 # Drop the rows missing a value
 wheat_df %<>% na.omit()
 # Long to wide table
-wheat_gg <- wheat_df %>% gather(Series, Price, Wheat:Wages)
+wheat_gg <- wheat_df %>% tidyr::gather(Series, Price, Wheat:Wages)
 # Playfair's graph
 ggplot(data = wheat_gg, aes(x = Year, y = Price, color = Series, linetype = Series)) +
   geom_point() +
@@ -226,7 +227,7 @@ ggplot(data = wheat_gg, aes(x = Year, y = Price, color = Series, linetype = Seri
   ylab("Wage/Price (Shillings)") +
   ggtitle("Playfair's wheat and wages time series") +
   theme_ed +
-  scale_linetype_manual("Series",
+  scale_linetype_manual("Series:",
     values = c(1, 3),
     labels = c("Wages", "Price of wheat")
   ) +
