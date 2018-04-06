@@ -84,14 +84,14 @@ Calculating standard errors in various situations: spherical errors, heteroskeda
 [pdf](Section10/section10.pdf) | [R script](Section10/section10.R) | [zip](Section10.zip)
 <br><br>
 
-<!-- #### [__Section 11__](section11.html): Instrumental variables
+#### [__Section 11__](section11.html): Instrumental variables
 
 Instrumental variables (IV) and two-stage least squares (2SLS). Plus measurement error.
 
 [pdf](Section11/section11.pdf) | [R script](Section11/section11.R) | [zip](Section11.zip)
 <br><br>
 
-#### [__Section 12__](section12.html): Spatial data
+<!-- #### [__Section 12__](section12.html): Spatial data
 
 Spatial data. Shapefiles, points data, maps, and—more generally—R as a GIS.
 

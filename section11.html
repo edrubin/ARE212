@@ -316,66 +316,66 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../notes.html">Table of Contents</a>
+      <a href="notes.html">Table of Contents</a>
     </li>
     <li>
-      <a href="../section00.html">Section 0</a>
+      <a href="section00.html">Section 0</a>
     </li>
     <li>
-      <a href="../section01.html">Section 1</a>
+      <a href="section01.html">Section 1</a>
     </li>
     <li>
-      <a href="../section02.html">Section 2</a>
+      <a href="section02.html">Section 2</a>
     </li>
     <li>
-      <a href="../section03.html">Section 3</a>
+      <a href="section03.html">Section 3</a>
     </li>
     <li>
-      <a href="../section04.html">Section 4</a>
+      <a href="section04.html">Section 4</a>
     </li>
     <li>
-      <a href="../section05.html">Section 5</a>
+      <a href="section05.html">Section 5</a>
     </li>
     <li>
-      <a href="../section06.html">Section 6</a>
+      <a href="section06.html">Section 6</a>
     </li>
     <li>
-      <a href="../section07.html">Section 7</a>
+      <a href="section07.html">Section 7</a>
     </li>
     <li>
-      <a href="../section08.html">Section 8</a>
+      <a href="section08.html">Section 8</a>
     </li>
     <li>
-      <a href="../section09.html">Section 9</a>
+      <a href="section09.html">Section 9</a>
     </li>
     <li>
-      <a href="../section10.html">Section 10</a>
+      <a href="section10.html">Section 10</a>
     </li>
     <li>
-      <a href="../section11.html">Section 11</a>
+      <a href="section11.html">Section 11</a>
     </li>
     <li>
-      <a href="../latexKnitr.html">LaTeX and knitr</a>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="notes.html">Spring 2017 Notes</a>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../courseInfo.html">Course Info</a>
+  <a href="courseInfo.html">Course Info</a>
 </li>
 <li>
-  <a href="../syllabi.html">Syllabi</a>
+  <a href="syllabi.html">Syllabi</a>
 </li>
 <li>
-  <a href="../resources.html">R Resources</a>
+  <a href="resources.html">R Resources</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="../contact.html">
+  <a href="contact.html">
     <span class="fa fa-envelope-o fa-lg"></span>
      
   </a>
@@ -406,14 +406,21 @@ div.tocify {
 </div>
 
 
+<p><a href="Section11.zip"><span class="fa-stack fa-4x"> <i class="fa fa-folder fa-stack-2x"></i> <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i> </span></a></p>
 <p><br></p>
 <div id="admin" class="section level1">
 <h1>Admin</h1>
 <div id="announcements" class="section level2">
 <h2>Announcements</h2>
-<ol style="list-style-type: decimal">
-<li>We had a baby!</li>
-<li>You can take your final in any 48-hour period between April 29<sup>th</sup> and May 9<sup>th</sup>.</li>
+<ol start="0" style="list-style-type: decimal">
+<li>Today is my daughter’s first birthday!</li>
+<li>Problem set 2 is graded. Two common stumbling blocks:
+<ul>
+<li>When comparing a model that allows for treatment-effect heterogeneity for each of five groups: How many assumptions are in <span class="math inline">\(H_o: \beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5\)</span>? Four. We impose this hypothesis when we assume no heterogeneity (<em>i.e.</em>, only <span class="math inline">\(\beta\)</span>—no <span class="math inline">\(\beta_i\)</span>s).</li>
+<li>Can you use OLS residuals to verify the strict exogeneity? No: strict exogeneity is an assumption about the unobserved disturbances (<span class="math inline">\(\varepsilon_i\)</span>)—not the the OLS residuals (<span class="math inline">\(e_i\)</span>).</li>
+</ul></li>
+<li>New problem set due today.</li>
+<li>If you are interested in learning more about using R for geospatial analyses/data work, the Geospatial Innovation Facility (GIF) has some nice resources and <a href="http://gif.berkeley.edu/support/workshop_descriptions.html#geor">workshops</a>.</li>
 </ol>
 </div>
 <div id="last-section" class="section level2">
@@ -421,8 +428,8 @@ div.tocify {
 <p>In our <a href="section10.html">previous section</a> we (again) discussed standard errors. Specifically, we discussed the various assumptions that we use to generate our standard errors and common violates of these assumptions… and how we can calculate standard errors that are robust to some of these violations.</p>
 <div id="follow-up" class="section level3">
 <h3>Follow up</h3>
-<p>In our previous section, someone asked what happens when we calculate cluster-robust standard errors—standard errors that allow for intra-cluster correlation of the disturbances—when in reality the disturbances are independent.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> I wrote up some code to simulate this scenario. <em>Note</em>: I use a new package here (<code>data.table</code>). It is one of my go-to packages, but it has a syntax that is a bit different from all the packages we’ve covered thus far. Check out the <a href="https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">vignette</a> or the <a href="https://github.com/Rdatatable/data.table/wiki/Getting-started">Github repository</a>—they are quite helpful. In addition, Hadley Wickham is working on a package <a href="https://github.com/hadley/dtplyr"><code>dtplyr</code></a> that provides a “data.table backend for dplyr”.</p>
-<p>I think the <code>sim_fun()</code> function below is pretty cool:<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> you can give <code>sim_fun()</code> any within-cluster variance covariance matrix (the <code>var_cov</code> argument), and it will run the simulation based upon that within-cluster relationship.</p>
+<p>What happens when we calculate cluster-robust standard errors—standard errors that allow for intra-cluster correlation of the disturbances—when in reality the disturbances are independent?<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> I wrote up some code to simulate this scenario. <em>Note</em>: I use a new package here (<code>data.table</code>). It is one of my go-to packages, but it has a syntax that is a bit different from all the packages we’ve covered thus far. Check out the <a href="https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">vignette</a> or the <a href="https://github.com/Rdatatable/data.table/wiki/Getting-started">Github repository</a>—they are quite helpful. In addition, Hadley Wickham is working on a package <a href="https://github.com/hadley/dtplyr"><code>dtplyr</code></a> that provides a “data.table backend for dplyr”.</p>
+<p>I think the <code>sim_fun()</code> function below is pretty cool:<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> you can give <code>sim_fun()</code> any within-cluster variance-covariance matrix (the <code>var_cov</code> argument), and it will run the simulation based upon that within-cluster relationship.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># General setup ----</span>
 <span class="co"># Options</span>
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
@@ -460,7 +467,7 @@ sim_fun &lt;-<span class="st"> </span>function(i, n_g, g, var_cov, beta) {
   <span class="co"># Spherical-error inference</span>
   est_sph &lt;-<span class="st"> </span><span class="kw">felm</span>(y ~<span class="st"> </span>x, <span class="dt">data =</span> sim_dt) %&gt;%
 <span class="st">    </span><span class="kw">summary</span>() %&gt;%<span class="st"> </span><span class="kw">coef</span>() %&gt;%<span class="st"> </span><span class="kw">extract</span>(<span class="dv">2</span>, <span class="dv">1</span>:<span class="dv">3</span>)
-  <span class="co">#  inference</span>
+  <span class="co"># Het.-robust inference</span>
   est_het &lt;-<span class="st"> </span><span class="kw">felm</span>(y ~<span class="st"> </span>x, <span class="dt">data =</span> sim_dt) %&gt;%
 <span class="st">    </span><span class="kw">summary</span>(<span class="dt">robust =</span> T) %&gt;%<span class="st"> </span><span class="kw">coef</span>() %&gt;%<span class="st"> </span><span class="kw">extract</span>(<span class="dv">2</span>, <span class="dv">1</span>:<span class="dv">3</span>)
   <span class="co"># Cluster-robust inference</span>
@@ -494,14 +501,14 @@ sim_dt &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span clas
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summary stats ----</span>
 sim_dt[, <span class="kw">mean</span>(se), by =<span class="st"> </span>method]</code></pre></div>
 <pre><code>##            method         V1
-## 1:      spherical 0.02584668
-## 2:    het. robust 0.02581745
-## 3: cluster robust 0.02571905</code></pre>
+## 1:      spherical 0.02582803
+## 2:    het. robust 0.02580041
+## 3: cluster robust 0.02569531</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_dt[, <span class="kw">median</span>(se), by =<span class="st"> </span>method]</code></pre></div>
 <pre><code>##            method         V1
-## 1:      spherical 0.02583330
-## 2:    het. robust 0.02579634
-## 3: cluster robust 0.02568337</code></pre>
+## 1:      spherical 0.02581599
+## 2:    het. robust 0.02577879
+## 3: cluster robust 0.02562186</code></pre>
 <p>So we see that the means and medians of the three methods are quite close; what about the general distributions of the standard errors?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot results ----</span>
 <span class="co"># Distribution of standard errors</span>
@@ -514,7 +521,7 @@ sim_dt[, <span class="kw">mean</span>(se), by =<span class="st"> </span>method]<
 <span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Std. error method:&quot;</span>,
     <span class="dt">discrete =</span> T, <span class="dt">direction =</span> -<span class="dv">1</span>) +
 <span class="st">  </span>theme_ed</code></pre></div>
-<p><img src="section11_files/figure-html/histogram-1.png" width="672" /></p>
+<p><img src="section11_files/figure-html/se%20histogram-1.png" width="672" /></p>
 <p>We see that while the means and medians are quite close, the distributions vary considerably in their tails.</p>
 <p>To see this point from a different perspective, let’s plot pairs of standard errors, where the x-axis is the spherical error (correct in this simulation) and the y-axis is the cluster-robust standard error.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Pairs of spherical and cluster-robust SE</span>
@@ -536,6 +543,46 @@ pair_dt &lt;-<span class="st"> </span><span class="kw">merge</span>(
 <span class="st">  </span><span class="kw">coord_equal</span>()</code></pre></div>
 <p><img src="section11_files/figure-html/plotting%20pairs-1.png" width="672" /></p>
 <p>The reason for the strange dimensions in the plot here: I am forcing the axes to have equal units, which emphasizes the much greater dispersion of the cluster-robust standard errors. The best-fit (blue) line is quite close to the 45-degree line (omitted): the cluster-robust errors are consistent for the true (spherical) standard errors, but they add a lot of noise (due to the off-diagonal entries).</p>
+<p>One more case for comparison: Let’s see the same graphs when there is within-cluster covariance in the disturbances.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Simulation parameters ----</span>
+<span class="co"># Observations per group</span>
+n_g &lt;-<span class="st"> </span><span class="dv">30</span>
+<span class="co"># Number of groups</span>
+g &lt;-<span class="st"> </span><span class="dv">50</span>
+<span class="co"># Variance-covariance matrix (within a cluster)</span>
+var_cov &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="fl">0.9</span>, <span class="dt">nrow =</span> n_g, <span class="dt">ncol =</span> n_g)
+<span class="kw">diag</span>(var_cov) &lt;-<span class="st"> </span><span class="dv">1</span>
+<span class="co"># Define beta</span>
+beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">0</span>)
+<span class="co"># Set seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run the simulation ----</span>
+sim_dt &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class="dt">X =</span> <span class="dv">1</span>:<span class="fl">1e4</span>, <span class="dt">FUN =</span> sim_fun,
+  n_g, g, var_cov, beta,
+  <span class="dt">mc.cores =</span> <span class="dv">4</span>) %&gt;%<span class="st"> </span><span class="kw">rbindlist</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summary stats ----</span>
+sim_dt[, <span class="kw">mean</span>(se), by =<span class="st"> </span>method]</code></pre></div>
+<pre><code>##            method         V1
+## 1:      spherical 0.02551951
+## 2:    het. robust 0.02549286
+## 3: cluster robust 0.02491636</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sim_dt[, <span class="kw">median</span>(se), by =<span class="st"> </span>method]</code></pre></div>
+<pre><code>##            method         V1
+## 1:      spherical 0.02543350
+## 2:    het. robust 0.02537440
+## 3: cluster robust 0.02455921</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot results ----</span>
+<span class="co"># Distribution of standard errors</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> sim_dt, <span class="kw">aes</span>(<span class="dt">x =</span> se, <span class="dt">fill =</span> method)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">alpha =</span> <span class="fl">0.6</span>, <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">color =</span> <span class="st">&quot;grey50&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Standard error&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Distributions of standard errors by method&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;Truth: cluster-correlated disturbances&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Std. error method:&quot;</span>,
+    <span class="dt">discrete =</span> T, <span class="dt">direction =</span> -<span class="dv">1</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section11_files/figure-html/se%20histogram%202-1.png" width="672" /></p>
 </div>
 </div>
 <div id="this-week" class="section level2">
@@ -576,7 +623,7 @@ pair_dt &lt;-<span class="st"> </span><span class="kw">merge</span>(
 <p>Let’s set up a simple framework for omitted-variable bias. Consider the data-generating process</p>
 <p><span class="math display">\[ y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \varepsilon \]</span></p>
 <p>In order to keep things simple, we will assume <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are uncorrelated with <span class="math inline">\(\varepsilon\)</span>. We will also assume <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are correlated, <span class="math inline">\(\mathop{\text{Cov}} \left(x_1,\, x_2\right) \neq 0\)</span>, and <span class="math inline">\(\beta_i\neq 0\)</span> for each <span class="math inline">\(i\)</span>. Finally, assume the researcher does not observe <span class="math inline">\(x_2\)</span>.</p>
-<p>Why wouldn’t the researcher observe <span class="math inline">\(x_2\)</span>—an obviously important variable? One reason is that we do not always know which variables predict <span class="math inline">\(y\)</span> and correlate with other covariates. Another reason is that we do not always get all the data that we want. In either situation, we eventually end up with some variables in the regression and some variables left out.</p>
+<p>Why wouldn’t the researcher observe <span class="math inline">\(x_2\)</span>—an obviously important variable? One reason is that we do not always know which variables determine <span class="math inline">\(y\)</span> and correlate with other covariates. Another reason is that we do not always get all the data that we want.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> In either situation, we eventually end up with some variables in the regression and some variables left out.</p>
 <p>So what happens if the researcher omits <span class="math inline">\(x_2\)</span> and simply regresses <span class="math inline">\(y\)</span> on <span class="math inline">\(x_1\)</span> (and an intercept)?</p>
 <p><span class="math display">\[ y = \theta_0 + \theta_1 x_1 + \nu \]</span></p>
 <p>Will <span class="math inline">\(\theta_1\)</span> (the coefficient on <span class="math inline">\(x_1\)</span> in the regression that omits <span class="math inline">\(x_2\)</span>) be equal to <span class="math inline">\(\beta_1\)</span> (the coefficient on <span class="math inline">\(x_1\)</span> i in the regression that does not omit <span class="math inline">\(x_2\)</span>)? Returning to our Frisch-Waugh-Lovell notes: <strong>no</strong>. Why? In the language of an econometrician: <span class="math inline">\(x_1\)</span> is now <em>endogenous</em>—it is correlated with the error term.</p>
@@ -588,14 +635,14 @@ pair_dt &lt;-<span class="st"> </span><span class="kw">merge</span>(
 &amp;= \beta_2 \mathop{\text{Cov}} \left(x_1,\, x_2\right)\\
 &amp;\neq 0
 \end{aligned}\]</span></p>
-<p>Thus, our covariate is correlated with our disturbance, violating population orthogonality. What’s the big deal? We can no longer assume the OLS estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span> is consistent. Not good.</p>
+<p>Thus, our covariate is correlated with our disturbance, violating population orthogonality. What’s the big deal? We can no longer assume the OLS estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span> is consistent. Not good, my friends.</p>
 <p>For a slightly different view: recall from our <a href="section04.html">section on the Frisch-Waugh-Lovell theorem</a> that when we regress <span class="math inline">\(y\)</span> on <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, the estimate for <span class="math inline">\(\beta_1\)</span> (the coefficient on <span class="math inline">\(x_1\)</span>) is</p>
 <p><span class="math display">\[ b_1 = \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{y} - \left(\mathbf{X}_1&#39;\mathbf{X}_1\right)^{-1}\mathbf{X}_1&#39;\mathbf{X}_2 b_2 \]</span></p>
 <p>The second term in the difference reminds us that we will calculate a different (wrong/inconsistent) coefficient if we omit <span class="math inline">\(x_2\)</span> when (1) <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> have non-zero covariance (<em>i.e.</em>, <span class="math inline">\(\mathbf{X}_1&#39;\mathbf{X}_2 \neq \mathbf{0}\)</span>) and (2) <span class="math inline">\(y\)</span> and <span class="math inline">\(x_2\)</span> have non-zero covariance (<em>e.g.</em>, <span class="math inline">\(b_2 \neq 0\)</span>). More succinctly: if <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are not orthogonal, and if <span class="math inline">\(y\)</span> and <span class="math inline">\(x_2\)</span> are not orthogonal, then if you omit <span class="math inline">\(x_2\)</span> from your regression of <span class="math inline">\(y\)</span> and <span class="math inline">\(x_1\)</span>, your estimate for <span class="math inline">\(\beta_1\)</span> is inconsistent/biased. The inconsistency/bias comes from the effect of <span class="math inline">\(x_2\)</span> “loading” onto <span class="math inline">\(x_1\)</span> when you fail to explicitly control for <span class="math inline">\(x_2\)</span>.</p>
 </div>
 <div id="omitted-variables-solution" class="section level2">
 <h2>Omitted variables solution</h2>
-<p>So what do we do when we reach a point in our research where we believe we have a problem with an omitted variable? Find an instrument!<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>So what do we do when we reach a point in our research where we believe we have a problem with an omitted variable? Find an instrument!<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 <p>What is an instrumental variable (IV)? An <em>instrument</em> is a variable that is correlated with the “good” (or “exogenous”) variation in <span class="math inline">\(x_1\)</span> but is uncorrelated to the “bad” (or “endogenous” or “related-to-<span class="math inline">\(x_2\)</span>”) variation in <span class="math inline">\(x_1\)</span>. More formally, an IV is a variable (we will call it <span class="math inline">\(z\)</span>) that satisfies the following two properties:</p>
 <ol style="list-style-type: decimal">
 <li><span class="math inline">\(\mathop{\text{Cov}} \left(z,\, x_1 \right) \neq 0\)</span></li>
@@ -603,7 +650,7 @@ pair_dt &lt;-<span class="st"> </span><span class="kw">merge</span>(
 </ol>
 <p>The first condition requires that <span class="math inline">\(z\)</span> is predictive of (correlated with) <span class="math inline">\(x_1\)</span>. Recall that we are trying to isolate the relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x_1\)</span> (<em>i.e.</em>, <span class="math inline">\(\beta_1\)</span>). If <span class="math inline">\(z\)</span> and <span class="math inline">\(x_1\)</span> are uncorrelated, it is going to be pretty tough to learn anything about <span class="math inline">\(\beta_1\)</span>.</p>
 <p>The second condition—commonly referred to as the <em>exclusion restriction</em>—requires that our instrument <span class="math inline">\(z\)</span> is uncorrelated with the error term <span class="math inline">\(\nu\)</span>, which in turn requires that our instrument <span class="math inline">\(z\)</span> is uncorrelated with any omitted variables (<em>e.g.</em>, <span class="math inline">\(x_2\)</span>) and the stochastic disturbance <span class="math inline">\(\varepsilon\)</span>.</p>
-<p>Satisfying only one of these conditions is easy. With regards to the first condition, many variables correlate with <span class="math inline">\(x_1\)</span>, including <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_1 + 1\)</span>. With regards to the second condition, we could just simulate a random variable—it will be uncorrelated with <span class="math inline">\(\nu\)</span>. The real challenge in finding a valid instrumental—and it really is a challenge in many settings—is finding a variable that satisfies both conditions. Another complexity is that we cannot even test the requirement (the exclusion restriction), since <span class="math inline">\(\nu\)</span> is unknown. For these reasons, you should think carefully about research—yours or others’—that utilizes instrumental variables. There <em>are</em> some good instruments out there, but there are even more bad ones. However, when you find a good instrument, it is a very valuable tool.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<p>Satisfying only one of these conditions is easy. With regards to the first condition, many variables correlate with <span class="math inline">\(x_1\)</span>, including <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_1 + 1\)</span>. With regards to the second condition, we could just simulate a random variable—it will be uncorrelated with <span class="math inline">\(\nu\)</span>. The real challenge in finding a valid instrumental—and it really is a challenge in many settings—is finding a variable that satisfies both conditions. Another complexity is that we cannot even test the requirement (the exclusion restriction), since <span class="math inline">\(\nu\)</span> is unknown. For these reasons, you should think carefully about research—yours or others’—that utilizes instrumental variables. There <em>are</em> some good instruments out there, but there are even more bad ones. However, when you find a good instrument, it is a very valuable tool.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
 <p><em>Some unsolicited advice</em>: Don’t be jerk when people discuss their instruments/empirical strategies. Think carefully about why the instrument may or may not be valid (see requirements above). If the instrument seems to fail one of the requirements, kindly ask what you are missing. And try to make some constructive comments. Economics seminars can get a bit intense; try to take the high road.</p>
 </div>
 <div id="iv-in-practice" class="section level2">
@@ -652,7 +699,8 @@ ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class="dt"
   <span class="co"># Calculate OLS residuals</span>
   e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
   <span class="co"># Calculate s^2</span>
-  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n-k)
+  s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n -<span class="st"> </span>k)
+  s2 %&lt;&gt;%<span class="st"> </span><span class="kw">as.numeric</span>()
   <span class="co"># Inverse of X&#39;X</span>
   XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X)
   <span class="co"># Standard error</span>
@@ -742,7 +790,7 @@ vcov_ols &lt;-<span class="st"> </span>function(data, y_var, X_vars, <span class
 \sigma_{1,z} &amp; 0 &amp; 1
 \end{array}\right] \]</span></p>
 <p>where I’ve arbitrarily decided the variances of <span class="math inline">\(x_1,\, x_2\)</span>, and <span class="math inline">\(z\)</span> are equal to one. This matrix emphasizes the challenges with finding a valid instrument.</p>
-<p>This simulation will be a lot like previous simulations—including the one at the beginning of these notes. We will use the <code>mvrnorm()</code> function from the <code>MASS</code> package to generate 10,000 samples of our three variables from a multivariate normal distribution with the variance-covariance structure described above.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>This simulation will be a lot like previous simulations—including the one at the beginning of these notes. We will use the <code>mvrnorm()</code> function from the <code>MASS</code> package to generate 10,000 samples of our three variables from a multivariate normal distribution with the variance-covariance structure described above.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the seed</span>
 <span class="kw">set.seed</span>(<span class="dv">12345</span>)
 <span class="co"># Define our sample size</span>
@@ -774,8 +822,6 @@ gen_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
 <p>Looking good!</p>
 <p>If we regress <span class="math inline">\(y\)</span> on <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, we do not have an omitted-variable problem—we should have a consistent estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ols</span>(<span class="dt">data =</span> gen_df, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>))</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
 <pre><code>##      effect      coef  std_error     t_stat p_value
 ## 1 Intercept  4.997277 0.10605703   47.11877       0
 ## 2        x1  2.017723 0.01493354  135.11345       0
@@ -783,15 +829,11 @@ gen_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
 <p>Great! Now let’s see what happens when we omit <span class="math inline">\(x_1\)</span> or <span class="math inline">\(x_2\)</span>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Omitting x2</span>
 <span class="kw">ols</span>(<span class="dt">data =</span> gen_df, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x1&quot;</span>)</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
 <pre><code>##      effect       coef  std_error     t_stat      p_value
 ## 1 Intercept -13.804111 0.11327928 -121.85910 0.000000e+00
 ## 2        x1  -0.238444 0.02221594  -10.73302 9.957953e-27</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Omitting x1</span>
 <span class="kw">ols</span>(<span class="dt">data =</span> gen_df, <span class="dt">y_var =</span> <span class="st">&quot;y&quot;</span>, <span class="dt">X_vars =</span> <span class="st">&quot;x2&quot;</span>)</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
 <pre><code>##      effect        coef  std_error    t_stat   p_value
 ## 1 Intercept -0.04702974 0.16687272  -0.28183 0.7780797
 ## 2        x2 -1.49493016 0.01660446 -90.03182 0.0000000</code></pre>
@@ -834,12 +876,12 @@ b_iv &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span c
 <p>Not only is 2SLS an awesome tool when you have multiple endogenous covariates or multiple instruments, its two stages also help build intuition for what is going on with this whole instrumental variables thing.</p>
 <div id="the-two-stages" class="section level2">
 <h2>The two stages</h2>
-<p>In the <em>first stage</em> of 2SLS, we regress our covariates on the instruments (again, non-endogenous covariates are their own instruments). Returning to the case where <span class="math inline">\(x_1\)</span> is endogenous, the first stage looks like:</p>
-<p><span class="math display">\[ x_1 = \gamma_0 + \gamma_1 z + u \]</span></p>
-<p>We then use the fitted values from the first stage—<em>i.e.</em>, <span class="math inline">\(\hat{x}_1 = \hat{\gamma}_0 + \hat{\gamma}_1 z\)</span>—as the covariates in the second stage:</p>
-<p><span class="math display">\[ y = \beta_0 + \beta_1 \hat{x}_1 + v \]</span></p>
+<p>In the <em>first stage</em> of 2SLS, we regress our covariates on the instruments (again, non-endogenous covariates are their own instruments). Returning to the case where <span class="math inline">\(x\)</span> is endogenous, the first stage looks like:</p>
+<p><span class="math display">\[ x = \gamma_0 + \gamma_1 z + u \]</span></p>
+<p>We then use the fitted values from the first stage—<em>i.e.</em>, <span class="math inline">\(\hat{x} = \hat{\gamma}_0 + \hat{\gamma}_1 z\)</span>—as the covariates in the second stage:</p>
+<p><span class="math display">\[ y = \beta_0 + \beta_1 \hat{x} + v \]</span></p>
 <p>If we have a valid instrument, then our estimate of <span class="math inline">\(\beta_1\)</span> in the second stage is consistent for <span class="math inline">\(\beta_1\)</span>.</p>
-<p>So what is going on here? The first stage is purging the “bad variation” in <span class="math inline">\(x_1\)</span>. By regressing <span class="math inline">\(x_1\)</span> on a variable that is uncorrelated with our omitted variable(s), we are keeping only the variation in <span class="math inline">\(x_1\)</span> that is exogenous—uncorrelated with the error term. Then, when we use this purged version of <span class="math inline">\(x_1\)</span> (<span class="math inline">\(\hat{x}_1\)</span>) in the second stage, we no longer violate population orthogonality. Consistent estimates!</p>
+<p>So what is going on here? The first stage is purging the “bad variation” in <span class="math inline">\(x\)</span>. By regressing <span class="math inline">\(x\)</span> on a variable that is uncorrelated with our omitted variable(s), we are keeping only the variation in <span class="math inline">\(x\)</span> that is exogenous—uncorrelated with the error term. Then, when we use this purged version of <span class="math inline">\(x\)</span> (<span class="math inline">\(\hat{x}\)</span>) in the second stage, we no longer violate population orthogonality. Consistent estimates!</p>
 <p>Finally, keep in mind that variables in your second stage either need an instrument or act as their own instrument.</p>
 </div>
 <div id="in-r" class="section level2">
@@ -880,7 +922,7 @@ b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span
 <li>Your first stage does not match your second stage, <em>e.g.</em>,
 <ul>
 <li>You use different fixed effects in the two stages</li>
-<li>You use a different functional form of the endogenous covariate in the two stages, <em>e.g.</em>, <span class="math inline">\(x\)</span> in the first stage and <span class="math inline">\(\hat{x}^2\)</span> in the second stage.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></li>
+<li>You use a different functional form of the endogenous covariate in the two stages, <em>e.g.</em>, <span class="math inline">\(x\)</span> in the first stage and <span class="math inline">\(\hat{x}^2\)</span> in the second stage.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></li>
 </ul></li>
 </ol>
 <p>In both cases, the forbidden regressions do not provide consistent estimates for the parameters because you have failed to isolate the good variation from the bad variation.</p>
@@ -901,14 +943,10 @@ b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span
 <p><span class="math display">\[ \hat{\beta}_\text{1, IV} = \dfrac{\hat{\pi}_1}{\hat{\gamma}_1} \]</span></p>
 <p>Let’s confirm this fact in R. We will estimate the first stage (regressing <span class="math inline">\(x_1\)</span> on <span class="math inline">\(z\)</span>) and the reduced form (regressing <span class="math inline">\(y\)</span> on <span class="math inline">\(z\)</span>) using our old-fashioned OLS function. We will just grab the point estimates and will also ignore the intercept (hence the <code>coef[2]</code>, below).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The first stage</span>
-b_fs &lt;-<span class="st"> </span><span class="kw">ols</span>(gen_df, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;z&quot;</span>) %$%<span class="st"> </span>coef[<span class="dv">2</span>]</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The reduced form</span>
-b_rf &lt;-<span class="st"> </span><span class="kw">ols</span>(gen_df, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;z&quot;</span>) %$%<span class="st"> </span>coef[<span class="dv">2</span>]</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the ratio</span>
+b_fs &lt;-<span class="st"> </span><span class="kw">ols</span>(gen_df, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;z&quot;</span>) %$%<span class="st"> </span>coef[<span class="dv">2</span>]
+<span class="co"># The reduced form</span>
+b_rf &lt;-<span class="st"> </span><span class="kw">ols</span>(gen_df, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;z&quot;</span>) %$%<span class="st"> </span>coef[<span class="dv">2</span>]
+<span class="co"># Calculate the ratio</span>
 b_rf /<span class="st"> </span>b_fs</code></pre></div>
 <pre><code>## [1] 2.003279</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compare to beta-hat IV</span>
@@ -960,7 +998,7 @@ b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span
 <div id="more-standard-errors" class="section level2">
 <h2>More standard errors</h2>
 <p>Ha! You thought we finished standard errors. Nope! We still need standard errors for our 2SLS point estimates.</p>
-<p>Two-stage least squares will generate (weakly) larger standard errors than OLS, <em>i.e.</em><a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
+<p>Two-stage least squares will generate (weakly) larger standard errors than OLS, <em>i.e.</em><a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
 <p><span class="math display">\[ \mathop{\text{Var}} \left( \mathbf{b}_\text{2SLS} \right) = \sigma^2 \left( \mathbf{X}^\prime \mathbf{P_Z} \mathbf{X} \right)^{-1} \geq \sigma^2 \left( \mathbf{X}^\prime \mathbf{X} \right)^{-1} = \mathop{\text{Var}} \left( \mathbf{b}_\text{OLS} \right) \]</span></p>
 <p>The basic intuition behind this result is that 2SLS separates good and bad variation, while OLS uses all of the variation. Access to more variation yields smaller standard errors. Thus, standard errors from 2SLS will be at least as large as the standard errors from OLS.</p>
 <p>We can estimate the variance-covariance matrix for <span class="math inline">\(\mathbf{b}_\text{2SLS}\)</span> fairly easily. As given above, the variance-covariance matrix of <span class="math inline">\(\mathbf{b}_\text{2SLS}\)</span> is <span class="math inline">\(\mathop{\text{Var}} \left( \mathbf{b}_\text{2SLS} \right) = \sigma^2 \left( \mathbf{X}^\prime \mathbf{P_Z} \mathbf{X} \right)^{-1}\)</span>. We know <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{P_Z}\)</span>. And we know how to estimate <span class="math inline">\(\sigma^2\)</span>, <em>i.e.</em>,</p>
@@ -985,8 +1023,9 @@ b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span
   b &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>P_Z %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>P_Z %*%<span class="st"> </span>y
   <span class="co"># Calculate OLS residuals</span>
   e &lt;-<span class="st"> </span>y -<span class="st"> </span>X %*%<span class="st"> </span>b
-  <span class="co"># Calculate s2</span>
+  <span class="co"># Calculate s^2</span>
   s2 &lt;-<span class="st"> </span>(<span class="kw">t</span>(e) %*%<span class="st"> </span>e) /<span class="st"> </span>(n -<span class="st"> </span>k)
+  s2 %&lt;&gt;%<span class="st"> </span><span class="kw">as.numeric</span>()
   <span class="co"># Inverse of X&#39; Pz X</span>
   XX_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>P_Z %*%<span class="st"> </span>X)
   <span class="co"># Standard error</span>
@@ -1016,8 +1055,6 @@ b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span
 <p>Let’s check our function against <code>felm()</code> (again):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Our function</span>
 <span class="kw">b_2sls</span>(gen_df, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;z&quot;</span>)</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
 <pre><code>##      effect       coef std_error    t_stat       p_value
 ## 1 Intercept -25.012727 0.6320035 -39.57688 2.291852e-318
 ## 2        x1   2.003279 0.1262430  15.86844  5.046509e-56</code></pre>
@@ -1055,15 +1092,15 @@ b_2sls &lt;-<span class="st"> </span>function(data, y_var, X_vars, Z_vars, <span
 <div id="caveat-utilitor" class="section level2">
 <h2><em>Caveat utilitor</em></h2>
 <p>Finding a good instrument is a difficult task. You can test the strength of your first stage, but you will need some good reasons that your instrument satisfies the exclusion restriction. And economists can be a tough group to satisfy (see my comments above on being a constructive member of society).</p>
-<p>Your best-case scenario for a valid instrument is usually some sort of RCT.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> Imagine you want to test the effect of rural electrification on income. Simply regressing income on electrification status is probably not a good idea: you can imagine there is at least one omitted variable. If you’re lucky/clever, you might be able to convince some government to randomly allocate connection subsidies to households. Because the subsidies were randomized, they are exogenous. However, regressing income on these random subsidies does not answer our initial question about the effect of electrification on income. However, if these subsidies change the probability that a household gets connected to the grid, then we can use the subsidies as an instrument for electrification. Regressing electrification on the subsidies is the first stage. We can then use the predictions from this first stage to estimate the (causal) effect of electrification on income.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
-<p>While 2SLS is great when combined with experiments, most of us won’t be using it strictly in a randomized experimental setting. In these non-experimental settings, you need to be even more careful when implementing 2SLS/instrumental variables. The exclusion restriction is very important and untestable. One way to provide some evidence of the legitimacy of your 2SLS estimates is to show the OLS (non-instrumented) regression alongside the 2SLS (instrumented) regression. If there is indeed omitted variable bias (or simultaneity)—and if your instrument has some legitimacy—then the the OLS and 2SLS estimates will differ. If the difference is consistent with some economic reasoning, you have even more plausibility.</p>
+<p>Your best-case scenario for a valid instrument is usually some sort of RCT.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> Imagine you want to test the effect of rural electrification on income. Simply regressing income on electrification status is probably not a good idea: you can imagine there is at least one omitted variable. If you’re lucky/clever, you might be able to convince some government to randomly allocate connection subsidies to households. Because the subsidies were randomized, they are exogenous. However, regressing income on these random subsidies does not answer our initial question about the effect of electrification on income. However, if these subsidies change the probability that a household gets connected to the grid, then we can use the subsidies as an instrument for electrification. Regressing electrification on the subsidies is the first stage. We can then use the predictions from this first stage to estimate the (causal) effect of electrification on income.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
+<p>While 2SLS is great when combined with experiments, most of us won’t be using it strictly in a randomized experimental setting. In these non-experimental settings, you need to be even more careful when implementing 2SLS/instrumental variables. The exclusion restriction is very important and untestable. One way to provide some evidence of the legitimacy of your 2SLS estimates is to show the OLS (non-instrumented) regression alongside the 2SLS (instrumented) regression. If there is indeed omitted variable bias (or simultaneity)—and if your instrument has some legitimacy—then the the OLS and 2SLS estimates will differ. If the difference is consistent with some economic reasoning on the direction of the bias, then you have more plausibility.</p>
 <p>In short: instrumental variables/2SLS requires some humility, creativity, and caution.</p>
 </div>
 <div id="measurement-error" class="section level2">
 <h2>Measurement error</h2>
-<p>You might be aware of this fact: data are not always perfect. In fact, when we start delving deep into our data, it is often frightening how messy they are. It turns out that one of the original implementations of IV was as a solution to measurement error. In this case, the exclusion restriction is often a bit less difficult to swallow, and the first stage is generally quite strong.</p>
-<p>Let’s consider an example. There are two weather stations. Let’s creatively name them <em>A</em> and <em>B</em>. Each weather station measures the actual temperature with some error. If we think the stations’ measurement errors are independent, then we can instrument one station’s data with data from the other station.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
-<p>Suppose station <em>A</em> is closer to our village than station <em>B</em>, so we want to use the data from station <em>A</em>. However, we also know there is some measurement error, which will tend to attenuate our estimates for the effect of temperature. Specifically, assume we are interested in the effect of temperature on income. We will define the true data-generating process as<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a></p>
+<p>You might already be aware of this fact: data are not always perfect. In fact, when we start delving deep into our data, it is often frightening how messy they are. It turns out that one of the original implementations of IV was as a solution to measurement error. In this case, the exclusion restriction is often a bit less difficult to swallow, and the first stage is generally quite strong.</p>
+<p>Let’s consider an example. There are two weather stations. Let’s creatively name them <em>A</em> and <em>B</em>. Each weather station measures the actual temperature with some error. If we think the stations’ measurement errors are independent, then we can instrument one station’s data with data from the other station.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a></p>
+<p>Suppose station <em>A</em> is closer to our village than station <em>B</em>, so we want to use the data from station <em>A</em>. However, we also know there is some measurement error, which will tend to attenuate our estimates for the effect of temperature. Specifically, assume we are interested in the effect of temperature on income. We will define the true data-generating process as<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a></p>
 <p><span class="math display">\[ \text{Income} = \beta_0 + \beta_1 \text{Temperature} + \varepsilon \]</span></p>
 <p>In addition, assume that the temperature measured at station <em>A</em> follows the DGP</p>
 <p><span class="math display">\[ \text{Temperature}_A = \text{Temperature} + \nu \]</span></p>
@@ -1104,22 +1141,16 @@ temp_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
 <p>Now let’s run three regressions: (1) the regression that matches the DGP (temperature without measurement error); (2) regress income on station <em>A</em>’s temperature (should be biased toward zero); (3) instrument station <em>A</em>’s temperature with station <em>B</em>’s temperature.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># OLS for DGP</span>
 <span class="kw">ols</span>(temp_df, <span class="st">&quot;income&quot;</span>, <span class="st">&quot;true_temp&quot;</span>)</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
 <pre><code>##      effect      coef   std_error   t_stat p_value
 ## 1 Intercept 49.997704 0.009866772 5067.281       0
 ## 2 true_temp  3.015444 0.009868744  305.555       0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># OLS for DGP</span>
 <span class="kw">ols</span>(temp_df, <span class="st">&quot;income&quot;</span>, <span class="st">&quot;temp_a&quot;</span>)</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
 <pre><code>##      effect      coef  std_error     t_stat p_value
 ## 1 Intercept 49.982446 0.02358063 2119.63991       0
 ## 2    temp_a  1.508064 0.01675688   89.99667       0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 2SLS</span>
 <span class="kw">b_2sls</span>(temp_df, <span class="st">&quot;income&quot;</span>, <span class="st">&quot;temp_a&quot;</span>, <span class="st">&quot;temp_b&quot;</span>)</code></pre></div>
-<pre><code>## Warning in s2 * diag(XX_inv): Recycling array of length 1 in array-vector arithmetic is deprecated.
-##   Use c() or as.vector() instead.</code></pre>
 <pre><code>##      effect      coef  std_error     t_stat p_value
 ## 1 Intercept 49.968983 0.03203390 1559.87841       0
 ## 2    temp_a  3.048674 0.04568209   66.73674       0</code></pre>
@@ -1137,15 +1168,16 @@ temp_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
 <ol>
 <li id="fn1"><p>A similar situation: what happens when we cluster too conservatively?<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>Yes, I am a nerd.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>I guess you have two other options: give up or continue your research knowing you have inconsistent estimates for your parameters of interest.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>One of the most memorable instruments that I’ve seen is the Scrabble score of an individual’s name (Biavaschi <em>et al.</em>, 2013). You can decide for yourself if the Scrabble-score instrument fulfills both requirements for a valid instrument by checking out <a href="http://ftp.iza.org/dp7725.pdf">the paper</a>.<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>We will arbitrarily define <span class="math inline">\(\sigma_{1,2} = 0.75\)</span> and <span class="math inline">\(\sigma_{1,z} = 0.25\)</span>. Also: <span class="math inline">\(\mu_{x_1} = 5\)</span>, <span class="math inline">\(\mu_{x_2}=10\)</span>, <span class="math inline">\(\mu_z = -5\)</span>.<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>Note: If you have <span class="math inline">\(x\)</span> and <span class="math inline">\(x^2\)</span> in your first stage, and you are instrumenting <span class="math inline">\(x\)</span> with <span class="math inline">\(z\)</span>, then you should also instrument <span class="math inline">\(x^2\)</span> with <span class="math inline">\(z^2\)</span>. You might be tempted to predict <span class="math inline">\(x\)</span> with <span class="math inline">\(z\)</span> and then square the prediction in the second stage; this method is wrong.<a href="#fnref6">↩</a></p></li>
-<li id="fn7"><p>To show this fact, use the linear algebra fact that <span class="math inline">\(\mathbf{X}^\prime \mathbf{W} \mathbf{X} = \mathbf{X}^\prime \mathbf{W} \mathbf{W} \mathbf{X} = \mathbf{X}^\prime \mathbf{W}^\prime \mathbf{W} \mathbf{X} = \left( \mathbf{W} \mathbf{X} \right)^\prime \left( \mathbf{W} \mathbf{X} \right) \geq 0\)</span> for any symmetric, idempotent matrix <span class="math inline">\(\mathbf{W}\)</span>—and remember that <span class="math inline">\(\mathbf{P_Z}\)</span> is a symmetric and idempotent matrix.<a href="#fnref7">↩</a></p></li>
-<li id="fn8"><p>It’s often helpful to think about your ideal research design, even if there’s no reason/hope of running such an experiment.<a href="#fnref8">↩</a></p></li>
-<li id="fn9"><p>We call the estimated effect of subsidies on income (the reduced form) the <em>intent-to-treat</em> estimate (ITT). We call the effect of electricity on income the average treatment effect (ATE). In the case of IV/2SLS, the ATE is actually a <em>local</em> average treatment effect (LATE), because our effect is based upon the subset of people who moved from no electricity to electricity due to the subsidy. Check out Michael Anderson’s class (ARE 213) for more information.<a href="#fnref9">↩</a></p></li>
-<li id="fn10"><p>See <a href="https://www.aeaweb.org/articles?id=10.1257/aer.99.3.1006">Maccini and Yang, 2009</a> for an example of this technique.<a href="#fnref10">↩</a></p></li>
-<li id="fn11"><p>Don’t worry; I’m not saying temperature has a linear effect on income—this is just an example.<a href="#fnref11">↩</a></p></li>
+<li id="fn3"><p>Or the governmental department that has the data that you want drags its feet for three years and then gives you an unusably aggregated version of the data that you actually wanted that covers two whole years and is somehow still missing half of its observations.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>I guess you have two other options: give up or continue your research knowing you have inconsistent estimates for your parameters of interest.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>One of the most memorable instruments that I’ve seen is the Scrabble score of an individual’s name (Biavaschi <em>et al.</em>, 2013). You can decide for yourself if the Scrabble-score instrument fulfills both requirements for a valid instrument by checking out <a href="http://ftp.iza.org/dp7725.pdf">the paper</a>.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>We will arbitrarily define <span class="math inline">\(\sigma_{1,2} = 0.75\)</span> and <span class="math inline">\(\sigma_{1,z} = 0.25\)</span>. Also: <span class="math inline">\(\mu_{x_1} = 5\)</span>, <span class="math inline">\(\mu_{x_2}=10\)</span>, <span class="math inline">\(\mu_z = -5\)</span>.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>Note: If you have <span class="math inline">\(x\)</span> and <span class="math inline">\(x^2\)</span> in your first stage, and you are instrumenting <span class="math inline">\(x\)</span> with <span class="math inline">\(z\)</span>, then you should also instrument <span class="math inline">\(x^2\)</span> with <span class="math inline">\(z^2\)</span>. You might be tempted to predict <span class="math inline">\(x\)</span> with <span class="math inline">\(z\)</span> and then square the prediction in the second stage; this method is wrong.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>To show this fact, use the linear algebra fact that <span class="math inline">\(\mathbf{X}^\prime \mathbf{W} \mathbf{X} = \mathbf{X}^\prime \mathbf{W} \mathbf{W} \mathbf{X} = \mathbf{X}^\prime \mathbf{W}^\prime \mathbf{W} \mathbf{X} = \left( \mathbf{W} \mathbf{X} \right)^\prime \left( \mathbf{W} \mathbf{X} \right) \geq 0\)</span> for any symmetric, idempotent matrix <span class="math inline">\(\mathbf{W}\)</span>—and remember that <span class="math inline">\(\mathbf{P_Z}\)</span> is a symmetric and idempotent matrix.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>It’s often helpful to think about your ideal research design, even if there’s no reason/hope of running such an experiment.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>We call the estimated effect of subsidies on income (the reduced form) the <em>intent-to-treat</em> estimate (ITT). We call the effect of electricity on income the average treatment effect (ATE). In the case of IV/2SLS, the ATE is actually a <em>local</em> average treatment effect (LATE), because our effect is based upon the subset of people who moved from no electricity to electricity due to the subsidy. Check out Michael Anderson’s class (ARE 213) for more information.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>See <a href="https://www.aeaweb.org/articles?id=10.1257/aer.99.3.1006">Maccini and Yang, 2009</a> for an example of this technique.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>Don’t worry; I’m not saying temperature has a linear effect on income—this is just an example.<a href="#fnref12">↩</a></p></li>
 </ol>
 </div>
 

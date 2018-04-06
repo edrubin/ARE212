@@ -1,6 +1,7 @@
 # TODO
 
 - Add README about building the course website.
+- Derive and simulate both flavors of the 'forbidden regression.'
 - Machine learning
 - Regular expressions
 - `recode()`

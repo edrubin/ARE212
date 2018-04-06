@@ -1,6 +1,6 @@
 library(rmarkdown)
 setwd("/Users/edwardarubin/Dropbox/Teaching/ARE212")
-render("section10.Rmd",
+render("section11.Rmd",
   pdf_document(
     latex_engine = "xelatex",
     toc = T,
@@ -13,4 +13,4 @@ render("section10.Rmd",
       pandoc_variable_arg("fontsize", "11pt")
       )
     ),
-  output_dir = "Section10")
+  output_dir = "Section11")
