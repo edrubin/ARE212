@@ -355,6 +355,9 @@ div.tocify {
       <a href="section11.html">Section 11</a>
     </li>
     <li>
+      <a href="section12.html">Section 12</a>
+    </li>
+    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
     <li class="divider"></li>
@@ -528,14 +531,14 @@ div.tocify {
 <p>As econometricians love to say, let’s take this to the data. We don’t have data yet, so let’s find some. <code>ggplot2</code> has a (somewhat) interesting dataset on approximately 54,000 diamonds.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(ggplot2::diamonds)</code></pre></div>
 <pre><code>## # A tibble: 6 x 10
-##   carat       cut color clarity depth table price     x     y     z
-##   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
-## 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
-## 3  0.23      Good     E     VS1  56.9    65   327  4.05  4.07  2.31
-## 4  0.29   Premium     I     VS2  62.4    58   334  4.20  4.23  2.63
-## 5  0.31      Good     J     SI2  63.3    58   335  4.34  4.35  2.75
-## 6  0.24 Very Good     J    VVS2  62.8    57   336  3.94  3.96  2.48</code></pre>
+##   carat cut       color clarity depth table price     x     y     z
+##   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 0.230 Ideal     E     SI2      61.5   55.   326  3.95  3.98  2.43
+## 2 0.210 Premium   E     SI1      59.8   61.   326  3.89  3.84  2.31
+## 3 0.230 Good      E     VS1      56.9   65.   327  4.05  4.07  2.31
+## 4 0.290 Premium   I     VS2      62.4   58.   334  4.20  4.23  2.63
+## 5 0.310 Good      J     SI2      63.3   58.   335  4.34  4.35  2.75
+## 6 0.240 Very Good J     VVS2     62.8   57.   336  3.94  3.96  2.48</code></pre>
 <p>Our setup:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Options</span>
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)

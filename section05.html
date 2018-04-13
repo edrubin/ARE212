@@ -355,6 +355,9 @@ div.tocify {
       <a href="section11.html">Section 11</a>
     </li>
     <li>
+      <a href="section12.html">Section 12</a>
+    </li>
+    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
     <li class="divider"></li>
@@ -425,25 +428,25 @@ div.tocify {
 x &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">4</span>, <span class="ot">NA</span>), <span class="dt">b =</span> <span class="kw">c</span>(<span class="st">&quot;..&quot;</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="st">&quot;..&quot;</span>))  %&gt;%<span class="st"> </span><span class="kw">as_tibble</span>()
 x</code></pre></div>
 <pre><code>## # A tibble: 5 x 2
-##       a      b
-##   &lt;int&gt; &lt;fctr&gt;
-## 1     1     ..
-## 2     2      1
-## 3     3      2
-## 4     4      3
-## 5    NA     ..</code></pre>
+##       a b    
+##   &lt;int&gt; &lt;fct&gt;
+## 1     1 ..   
+## 2     2 1    
+## 3     3 2    
+## 4     4 3    
+## 5    NA ..</code></pre>
 <p><strong>Option 1: Indexing and logical operators</strong> We can use R’s standard indexing in conjunction with logical operators to replace the unwanted values:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">4</span>, <span class="ot">NA</span>), <span class="dt">b =</span> <span class="kw">c</span>(<span class="st">&quot;..&quot;</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="st">&quot;..&quot;</span>))  %&gt;%<span class="st"> </span><span class="kw">as_tibble</span>()
 x[x ==<span class="st"> &quot;..&quot;</span>] &lt;-<span class="st"> </span><span class="ot">NA</span>
 x</code></pre></div>
 <pre><code>## # A tibble: 5 x 2
-##       a      b
-##   &lt;int&gt; &lt;fctr&gt;
-## 1     1   &lt;NA&gt;
-## 2     2      1
-## 3     3      2
-## 4     4      3
-## 5    NA   &lt;NA&gt;</code></pre>
+##       a b    
+##   &lt;int&gt; &lt;fct&gt;
+## 1     1 &lt;NA&gt; 
+## 2     2 1    
+## 3     3 2    
+## 4     4 3    
+## 5    NA &lt;NA&gt;</code></pre>
 <p>Notice that the class of the <code>b</code> column is still factor, so we would still need to convert the column to numeric (<code>x &lt;- mutate(x, b = as.numeric(b))</code>)</p>
 <p><strong>Option 2: <code>replace</code> and <code>mutate</code></strong> You can combine the (base) <code>replace()</code> function with <code>dplyr</code>’s <code>mutate()</code>. <code>replace()</code> wants three arguments: the data (vector), a list of the indices that should be replaced, and the new values. Using <code>replace()</code>, we can write a function that performs our desired replacement. I’ll also use <code>as.numeric()</code> to convert result to numeric.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define our function</span>
@@ -455,11 +458,11 @@ x %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt"
 <pre><code>## # A tibble: 5 x 2
 ##       a     b
 ##   &lt;int&gt; &lt;dbl&gt;
-## 1     1    NA
-## 2     2     2
-## 3     3     3
-## 4     4     4
-## 5    NA    NA</code></pre>
+## 1     1   NA 
+## 2     2    2.
+## 3     3    3.
+## 4     4    4.
+## 5    NA   NA</code></pre>
 <p>You can use <code>mutate_all()</code> to apply the function to all columns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Make some data</span>
 x &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">4</span>, <span class="ot">NA</span>), <span class="dt">b =</span> <span class="kw">c</span>(<span class="st">&quot;..&quot;</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="st">&quot;..&quot;</span>))  %&gt;%<span class="st"> </span><span class="kw">as_tibble</span>()
@@ -468,11 +471,11 @@ x %&gt;%<span class="st"> </span><span class="kw">mutate_all</span>(rep_na) %&gt
 <pre><code>## # A tibble: 5 x 2
 ##       a     b
 ##   &lt;dbl&gt; &lt;dbl&gt;
-## 1     1    NA
-## 2     2     2
-## 3     3     3
-## 4     4     4
-## 5    NA    NA</code></pre>
+## 1    1.   NA 
+## 2    2.    2.
+## 3    3.    3.
+## 4    4.    4.
+## 5   NA    NA</code></pre>
 <p>In addition to <code>mutate_all()</code>, there are a bunch of other similar functions like <code>mutate_at()</code>, <code>mutate_each()</code>, and <code>mutate_if()</code> (and similar suffixes for all of the standard functions in <code>dplyr</code>). Check them out.</p>
 <p><strong>Note: Multiple values to NA</strong> If you want to convert multiple values to <code>NA</code> (<em>e.g.</em>, both <code>&quot;..&quot;</code> and <code>&quot;&quot;</code>), then use the logical operator <code>%in%</code>, <em>e.g.</em>, <code>x[x %in% c(&quot;..&quot;, &quot;&quot;)] &lt;- NA</code>.</p>
 </div>

@@ -30,6 +30,10 @@ navbar:
       href: section09.html
     - text: Section 10
       href: section10.html
+    - text: Section 11
+      href: section11.html
+    - text: Section 12
+      href: section12.html
     - text: LaTeX and knitr
       href: latexKnitr.html
     - text: '---------'
@@ -56,4 +60,3 @@ output:
       after_body: footer.html
     lib_dir: site_libs
     self_contained: no
-

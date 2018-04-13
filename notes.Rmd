@@ -91,14 +91,14 @@ Instrumental variables (IV) and two-stage least squares (2SLS). Plus measurement
 [pdf](Section11/section11.pdf) | [R script](Section11/section11.R) | [zip](Section11.zip)
 <br><br>
 
-<!-- #### [__Section 12__](section12.html): Spatial data
+#### [__Section 12__](section12.html): Spatial data
 
 Spatial data. Shapefiles, points data, maps, and—more generally—R as a GIS.
 
 [pdf](Section12/section12.pdf) | [R script](Section12/section12.R) | [zip](Section12.zip)
 <br><br>
 
-#### [__Section 12b__](section12b.html): Spatial data, continued
+<!-- #### [__Section 12b__](section12b.html): Spatial data, continued
 
 Spatial data. Rasters, geocoding, and mapping in R.
 

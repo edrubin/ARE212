@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 12: Spatial data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="section06.html">Section 6</a>
+    </li>
+    <li>
+      <a href="section07.html">Section 7</a>
+    </li>
+    <li>
+      <a href="section08.html">Section 8</a>
+    </li>
+    <li>
+      <a href="section09.html">Section 9</a>
+    </li>
+    <li>
+      <a href="section10.html">Section 10</a>
+    </li>
+    <li>
+      <a href="section11.html">Section 11</a>
+    </li>
+    <li>
+      <a href="section12.html">Section 12</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 12: Spatial data</h1>
+
+</div>
+
+
+<p><a href="Section12.zip"><span class="fa-stack fa-4x"> <i class="fa fa-folder fa-stack-2x"></i> <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i> </span></a></p>
+<p><br></p>
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<div id="announcements" class="section level2">
+<h2>Announcements</h2>
+<ol style="list-style-type: decimal">
+<li>No office hours on Monday next week. I scheduled time next week on Friday (April 20<sup>th</sup>) from 1pm–3pm in Giannini 254.</li>
+<li>Next week we will wrap up spatial data. We have some flexibility for what we cover the next two weeks: strategies for large datasets (<em>big data</em>), efficient coding practices, machine learning, web scraping, a paper replication—any other ideas? <a href="http://etc.ch/KWWS">What are your preferences</a>?</li>
+</ol>
+</div>
+<div id="last-section" class="section level2">
+<h2>Last section</h2>
+<p>In the <a href="section11.html">previous section</a> we covered instrumental variables (IV) and two-stage least squares (2SLS)—two tools an econometrician can use against the bias/inconsistency generated by omitted variables, measurement error, and simultaneous equations.</p>
+<div id="follow-up-papers" class="section level3">
+<h3>Follow up: Papers</h3>
+<p>In case you would like a few examples of papers that apply instrumental variables. Below are several options. In general, it is hard to go wrong with Angrist and Krueger (or Imbens). The first two papers are actually a summary articles—the first paper has a great table of instrumental variables papers in myriad settings. The third paper (Angrist, 1990) is a classic. The fourth paper is fairly new by Reed Walker (Berkeley). The fifth paper (Lee <em>et al.</em>) is a working paper on rural electrification by three more Berkeley folks. The last paper (Maccini and Yang, 2009) is a pretty classic paper of health, development, and measurement error.</p>
+<p>I’ve provided the PDF of the first two papers. You’ll need to download the other papers from an IP address with access.</p>
+<ul>
+<li><a href="Papers/AngristKrueger2001.pdf">Instrumental Variables and the Search for Identification: From Supply and Demand to Natural Experiments</a>, Angrist and Krueger (2001)</li>
+<li><a href="Papers/Imbens2014.pdf">Instrumental Variables: An Econometrician’s Perspective</a>, Imbens (2014)</li>
+<li><a href="https://www.jstor.org/stable/2006669">Lifetime Earnings and the Vietnam Era Draft Lottery: Evidence from Social Security Administrative Records</a>, Angrist (1990)</li>
+<li><a href="Airports,%20Air%20Pollution,%20and%20Contemporaneous%20Health">Airports, Air Pollution, and Contemporaneous Health</a>, Schlenker and Walker (2016)</li>
+<li><a href="http://emiguel.econ.berkeley.edu/research/experimental-evidence-on-the-demand-for-and-costs-of-rural-electrification">Experimental Evidence on the Demand for and Costs of Rural Electrification</a>, Lee, Miguel, and Wolfram (working paper)</li>
+<li><a href="https://www.aeaweb.org/articles?id=10.1257/aer.99.3.1006">Under the Weather: Health, Schooling, and Economic Consequences of Early-Life Rainfall</a>, Maccini and Yang (2009)</li>
+</ul>
+<p>More generally, over the summer, you should read the book <a href="http://www.mostlyharmlesseconometrics.com">Mostly Harmless Econometrics</a> by Angrist and Pischke.</p>
+</div>
+<div id="follow-up-creative-specification" class="section level3">
+<h3>Follow up: Creative specification</h3>
+<p>Adding the instrument to your regression without doing 2SLS (or IV) does not fix your problem—and may make it worse. To see why, think about Frisch-Waugh-Lovell.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> If we residualize all variables on the (exogenous) instrument, then the remaining variation (in the residuals) is still endogenous. Worse yet, we’ve already controlled for the exogenous variation, so this strategy will estimate the coefficient using <em>only</em> the endogenous variation—essentially the opposite of what IV/2SLS does.</p>
+</div>
+</div>
+<div id="this-week" class="section level2">
+<h2>This week</h2>
+<p>This week we move a bit away from econometric techniques and instead focus on a class of data: <em>spatial</em> data. Spatial data are increasingly important to economic—and general social science—research. They also provide researchers with a few unique challenges and thus require a few unique tools.</p>
+</div>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p><strong>Packages</strong>:</p>
+<ul>
+<li>New:
+<ul>
+<li>Spatial: <code>rgdal</code>, <code>raster</code>, <code>broom</code>, <code>rgeos</code>, <code>GISTools</code></li>
+<li>Dates: <code>lubridate</code></li>
+</ul></li>
+<li>Old: <code>dplyr</code>, <code>ggplot2</code>, <code>ggthemes</code>, <code>magrittr</code>, <code>pacman</code>, <code>viridis</code></li>
+<li><strong>Note</strong>: With all of these packages floating around, it is quite likely there will be overlap in some of the names of the functions. Recall that R will <em>mask</em> a previously loaded function if you load a new package that has a function with the same name. For instance, the packages <code>magrittr</code> and <code>raster</code> both have functions named <code>extract()</code>. Keep this fact in mind if you run into problems while you have many functions loaded. Remember that you can always force R to use a specific package’s function using <code>package_name::function_name(arg1, arg2, ...)</code>.</li>
+</ul>
+<p><strong>Data</strong>:</p>
+<ul>
+<li>The folder <a href="Section12/ChicagoPoliceBeats.zip">ChicagoPoliceBeats</a>, which contains the shapefile of Chicago’s police beats.</li>
+<li>The file <a href="Section12/chicagoCrime.rds">chicagoCrime.rds</a>.</li>
+</ul>
+</div>
+</div>
+<div id="spatial-data" class="section level1">
+<h1>Spatial data</h1>
+<p>As I mentioned above, today we are focusing on a class of data, rather than a specific set of econometric techniques. The reason for this change is manyfold.</p>
+<ol style="list-style-type: decimal">
+<li>Spatial data are increasingly important within research—economics, environmental studies, development, agriculture, political science all are increasingly utilizing spatial variation. Spatial variation is important in many data-generating processes (<em>e.g.</em>, the effects of air pollution), and it also can provide some compelling natural experiments (<em>e.g.</em>, the rollout of a new policy throughout a country). Furthermore, some topics simply cannot be analyzed well without analyzing the topic <em>in space</em>, <em>e.g.</em>, air pollution, gerrymandering, segregation, or well depletion.</li>
+<li>Spatial data are fairly distinct from other types of data in their structure. These structural differences tend to require unique techniques for compiling, describing, and analyzing the data. Why the difference? Spatial data have more dimensions than most other datasets that we use. Rather than a value connected to a time, we usually have a value connected to a latitude and a longitude–perhaps coupled with time and/or elevation. This difference is not <em>huge</em>; it just requires a little more machinery.</li>
+<li>Maps are awesome.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></li>
+</ol>
+<p>Following the theme of section this semester, I am going to show you how to get started with spatial data in R. Of course, there are other tools. <a href="https://www.arcgis.com/">ArcGIS</a> is probably the most well-known name in GIS (geographic information systems), but it is proprietary, expensive, and only works with Windows. If you really need it, there are several labs on campus that provide access—see the <a href="http://dlab.berkeley.edu/space">D-Lab</a>. <a href="http://www.qgis.org/">QGIS</a> provides a free, open-source, cross-platform alternative to ArcGIS. We’ll stick with R today; it’s free, it’s open source, and you are fairly familiar with it. Plus there’s a nice online community of people using R for GIS, so you can (usually/eventually) find solutions when things go wrong. Finally, because you will likely use R for the econometrics in your research, using are for your GIS allows you to minimize the number of programs/scripts required during the course of your analysis.</p>
+<p>Now that I’ve (hopefully) convinced you, let’s get started.</p>
+<div id="r-setup" class="section level2">
+<h2>R setup</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># General R setup ----</span>
+<span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="co"># Load new packages</span>
+pacman::<span class="kw">p_load</span>(lubridate, rgdal, raster, broom, rgeos, GISTools)
+<span class="co"># Load old packages</span>
+pacman::<span class="kw">p_load</span>(dplyr, ggplot2, ggthemes, magrittr, viridis)
+<span class="co"># My ggplot2 theme</span>
+theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
+  <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+  <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+  <span class="co"># panel.border = element_rect(fill = NA, color = &quot;grey75&quot;),</span>
+  <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())
+<span class="co"># My directory</span>
+dir_12 &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section12/&quot;</span></code></pre></div>
+</div>
+<div id="types-of-data" class="section level2">
+<h2>Types of data</h2>
+<p>There are two basic types of spatial: <strong>vector</strong> and <strong>raster</strong>. <em>Vector</em> data include points, lines, and polygons—the things generally contained in files called <em>shapefiles</em>. <em>Raster</em> data are comprised of single raster layers and raster stacks (stacks of raster layers) and are essentially images—values mapped to a grid.</p>
+</div>
+</div>
+<div id="vector-data" class="section level1">
+<h1>Vector data</h1>
+<p>You will generally encounter vector data as shapefiles (extension <code>.shp</code>). However, you will also encounter vectors as datasets of points that include the coordinates of observations and some information about those points (often <code>.csv</code>). At their core, all vector files are simply collections of points. For points-based files, this statement is obvious. Lines and polygons are collections of points, so again, we see that the classes of objects that make up vectors are “simply” collections of points.</p>
+<div id="loading-a-shapefile" class="section level2">
+<h2>Loading a shapefile</h2>
+<p>Let’s load a shapefile. Specifically, we will load the polygons that compose the police beats for the city of Chicago.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> To read in the shapefile that comprises these spatial data, we will use the <code>readOGR()</code> function from the package <code>rgdal</code>. The function needs two arguments: <code>dsn</code>, which is generally the folder that contains the shapefile, and <code>layer</code>, which is generally the name of the shapefile (omitting the <code>.shp</code> extension). In our case, the name of the folder is “ChicagoPoliceBeats”, and the name of the shapefile is “chiBeats.shp”. Let’s load the shapefile!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the shapefile with the Chicago beats data</span>
+beats_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(
+  <span class="dt">dsn =</span> <span class="kw">paste0</span>(dir_12, <span class="st">&quot;ChicagoPoliceBeats&quot;</span>),
+  <span class="dt">layer =</span> <span class="st">&quot;chiBeats&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section12/ChicagoPoliceBeats&quot;, layer: &quot;chiBeats&quot;
+## with 277 features
+## It has 4 fields</code></pre>
+<p><strong>Note:</strong> <code>rgdal</code> and <code>sp</code> do a nice job for spatial work in R, but I if you find it a bit slow—or you want to be a bit more cutting edge—I suggest you check out the <a href="https://cran.r-project.org/web/packages/sf/vignettes/sf1.html"><code>sf</code> package</a>. It’s newer, so it</p>
+<p>Now, let’s check a few things—the class of the object we just read into R, its dimensions, and plotting it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Class</span>
+<span class="kw">class</span>(beats_shp)</code></pre></div>
+<pre><code>## [1] &quot;SpatialPolygonsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Dimensions</span>
+<span class="kw">dim</span>(beats_shp)</code></pre></div>
+<pre><code>## [1] 277   4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot</span>
+<span class="kw">plot</span>(beats_shp)</code></pre></div>
+<p><img src="section12_files/figure-html/check%20beats%20shapefile-1.png" width="672" /></p>
+<p>Cool, right? So what does it mean that this “spatial polygons data frame” has dimensions 277 and 4? The first number is generally the number of distinct shapes (features) in the shapefile. In our case, we 277 polygons. And what about the second number? The second number gives us the number of fields—essentially the number of variables (a.k.a. features) for which we have information for each polygon.</p>
+</div>
+<div id="decomposing-a-shapefile" class="section level2">
+<h2>Decomposing a shapefile</h2>
+<p>We can dive a bit deeper into the data that compose a shapefile in R. Up to this point, you’ve seen that you can access the columns of a <code>data.frame</code><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> using the dollar sign, <em>e.g.</em>, <code>pretend_df$variable1</code>. Spatial data frames add an additional level—we now have slots. You can still find out the names of the fields (variables) using <code>names(beats_shp)</code>, but now you can also find the names of the <em>slots</em> using <code>slotNames(beats_shp)</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fied/variable names</span>
+<span class="kw">names</span>(beats_shp)</code></pre></div>
+<pre><code>## [1] &quot;district&quot; &quot;beat_num&quot; &quot;sector&quot;   &quot;beat&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Slot names</span>
+<span class="kw">slotNames</span>(beats_shp)</code></pre></div>
+<pre><code>## [1] &quot;data&quot;        &quot;polygons&quot;    &quot;plotOrder&quot;   &quot;bbox&quot;        &quot;proj4string&quot;</code></pre>
+<p>The <code>data</code> slot is a data frame like we’ve seen before, but now there are other slots related to our spatial data: the polygons, the plot order (<code>plotOrder</code>), the bounding box (<code>bbox</code>), and the <code>proj4string</code> (a string that encodes the projection used for the polygons’ coordinates).</p>
+<p>Let’s take a look at the data slot. To access the slots, use the slot’s name in conjunction with an ampersat, <em>e.g.</em>, <code>beats_shp@data</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the class of the object in the &#39;data&#39; slot</span>
+beats_shp@data %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the head of the object in the &#39;data&#39; slot</span>
+beats_shp@data %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>##   district beat_num sector beat
+## 0       17     1713      1    1
+## 1       31     3100      0    0
+## 2       19     1914      1    1
+## 3       19     1915      1    1
+## 4       19     1913      1    1
+## 5       19     1912      1    1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the head of the object in the &#39;data&#39; slot</span>
+beats_shp@data %&gt;%<span class="st"> </span><span class="kw">dim</span>()</code></pre></div>
+<pre><code>## [1] 277   4</code></pre>
+<p>Let’s see what objects are in the other slots.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># &#39;plotOrder&#39; slot</span>
+beats_shp@plotOrder %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>## [1]  33 253 260 252   2  45</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># &#39;bbox&#39; slot</span>
+beats_shp@bbox</code></pre></div>
+<pre><code>##         min       max
+## x -87.94011 -87.52414
+## y  41.64455  42.02303</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># &#39;proj4string&#39; slot</span>
+beats_shp@proj4string</code></pre></div>
+<pre><code>## CRS arguments: +proj=longlat +ellps=WGS84 +no_defs</code></pre>
+<p>Finally, let’s investigate the <code>polygons</code> slot. What is the class?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Find the class</span>
+beats_shp@polygons %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Find the length of the list</span>
+beats_shp@polygons %&gt;%<span class="st"> </span><span class="kw">length</span>()</code></pre></div>
+<pre><code>## [1] 277</code></pre>
+<p>A list of length 277! Where have we seen the number 277 before? The dimensions of the <code>beats_shp</code> and the number of rows in the data frame in the <code>data</code> slot. The <code>polygons</code> slot is a list whose elements are the individual polygons that make up the shapefile.</p>
+<p>What is the class of a single polygon (a single element of the list in the <code>polygons</code> slot)?<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Class of the first element in the &#39;polygons&#39; slot</span>
+beats_shp@polygons[[<span class="dv">1</span>]] %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;Polygons&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<p>This polygon object has the class <code>Polygons</code>, which is simultaneously fitting and uninformative. Are you ready to get a bit meta? The polygons in the <code>polygons</code> slot have slots of their own. Let’s see the names of the slots for a single polygon in the <code>polygons</code> slot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Slot names for a polygon</span>
+beats_shp@polygons[[<span class="dv">1</span>]] %&gt;%<span class="st"> </span><span class="kw">slotNames</span>()</code></pre></div>
+<pre><code>## [1] &quot;Polygons&quot;  &quot;plotOrder&quot; &quot;labpt&quot;     &quot;ID&quot;        &quot;area&quot;</code></pre>
+<p>Let’s (quickly) continue down this rabbit hole, accessing the <code>Polygons</code> slot and checking its class.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># What is the class?</span>
+beats_shp@polygons[[<span class="dv">1</span>]]@Polygons %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># What is the length?</span>
+beats_shp@polygons[[<span class="dv">1</span>]]@Polygons %&gt;%<span class="st"> </span><span class="kw">length</span>()</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>Another list, but this list is only of length one. Let’s access the single element in this list and then check the slot names on last time.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Deep in the rabbit hole</span>
+beats_shp@polygons[[<span class="dv">1</span>]]@Polygons[[<span class="dv">1</span>]] %&gt;%<span class="st"> </span><span class="kw">slotNames</span>()</code></pre></div>
+<pre><code>## [1] &quot;labpt&quot;   &quot;area&quot;    &quot;hole&quot;    &quot;ringDir&quot; &quot;coords&quot;</code></pre>
+<p>Finally, we see a slot name <code>coords</code>. These are the coordinates of the points that make up the first polygon in our shapefile. Let’s check the head and dimensions of this object then plot its points.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The head of the coordinates</span>
+beats_shp@polygons[[<span class="dv">1</span>]]@Polygons[[<span class="dv">1</span>]]@coords %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>##           [,1]     [,2]
+## [1,] -87.70473 41.97577
+## [2,] -87.70472 41.97577
+## [3,] -87.70472 41.97574
+## [4,] -87.70471 41.97570
+## [5,] -87.70470 41.97567
+## [6,] -87.70468 41.97565</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The dimensions of the coordinates</span>
+beats_shp@polygons[[<span class="dv">1</span>]]@Polygons[[<span class="dv">1</span>]]@coords %&gt;%<span class="st"> </span><span class="kw">dim</span>()</code></pre></div>
+<pre><code>## [1] 345   2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot the coordinates</span>
+beats_shp@polygons[[<span class="dv">1</span>]]@Polygons[[<span class="dv">1</span>]]@coords %&gt;%<span class="st"> </span><span class="kw">plot</span>()</code></pre></div>
+<p><img src="section12_files/figure-html/first%20polygon%20points-1.png" width="672" /></p>
+<p>Thus, we see that the first polygon is made up of 345 coordinates that jointly determine area for beat number 1713 (the first row in <code>beats_shp@data</code>). We can confirm that these points match the polygon for beat number 1713 by taking the <code>subset()</code> of <code>beats_shp</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subset</span>(beats_shp, beat_num ==<span class="st"> &quot;1713&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">plot</span>()</code></pre></div>
+<p><img src="section12_files/figure-html/plot%201713-1.png" width="672" /></p>
+<p>So what have we learned, thus far, about this shapefile? The shapefile is made up of polygons, and each polygon is made up of points on a coordinate system—in this case, longitudes (<span class="math inline">\(x\)</span>) and latitudes (<span class="math inline">\(y\)</span>). When you plot the points using their coordinates and then connect the dots (points), you get a polygon. Together, the polygons determine the shapefile. In addition to shapes of the polygons, we also have data (in the <code>data</code> slot) about each polygons. In the current example, we have four fields/attributes/features/variables<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> about the polygons, but in other cases, you will know a lot more about each polygon—for instance, Census will have hundreds of variables for each polygon (the polygons are the Census blocks, tracts, <em>etc.</em>).</p>
+</div>
+<div id="building-a-shapefile" class="section level2">
+<h2>Building a shapefile</h2>
+<p>We can also move in the opposite direction:</p>
+<ol style="list-style-type: decimal">
+<li>Create a data frame with two columns for the coordinates.</li>
+<li>Convert the data frame to a matrix.</li>
+<li>Convert the matrix of coordinates to a polygon using <code>Polygon()</code>.</li>
+<li>Create a <code>Polygons</code> object using a list and the function <code>Polygons()</code>.</li>
+<li>Create a <code>SpatialPolygons</code> object from a list the <code>Polygons</code> object(s).</li>
+<li>Create a <code>SpatialPolygonsDataFrame</code> from the <code>SpatialPolygons</code> object and a data frame.</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create coordinates in data.frame</span>
+coord_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>),
+  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, -<span class="dv">1</span>))
+<span class="co"># Convert data.frame to matrix</span>
+coord_mat &lt;-<span class="st"> </span>coord_df %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+<span class="co"># Create a Polygon</span>
+the_polygon &lt;-<span class="st"> </span><span class="kw">Polygon</span>(coord_mat)
+<span class="co"># Create the Polygons object</span>
+the_polygons &lt;-<span class="st"> </span><span class="kw">Polygons</span>(<span class="kw">list</span>(the_polygon), <span class="dv">1</span>)
+<span class="co"># Create the SpatialPolygons object</span>
+the_sp &lt;-<span class="st"> </span><span class="kw">SpatialPolygons</span>(<span class="kw">list</span>(the_polygons))
+<span class="co"># Create a SpatialPolygonsDataFrame</span>
+the_spdf &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(the_sp,
+  <span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">12</span>, <span class="dt">b =</span> <span class="dv">6</span>))</code></pre></div>
+<p>Now let’s check our work:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot &#39;the_spdf&#39;</span>
+<span class="kw">plot</span>(the_spdf)</code></pre></div>
+<p><img src="section12_files/figure-html/plot%20built%20shapefile-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the data slot</span>
+the_spdf@data</code></pre></div>
+<pre><code>##    a b
+## 1 12 6</code></pre>
+<p><strong>Notes</strong>:</p>
+<ol style="list-style-type: decimal">
+<li>Notice that we created the polygon by plotting the points <strong>in the order that they are listed</strong> (and connecting the last point to the first point).</li>
+<li>In this example, we created only one polygon, but the process is similar for multiple polygons.</li>
+</ol>
+</div>
+<div id="plotting-shapefiles-with-ggplot2" class="section level2">
+<h2>Plotting shapefiles with <code>ggplot2</code></h2>
+<p>You’ve already seen that we can use R’s base <code>plot()</code> function to plot shapefiles, but what if we want to use <code>ggplot2</code>? In this situation, <code>ggplot2</code> still produces pretty pictures, but it can be much slower than <code>plot()</code> when you have a lot of polygons with many points. Plot at your own risk.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> This setting <a href="https://qgis.org/">QGIS</a> can be really helpful.</p>
+<p>Okay, so let’s plot the police beats shapefile. <code>ggplot2</code> wants a data frame where each row is a point. As we saw above, we’re almost there—the polygons are composed of points—but we need to formally convert the spatial polygons data frame to a data frame. For this task, I suggest the <code>tidy()</code> function from the <code>broom</code> package.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> We simply feed our shapefile (the spatial polygons data frame <code>beats_shp</code>) to <code>tidy()</code>, and we get back a data frame where each row is a point in one of the polygons in the shapefile. This process can take a while and can also take up a lot of memory if you have many polygons with many points.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Tidy the shapefile</span>
+beats_df &lt;-<span class="st"> </span><span class="kw">tidy</span>(beats_shp)</code></pre></div>
+<pre><code>## Regions defined for each Polygons</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look at the first three rows</span>
+beats_df %&gt;%<span class="st"> </span><span class="kw">head</span>(<span class="dv">3</span>)</code></pre></div>
+<pre><code>##        long      lat order  hole piece group id
+## 1 -87.70473 41.97577     1 FALSE     1   0.1  0
+## 2 -87.70472 41.97577     2 FALSE     1   0.1  0
+## 3 -87.70472 41.97574     3 FALSE     1   0.1  0</code></pre>
+<p><strong>Note</strong>: Plotting in <code>ggplot2</code> is another point where the <code>sf</code> package is terrific—you can just use <code>geom_sf()</code> without the <code>tidy()</code>-ing.</p>
+<p>Now we are ready to plot. The syntax for <code>ggplot2</code> remains the same. We need to map the <code>x</code> and <code>y</code> aesthetics (longitude and latitude), as well as the <code>group</code> (the polygon). For the actual plotting, we can use <code>geom_path()</code>—for only the outline of the polygons—and/or <code>geom_polygon()</code>, which allows for filling the polygons with color. <code>geom_map</code> is another nice option, but I will stick to <code>geom_path()</code> and <code>geom_polygon()</code> because they are a bit clearer. Finally, the <code>coord_map()</code> function allows you to specify a projection for the map. If you’ve ever seen maps that look a bit strange, it was probably because they used a different projection.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot the tidied shapefile</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> beats_df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group)) +
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">fill =</span> <span class="st">&quot;grey90&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">size =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Longitude&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Latitude&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Chicago police beats&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="section12_files/figure-html/plot%20shapefile-1.png" width="672" /></p>
+</div>
+<div id="points-data" class="section level2">
+<h2>Points data</h2>
+<p>In addition to shapefiles, the second type of vector data you will often encounter is point data. These files are exactly what they sound like: each observation (row) contains coordinates for a point in space and information on some set of variables.</p>
+<p>Let’s load a points dataset. The file <code>chicagoCrime.rds</code> contains Chicago’s police incident reports data from 2010 through the end of 2016 (again, downloaded from <a href="https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present/ijzp-q8t2">Chicago’s data portal</a>). The actual dataset has a few more variables and goes back to 2001, but I wanted to keep the file a bit smaller. I’ve saved the file as an <code>.rds</code> file, which is an R-specific format that offers a lot of compression, substantially reducing the size of the file. To load an <code>.rds</code> file, you can use the <code>readRDS()</code> function (or <code>readr</code>’s <code>read_rds()</code> function, which is just a wrapper for <code>readRDS()</code>). Let’s load it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read crime points data file</span>
+crime_df &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">paste0</span>(dir_12, <span class="st">&quot;chicagoCrime.rds&quot;</span>))
+<span class="co"># Convert to tbl_df</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Check it out</span>
+crime_df</code></pre></div>
+<pre><code>## # A tibble: 2,234,883 x 8
+##         ID Date    `Primary Type` Arrest Domestic  Beat Latitude Longitude
+##      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1 8438081 01/12/… THEFT          true   false      131     41.9     -87.6
+##  2 8438082 01/08/… THEFT          false  false     1732     41.9     -87.7
+##  3 8438084 01/12/… NARCOTICS      true   false     1211     41.9     -87.7
+##  4 8438085 01/12/… BATTERY        false  false     1623     42.0     -87.8
+##  5 8438086 01/11/… CRIMINAL DAMA… false  false     1412     41.9     -87.7
+##  6 8438087 01/10/… ASSAULT        false  true      1732     41.9     -87.7
+##  7 8438088 01/12/… THEFT          true   false     2513     41.9     -87.8
+##  8 8438089 01/10/… MOTOR VEHICLE… false  false     1723     42.0     -87.7
+##  9 8438090 01/12/… DECEPTIVE PRA… true   false     1832     41.9     -87.6
+## 10 8438091 01/12/… DECEPTIVE PRA… false  false     1133     41.9     -87.7
+## # ... with 2,234,873 more rows</code></pre>
+<div id="data-cleaning" class="section level3">
+<h3>Data cleaning</h3>
+<p>Let’s clean up the file a bit more. First, we will change the names of the variables. Second, we will drop any observations missing their latitude or longitude.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> Third, we will convert the dates from character to actual dates using the function <code>mdy_hms()</code> from the <code>lubridate</code> package. The <code>mdy</code> part of the function’s name implies that the dates have month first, followed by day, follwed by year. The <code>hms</code> part of the function’s name implies that we have hours, minutes, and seconds. If you did not have hours, minutes, and seconds, then you would want to use the function <code>mdy()</code>. If you had year, followed by month, followed by day, then you would want to use the function <code>ymd()</code>. And so on….</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Change names</span>
+<span class="kw">names</span>(crime_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;date&quot;</span>, <span class="st">&quot;primary_offense&quot;</span>,
+  <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;domestic&quot;</span>, <span class="st">&quot;beat&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;lon&quot;</span>)
+<span class="co"># Drop observations missing lat or lon</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(lat) &amp;<span class="st"> </span>!<span class="kw">is.na</span>(lon))
+<span class="co"># Convert dates</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">mdy_hms</span>(date))
+<span class="co"># Check it out again</span>
+crime_df</code></pre></div>
+<pre><code>## # A tibble: 2,203,481 x 8
+##         id date                primary_offense arrest domestic  beat   lat
+##      &lt;int&gt; &lt;dttm&gt;              &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt;
+##  1 8438081 2012-01-12 18:40:00 THEFT           true   false      131  41.9
+##  2 8438082 2012-01-08 12:00:00 THEFT           false  false     1732  41.9
+##  3 8438084 2012-01-12 19:23:00 NARCOTICS       true   false     1211  41.9
+##  4 8438085 2012-01-12 16:30:00 BATTERY         false  false     1623  42.0
+##  5 8438086 2012-01-11 13:00:00 CRIMINAL DAMAGE false  false     1412  41.9
+##  6 8438087 2012-01-10 02:00:00 ASSAULT         false  true      1732  41.9
+##  7 8438088 2012-01-12 17:55:00 THEFT           true   false     2513  41.9
+##  8 8438089 2012-01-10 16:00:00 MOTOR VEHICLE … false  false     1723  42.0
+##  9 8438090 2012-01-12 19:20:00 DECEPTIVE PRAC… true   false     1832  41.9
+## 10 8438091 2012-01-12 19:30:00 DECEPTIVE PRAC… false  false     1133  41.9
+## # ... with 2,203,471 more rows, and 1 more variable: lon &lt;dbl&gt;</code></pre>
+</div>
+<div id="spatial-points-data" class="section level3">
+<h3>Spatial points data</h3>
+<p>Great! While we know that these data depict a points in space, R does not. However, we can easily tell R which variables are the coordinates for these data. For this task, we use the <code>coordinates()</code> function from the <code>sp</code> package (loaded when we load <code>rgdal</code>). You define the coordinates in a data frame using a slightly strange formula of the form <code>coordinates(your_df) &lt;- ~ x_var + y_var</code>. Let’s do it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define longitude and latitude as our coordinates</span>
+<span class="kw">coordinates</span>(crime_df) &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>lon +<span class="st"> </span>lat</code></pre></div>
+<p>Check the class, the head, and the slot names of <code>crime_df</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check class</span>
+crime_df %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;SpatialPointsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check head</span>
+crime_df %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>## # A tibble: 6 x 6
+##        id date                primary_offense arrest domestic  beat
+##     &lt;int&gt; &lt;dttm&gt;              &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;
+## 1 8438081 2012-01-12 18:40:00 THEFT           true   false      131
+## 2 8438082 2012-01-08 12:00:00 THEFT           false  false     1732
+## 3 8438084 2012-01-12 19:23:00 NARCOTICS       true   false     1211
+## 4 8438085 2012-01-12 16:30:00 BATTERY         false  false     1623
+## 5 8438086 2012-01-11 13:00:00 CRIMINAL DAMAGE false  false     1412
+## 6 8438087 2012-01-10 02:00:00 ASSAULT         false  true      1732</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check slot names</span>
+crime_df %&gt;%<span class="st"> </span><span class="kw">slotNames</span>()</code></pre></div>
+<pre><code>## [1] &quot;data&quot;        &quot;coords.nrs&quot;  &quot;coords&quot;      &quot;bbox&quot;        &quot;proj4string&quot;</code></pre>
+<p>Notice that the variables we defined as the coordinates no longer show up in the <code>head</code>. If you check out the data frame in the <code>data</code> slot, you will not see the variables there, either. (Applying <code>head()</code> to the spatial points data frame is actually giving you the head of the data frame stored in the <code>data</code> slot.) So where did they go? The variables are now stored in the <code>coords</code> slot. See:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check out the coords slot</span>
+crime_df@coords %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<pre><code>##         lon      lat
+## 1 -87.63916 41.86449
+## 2 -87.71400 41.94883
+## 3 -87.68639 41.87963
+## 4 -87.76728 41.96173
+## 5 -87.71294 41.93927
+## 6 -87.72013 41.94916</code></pre>
+<p>When we converted the data frame to a spatial points data frame—by assigning the coordinates—what happened to the coordinate reference system (CRS)? Did R find/choose a CRS for us?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the projection</span>
+crime_df@proj4string</code></pre></div>
+<pre><code>## CRS arguments: NA</code></pre>
+<p>Nope. The coordinate reference system is missing. I could not find any information on the CRS that the city of Chicago uses, but let’s assume it matches their other data files—specifically the police beats shapefile we already loaded. We can assign the <code>proj4string</code> using a function by the same name. And we can grab the CRS from another object using the <code>crs()</code> function from the <code>raster</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Assing a CRS to the crime points data</span>
+<span class="kw">proj4string</span>(crime_df) &lt;-<span class="st"> </span><span class="kw">crs</span>(beats_shp)
+<span class="co"># See if it worked</span>
+crime_df@proj4string</code></pre></div>
+<pre><code>## CRS arguments: +proj=longlat +ellps=WGS84 +no_defs</code></pre>
+<p>Great!</p>
+</div>
+</div>
+<div id="points-in-polygons" class="section level2">
+<h2>Points in polygons</h2>
+<p>Let’s now add the points to our map. Because we have 2.2 million observations, we will focus on two primary offenses: narcotics (200,000+ observations) and homicide (about 3,600 observations). <code>dplyr</code>’s handy functions do not currently work on spatial points data frames, but we can use the old-fashioned <code>subset()</code> function, which is like a combination of <code>filter()</code> and <code>select()</code>. Let’s overwrite our current <code>crime_df</code> with the subset that includes only homicides and narcotics.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Take subset of crimes</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">subset</span>(primary_offense %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HOMICIDE&quot;</span>, <span class="st">&quot;NARCOTICS&quot;</span>))</code></pre></div>
+<p>As with the shapefile data, you can quickly plot a spatial points data frame using the base <code>plot()</code> function. Let’s do it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(crime_df)</code></pre></div>
+<p><img src="section12_files/figure-html/base%20plot%20points-1.png" width="672" /></p>
+<p>It looks like we have at least one observation that is not quite in Chicago. From the police beats, we know where Chicago is, so let’s use this knowledge to drop observations that are outside of Chicago.</p>
+<p>This observation brings up an important <em>point</em>: with all of the data manipulation required for spatial data—or any data-intensive project—it is good to continually check the quality of your data to make sure everything is making sense. For spatial data, this often looks like making many maps.</p>
+<p>First, let’s take the union of all of the polygons, which will give us a single polygon that outlines Chicago. For this task, we will use the function <code>gUnaryUnion()</code> from the <code>rgeos</code> package. We will plot the result using <code>plot()</code>.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Take the union of the beats polygons</span>
+chicago_union &lt;-<span class="st"> </span><span class="kw">gUnaryUnion</span>(beats_shp)
+<span class="co"># Plot the union</span>
+<span class="kw">plot</span>(chicago_union)</code></pre></div>
+<p><img src="section12_files/figure-html/chicago%20outline-1.png" width="672" /></p>
+<p>We can now use this union to keep the crimes that fall within Chicago’s city limits.<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> In particular, we can use the <code>over()</code> function from the <code>sp</code> package to determine which points are <em>over</em> which polygons.<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a> Thus, you can also use the <code>over()</code> function to map points to polygons or to grab the value of some variable related to a polygon for each point. Our use is much more simple: if the point is not <em>over</em> a polygon, then we get an <code>NA</code>. This task is sometimes referred to as <em>points in polygons</em>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check which crime points are inside of Chicago</span>
+test_points &lt;-<span class="st"> </span><span class="kw">over</span>(crime_df, chicago_union)
+<span class="co"># From 1 and NA to T and F (F means not in Chicago)</span>
+test_points &lt;-<span class="st"> </span>!<span class="kw">is.na</span>(test_points)</code></pre></div>
+<p>An alternative route that requires a bit more typing:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_xy &lt;-<span class="st"> </span>crime_df@coords
+chicago_xy &lt;-<span class="st"> </span>chicago_union@polygons[[<span class="dv">1</span>]]@Polygons[[<span class="dv">1</span>]]@coords
+test_points2 &lt;-<span class="st"> </span><span class="kw">point.in.polygon</span>(
+  crime_xy[,<span class="dv">1</span>], crime_xy[,<span class="dv">2</span>],
+  chicago_xy[,<span class="dv">1</span>], chicago_xy[,<span class="dv">2</span>])</code></pre></div>
+<p>Now we will use <code>test_points</code> to drop observations outside of Chicago’s limits.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_df &lt;-<span class="st"> </span>crime_df[<span class="kw">which</span>(test_points ==<span class="st"> </span>T), ]</code></pre></div>
+<p>Finally, let’s plot the crime points again to see if they now fit inside of the city.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(chicago_union, <span class="dt">col =</span> <span class="st">&quot;grey80&quot;</span>)
+<span class="kw">plot</span>(crime_df, <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">add =</span> T)</code></pre></div>
+<p><img src="section12_files/figure-html/do%20points%20fit-1.png" width="672" /></p>
+<p>Much better.</p>
+<p>But what if we want to do all of this in <code>ggplot2</code>?</p>
+</div>
+<div id="plotting-points-data-with-ggplot2" class="section level2">
+<h2>Plotting points data with <code>ggplot2</code></h2>
+<p>As we discussed above, <code>ggplot2</code> doesn’t really want spatial data objects—it just wants data frames (or similar objects). Therefore, to plot the spatial points data frame in <code>ggplot2</code>, we want to convert it <em>back</em> to a standard data frame. Because it may be hand to preserve the spatial object, let’s <em>copy</em> the current <code>crime_df</code>, renaming it to <code>crime_spdf</code> and then convert <code>crime_df</code> to a <code>tbl_df</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Copy the spatial points data frame, renaming</span>
+crime_spdf &lt;-<span class="st"> </span>crime_df
+<span class="co"># Convert the spatial points data frame to tbl_df</span>
+crime_df &lt;-<span class="st"> </span>crime_df %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+<span class="co"># Check classes</span>
+crime_spdf %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;SpatialPointsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_df %&gt;%<span class="st"> </span><span class="kw">class</span>()</code></pre></div>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<p>Alright, we are now ready to plot the police beat polygons with the crime data. Let’s make a map for each class of crime. I’ll add a factor variable for type of crime. I’ll also add year.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add a factor to crime_df</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">crime_fac =</span>
+  <span class="kw">factor</span>(primary_offense,
+    <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;HOMICIDE&quot;</span>, <span class="st">&quot;NARCOTICS&quot;</span>),
+    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Homicide&quot;</span>, <span class="st">&quot;Narcotics&quot;</span>)
+    ))
+<span class="co"># Add year</span>
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(date))
+<span class="co"># The maps</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> crime_df) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> beats_df, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group),
+    <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;grey60&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> crime_fac, <span class="dt">alpha =</span> crime_fac),
+    <span class="dt">size =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial distribution of homicides and narcotics offenses&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;Chicago, 2010 to present&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) +
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">viridis</span>(<span class="dv">2</span>, <span class="dt">end =</span> <span class="fl">0.6</span>)) +
+<span class="st">  </span><span class="kw">scale_alpha_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>)) +
+<span class="st">  </span><span class="kw">coord_map</span>() +
+<span class="st">  </span><span class="kw">facet_grid</span>(. ~<span class="st"> </span>crime_fac)</code></pre></div>
+<p><img src="section12_files/figure-html/plot%20beats%20and%20crimes-1.png" width="672" /></p>
+<p>What if we want to incorporate time into this picture? We can add another dimension to the <code>fact_grid()</code>. I’m also going to look only at 2010, 2013, and 2016 to keep things from getting too crazy.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The maps</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">subset</span>(crime_df, year %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">2010</span>, <span class="dv">2013</span>, <span class="dv">2016</span>))) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> beats_df, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group),
+    <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;grey60&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> crime_fac, <span class="dt">alpha =</span> crime_fac),
+    <span class="dt">size =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial distribution of homicides and narcotics offenses&quot;</span>,
+    <span class="dt">subtitle =</span> <span class="st">&quot;Chicago, 2010 to present&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) +
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">viridis</span>(<span class="dv">2</span>, <span class="dt">end =</span> <span class="fl">0.6</span>)) +
+<span class="st">  </span><span class="kw">scale_alpha_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>)) +
+<span class="st">  </span><span class="kw">coord_map</span>() +
+<span class="st">  </span><span class="kw">facet_grid</span>(year ~<span class="st"> </span>crime_fac)</code></pre></div>
+<p><img src="section12_files/figure-html/year%20and%20space-1.png" width="672" /></p>
+<p>Nice. These maps are pretty interesting—you can see Chicago’s highly publicized homicide explosion in 2016, but you can also see a (non-publicized) large drop in the narcotics busts in 2016.</p>
+</div>
+<div id="aggregating-points-to-polygons" class="section level2">
+<h2>Aggregating points to polygons</h2>
+<p>What if want to count the number of incidents within a beat? You could use the <code>over()</code> function from the <code>sp</code> package, but the <code>poly.counts()</code> function in the <code>GISTools</code> package is a bit easier. You feed the function a dataset of points and a dataset of polygons, and <code>poly.counts()</code> counts the points within each polygon.</p>
+<p>The general use would look like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">poly.counts</span>(<span class="dt">pts =</span> crime_spdf, <span class="dt">polys =</span> beats_shp)</code></pre></div>
+<p>which returns a list (the same length as the number of polygons) of integers that count the number of points within each polygon.</p>
+<p>But what if we want counts by year?</p>
+<p>Let’s also add a year feature to the spatial points data frame.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add &#39;year&#39; to spatial points data frame</span>
+crime_spdf@data %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(date))</code></pre></div>
+<p>Now let’s count the points in each polygon (beat) by year and by type of crime.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Count homicides by year</span>
+homicide_beats &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dt">X =</span> <span class="dv">2010</span>:<span class="dv">2016</span>, <span class="dt">FUN =</span> function(y) {
+  <span class="co"># Count points in polygons</span>
+  tmp &lt;-<span class="st"> </span><span class="kw">poly.counts</span>(
+    <span class="dt">pts =</span> <span class="kw">subset</span>(crime_spdf, (year ==<span class="st"> </span>y) &amp;<span class="st"> </span>(primary_offense ==<span class="st"> &quot;HOMICIDE&quot;</span>)),
+    <span class="dt">polys =</span> beats_shp)
+  <span class="co"># Create data frame</span>
+  tmp_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="dt">id =</span> <span class="kw">names</span>(tmp),
+    <span class="dt">count =</span> tmp)
+  <span class="co"># Change names</span>
+  <span class="kw">names</span>(tmp_df)[<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;hom_&quot;</span>, y)
+  <span class="co"># Return tmp_df</span>
+  <span class="kw">return</span>(tmp_df)
+  })
+<span class="co"># Count narcotics offenses by year</span>
+narcotics_beats &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dt">X =</span> <span class="dv">2010</span>:<span class="dv">2016</span>, <span class="dt">FUN =</span> function(y) {
+  <span class="co"># Count points in polygons</span>
+  tmp &lt;-<span class="st"> </span><span class="kw">poly.counts</span>(
+    <span class="dt">pts =</span> <span class="kw">subset</span>(crime_spdf, (year ==<span class="st"> </span>y) &amp;<span class="st"> </span>(primary_offense ==<span class="st"> &quot;NARCOTICS&quot;</span>)),
+    <span class="dt">polys =</span> beats_shp)
+  <span class="co"># Create data frame</span>
+  tmp_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="dt">id =</span> <span class="kw">names</span>(tmp),
+    <span class="dt">count =</span> tmp)
+  <span class="co"># Change names</span>
+  <span class="kw">names</span>(tmp_df)[<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;narc_&quot;</span>, y)
+  <span class="co"># Return tmp_df</span>
+  <span class="kw">return</span>(tmp_df)
+  })</code></pre></div>
+<p>Finally, we will (1) bind these lists of datasets together, and (2) join these datasets onto the data stored in the police beats shapefile (in the <code>data</code> slot).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Bind the lists together</span>
+narc_df &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(narcotics_beats)
+hom_df &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(homicide_beats)
+<span class="co"># Select unique columns</span>
+narc_df &lt;-<span class="st"> </span>narc_df[, !<span class="kw">duplicated</span>(<span class="kw">names</span>(narc_df))] %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
+hom_df &lt;-<span class="st"> </span>hom_df[, !<span class="kw">duplicated</span>(<span class="kw">names</span>(hom_df))] %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()</code></pre></div>
+<p>Finally, we can join these data in <code>hom_df</code> and <code>narc_df</code> to the <code>data</code> slot in our shapefile. We will add the row names to the shapefile’s data so that we can join the dataset with <code>narc_df</code> and <code>hom_df</code>. We will then update <code>beats_df</code> using <code>tidy()</code>. Finally, to join the new variables, we will use <code>left_join()</code> from <code>dplyr</code>. It’s a great function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add row names</span>
+beats_shp@data$id &lt;-<span class="st"> </span><span class="kw">rownames</span>(beats_shp@data)
+<span class="co"># Join the count data</span>
+beats_shp@data &lt;-<span class="st"> </span><span class="kw">left_join</span>(<span class="dt">x =</span> beats_shp@data, <span class="dt">y =</span> narc_df, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)
+beats_shp@data &lt;-<span class="st"> </span><span class="kw">left_join</span>(<span class="dt">x =</span> beats_shp@data, <span class="dt">y =</span> hom_df, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)
+<span class="co"># Re-create data frame</span>
+beats_df &lt;-<span class="st"> </span><span class="kw">tidy</span>(beats_shp, <span class="dt">region =</span> <span class="st">&quot;id&quot;</span>)
+<span class="co"># Join the beats counts (again)</span>
+beats_df %&lt;&gt;%<span class="st"> </span><span class="kw">left_join</span>(<span class="dt">x =</span> ., <span class="dt">y =</span> narc_df, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)
+beats_df %&lt;&gt;%<span class="st"> </span><span class="kw">left_join</span>(<span class="dt">x =</span> ., <span class="dt">y =</span> hom_df, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)</code></pre></div>
+<p>And now, we can plot our shapefile, coloring the police beats by the number of homicides in 2016. We will update <code>beats_df</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beats_df, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group)) +
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> hom_2016), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="fl">0.07</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Homicides by police beat, Chicago 2016&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Homicides within police beat&quot;</span>,
+    <span class="dt">option =</span> <span class="st">&quot;B&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="section12_files/figure-html/homicides%20by%20beat%202016-1.png" width="672" /></p>
+<p>Let’s also plot the within-beat change between 2010 and 2016.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beats_df, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group)) +
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> hom_2016 -<span class="st"> </span>hom_2010), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="fl">0.07</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Homicide change between 2010 and 2016, by police beat, Chicago&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Change in number of homicides within police beat&quot;</span>,
+    <span class="dt">option =</span> <span class="st">&quot;B&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="section12_files/figure-html/homicide%20growth%20in%20beat-1.png" width="672" /></p>
+<p>Finally, let’s make the same plots for narcotics.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beats_df, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group)) +
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> narc_2016), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="fl">0.07</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Narcotics by police beat, Chicago 2016&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Narcotics offenses within police beat&quot;</span>,
+    <span class="dt">option =</span> <span class="st">&quot;B&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="section12_files/figure-html/narcotics%20by%20beat%202016-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beats_df, <span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group)) +
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> narc_2016 -<span class="st"> </span>narc_2010), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="fl">0.07</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Narcotics change between 2010 and 2016, by police beat, Chicago&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text =</span> <span class="kw">element_blank</span>()) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Change in number of narcotics offenses within police beat&quot;</span>,
+    <span class="dt">option =</span> <span class="st">&quot;B&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="section12_files/figure-html/narcotics%20growth%20in%20beat-1.png" width="672" /></p>
+<p>Let’s quickly compare the change in homicides and the change in narcotics.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">unique</span>(beats_df %&gt;%<span class="st"> </span><span class="kw">select</span>(id, <span class="kw">starts_with</span>(<span class="st">&quot;hom&quot;</span>), <span class="kw">starts_with</span>(<span class="st">&quot;narc&quot;</span>))),
+  <span class="kw">aes</span>(<span class="dt">x =</span> hom_2016 -<span class="st"> </span>hom_2010, <span class="dt">y =</span> narc_2016 -<span class="st"> </span>narc_2010)) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">size =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>, <span class="dt">size =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>, <span class="dt">shape =</span> <span class="dv">19</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">formula =</span> <span class="st">&quot;y ~ x&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="kw">expression</span>(Delta*Homicide~(N[<span class="dv">2016</span>]-N[<span class="dv">2010</span>])),
+    <span class="dt">y =</span> <span class="kw">expression</span>(Delta*Narcotics~(N[<span class="dv">2016</span>]-N[<span class="dv">2010</span>]))
+  ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Changes in homicides and narcotics offenses by police beat, Chicago&quot;</span>) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section12_files/figure-html/comparing%20changes-1.png" width="672" /></p>
+</div>
+</div>
+<div id="projections" class="section level1">
+<h1>Projections</h1>
+<p>Let’s return to the <code>proj4string</code> slot for a moment. This slot contains the projection (coordinate reference system or CRS) used in creating the shapefile. <a href="https://xkcd.com/977/">Different projections</a> yield different sets of coordinates. Thus, if your projects entails multiple datasets—as most do—then you need to make sure that you are using a consistent projection across all of your datasets/files. If you do not, then (0, 0) in one of your datasets may actually be (180, 180) in another of your datasets—nothing will line up (or it will erroneously line up). Be careful here. For information on how to change projections, see the help files <code>?raster::crs</code>, <code>?rgdal::spTransform</code>, the <a href="https://cran.r-project.org/web/packages/proj4/proj4.pdf"><code>proj4</code> package</a>, and/or the <a href="http://proj4.org/">proj.4 website</a>).</p>
+</div>
+<div id="other-resources" class="section level1">
+<h1>Other resources</h1>
+<p>If you are interested in learing more about spatial data, check out <a href="http://globalpolicy.science/solomon-hsiang">Sol Hsiang</a>’s course, Public Policy 290.</p>
+<p>Here are a few more resources for utilizing spatial data in R.</p>
+<ul>
+<li><a href="http://www.nickeubank.com/wp-content/uploads/2015/10/gis_in_r_vector_cheatsheet.pdf" class="uri">http://www.nickeubank.com/wp-content/uploads/2015/10/gis_in_r_vector_cheatsheet.pdf</a></li>
+<li><a href="https://science.nature.nps.gov/im/datamgmt/statistics/r/advanced/spatial.cfm" class="uri">https://science.nature.nps.gov/im/datamgmt/statistics/r/advanced/spatial.cfm</a></li>
+<li><a href="https://www.datacamp.com/courses/working-with-geospatial-data-in-r" class="uri">https://www.datacamp.com/courses/working-with-geospatial-data-in-r</a></li>
+<li><a href="http://www.rspatial.org/" class="uri">http://www.rspatial.org/</a></li>
+<li><a href="https://pakillo.github.io/R-GIS-tutorial/" class="uri">https://pakillo.github.io/R-GIS-tutorial/</a></li>
+<li><a href="http://spatial.ly/r/" class="uri">http://spatial.ly/r/</a></li>
+<li><a href="https://cran.r-project.org/doc/contrib/intro-spatial-rl.pdf" class="uri">https://cran.r-project.org/doc/contrib/intro-spatial-rl.pdf</a></li>
+<li><a href="ftp://ftp.bgc-jena.mpg.de/pub/outgoing/mforkel/Rcourse/spatialR_2015.pdf" class="uri">ftp://ftp.bgc-jena.mpg.de/pub/outgoing/mforkel/Rcourse/spatialR_2015.pdf</a></li>
+</ul>
+</div>
+<div id="fun-tools-qgis" class="section level1">
+<h1>Fun tools: QGIS</h1>
+<p>I’m happy to chat more about QGIS, but here’s a quick teaser: <img src="Images/myQGIS.png" /> Temperature and QGIS.</p>
+</div>
+<div id="fun-tools-unpaywall" class="section level1">
+<h1>Fun tools: unpaywall</h1>
+<p>The browser extension <a href="http://unpaywall.org">unpaywall</a> helps you find papers that are behind a paywall. It doesn’t work all the time, but it works frequently, and I imagine/hope it will continue to get better.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>I told you it was important!<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Fact.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>I downloaded these data from <a href="https://data.cityofchicago.org/">Chicago’s great data portal</a>.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>or <code>tibble</code> or <code>tbl_df</code> or <code>data.table</code><a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Recall that we use <code>a_list[[n]]</code> to access the n<sup>th</sup> object of the list <code>a_list</code>.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>I know, too much. I just wanted to emphasize that you will hear different words for the same concept across disciplines.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>If it is taking too long, try saving the plot, rather than printing it to screen.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>You can use this <code>tidy()</code> function for tidying up all kinds of objects.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>See <code>?coord_map</code> for more information.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>In your actual research, you want to be careful with which observations are missing values—it is quite likely that latitude and longitude are not missing at random.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>The reason we take the union here is that we want a single polygon when testing whether the points are in Chicago. It makes life a bit easier.<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>You could also make use of the bounding box of the shapefile for the exercise, but it would not be as clean—you might still have crimes that are outside of the police beats.<a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p><strong>Warning</strong>: The <code>over()</code> function can be a bit slow—the task we are asking R to complete can be pretty computationally intense if you have complex shapes for your polygons (many points making up your polygons) and many points to test.<a href="#fnref13">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
