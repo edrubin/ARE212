@@ -331,3 +331,16 @@ ggplot(beats_df, aes(long, lat, group = group)) +
   scale_fill_viridis("Change in number of narcotics offenses within police beat",
     option = "B") +
   coord_map()
+
+ggplot(unique(beats_df %>% select(id, starts_with("hom"), starts_with("narc"))),
+  aes(x = hom_2016 - hom_2010, y = narc_2016 - narc_2010)) +
+  geom_hline(yintercept = 0, size = 0.3) +
+  geom_vline(xintercept = 0, size = 0.3) +
+  geom_point(color = "grey40", shape = 19, alpha = 0.5) +
+  geom_smooth(formula = "y ~ x", method = "lm") +
+  labs(
+    x = expression(Delta*Homicide~(N[2016]-N[2010])),
+    y = expression(Delta*Narcotics~(N[2016]-N[2010]))
+  ) +
+  ggtitle("Changes in homicides and narcotics offenses by police beat, Chicago") +
+  theme_ed
