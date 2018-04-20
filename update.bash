@@ -20,8 +20,6 @@ Rscript -e 'rmarkdown::render_site("section09.Rmd")'
 Rscript -e 'rmarkdown::render_site("section10.Rmd")'
 Rscript -e 'rmarkdown::render_site("section11.Rmd")'
 Rscript -e 'rmarkdown::render_site("section12.Rmd")'
-# Rscript -e 'rmarkdown::render_site("section12b.Rmd")'
-# Rscript -e 'rmarkdown::render_site("section13.Rmd")'
 Rscript -e 'rmarkdown::render_site("syllabi.Rmd")'
 
 Rscript pdfScript.R

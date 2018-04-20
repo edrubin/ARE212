@@ -1,5 +1,5 @@
 ---
-title: "Section 12b: Spatial data, continued"
+title: "Section 13: Spatial data, continued"
 header-includes:
 output:
   html_document:
@@ -11,26 +11,33 @@ output:
       smooth_scroll: true
 ---
 
+[<span class="fa-stack fa-4x">
+  <i class="fa fa-folder fa-stack-2x"></i>
+  <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i>
+</span>](Section13.zip)
+
 <br>
 
 # Admin
 
 ## Announcements
 
-See the [notes for Section 13](section13.html).
+Office hours today! New time/location: 12pm–1:30pm in Giannini Hall, room 254.
 
 ## What you will need
 
 __Packages__:
 
-- New: `ggmap` and `leaflet` (and `raster`, though we loaded it last week)
+- New: `ggmap`, `ncdf4`, `leaflet`, `fields` (and `raster`, though we loaded it last week)
 - Old: `lubridate`, `rgdal`, `raster`, `broom`, `rgeos`, `GISTools`, `dplyr`, `ggplot2`, `ggthemes`, `magrittr`, and `viridis`
 
 __Data__:
 
-- The file [chicagoNightLights.tif](Section12b/chicagoNightLights.tif)
+- The file [chicagoNightLights.tif](Section13/chicagoNightLights.tif)
 - The folder [ChicagoPoliceBeats](Section12/ChicagoPoliceBeats.zip), which contains the shapefile of Chicago's police beats.
 - The file [chicagoCrime.rds](Section12/chicagoCrime.rds)
+- The file [GlobalGWRc_PM25_GL_201001_201612-RH35.nc](Section/GlobalGWRc_PM25_GL_201001_201612-RH35.nc)
+- The file [GlobalGWRc_PM25_GL_201601_201612-RH35.nc](Section/GlobalGWRc_PM25_GL_201601_201612-RH35.nc)
 
 # Spatial data, continued
 
@@ -38,7 +45,7 @@ These notes continue our discussion of spatial data, which we began in [Section 
 
 # Raster data
 
-As I mentioned previously, raster data are grids with values assigned to the squares within the grid.^[This is exactly how pictures work, which is why you will sometimes see rasters in the same file formats as pictures from a camera—.jpeg, .tif, _etc._] A major difference between rasters and vectors: vectors are composed of discrete elements throughout space, whereas rasters are defined continuously through space. Although you still end up with non-continuous movement in the values between cells, you can think of a raster as the interpolation of a field (variable) that is constant through space. A common example is temperature. Every point on Earth's surface has a temperature. And guess what... you can get temperature rasters.^[See [NOAA](https://www.ncdc.noaa.gov/cdo-web/), [NARR](https://www.esrl.noaa.gov/psd/data/gridded/data.narr.html), and [Berkeley Earth](http://berkeleyearth.org/) for examples.] Other examples? [Air quality/pollution](https://earthdata.nasa.gov/earth-observation-data/near-real-time/hazards-and-disasters/air-quality), property values, [land cover](https://www.mrlc.gov/nlcd2011.php), [elevation](https://nationalmap.gov/elevation.html), and [population](http://sedac.ciesin.columbia.edu/data/set/gpw-v3-population-density) (sort of).
+As I mentioned previously (briefly), raster data are essentially grids with values assigned to the squares within the grid.^[This is exactly how pictures work, which is why you will sometimes see rasters in the same file formats as pictures from a camera—.jpeg, .tif, _etc._] A major difference between rasters and vectors: vectors are composed of discrete elements throughout space, whereas rasters are defined continuously through space. Although you still end up with non-continuous movement in the values between cells, you can think of a raster as the interpolation of a field (variable) that is constant through space. A common example is temperature. Every point on Earth's surface has a temperature. And guess what... you can get temperature rasters!^[See [NOAA](https://www.ncdc.noaa.gov/cdo-web/), [NARR](https://www.esrl.noaa.gov/psd/data/gridded/data.narr.html), and [Berkeley Earth](http://berkeleyearth.org/) for examples.] Other examples? [Air quality/pollution](https://earthdata.nasa.gov/earth-observation-data/near-real-time/hazards-and-disasters/air-quality), property values, [land cover](https://www.mrlc.gov/nlcd2011.php), [elevation](https://nationalmap.gov/elevation.html), and [population](http://sedac.ciesin.columbia.edu/data/set/gpw-v3-population-density) (sort of).
 
 ## R setup
 
@@ -49,10 +56,11 @@ Let's set up R and then dive in.
 # Options
 options(stringsAsFactors = F)
 # Load new packages
-pacman::p_load(ggmap, leaflet)
+library(pacman)
+p_load(ggmap, leaflet)
 # Load old packages
-pacman::p_load(lubridate, rgdal, raster, broom, rgeos, GISTools)
-pacman::p_load(dplyr, ggplot2, ggthemes, magrittr, viridis)
+p_load(lubridate, rgdal, raster, broom, rgeos, GISTools)
+p_load(dplyr, ggplot2, ggthemes, fields, magrittr, viridis)
 # My ggplot2 theme
 theme_ed <- theme(
   legend.position = "bottom",
@@ -63,8 +71,8 @@ theme_ed <- theme(
   panel.grid.minor = element_line(color = "grey95", size = 0.3),
   legend.key = element_blank())
 # My directories
-dir_12 <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section12/"
-dir_12b <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/Spring2017/Section12b/"
+dir_12 <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/Section12/"
+dir_13 <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/Section13/"
 ```
 
 ## Loading rasters
@@ -74,7 +82,7 @@ We need a raster.^[Usually, your research question will dictate which dataset yo
 Let's read in this raster (named `chicagoNightLights.tif`). For this task, we will use the `raster()` function from the `raster` package.^[Creative naming, right?] We will also load the police beats shapefile that we used in the previous section.
 ```{R, read Chicago lights raster, messages = F}
 # Read the Chicago lights raster
-chi_lights <- raster(paste0(dir_12b, "chicagoNightLights.tif"))
+chi_lights <- raster(paste0(dir_13, "chicagoNightLights.tif"))
 # Read the Chicago police beats shapefile
 chi_beats <- readOGR(paste0(dir_12, "ChicagoPoliceBeats"), "chiBeats")
 ```
@@ -82,13 +90,13 @@ chi_beats <- readOGR(paste0(dir_12, "ChicagoPoliceBeats"), "chiBeats")
 As was the case with vectors (shapefiles), we can quickly and easily plot rasters using R's `base` `plot()` function. Again, this frequent plotting—particularly after loading a new file—is a good policy that helps you avoid errors and better understand what you are looking at/doing. Once again, I am going to use the `virids` package (and function) for its color palette.
 ```{R, quick plot of lights raster, fig.height = 8}
 # Plot the Chicago night lights raster
-plot(chi_lights, col = viridis(1e3))
+plot(chi_lights, col = viridis(1e3), axes = F, box = F)
 ```
 
 Now that we've plotted the raster, let's plot the police beats shapefile _over_ the raster, using the `base` `lines()` function. You could also use `plot()` here with the additional argument `add = T`. The `lwd` argument specifies the width of the lines.
 ```{R, plot of lights raster with beats, fig.height = 8}
 # Plot the Chicago night lights raster
-plot(chi_lights, col = viridis(1e3))
+plot(chi_lights, col = viridis(1e3), axes = F, box = F)
 # Plot the police beats over the night lights raster
 lines(chi_beats, col = "white", lwd = 0.8)
 ```
@@ -134,7 +142,7 @@ We generally want to take some sort of summary statistics of our raster. Often, 
 - `fun`: the function we will use to summarize the raster (here: `mean`)
 - `na.rm`: do you want to remove missing values (`NA`s)?
 - `df`: (optional) do you want a data frame (rather than a matrix)
-  - `sp`: (optional) do you want the outputted results attached the the `data` slot of `y` (requires the `y` is an `sp` object, _i.e._, spatial polygons or spatial lines.)
+- `sp`: (optional) do you want the outputted results attached the the `data` slot of `y` (requires the `y` is an `sp` object, _i.e._, spatial polygons or spatial lines.)
 
 Because we would end up joining the results of `extract()` to our spatial polygons data frame (`chi_beats`), I will go ahead and specify `sp = TRUE`.
 
@@ -274,7 +282,7 @@ ggplot() +
   scale_fill_viridis("", discrete = T)
 ```
 
-It actually looks like the crimes occur in locations with a bit more light.^[I'm looking at the thicker lower tail for _All of Chicago_.] We can also check out the means:^[I'm not logging here. Apologies for being inconsistent.]
+It actually looks like the crimes occur in locations with a bit more light.^[I'm looking at the thicker lower tail for _All of Chicago_.] We can also check out the summary statistics for each group:^[I'm not logging here. Apologies for being inconsistent.]
 
 ```{R, mean comparison}
 # Compare means
@@ -292,6 +300,79 @@ crime_extract %>%
 ```
 
 These numerical summaries are consistent with what we observed in the density plot above: the recorded crimes tend to happen in places that are brighter than the average point in Chicago. Of course, this observation is not causal and does not include standard errors/inference (or even a formal point estimate), so I wouldn't recommend any policy decisions quite yet.
+
+## NetCDFs
+
+As you travel through the world of geospatial data, you will likely encounter netCDF data (file extension: `.nc`). NetCDF is a file type common to more (physical) scientific datasets (_e.g._, temperature and atmospheric modeling). It's actually [more than _just_ a file type](https://www.unidata.ucar.edu/software/netcdf/), but for our purposes, we'll treat it as a filetype. NetCDFs contain raster data—gridded latitudes and longitudes paired with values. Lucky for us, the `raster` package and its `raster()` function can typically handle netCDF data, so long as you have installed the `ncdf4` package. The `ncdf4` package has a bunch of tools for working with (reading, creating, and manipulating) netCDFs, but for our purposes today, we can use `raster()`.
+
+Let's load two netCDFs from the [Atomspheric Composition Analysis Group at Dalhousie Univeristy](http://fizz.phys.dal.ca/~atmos/martin/?page_id=140). The two files contain estimates for annual mean PM2.5 levels for 2010 and 2016.^[[The authors use](http://ffizz.phys.dal.ca/~atmos/martin/?page_id=140) satellite-measured Aerosol Optical Depth (AOD) in conjunction with a chemical transport model and geographically weighted regression.]
+
+
+```{R, load netcdfs}
+pm_2010 <- paste0(dir_13, "GlobalGWRc_PM25_GL_201001_201012-RH35.nc") %>% raster()
+pm_2016 <- paste0(dir_13, "GlobalGWRc_PM25_GL_201601_201612-RH35.nc") %>% raster()
+```
+_Note_: If you get an error, make sure you've installed `ncdf4` on your computer.
+
+So what do we have?
+```{R, check netcdfs}
+pm_2010
+pm_2016
+```
+
+If we want, we can load both of the files into a raster stack. This feature works for all rasters and can help you when you are performing operations on a bunch of rasters.
+```{R, raster stack}
+# Load
+pm_stack <- paste0(dir_13, c(
+  "GlobalGWRc_PM25_GL_201001_201012-RH35.nc",
+  "GlobalGWRc_PM25_GL_201601_201612-RH35.nc")
+) %>% stack()
+# Check
+pm_stack
+```
+
+Notice that we now have a fourth dimension: the layers of the raster stack.
+
+We can quickly plot the raster, as before:
+```{R, plot netcdf raster, fig.height = 8}
+# Quick plots of the loaded ncdfs
+plot(pm_2010, col = inferno(1e3), axes = F, box = F)
+plot(pm_2016, col = inferno(1e3), axes = F, box = F)
+```
+
+However, it's hard to compare across these two maps, since the color scales are different. One option would be to create a constant color scale (`ggplot2` has a fairlystraightforward way of accomplishing this task using the [`scale_*_gradient*` functions](http://ggplot2.tidyverse.org/reference/scale_gradient.html) and the [`guide_colorbar`](https://ggplot2.tidyverse.org/reference/guide_colourbar.html)), but we're going to g a different route...
+
+Another great thing about rasters is that you can perform mathematic operations on them (since they are essentially fancy matrices). So to compare the two years—meaning we want to see how PM2.5 changed (as estimated by the authors) between 2010 and 2016—we just use subtraction (`-`):
+```{R, raster subtraction}
+plot(pm_2016 - pm_2010, col = inferno(1e3), axes = F, box = F)
+```
+
+Interesting, but the color scale is still not super informative: zero is stuck in a arbitrary dark purple region. Enter: the `fields` package. We basically need to know the minimum and maximum values and the colors we want to assign to the minimum, the maximum, and any other points in the color scale (for us: the number zero). The `getValues()` function from the `raster` package is helpful here. Keep in the mind that there are a lot of `NA`s because our PM2.5 estimates are only for land, while the raster field is defined for the whole globe.
+```{R, diff min max}
+# Min and max values of PM difference (2016 - 2010)
+diff_min <- getValues(pm_2016 - pm_2010) %>% min(na.rm = T)
+diff_max <- getValues(pm_2016 - pm_2010) %>% max(na.rm = T)
+```
+
+We can create a color scale that spans from the global minimum to the global maximum, giving us a constant color scale for reasonable visual comparison. We will use the `designer.colors()` function from the `fields` package, which wants (as arguments) the number of colors we want to generate for the color scale (`n`), a set of colors for the color scale (`col`, which can be names or hex values), and the positions of the colors on a numeric scale.^[[ColorBrewer](http://colorbrewer2.org/#type=diverging&scheme=PRGn&n=5) can be helpful for picking color scales.]
+
+```{R, plot ncdf constant color, fig.height = 8}
+# Create the color scale
+c_scale <- designer.colors(
+  n = 500,
+  col = c(inferno(100)[25], "grey92", inferno(100)[70]),
+  x = c(diff_min, 0, diff_max),
+  alpha = 1
+)
+# Plot again
+plot(pm_2016 - pm_2010, col = c_scale, axes = F, box = F)
+```
+
+Finally, if we want to zoom in a bit, we can use the `crop()` function (from the `raster` package). Usually you crop one object to the _extent_ of another object, but we can also create our own extent (it's pretty much just a box based upon `xmin`, `xmax`, `ymin`, `ymax`). Let's zoom in on some of the PM2.5 action (changes) in Asia.
+```{R, crop raster subtraction}
+crop(pm_2016 - pm_2010, extent(25, 150, -25, 50)) %>%
+  plot(col = c_scale, axes = F, box = F)
+```
 
 ## Creating a raster
 
@@ -361,32 +442,60 @@ As you may have guessed, you can also geocode using R (and an internet connectio
 - `source`: the source used for geocoding; either `"google"` for Google or `"dsk"` for the Data Science Toolkit
 
 Alright, let's try geocoding an address. We'll give it a tricky one—the address of Giannini Hall, which is even difficult for pizza-delivery people who live in Berkeley. We will try both sources.
-```{R, geocoding giannini}
+```{R, geocoding giannini, cache = T}
 # Geocode with Google
 geo_google <- geocode(
-  "207 Giannini Hall #3310 University of California Berkeley, CA 94720-3310",
+  "Giannini Hall, #3310 University of California Berkeley, CA 94720",
   output = "more",
   source = "google")
+# Geocode with DSK
+geo_dsk <- geocode(
+  "Giannini Hall, #3310 University of California Berkeley, CA 94720",
+  output = "more",
+  source = "dsk")
 ```
 
-__Note__: I used to have an example here contrasting Google's (great) geocoding of Giannini Hall with the (less-stellar but open-source) Data Science Toolkit (the `source = "dsk"` in the `geocode()` function), but I cannot currently find a working page for the Data Science Toolkit.
+__Note__: The (less-stellar but open-source) Data Science Toolkit (the `source = "dsk"` in the `geocode()` function), has been a bit unstable in the past.
 
-First, let's see how Google did.^[You are restricted to 2500 queries to Google each day.]
+First, let's see how Google and the DSK each did.^[You are restricted to 2500 queries to Google each day.]
 ```{R, geocode google, cache = T}
 geo_google
+geo_dsk
 ```
 
 It's hard to tell from this print out, but it seems as though Google did well. You can at least see that Google stayed inside of the city that we gave them and identified the location as an 'establishment.'
 
 Let's zoom in on Google's geocoding.
-```{R, zoom google, fig.width = 8}
+```{R, map both geocodes, fig.width = 8}
+leaflet() %>%
+  addMarkers(lng = geo_google$lon, lat = geo_google$lat, popup = "Google") %>%
+  addMarkers(lng = geo_dsk$lon, lat = geo_dsk$lat, popup = "DSK") %>%
+  addProviderTiles(providers$OpenStreetMap.HOT)
+```
+
+Interesting. Let's map the two geocodings individually to see where they ended up.
+
+First up: Google.
+
+```{R, map google geocode, fig.width = 8}
 leaflet() %>%
   addMarkers(lng = geo_google$lon, lat = geo_google$lat, popup = "Google") %>%
   addProviderTiles(providers$OpenStreetMap.HOT) %>%
   setView(lng = geo_google$lon, lat = geo_google$lat, zoom = 17)
 ```
 
-Impressive. I'm pretty sure Google found my desk.
+Impressive. Not quite the correct building, but quite close. (Note: Last year Google did better.)
+
+Now for the data science toolkit.
+
+```{R, map dsk geocode, fig.width = 8}
+leaflet() %>%
+  addMarkers(lng = geo_dsk$lon, lat = geo_dsk$lat, popup = "DSK") %>%
+  addProviderTiles(providers$OpenStreetMap.HOT) %>%
+  setView(lng = geo_dsk$lon, lat = geo_dsk$lat, zoom = 12)
+```
+
+A bit less impressive. The DSK geocoded Giannini Hall as somewhere near Gainesville, Georgia.
 
 An important point for geocoding: You will not always get quality results, and it is really helpful to have a way to "check" your work. One way is to use several geocoding services to see if you are getting consistent results—though they may all make the same mistake.
 
@@ -406,9 +515,15 @@ m <- leaflet() %>%
   setView(lng = -96.6852, lat = 40.8258, zoom = 12)
 ```
 
-CartoDB:
+CartoDB's standard map:
 ```{R, leaflet cartodb, fig.width = 8}
 m %>% addProviderTiles(providers$CartoDB)
+```
+
+CartoDB's _dark-matter_ map (zoomed out):
+```{R, leaflet cartodb dark matter, fig.width = 8}
+m %>% addProviderTiles(providers$CartoDB.DarkMatter) %>%
+  setView(lng = -96.6852, lat = 40.8258, zoom = 4)
 ```
 
 OpenMapSurfer's roads map:
@@ -431,6 +546,14 @@ ESRI's "World Terrain" map (zoomed out):
 m %>% addProviderTiles(providers$Esri.WorldTerrain) %>%
   setView(lng = -96.6852, lat = 40.8258, zoom = 4)
 ```
+
+Stamen's _water color_ map (zoomed out):
+```{R, leaflet stamen watercolor, fig.width = 8}
+m %>% addProviderTiles(providers$Stamen.Watercolor) %>%
+  setView(lng = -96.6852, lat = 40.8258, zoom = 4)
+```
+
+And to go full circle...
 
 NASA's "Viirs Earth At Night, 2012" map (zoomed out):
 ```{R, leaflet nasa viirs night, fig.width = 8}

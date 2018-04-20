@@ -98,14 +98,14 @@ Spatial data. Shapefiles, points data, maps, and—more generally—R as a GIS.
 [pdf](Section12/section12.pdf) | [R script](Section12/section12.R) | [zip](Section12.zip)
 <br><br>
 
-<!-- #### [__Section 12b__](section12b.html): Spatial data, continued
+#### [__Section 13__](section13.html): Spatial data, continued
 
 Spatial data. Rasters, geocoding, and mapping in R.
 
-[pdf](Section12b/section12b.pdf) | [R script](Section12b/section12b.R) | [zip](Section12b.zip)
+[pdf](Section13/section13.pdf) | [R script](Section13/section13.R) | [zip](Section13.zip)
 <br><br>
 
-#### [__Section 13__](section13.html): Introduction to `data.table`
+<!-- #### [__Section 13__](section13.html): Introduction to `data.table`
 
 An introduction to the `data.table` package (useful for working with large datasets).
 
