@@ -36,6 +36,8 @@ navbar:
       href: section12.html
     - text: Section 13
       href: section13.html
+    - text: Section 14
+      href: section14.html
     - text: LaTeX and knitr
       href: latexKnitr.html
     - text: '---------'
@@ -62,4 +64,3 @@ output:
       after_body: footer.html
     lib_dir: site_libs
     self_contained: no
-

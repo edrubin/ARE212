@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Section 14: Simultaneous Equations Models</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ARE 212</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Section notes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="notes.html">Table of Contents</a>
+    </li>
+    <li>
+      <a href="section00.html">Section 0</a>
+    </li>
+    <li>
+      <a href="section01.html">Section 1</a>
+    </li>
+    <li>
+      <a href="section02.html">Section 2</a>
+    </li>
+    <li>
+      <a href="section03.html">Section 3</a>
+    </li>
+    <li>
+      <a href="section04.html">Section 4</a>
+    </li>
+    <li>
+      <a href="section05.html">Section 5</a>
+    </li>
+    <li>
+      <a href="section06.html">Section 6</a>
+    </li>
+    <li>
+      <a href="section07.html">Section 7</a>
+    </li>
+    <li>
+      <a href="section08.html">Section 8</a>
+    </li>
+    <li>
+      <a href="section09.html">Section 9</a>
+    </li>
+    <li>
+      <a href="section10.html">Section 10</a>
+    </li>
+    <li>
+      <a href="section11.html">Section 11</a>
+    </li>
+    <li>
+      <a href="section12.html">Section 12</a>
+    </li>
+    <li>
+      <a href="section13.html">Section 13</a>
+    </li>
+    <li>
+      <a href="section14.html">Section 14</a>
+    </li>
+    <li>
+      <a href="latexKnitr.html">LaTeX and knitr</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Spring2017/notes.html">Spring 2017 Notes</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="courseInfo.html">Course Info</a>
+</li>
+<li>
+  <a href="syllabi.html">Syllabi</a>
+</li>
+<li>
+  <a href="resources.html">R Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-envelope-o fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/edrubin/ARE212">
+    <span class="fa fa-github-square fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://edrub.in">
+    <span class="fa fa-hand-peace-o fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Section 14: Simultaneous Equations Models</h1>
+
+</div>
+
+
+<p><a href="Section14.zip"><span class="fa-stack fa-4x"> <i class="fa fa-folder fa-stack-2x"></i> <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i> </span></a></p>
+<p><br></p>
+<div id="general-notes" class="section level1">
+<h1>General notes</h1>
+<p>I really like Woolridge for this material. His notation is a bit different from the notes and Greene, but his writing is really clean and simple.</p>
+</div>
+<div id="the-canonical-example" class="section level1">
+<h1>The canonical example</h1>
+<p>In many settings, the relationships we wish to investigate are more complex than a simple one-equation linear regression of <span class="math inline">\(y_t\)</span> on an intercept and an exogenous variable <span class="math inline">\(x_t\)</span>. We’ve already discussed one example of further complexity—when <span class="math inline">\(x_i\)</span> is <em>endogenous</em>—during our instrument variables (IV) and two-stage least squares (2SLS) section. We now consider a second, more general setting wherein the relationships that we wish to econometrically explore are caught up in a system of equations.</p>
+<p>One of the classic examples, which Max already showed you in class, is the system of demand and supply for a good: <span class="math display">\[
+\begin{aligned}
+  \text{Demand:} \quad &amp; q_{d,t} = \alpha_0 + \alpha_1 p_t + \varepsilon_{d,t} \\
+  \text{Supply:} \quad &amp; q_{s,t} = \beta_0 + \beta_1 p_t + \varepsilon_{s,t} \\
+  \text{Equilibrium:} \quad &amp; q_{d,t} = q_{s,t} = q_t
+\end{aligned}
+\]</span> These equations are known as the <em>structural equations</em> for the system—they hold the <em>structural</em> parameters that we would like to estimate.</p>
+<p>We can simplify the system by substituting in the third market-clearing equation into the other two equations <span class="math display">\[
+\begin{aligned}
+  \text{Demand:} \quad &amp; q_{t} = \alpha_0 + \alpha_1 p_t + \varepsilon_{d,t} \\
+  \text{Supply:} \quad &amp; q_{t} = \beta_0 + \beta_1 p_t + \varepsilon_{s,t} \\
+\end{aligned}
+\]</span></p>
+<p>The challenge here is that we are unable to separate demand shocks from supply shocks—meaning price and quantity (our variables of interest) are correlated with both error terms and are thus endogenous. To see this fact, solve for <span class="math inline">\(p_t\)</span> and <span class="math inline">\(q_t\)</span>: <span class="math display">\[
+\begin{aligned}
+  p_{t} &amp;= \dfrac{\beta_0 - \alpha_0}{\alpha_1 - \beta_1} + \dfrac{\varepsilon_{d,t} - \varepsilon_{s,t}}{\alpha_1 - \beta_1} \\[0.8em]
+  q_{t} &amp;= \dfrac{\alpha_1 \beta_0 - \alpha_0 \beta_1}{\alpha_1 - \beta_1} + \dfrac{\alpha_1 \varepsilon_{d,t} - \beta_1 \varepsilon_{s,t}}{\alpha_1 - \beta_1}
+\end{aligned}
+\]</span> Thus price is a function of both supply and demand shocks (make sense)—as is quantity. What we need is a lever (perhaps instrument?) that is exclusive to one channel—either supply or demand. If this lever only affect supply, then we will observe different sets of quantity and price without any movement in the demand curve. We can then use these different sets of quantity and price to trace out the demand curve. More formally: we need a variable <span class="math inline">\(x_t\)</span> that moves around supply without affecting demand.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> <span class="math display">\[
+\begin{aligned}
+  \text{Demand:} \quad &amp; q_{t} = \alpha_0 + \alpha_1 p_t + \varepsilon_{d,t} \\
+  \text{Supply:} \quad &amp; q_{t} = \beta_0 + \beta_1 p_t + \beta_2 x_t + \zeta_{s,t}
+\end{aligned}
+\]</span> Now we have a hope of estimating the structural demand parameters. However, we still will not be able to consistently estimate the structural supply parameters.</p>
+</div>
+<div id="the-general-problem" class="section level1">
+<h1>The general problem</h1>
+<p>Let’s setup a more general formulation for estimating systems of equations.</p>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>In general, we will write a system of <span class="math inline">\(M\)</span> simultaneous equations for <span class="math inline">\(M\)</span> endogenous variables <span class="math inline">\(y_{1,t}\)</span>, …, <span class="math inline">\(y_{M,t}\)</span> and <span class="math inline">\(K\)</span> exogenous variables<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> <span class="math inline">\(x_{1,t}\)</span>, …, <span class="math inline">\(x_{K,t}\)</span> in its structural form as:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> <span class="math display">\[
+\begin{aligned}
+  \gamma_{11} y_{1,t} + \cdots + \gamma_{M1} y_{M,t} + \cdots + \beta_{11} x_{1,t} + \cdots + \beta_{K1} x_{K,t} =&amp; \varepsilon_{1,t} \\
+  \gamma_{12} y_{1,t} + \cdots + \gamma_{M2} y_{M,t} + \cdots + \beta_{12} x_{1,t} + \cdots + \beta_{K2} x_{K,t} =&amp; \varepsilon_{2,t} \\
+  \vdots&amp; \\
+  \gamma_{1M} y_{1,t} + \cdots + \gamma_{MM} y_{M,t} + \cdots + \beta_{1M} x_{1,t} + \cdots + \beta_{KM} x_{K,t} =&amp; \varepsilon_{M,t}
+\end{aligned}
+\]</span> which we can write more succinctly as <span class="math display">\[ \mathbf{y}_t&#39; \boldsymbol{\Gamma} + \mathbf{x}_t&#39; \mathbf{B} = \boldsymbol{\varepsilon}_t&#39; \]</span></p>
+<p>We can solve this system for the <span class="math inline">\(M\)</span> endogenous variables <span class="math inline">\(\mathbf{y}\)</span> by post-multiplying by <span class="math inline">\(\boldsymbol{\Gamma}^{-1}\)</span>: <span class="math display">\[
+\begin{aligned}
+  \mathbf{y}_t&#39; \boldsymbol{\Gamma} + \mathbf{x}_t&#39; \mathbf{B} &amp;= \boldsymbol{\varepsilon}_t&#39; \\[0.4em]
+  \mathbf{y}_t&#39; \boldsymbol{\Gamma}\boldsymbol{\Gamma}^{-1} + \mathbf{x}_t&#39; \mathbf{B}\boldsymbol{\Gamma}^{-1} &amp;= \boldsymbol{\varepsilon}_t&#39;\boldsymbol{\Gamma}^{-1} \\[0.4em]
+  \mathbf{y}_t&#39; &amp;= - \mathbf{x}_t&#39; \mathbf{B}\boldsymbol{\Gamma}^{-1} + \boldsymbol{\varepsilon}_t&#39;\boldsymbol{\Gamma}^{-1} \\[0.4em]
+  \mathbf{y}_t&#39; &amp;= \mathbf{x}_t&#39; \boldsymbol{\Pi} + \mathbf{v}_t&#39;
+\end{aligned}
+\]</span> which gives our reduced-form equations.</p>
+<p>Finally, to take into account our <span class="math inline">\(T\)</span> observations, <span class="math display">\[
+\begin{bmatrix} \mathbf{Y} &amp; \mathbf{X} &amp; \mathbf{E} \end{bmatrix} =
+\begin{bmatrix}
+  \mathbf{y}_1&#39; &amp; \mathbf{x}_1&#39; &amp; \boldsymbol{\varepsilon}_1&#39; \\
+  \mathbf{y}_2&#39; &amp; \mathbf{x}_2&#39; &amp; \boldsymbol{\varepsilon}_2&#39; \\
+  \vdots &amp; \vdots &amp; \vdots \\
+  \mathbf{y}_T&#39; &amp; \mathbf{x}_T&#39; &amp; \boldsymbol{\varepsilon}_T&#39; \\
+\end{bmatrix}
+\]</span> which gives us <span class="math display">\[ \mathbf{Y} \boldsymbol{\Gamma} + \mathbf{X} \mathbf{B} = \mathbf{E} \]</span> We will assume strict exogeneity, <span class="math inline">\(\mathop{\boldsymbol{E}}\left[ \mathbf{E} | \mathbf{X} \right] = 0\)</span>. The reduced form is <span class="math display">\[ \mathbf{Y} = \mathbf{X} \boldsymbol{\Pi} + \mathbf{V} \]</span></p>
+</div>
+<div id="identification-the-problem" class="section level2">
+<h2>Identification: The problem</h2>
+<p>We can easily and consistently estimate the parameters from the reduced-form equations (<span class="math inline">\(\boldsymbol{\Pi}\)</span>) via <span class="math inline">\(\hat{\boldsymbol{\Pi}} = (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{Y}\)</span>. However, we usually want to learn about the <em>structural</em> parameters—not the <em>reduced-form</em> parameters. You might be tempted to think we can simply back out consistent estimates for the structural parameters using out consistent estimates for the reduced-form parameters. But there’s a problem here: our reduced-form equation does not guarantee a unique set of structural estimates. Observe:</p>
+<ol style="list-style-type: decimal">
+<li>Recall that <span class="math inline">\(\boldsymbol{\Pi} = - \mathbf{B} \boldsymbol{\Gamma}^{-1}\)</span>.</li>
+<li>Post-multiply our structural equation by some arbitrary nonsingular matrix <span class="math inline">\(\mathbf{F}\)</span>: <span class="math display">\[
+\begin{aligned}
+  \mathbf{Y} \boldsymbol{\Gamma} \mathbf{F} + \mathbf{X} \mathbf{B} \mathbf{F} &amp;= \mathbf{E} \mathbf{F} \\
+  \mathbf{Y} \tilde{\boldsymbol{\Gamma}} + \mathbf{X} \tilde{\mathbf{B}} &amp;= \tilde{\mathbf{E}}
+\end{aligned}
+\]</span></li>
+<li>Solve for the reduced form of this alternate structural model: <span class="math display">\[
+\begin{aligned}
+  \mathbf{Y} \tilde{\boldsymbol{\Gamma}} \tilde{\boldsymbol{\Gamma}}^{-1} + \mathbf{X} \tilde{\mathbf{B}} \tilde{\boldsymbol{\Gamma}}^{-1} &amp;= \tilde{\mathbf{E}}\tilde{\boldsymbol{\Gamma}}^{-1} \\[0.2em]
+  \mathbf{Y} &amp;= - \mathbf{X} \mathbf{B} \mathbf{F} \mathbf{F}^{-1} \boldsymbol{\Gamma}^{-1} + \mathbf{E} \mathbf{F} \mathbf{F}^{-1} \boldsymbol{\Gamma}^{-1} \\[0.2em]
+  \mathbf{Y} &amp;= - \mathbf{X} \mathbf{B} \boldsymbol{\Gamma}^{-1} + \mathbf{E} \boldsymbol{\Gamma}^{-1} \\[0.2em]
+  \mathbf{Y} &amp;= \mathbf{X} \boldsymbol{\Pi} + \mathbf{V}
+\end{aligned}
+\]</span></li>
+</ol>
+<p>Thus, the two different sets of structural equations produce the same reduced form. This result is bad news if you are trying to learn anything about the structural-form parameters. So what can we do? We need to make some assumptions/exclusions that allow us to rule out any <span class="math inline">\(\mathbf{F}\)</span> except for the identity matrix.</p>
+<p>Another way to think about this problem: We know that we can consistently estimate the <span class="math inline">\(K \times M\)</span> reduced-form parameters and the <span class="math inline">\(M\times M\)</span> reduced-form covariance matrix, which means we “know” <span class="math inline">\(KM + \frac{1}{2}(M+1)M\)</span> parameters. We want to know the <span class="math inline">\(M\times M\)</span> parameters in <span class="math inline">\(\boldsymbol{\Gamma}\)</span>, the <span class="math inline">\(K\times M\)</span> parameters in <span class="math inline">\(\mathbf{B}\)</span>, and the <span class="math inline">\(M\times M\)</span> parameters in <span class="math inline">\(\boldsymbol{\Sigma}\)</span>—meaning we do not know <span class="math inline">\(M^2 + KM + \dfrac{1}{2}(M+1)M\)</span> structural parameters. The difference between the numbers of “known” and “unknown” parameters is <span class="math inline">\(M^2\)</span>—there are <span class="math inline">\(M^2\)</span> more unknown parameters than known parameters. Hence the need to make some assumptions.</p>
+</div>
+<div id="identification-the-solutions" class="section level2">
+<h2>Identification: The solution(s)</h2>
+<p>Max and Greene provide a list of five solutions to our identification problem.</p>
+<ol style="list-style-type: decimal">
+<li>Normalization</li>
+<li>Identities</li>
+<li>Exclusions</li>
+<li>Linear restrictions</li>
+<li>Restriction on the disturbance covariance matrix</li>
+</ol>
+<p>We’ll focus on (1) and (2–4).</p>
+<div id="a-single-equation" class="section level3">
+<h3>A single equation</h3>
+<p>Let’s focus on a single equation from our system, equation <span class="math inline">\(i\)</span>: <span class="math display">\[
+\mathbf{Y} \boldsymbol{\Gamma}_i + \mathbf{X} \mathbf{B}_i = \mathbf{e}_i
+\]</span> or perhaps more clearly<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> <span class="math display">\[
+\gamma_{1i} y_1 + \gamma_{2i} y_2 + \cdots + \gamma_{Mi} y_M + \beta_{1i} x_1 + \beta_{2i} x_2 \cdots + \beta_{MK} x_K = \varepsilon_i
+\]</span></p>
+</div>
+<div id="normalization" class="section level3">
+<h3>Normalization</h3>
+<p>The first restriction that we will make is the normalization restriction, which simply sets the coefficient on one of our endogenous variables to <span class="math inline">\(1\)</span>.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> The norm<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> is that the coefficient on the <span class="math inline">\(i\)</span><sup>th</sup> endogenous variable gets normalized, though it really doesn’t matter which one you choose. Your structural model should actually inform this choice (see Woolridge chapter 9 for a really nice write up here).</p>
+<p>Let’s focus on the <span class="math inline">\(i=1\)</span> equation and normalize <span class="math inline">\(\gamma_{11} = 1\)</span>. Then structural equation <span class="math inline">\(i=1\)</span> becomes <span class="math display">\[
+y_1 + \gamma_{21} y_2 + \cdots + \gamma_{M1} y_M + \beta_{11} x_1 + \beta_{21} x_2 \cdots + \beta_{MK} x_K = \varepsilon_1
+\]</span> And we now only have a deficit of <span class="math inline">\(M(M-1)\)</span> unknown parameters (relative to the number of known parameters). How easy was that?</p>
+</div>
+<div id="restrictions" class="section level3">
+<h3>Restrictions</h3>
+<p>I’m going to lump together identities, exclusions, and linear restrictions. The gist of the game here is we have too many parameters. Hopefully there are some reasonable restrictions to make—not all variables affect all other variables (and thus can be excluded), some parameters are equal or linearly related, <em>etc.</em></p>
+<p>First, let’s define a matrix filled with all of our structural-form parameters: <span class="math display">\[\boldsymbol{\Delta} = \begin{bmatrix}\boldsymbol{\Gamma} \\ \mathbf{B} \end{bmatrix}\]</span> The <span class="math inline">\(i\)</span><sup>th</sup> column of <span class="math inline">\(\boldsymbol{\Delta}\)</span> gives the structural-form parameters in the <span class="math inline">\(i\)</span><sup>th</sup> equation, <em>i.e.</em>, <span class="math display">\[\boldsymbol{\Delta}_i = \begin{bmatrix}\boldsymbol{\Gamma}_i \\ \mathbf{B}_i \end{bmatrix}\]</span></p>
+<p>Now define a matrix <span class="math inline">\(\mathbf{R}_i\)</span> that imposes all of the restrictions on equation <span class="math inline">\(i\)</span> (excluding the normalization restriction) such that <span class="math display">\[ \mathbf{R}_i \boldsymbol{\Delta}_i = \boldsymbol{0} \]</span></p>
+<div id="example" class="section level4">
+<h4>Example<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></h4>
+<p>For instance, if we have a system of equations <span class="math display">\[
+\begin{aligned}
+  y_1 &amp;= \gamma_{21} y_2 + \gamma_{31} y_3 + \beta_{11} x_1 + \beta_{31} x_3 + \varepsilon_1 \\
+  y_2 &amp;= \gamma_{12} y_1 + \beta_{12} x_1 + \varepsilon_2 \\
+  y_3 &amp;= \beta_{13} x_1 + \beta_{23} x_2 + \beta_{33} x_3 + \beta_{43} x_4 + \varepsilon_3
+\end{aligned}
+\]</span></p>
+<p>The restrictions (ignoring the normalization) imposed in equation 1 are: <span class="math inline">\(\beta_{21} = 0\)</span> and <span class="math inline">\(\beta_{41} = 0\)</span>. Therefore, <span class="math display">\[
+\mathbf{R}_1 =
+\begin{bmatrix}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\]</span></p>
+<p>To see this definition of <span class="math inline">\(\mathbf{R}_1\)</span>, post-multiply it by <span class="math inline">\(\boldsymbol{\Delta}_1\)</span>: <span class="math display">\[
+\mathbf{R}_1 \boldsymbol{\Delta}_1 =
+\begin{bmatrix}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+  -1 \\ \gamma_{21} \\ \gamma_{31} \\ \beta_{11} \\ \beta_{21} \\ \beta_{31} \\ \beta_{41}
+\end{bmatrix} =
+\begin{bmatrix}
+  \beta_{21} \\ \beta_{41}
+\end{bmatrix} =
+\begin{bmatrix}
+  0 \\ 0
+\end{bmatrix}
+\]</span> which replicates our restrictions.</p>
+</div>
+</div>
+<div id="order-condition" class="section level3">
+<h3>Order condition</h3>
+<p>The <em>order condition</em> gives us a necessary (but not sufficient) condition for whether the <span class="math inline">\(i\)</span><sup>th</sup> structural equation is identified. The order condition says that a necessary condition for the <span class="math inline">\(i\)</span><sup>th</sup> equation to be identified is <span class="math inline">\(J_i \geq M-1\)</span>, where <span class="math inline">\(J_i\)</span> is the row dimension of <span class="math inline">\(\mathbf{R}_i\)</span>.</p>
+<p>The order condition is a fairly quick and easy way to check whether an equation is identified. Just keep in mind that the order condition is necessary but not sufficient.</p>
+<p>Greene formally defines the order condition slightly differently:<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> “The number of exogenous variables excluded from equation <span class="math inline">\(j\)</span> must be at least as large as the number of endogenous variables included in equation <span class="math inline">\(j\)</span>.”</p>
+</div>
+<div id="rank-condition" class="section level3">
+<h3>Rank condition</h3>
+<p>The <em>rank condition</em> provides a necessary and sufficient condition for the <span class="math inline">\(i\)</span><sup>th</sup> equation to be identified. The rank condition is: <span class="math display">\[\text{rank}\big(\mathbf{R}_i \boldsymbol{\Delta}\big) = M-1\]</span></p>
+</div>
+<div id="name-calling" class="section level3">
+<h3>Name calling</h3>
+<p>Our order condition allows for three possibilities:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(J_i &lt; M-1\)</span>: Equation <span class="math inline">\(i\)</span> is under identified.</li>
+<li><span class="math inline">\(J_i = M-1\)</span> and <span class="math inline">\(\text{rank}\big(\mathbf{R}_1 \boldsymbol{\Delta}\big) = M-1\)</span>: Equation <span class="math inline">\(i\)</span> is exactly identified.</li>
+<li><span class="math inline">\(J_i &gt; M-1\)</span> and <span class="math inline">\(\text{rank}\big(\mathbf{R}_1 \boldsymbol{\Delta}\big) = M-1\)</span>: Equation <span class="math inline">\(i\)</span> is over identified.</li>
+</ol>
+<div id="example-continued" class="section level4">
+<h4>Example, continued</h4>
+<p>Returning to our example of three endogenous variables, three equations, and four exogenous variables <span class="math display">\[
+\begin{aligned}
+  y_1 &amp;= \gamma_{21} y_2 + \gamma_{31} y_3 + \beta_{11} x_1 + \beta_{31} x_3 + \varepsilon_1 \\
+  y_2 &amp;= \gamma_{12} y_1 + \beta_{12} x_1 + \varepsilon_2 \\
+  y_3 &amp;= \beta_{13} x_1 + \beta_{23} x_2 + \beta_{33} x_3 + \beta_{43} x_4 + \varepsilon_3
+\end{aligned}
+\]</span> and <span class="math display">\[
+\mathbf{R}_1 =
+\begin{bmatrix}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\]</span></p>
+<p>We can check the order condition for the first equation: <span class="math inline">\(J_1 = 2\)</span> (the number of rows in <span class="math inline">\(\mathbf{R}_1\)</span>), and <span class="math inline">\(M-1 = 3-1 = 2\)</span>, so <span class="math inline">\(J_1 = M-1\)</span>. We <em>exatly</em> satisfy the order condition. However, we still need to check the rank condition.</p>
+<p><span class="math display">\[
+\mathbf{R}_1 \boldsymbol{\Delta} =
+\begin{bmatrix}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+  -1 &amp; \gamma_{12} &amp; \gamma_{13} \\
+  \gamma_{21} &amp; -1 &amp; \gamma_{23} \\
+  \gamma_{31} &amp; \gamma_{32} &amp; -1 \\
+  \beta_{11} &amp; \beta_{12} &amp; \beta_{13} \\
+  \beta_{21} &amp; \beta_{22} &amp; \beta_{23} \\
+  \beta_{31} &amp; \beta_{32} &amp; \beta_{33} \\
+  \beta_{41} &amp; \beta_{42} &amp; \beta_{43}
+\end{bmatrix} =
+\begin{bmatrix}
+  \beta_{21} &amp; \beta_{22} &amp; \beta_{23} \\
+  \beta_{41} &amp; \beta_{42} &amp; \beta_{43}
+\end{bmatrix}
+\]</span></p>
+<p>Now we impose any restrictions found in the structural equations. The first column is all zeros because <span class="math inline">\(\beta_{21} = 0\)</span> and <span class="math inline">\(\beta_{41} = 0\)</span> by assumption. Notice that the second structural equation also sets <span class="math inline">\(\beta_{22}=0\)</span> and <span class="math inline">\(\beta_{42}=0\)</span>. Finally, the third structural equation does not have any restrictions that affect <span class="math inline">\(\mathbf{R}_1 \boldsymbol{\Delta}\)</span>. Imposing these restrictions, we now have</p>
+<p><span class="math display">\[
+\mathbf{R}_1 \boldsymbol{\Delta} =
+\begin{bmatrix}
+  0 &amp; 0 &amp; \beta_{23} \\
+  0 &amp; 0 &amp; \beta_{43}
+\end{bmatrix}
+\]</span> which has at most rank 1 (if either <span class="math inline">\(\beta_{23}\)</span> or <span class="math inline">\(\beta_{43}\)</span> are not equal to zero). Because <span class="math inline">\(M-1=3-1=2\)</span>, equation 1 fails the rank condition and is therefore not identified in this system of equations.</p>
+</div>
+</div>
+</div>
+<div id="checking-identification" class="section level2">
+<h2>Checking identification</h2>
+<p>Woolridge<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> provides a nice four-step process for checking whether the <span class="math inline">\(i\)</span><sup>th</sup> equation in the system is identified:</p>
+<ol style="list-style-type: decimal">
+<li>Set one of the parameters for the endogenous variables (<em>i.e.</em>, one of the <span class="math inline">\(\gamma_{mi}\)</span>) to one (normalization).</li>
+<li>Define the <span class="math inline">\(J_i \times (M+K)\)</span> matrix <span class="math inline">\(\mathbf{R}_i\)</span> that imposes all of the restrictions for equation <span class="math inline">\(i\)</span>.</li>
+<li>If <span class="math inline">\(J_i &lt; M-1\)</span>, then equation <span class="math inline">\(i\)</span> is not identified (under identified).</li>
+<li>If <span class="math inline">\(J_i \geq M-1\)</span>, then equation <span class="math inline">\(i\)</span> might be identified.
+<ul>
+<li>Let <span class="math inline">\(\boldsymbol{\Delta}\)</span> be the matrix of all structural parameters with only the normalization restrictions applied.</li>
+<li>Compute <span class="math inline">\(\mathbf{R}_i \boldsymbol{\Delta}\)</span>.</li>
+<li>Impose the restrictions in the entire system.</li>
+<li>Check the rank condition, <em>i.e.</em>, <span class="math inline">\(\text{rank}\big(\mathbf{R}_i \boldsymbol{\Delta}\big) = M-1\)</span>.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="simultaneous-simulation" class="section level1">
+<h1>Simultaneous simulation</h1>
+<p>Let’s bake some data so we can apply our newly learned theory.</p>
+<p>First, it will be helpful (necessary) to have an actual set of equations. So here is one. <span class="math display">\[
+\begin{aligned}
+  y_{1} &amp;= \gamma_{21} y_{2} + \beta_{21} x_2 + \beta_{31} x_3 + \varepsilon_1 \\
+  y_{2} &amp;= \gamma_{32} y_{3} + \beta_{12} x_1 + \beta_{22} x_2 + \varepsilon_2 \\
+  y_{3} &amp;= \gamma_{13} y_{1} + \beta_{13} x_1 + \varepsilon_3
+\end{aligned}
+\]</span></p>
+<p>I’ll let you check the rank conditions for each of the equations. They should pass.</p>
+<p>Let’s write out the structural and reduced forms in matrix form.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  \begin{bmatrix} y_1 &amp; y_2 &amp; y_3 \end{bmatrix}
+  \begin{bmatrix}
+    -1 &amp; 0 &amp; \gamma_{13} \\
+    \gamma_{21} &amp; -1 &amp; 0 \\
+    0 &amp; \gamma_{32} &amp; -1
+  \end{bmatrix}
+  +
+  \begin{bmatrix} x_1 &amp; x_2 &amp; x_3 \end{bmatrix}
+  \begin{bmatrix}
+    0 &amp; \beta_{12} &amp; \beta_{13} \\
+    \beta_{21} &amp; \beta_{22} &amp; 0 \\
+    \beta_{31} &amp; 0 &amp; 0
+  \end{bmatrix}
+  =
+  - \begin{bmatrix} \varepsilon_1 &amp; \varepsilon_2 &amp; \varepsilon_3 \end{bmatrix}  
+\end{aligned}
+\]</span></p>
+<p>Which implies the reduced form <span class="math display">\[
+\begin{aligned}
+  \begin{bmatrix} y_1 &amp; y_2 &amp; y_3 \end{bmatrix}
+  =
+  \begin{bmatrix} x_1 &amp; x_2 &amp; x_3 \end{bmatrix}
+  \begin{bmatrix}
+    0 &amp; \beta_{12} &amp; \beta_{13} \\
+    \beta_{21} &amp; \beta_{22} &amp; 0 \\
+    \beta_{31} &amp; 0 &amp; 0
+  \end{bmatrix}
+  \begin{bmatrix}
+    -1 &amp; 0 &amp; \gamma_{13} \\
+    \gamma_{21} &amp; -1 &amp; 0 \\
+    0 &amp; \gamma_{32} &amp; -1
+  \end{bmatrix}^{-1}
+  - \begin{bmatrix} \varepsilon_1 &amp; \varepsilon_2 &amp; \varepsilon_3 \end{bmatrix}  
+  \begin{bmatrix}
+    -1 &amp; 0 &amp; \gamma_{13} \\
+    \gamma_{21} &amp; -1 &amp; 0 \\
+    0 &amp; \gamma_{32} &amp; -1
+  \end{bmatrix}^{-1}
+\end{aligned}
+\]</span></p>
+<div id="parameterization" class="section level2">
+<h2>Parameterization</h2>
+<p>We can use this reduced form to generate data, but first we need to define some parameters. <span class="math display">\[
+\begin{aligned}
+  y_{1} &amp;= 2 y_{2} + 3 x_2 + 5 x_3 + \varepsilon_1 \\
+  y_{2} &amp;= 3 y_{3} + 1 x_1 + 4 x_2 + \varepsilon_2 \\
+  y_{3} &amp;= 1 y_{1} + 2 x_1 + \varepsilon_3
+\end{aligned}
+\]</span></p>
+<p>Thus, the parameters in <span class="math inline">\(\boldsymbol{\Gamma}\)</span> are: <span class="math display">\[
+\boldsymbol{\Gamma} =
+\begin{bmatrix}
+  -1 &amp; 0 &amp; \gamma_{13} \\
+  \gamma_{21} &amp; -1 &amp; 0 \\
+  0 &amp; \gamma_{32} &amp; -1
+\end{bmatrix} =
+\begin{bmatrix}
+  -1 &amp; 0 &amp; 1 \\
+  2 &amp; -1 &amp; 0 \\
+  0 &amp; 3 &amp; -1
+\end{bmatrix}
+\]</span> And the parameters in <span class="math inline">\(\mathbf{B}\)</span> are: <span class="math display">\[
+\mathbf{B} =
+\begin{bmatrix}
+  0 &amp; \beta_{12} &amp; \beta_{13} \\
+  \beta_{21} &amp; \beta_{22} &amp; 0 \\
+  \beta_{31} &amp; 0 &amp; 0
+\end{bmatrix} =
+\begin{bmatrix}
+  0 &amp; 1 &amp; 2 \\
+  3 &amp; 4 &amp; 0 \\
+  5 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>Now let’s set it all up in R.</p>
+<p>First the general setup.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># General R setup ----</span>
+<span class="co"># Options</span>
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
+<span class="co"># Load new packages</span>
+<span class="kw">library</span>(pacman)
+<span class="kw">p_load</span>(ggmap, leaflet)
+<span class="co"># Load old packages</span>
+<span class="kw">p_load</span>(dplyr, ggplot2, ggthemes, parallel, magrittr, viridis)
+<span class="co"># My ggplot2 theme</span>
+theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
+  <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+  <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+  <span class="co"># panel.border = element_rect(fill = NA, color = &quot;grey75&quot;),</span>
+  <span class="dt">axis.ticks =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
+  <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())
+<span class="co"># My directories</span>
+dir_14 &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section14/&quot;</span></code></pre></div>
+<p>Now the structural parameters.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define the structural parameters ----</span>
+<span class="co"># Gamma</span>
+Gamma &lt;-<span class="st"> </span><span class="kw">matrix</span>(
+  <span class="dt">data =</span> <span class="kw">c</span>(-<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, -<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">3</span>, -<span class="dv">1</span>),
+  <span class="dt">nrow =</span> <span class="dv">3</span>,
+  <span class="dt">byrow =</span> T
+)
+<span class="co"># Beta</span>
+Beta &lt;-<span class="st"> </span><span class="kw">matrix</span>(
+  <span class="dt">data =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">0</span>),
+  <span class="dt">nrow =</span> <span class="dv">3</span>,
+  <span class="dt">byrow =</span> T
+)</code></pre></div>
+</div>
+<div id="generate-data" class="section level2">
+<h2>Generate data</h2>
+<p>Now let’s generate the three <span class="math inline">\(x_k\)</span> variables and the disturbances <span class="math inline">\(\varepsilon_{m}\)</span> from standard random normal distributions. We want 10,000 observations.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Generate data ----</span>
+<span class="co"># Set the sample size</span>
+N &lt;-<span class="st"> </span><span class="fl">1e3</span>
+<span class="co"># Set a seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Generate the data for X and E</span>
+x_df &lt;-<span class="st"> </span><span class="kw">data_frame</span>(
+  <span class="dt">x1 =</span> <span class="kw">rnorm</span>(N),
+  <span class="dt">x2 =</span> <span class="kw">rnorm</span>(N),
+  <span class="dt">x3 =</span> <span class="kw">rnorm</span>(N)
+)
+e_df &lt;-<span class="st"> </span><span class="kw">data_frame</span>(
+  <span class="dt">e1 =</span> <span class="kw">rnorm</span>(N),
+  <span class="dt">e2 =</span> <span class="kw">rnorm</span>(N),
+  <span class="dt">e3 =</span> <span class="kw">rnorm</span>(N)
+)</code></pre></div>
+<p>Now we will use the reduced form to generate our <span class="math inline">\([\mathbf{y}_1,\, \mathbf{y}_2,\, \mathbf{y}_3]\)</span> variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Generate the y variables</span>
+y_mat &lt;-<span class="st"> </span>(-<span class="dv">1</span>) *<span class="st"> </span><span class="kw">as.matrix</span>(x_df) %*%<span class="st"> </span>Beta %*%<span class="st"> </span><span class="kw">solve</span>(Gamma) -
+<span class="st">  </span><span class="kw">as.matrix</span>(e_df) %*%<span class="st"> </span><span class="kw">solve</span>(Gamma)
+<span class="co"># Force to data frame</span>
+y_df &lt;-<span class="st"> </span>y_mat %&gt;%<span class="st"> </span><span class="kw">as_data_frame</span>()
+<span class="kw">names</span>(y_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;y1&quot;</span>, <span class="st">&quot;y2&quot;</span>, <span class="st">&quot;y3&quot;</span>)
+<span class="co"># Join the data together</span>
+the_df &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(y_df, x_df)</code></pre></div>
+</div>
+<div id="estimation" class="section level2">
+<h2>Estimation</h2>
+<p>Let’s estimate the parameters in the first equation. Keep in mind that truth in this simulation is <span class="math inline">\(\gamma_{21} = 2\)</span>, <span class="math inline">\(\beta_{21} = 3\)</span>, and <span class="math inline">\(\beta_{31} = 5\)</span>.</p>
+<div id="ols" class="section level3">
+<h3>OLS</h3>
+<p>First, let’s try plain OLS to estimate the parameters in the first equation. OLS here is exactly what we’ve been doing throughout this whole course: for equation <span class="math inline">\(i\)</span>, regress the left-hand side variable (<span class="math inline">\(\mathbf{y}_i\)</span>) on the right-hand side variables (<span class="math inline">\(\mathbf{Z}_i\)</span>, which includes endogenous and exogenous variables on the RHS).</p>
+<p><span class="math display">\[ \mathbf{d}_{i,\text{OLS}} = \left( \mathbf{Z}_i&#39;\mathbf{Z}_i  \right)^{-1} \mathbf{Z}_i&#39; \mathbf{y}_i&#39; \]</span></p>
+<p>OLS for equation 1:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The LHS variable in eq. 1</span>
+yi &lt;-<span class="st"> </span>y_mat[,<span class="dv">1</span>]
+<span class="co"># The RHS variables in eq. 1</span>
+Zi &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(y_df[,<span class="dv">2</span>], x_df[,<span class="dv">2</span>:<span class="dv">3</span>]) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+<span class="co"># OLS estimates</span>
+<span class="kw">solve</span>(<span class="kw">t</span>(Zi) %*%<span class="st"> </span>Zi) %*%<span class="st"> </span><span class="kw">t</span>(Zi) %*%<span class="st"> </span>yi</code></pre></div>
+<pre><code>##        [,1]
+## y2 1.802818
+## x2 2.479916
+## x3 4.388147</code></pre>
+<p>OLS is inconsistent here. Unsurprisingly, our estimates are not right on their parameters.</p>
+</div>
+<div id="sls" class="section level3">
+<h3>2SLS</h3>
+<p>One of the classic solutions to simultaneity bias—particularly when you only care about estimating the parameters in a single equation—is two-stage least squares (2SLS). In this application of two-stage least squares, we are going to instrument (project) the endogenous RHS variables of equation <span class="math inline">\(i\)</span> with <em>all</em> of the exogenous variables in the system. To make calculation a bit easier, we will actually instrument all RHS variables in equation <span class="math inline">\(i\)</span> (call this matrix <span class="math inline">\(\mathbf{Z}_i\)</span>) with all of the exogenous variables in the system (call this matrix <span class="math inline">\(\mathbf{X}\)</span>). Call the predictions (a.k.a fitted values) from this first stage <span class="math inline">\(\hat{\mathbf{Z}}_i\)</span>. We then regress our LHS dependent variable in equation <span class="math inline">\(i\)</span> (call this vector <span class="math inline">\(\mathbf{y}_i\)</span>) on <span class="math inline">\(\hat{\mathbf{Z}}_i\)</span>. In math:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  \text{Predictions from the first stage:}&amp; \quad
+    \hat{\mathbf{Z}}_i = \mathbf{X} \left( \mathbf{X}&#39;\mathbf{X} \right)^{-1} \mathbf{X}&#39; \mathbf{Z}_i \\
+  \text{Second-stage estimates for }\boldsymbol{\Delta}_i\text{:}&amp; \quad
+    \mathbf{d}_{i,\text{2SLS}} = \left( \hat{\mathbf{Z}}_i&#39; \hat{\mathbf{Z}}_i \right)^{-1} \hat{\mathbf{Z}}_i&#39; \mathbf{y}_i
+\end{aligned}
+\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Matrix of all exogenous variables in the system</span>
+X &lt;-<span class="st"> </span>x_df %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+<span class="co"># First-stage fitted values</span>
+Zi_hat &lt;-<span class="st"> </span>X %*%<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>Zi
+<span class="co"># 2SLS estimates</span>
+<span class="kw">solve</span>(<span class="kw">t</span>(Zi_hat) %*%<span class="st"> </span>Zi_hat) %*%<span class="st"> </span><span class="kw">t</span>(Zi_hat) %*%<span class="st"> </span>yi</code></pre></div>
+<pre><code>##        [,1]
+## y2 2.017908
+## x2 3.049772
+## x3 5.022968</code></pre>
+<p>Much better!</p>
+</div>
+</div>
+<div id="simulation" class="section level2">
+<h2>Simulation</h2>
+<p>We’ve observed that in a single sample 2SLS gets us much closer to the true parameter estimates than OLS. Let’s use a simulation to confirm that this empirical observation (and the underlying theory) repeat through many samples.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
+<p>For this simulation, we want to</p>
+<ol style="list-style-type: decimal">
+<li>Generate a population of size <span class="math inline">\(N\)</span></li>
+<li>Sample from the population with sample size <span class="math inline">\(n\)</span></li>
+<li>Estimate OLS and 2SLS on the sample</li>
+<li>Repeat 10,000 times</li>
+</ol>
+<p>First, let’s generate the population. I think a 100,000 members will suffice. We can simply steal code from above.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Simulation ----</span>
+<span class="co"># Clean up from the other &#39;simulation&#39;</span>
+<span class="kw">rm</span>(N, x_df, e_df, y_mat, y_df, the_df, yi, Zi, X, Zi_hat); <span class="kw">gc</span>()</code></pre></div>
+<pre><code>##           used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells  745519 39.9    1168576 62.5  1168576 62.5
+## Vcells 1193138  9.2    2928070 22.4  2346069 17.9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Generate population data:</span>
+<span class="co"># Set the population size</span>
+N &lt;-<span class="st"> </span><span class="fl">1e5</span>
+<span class="co"># Set a seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Generate the data for X and E</span>
+pop_x &lt;-<span class="st"> </span><span class="kw">data_frame</span>(
+  <span class="dt">x1 =</span> <span class="kw">rnorm</span>(N),
+  <span class="dt">x2 =</span> <span class="kw">rnorm</span>(N),
+  <span class="dt">x3 =</span> <span class="kw">rnorm</span>(N)
+)
+pop_e &lt;-<span class="st"> </span><span class="kw">data_frame</span>(
+  <span class="dt">e1 =</span> <span class="kw">rnorm</span>(N),
+  <span class="dt">e2 =</span> <span class="kw">rnorm</span>(N),
+  <span class="dt">e3 =</span> <span class="kw">rnorm</span>(N)
+)
+<span class="co"># Generate the y variables</span>
+pop_y &lt;-<span class="st"> </span>(-<span class="dv">1</span>) *<span class="st"> </span><span class="kw">as.matrix</span>(pop_x) %*%<span class="st"> </span>Beta %*%<span class="st"> </span><span class="kw">solve</span>(Gamma) -
+<span class="st">  </span><span class="kw">as.matrix</span>(pop_e) %*%<span class="st"> </span><span class="kw">solve</span>(Gamma)
+<span class="co"># Force to data frame</span>
+y_df &lt;-<span class="st"> </span>pop_y %&gt;%<span class="st"> </span><span class="kw">as_data_frame</span>()
+<span class="kw">names</span>(y_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;y1&quot;</span>, <span class="st">&quot;y2&quot;</span>, <span class="st">&quot;y3&quot;</span>)
+<span class="co"># Join the data together</span>
+pop_df &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(y_df, pop_x)
+<span class="co"># Clean up</span>
+<span class="kw">rm</span>(pop_x, pop_e, pop_y, y_df); <span class="kw">gc</span>()</code></pre></div>
+<pre><code>##           used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells  745647 39.9    1168576 62.5  1168576 62.5
+## Vcells 1793263 13.7    2928070 22.4  2904307 22.2</code></pre>
+<p>Now we will write a function that carries out tasks (2) and (3).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function: Run a single iteration of the simulation</span>
+fun_iter &lt;-<span class="st"> </span>function(i, data, sample_size) {
+  <span class="co"># Sample from the population</span>
+  smpl_df &lt;-<span class="st"> </span><span class="kw">sample_n</span>(<span class="dt">tbl =</span> data, <span class="dt">size =</span> sample_size)
+  <span class="co"># The LHS variable in eq.1</span>
+  yi &lt;-<span class="st"> </span>smpl_df %&gt;%<span class="st"> </span><span class="kw">select</span>(y1) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+  <span class="co"># The RHS variables in eq. 1</span>
+  Zi &lt;-<span class="st"> </span>smpl_df %&gt;%<span class="st"> </span><span class="kw">select</span>(y2, x2, x3) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+  <span class="co"># OLS estimates</span>
+  d_ols &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Zi) %*%<span class="st"> </span>Zi) %*%<span class="st"> </span><span class="kw">t</span>(Zi) %*%<span class="st"> </span>yi
+  <span class="co"># Matrix of all exogenous variables in the system</span>
+  X &lt;-<span class="st"> </span>smpl_df %&gt;%<span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;x&quot;</span>)) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+  <span class="co"># First-stage fitted values</span>
+  Zi_hat &lt;-<span class="st"> </span>X %*%<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(X) %*%<span class="st"> </span>X) %*%<span class="st"> </span><span class="kw">t</span>(X) %*%<span class="st"> </span>Zi
+  <span class="co"># 2SLS estimates</span>
+  d_2sls &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(Zi_hat) %*%<span class="st"> </span>Zi_hat) %*%<span class="st"> </span><span class="kw">t</span>(Zi_hat) %*%<span class="st"> </span>yi
+  <span class="co"># Create results data frame</span>
+  result_df &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">t</span>(d_ols), <span class="kw">t</span>(d_2sls)) %&gt;%<span class="st"> </span><span class="kw">as_data_frame</span>()
+  <span class="co"># Add method and iteration variables</span>
+  result_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(
+    <span class="dt">method =</span> <span class="kw">c</span>(<span class="st">&quot;OLS&quot;</span>, <span class="st">&quot;2SLS&quot;</span>),
+    <span class="dt">iter =</span> i
+  )
+  <span class="co"># Return the results</span>
+  <span class="kw">return</span>(result_df)
+}</code></pre></div>
+<p>Now for the simulation! We will run 10,000 iterations with sample size 1,000. It takes about a minute to run on my machine using three cores (I’m using <code>proc.time()</code> to track the start and end times of the simulation. Taking the difference gives us the elapsed time during the simulation.).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t1 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+<span class="co"># Run fun_iter() 10,000 times</span>
+sim_df &lt;-<span class="st"> </span><span class="kw">mclapply</span>(
+  <span class="dt">X =</span> <span class="dv">1</span>:<span class="fl">1e4</span>,
+  <span class="dt">FUN =</span> fun_iter,
+  <span class="dt">mc.cores =</span> <span class="dv">3</span>,
+  <span class="dt">data =</span> pop_df,
+  <span class="dt">sample_size =</span> <span class="fl">1e3</span>
+) %&gt;%<span class="st"> </span><span class="kw">bind_rows</span>()
+t2 &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+t2 -<span class="st"> </span>t1</code></pre></div>
+<pre><code>##    user  system elapsed 
+##  97.428  17.244  59.905</code></pre>
+<p>Finally, let’s plot our results. First, <span class="math inline">\(\gamma_{21}\)</span>—the coefficient on <span class="math inline">\(y_2\)</span> in the first equation—which we know is actually equal to 2.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> sim_df, <span class="kw">aes</span>(<span class="dt">x =</span> y2, <span class="dt">fill =</span> method)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">color =</span> <span class="ot">NA</span>, <span class="dt">alpha =</span> <span class="fl">0.9</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> Gamma[<span class="dv">2</span>,<span class="dv">1</span>], <span class="dt">color =</span> <span class="kw">viridis</span>(<span class="dv">3</span>, <span class="dt">option =</span> <span class="st">&quot;C&quot;</span>)[<span class="dv">2</span>]) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="kw">expression</span>(Parameter~estimates:<span class="er">~</span>gamma[<span class="dv">21</span>]),
+    <span class="dt">y =</span> <span class="st">&quot;Density&quot;</span>
+  ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(
+    <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;Simultaneity bias: Comparing OLS and 2SLS in estimating equation 1 parameter &quot;</span>,
+      gamma[<span class="dv">21</span>])),
+    <span class="dt">subtitle =</span> <span class="st">&quot;10,000 iterations with sample size 1,000&quot;</span>
+  ) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(
+    <span class="st">&quot;Estimation method:&quot;</span>,
+    <span class="dt">discrete =</span> T, <span class="dt">option =</span> <span class="st">&quot;C&quot;</span>, <span class="dt">begin =</span> <span class="fl">0.15</span>, <span class="dt">end =</span> <span class="fl">0.85</span>
+  ) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section14_files/figure-html/plot%20gamma%2021%20density-1.png" width="768" /></p>
+<p>Repeat for <span class="math inline">\(\beta_{21}\)</span> (<span class="math inline">\(=3\)</span>) and <span class="math inline">\(\beta_{31}\)</span> (<span class="math inline">\(=5\)</span>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> sim_df, <span class="kw">aes</span>(<span class="dt">x =</span> x2, <span class="dt">fill =</span> method)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">color =</span> <span class="ot">NA</span>, <span class="dt">alpha =</span> <span class="fl">0.9</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> Beta[<span class="dv">2</span>,<span class="dv">1</span>], <span class="dt">color =</span> <span class="kw">viridis</span>(<span class="dv">3</span>, <span class="dt">option =</span> <span class="st">&quot;C&quot;</span>)[<span class="dv">2</span>]) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="kw">expression</span>(Parameter~estimates:<span class="er">~</span>beta[<span class="dv">21</span>]),
+    <span class="dt">y =</span> <span class="st">&quot;Density&quot;</span>
+  ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(
+    <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;Simultaneity bias: Comparing OLS and 2SLS in estimating equation 1 parameter &quot;</span>,
+      beta[<span class="dv">21</span>])),
+    <span class="dt">subtitle =</span> <span class="st">&quot;10,000 iterations with sample size 1,000&quot;</span>
+  ) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(
+    <span class="st">&quot;Estimation method:&quot;</span>,
+    <span class="dt">discrete =</span> T, <span class="dt">option =</span> <span class="st">&quot;C&quot;</span>, <span class="dt">begin =</span> <span class="fl">0.15</span>, <span class="dt">end =</span> <span class="fl">0.85</span>
+  ) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section14_files/figure-html/plot%20beta%2021%20density-1.png" width="768" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> sim_df, <span class="kw">aes</span>(<span class="dt">x =</span> x3, <span class="dt">fill =</span> method)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">color =</span> <span class="ot">NA</span>, <span class="dt">alpha =</span> <span class="fl">0.9</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> Beta[<span class="dv">3</span>,<span class="dv">1</span>], <span class="dt">color =</span> <span class="kw">viridis</span>(<span class="dv">3</span>, <span class="dt">option =</span> <span class="st">&quot;C&quot;</span>)[<span class="dv">2</span>]) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="kw">expression</span>(Parameter~estimates:<span class="er">~</span>beta[<span class="dv">31</span>]),
+    <span class="dt">y =</span> <span class="st">&quot;Density&quot;</span>
+  ) +
+<span class="st">  </span><span class="kw">ggtitle</span>(
+    <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;Simultaneity bias: Comparing OLS and 2SLS in estimating equation 1 parameter &quot;</span>,
+      beta[<span class="dv">31</span>])),
+    <span class="dt">subtitle =</span> <span class="st">&quot;10,000 iterations with sample size 1,000&quot;</span>
+  ) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(
+    <span class="st">&quot;Estimation method:&quot;</span>,
+    <span class="dt">discrete =</span> T, <span class="dt">option =</span> <span class="st">&quot;C&quot;</span>, <span class="dt">begin =</span> <span class="fl">0.15</span>, <span class="dt">end =</span> <span class="fl">0.85</span>
+  ) +
+<span class="st">  </span>theme_ed</code></pre></div>
+<p><img src="section14_files/figure-html/plot%20beta%2031%20density-1.png" width="768" /></p>
+<p>Just as we suspected: 2SLS is providing consistent<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> estimates of the structural parameters, while OLS is inconsistent in each application.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This requirement should sound pretty familiar, <em>i.e.</em>, our old friend the exclusion restriction.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>One of these exogenous (a.k.a. predetermined) variables should be an intercept.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>I’m following Max’s notation here. Woolridge differs.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>I’ve omit the <span class="math inline">\(t\)</span> subscripts below.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Or <span class="math inline">\(-1\)</span> if you are following Woolridge. Doesn’t matter.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Pun a little bit intended<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>Based upon Woolridge, Example 9.3.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>Definition 15.1 for me<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>Page 219 in my copy.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>Note: This kind of simulation (for a fixed sample size) is really getting at bias—rather than consistency.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>Again, this simulation is more about unbiased-ness.<a href="#fnref11">↩</a></p></li>
+</ol>
+</div>
+
+<!-- <?php include_once("analyticstracking.php") ?> -->
+
+<!-- For Google Analytics: -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88887510-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

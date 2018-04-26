@@ -1,0 +1,101 @@
+---
+title: "Section 15: Learning with machines"
+header-includes:
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: false
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+---
+
+[<span class="fa-stack fa-4x">
+  <i class="fa fa-folder fa-stack-2x"></i>
+  <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i>
+</span>](Section15.zip)
+
+<br>
+
+# This week
+
+Prediction, cross validation, and machine learning!
+
+## What you need
+
+<!-- TODO -->
+
+## R setup
+
+```{R, R setup}
+# General R setup ----
+# Options
+options(stringsAsFactors = F)
+# Load new packages
+library(pacman)
+# Load old packages
+p_load(dplyr, ggplot2, ggthemes, parallel, magrittr, viridis)
+# My ggplot2 theme
+theme_ed <- theme(
+  legend.position = "bottom",
+  panel.background = element_rect(fill = NA),
+  # panel.border = element_rect(fill = NA, color = "grey75"),
+  axis.ticks = element_line(color = "grey95", size = 0.3),
+  panel.grid.major = element_line(color = "grey95", size = 0.3),
+  panel.grid.minor = element_line(color = "grey95", size = 0.3),
+  legend.key = element_blank())
+# My directories
+dir_15 <- "/Users/edwardarubin/Dropbox/Teaching/ARE212/Section15/"
+```
+
+# Motivations
+
+Up to this point, our class has almost exclusively focused on (causally) estimating parameters in linear models, _e.g._,
+$$\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
+
+As a result of this focus/objective, we have placed a tremendous level of importance on whether estimators are unbiased or consistent for the unknown parameters $\boldsymbol{\beta}$. We also focused on linear estimators. In fact, when we were focusing on unbiased-ness, we exclusively restricted our search to the set of linear unbiased estimators.^[We also made similar restrictions in the land of asymptopia.] OLS and 2SLS performed quite well with this objective.
+
+But what if we don't actually care about $\boldsymbol{\beta}$? What if we really want to be able to predict $\mathbf{y}$ (or extrapolating to outcomes for other, unobserved members of the population)? Jon Kleinberg, Jens Ludwig, Sendhil Mullainathan, and Ziad Obermeyer have a [nice article](https://www.aeaweb.org/articles?id=10.1257/aer.p20151023) entitled _Prediction Policy Problems_ wherein they point out that these types of _prediction_ problems may warrant tools other than those found in the classical econometrician's toolbox. Why? Unbiasedness/consistency and inference don't matter as much in the world of prediction. What matters? Low-error predictions! Enter: machine-learning/data-science/your-favorite-name-for-hot-new-data-prediction-tools.
+
+Today we are going to peak at a few tools/methods for improving your $\hat{\mathbf{y}}$ rather than $\hat{\boldsymbol{\beta}}$. First we'll talk about cross validation. Then we'll talk about a few machine-learning algorithms.
+
+# Cross validation
+
+As you get more data, and as you shift your focus toward prediction (and away from research designs that warrant causality), overfitting becomes a huge issue. As we saw early in the class, as you give OLS more variables, it has access to more degrees of freedom, and thus OLS fits the data better and better. The problem here is that you are __only__ getting a really good 'fit' (_e.g._, high R^2^) __for the data sample on which you are training the OLS model__. If you took a second sample, you might find that all of the garbage variables that you threw into your OLS model actually hurt your prediction for the second sample.
+
+That actually sounds like something we could easily demonstrate in R!
+
+## DGP
+
+Let's generate a population of data through a simple linear relationship between $y$, a constant, and $x_1$. However, as is often the case in real life, there will be a hundred other variables at our disposal, all of which are just noise. In other words
+$$ \mathbf{y} = \mathbf{3} + 7 \cdot \mathbf{x} + \boldsymbol{\varepsilon} $$
+
+For this exercise:
+
+1. Generate 2,000 observations with this DGP, where $\varepsilon$ and $x$ are both drawn from the standard normal distribution.
+2. Generate 100 other variables $\mathbf{Z}$. Standard normal distribution again.
+3. Split the sample into two 1,000-member samples. Call these samples $\mathbf{S}_1$ and $\mathbf{S}_2$.
+4. Fit two competing models on $\mathbf{S}_1$:
+    - $\mathbf{y}$ regressed on $\mathbf{x}$
+    - $\mathbf{y}$ regressed on $\mathbf{x}$ and the 100 noise variables of $\mathbf{Z}$
+5. Test how well the two competing models perform in predicting $\mathbf{y}$ in $\mathbf{S}_2$.
+
+## A note on model fit
+
+## The simulation
+
+```{R, cv pop, cache = T}
+# The population size
+n <- 2e3
+# Set a seed
+set.seed(12345)
+# Create the population
+s_df <- data_frame(
+  x = rnorm(n),
+  e = rnorm(n)
+) %>% mutate(y = 3 + 7 * x + e)
+# Create the 100 noise variables
+z_df <- matrix(data = rnorm(n * 100), nrow = n) %>%
+  as_data_frame()
+```

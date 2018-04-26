@@ -1,8 +1,11 @@
 # TODO
 
-- Add README about building the course website.
-- Derive and simulate both flavors of the 'forbidden regression.'
+- Add README about building the course website
+- Update spatial data notes with `sf` package
+- 3SLS and GMM for simultaneous equations
+- Derive and simulate both flavors of the 'forbidden regression'
 - Machine learning
+- Cross validation
 - Regular expressions
 - `recode()`
 - Trouble-shooting code

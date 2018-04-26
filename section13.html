@@ -372,6 +372,9 @@ div.tocify {
       <a href="section13.html">Section 13</a>
     </li>
     <li>
+      <a href="section14.html">Section 14</a>
+    </li>
+    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
     <li class="divider"></li>
@@ -477,17 +480,17 @@ theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
   <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey95&quot;</span>, <span class="dt">size =</span> <span class="fl">0.3</span>),
   <span class="dt">legend.key =</span> <span class="kw">element_blank</span>())
 <span class="co"># My directories</span>
-dir_<span class="dv">12</span> &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section12/&quot;</span>
-dir_<span class="dv">13</span> &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section13/&quot;</span></code></pre></div>
+dir_12 &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section12/&quot;</span>
+dir_13 &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section13/&quot;</span></code></pre></div>
 </div>
 <div id="loading-rasters" class="section level2">
 <h2>Loading rasters</h2>
 <p>We need a raster.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> I’ve decided we are going to look a small subset of the (in)famous <a href="https://ngdc.noaa.gov/eog/viirs/download_dnb_composites.html">night(time) lights dataset</a>.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> You can download the night lights data in various ways, but they are all fairly large—like 520 million cells large. I’ve cropped the original night lights raster (for January 2017) so that it covers the Chicago area with a little room to spare.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
 <p>Let’s read in this raster (named <code>chicagoNightLights.tif</code>). For this task, we will use the <code>raster()</code> function from the <code>raster</code> package.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> We will also load the police beats shapefile that we used in the previous section.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read the Chicago lights raster</span>
-chi_lights &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="kw">paste0</span>(dir_<span class="dv">13</span>, <span class="st">&quot;chicagoNightLights.tif&quot;</span>))
+chi_lights &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="kw">paste0</span>(dir_13, <span class="st">&quot;chicagoNightLights.tif&quot;</span>))
 <span class="co"># Read the Chicago police beats shapefile</span>
-chi_beats &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste0</span>(dir_<span class="dv">12</span>, <span class="st">&quot;ChicagoPoliceBeats&quot;</span>), <span class="st">&quot;chiBeats&quot;</span>)</code></pre></div>
+chi_beats &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste0</span>(dir_12, <span class="st">&quot;ChicagoPoliceBeats&quot;</span>), <span class="st">&quot;chiBeats&quot;</span>)</code></pre></div>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
 ## Source: &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/Section12/ChicagoPoliceBeats&quot;, layer: &quot;chiBeats&quot;
 ## with 277 features
@@ -518,7 +521,7 @@ chi_lights</code></pre></div>
 ## names       : chicagoNightLights 
 ## values      : 0.3693645, 434.6022  (min, max)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># R&#39;s summary of the raster</span>
-chi_lights <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</code></pre></div>
+chi_lights %&gt;%<span class="st"> </span><span class="kw">summary</span>()</code></pre></div>
 <pre><code>##         chicagoNightLights
 ## Min.             0.3693645
 ## 1st Qu.          9.7078307
@@ -527,14 +530,14 @@ chi_lights <span class="op">%&gt;%</span><span class="st"> </span><span class="k
 ## Max.           434.6021729
 ## NA&#39;s             0.0000000</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The slot names</span>
-chi_lights <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slotNames</span>()</code></pre></div>
+chi_lights %&gt;%<span class="st"> </span><span class="kw">slotNames</span>()</code></pre></div>
 <pre><code>##  [1] &quot;file&quot;     &quot;data&quot;     &quot;legend&quot;   &quot;title&quot;    &quot;extent&quot;   &quot;rotated&quot; 
 ##  [7] &quot;rotation&quot; &quot;ncols&quot;    &quot;nrows&quot;    &quot;crs&quot;      &quot;history&quot;  &quot;z&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The first 6 values</span>
-chi_lights <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">getValues</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+chi_lights %&gt;%<span class="st"> </span><span class="kw">getValues</span>() %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
 <pre><code>## [1] 25.68902 22.61487 26.09766 28.05734 39.12275 47.22555</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The first six coordinates</span>
-chi_lights <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coordinates</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+chi_lights %&gt;%<span class="st"> </span><span class="kw">coordinates</span>() %&gt;%<span class="st"> </span><span class="kw">head</span>()</code></pre></div>
 <pre><code>##              x        y
 ## [1,] -87.98750 42.07083
 ## [2,] -87.98333 42.07083
@@ -544,12 +547,12 @@ chi_lights <span class="op">%&gt;%</span><span class="st"> </span><span class="k
 ## [6,] -87.96667 42.07083</code></pre>
 <p>A histogram of the raster’s values (logged):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">light =</span> <span class="kw">getValues</span>(chi_lights)),
-  <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(light))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">fill =</span> <span class="kw">viridis</span>(<span class="dv">20</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Count&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log(radiance)&quot;</span>) <span class="op">+</span>
+  <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(light))) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">fill =</span> <span class="kw">viridis</span>(<span class="dv">20</span>)) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Count&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log(radiance)&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Distribution of light radiance near Chicago&quot;</span>,
-    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017, logged radiance&quot;</span>) <span class="op">+</span>
+    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017, logged radiance&quot;</span>) +
 <span class="st">  </span>theme_ed</code></pre></div>
 <p><img src="section13_files/figure-html/raster%20histogram-1.png" width="672" /></p>
 <p>It’s worth noting that this histogram includes a lot of low light due to Lake Michigan. I took the log of the radiance to get a bit more dispersion in the histogram.</p>
@@ -576,7 +579,7 @@ chi_lights <span class="op">%&gt;%</span><span class="st"> </span><span class="k
 <p>Many of these questions are especially relevant/important when your cells are large relative to your polygons. This is not the case in our current example. Unfortunately, it is often the case in real research.</p>
 <p>Alight, let’s summarize our night lights raster by taking the mean within each police beat. Finally, because we loaded the <code>magrittr</code> package after we loaded <code>raster</code> package—and because both packages have a function named <code>extract()</code>—<code>raster</code>’s version of extract has been masked by <code>magrittr</code>’s version. Thus we need to reference the <code>raster</code> package when we call <code>extract()</code>, <em>i.e.</em>, <code>raster::extract()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Take averages of lights raster within each police beat</span>
-beat_extract &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(
+beat_extract &lt;-<span class="st"> </span>raster::<span class="kw">extract</span>(
   <span class="dt">x =</span> chi_lights,
   <span class="dt">y =</span> chi_beats,
   <span class="dt">fun =</span> mean,
@@ -589,20 +592,20 @@ beat_extract &lt;-<span class="st"> </span>raster<span class="op">::</span><span
 <p>Now let’s carry out a similar task but with points rather than polygons.</p>
 <p>First, we need some points. We’ll load the crime locations that we used in our discussion of vector data. And <a href="setion12.html#aggregating_points_to_polygons">clean</a> them.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read crime points data file</span>
-crime_df &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">paste0</span>(dir_<span class="dv">12</span>, <span class="st">&quot;chicagoCrime.rds&quot;</span>))
+crime_df &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">paste0</span>(dir_12, <span class="st">&quot;chicagoCrime.rds&quot;</span>))
 <span class="co"># Convert to tbl_df</span>
-crime_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">tbl_df</span>()
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
 <span class="co"># Change names</span>
 <span class="kw">names</span>(crime_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;date&quot;</span>, <span class="st">&quot;primary_offense&quot;</span>,
   <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;domestic&quot;</span>, <span class="st">&quot;beat&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;lon&quot;</span>)
 <span class="co"># Drop observations missing lat or lon</span>
-crime_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(lat) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(lon))
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(lat) &amp;<span class="st"> </span>!<span class="kw">is.na</span>(lon))
 <span class="co"># Take subset of crimes</span>
-crime_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">subset</span>(primary_offense <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HOMICIDE&quot;</span>, <span class="st">&quot;NARCOTICS&quot;</span>))
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">subset</span>(primary_offense %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HOMICIDE&quot;</span>, <span class="st">&quot;NARCOTICS&quot;</span>))
 <span class="co"># Convert dates</span>
-crime_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">mdy_hms</span>(date))
+crime_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">mdy_hms</span>(date))
 <span class="co"># Define longitude and latitude as our coordinates</span>
-<span class="kw">coordinates</span>(crime_df) &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>lon <span class="op">+</span><span class="st"> </span>lat
+<span class="kw">coordinates</span>(crime_df) &lt;-<span class="st"> </span><span class="er">~</span><span class="st"> </span>lon +<span class="st"> </span>lat
 <span class="co"># Assing a CRS to the crime points data</span>
 <span class="kw">proj4string</span>(crime_df) &lt;-<span class="st"> </span><span class="kw">crs</span>(chi_beats)
 <span class="co"># Take the union of the beats polygons</span>
@@ -610,10 +613,10 @@ chicago_union &lt;-<span class="st"> </span><span class="kw">gUnaryUnion</span>(
 <span class="co"># Check which crime points are inside of Chicago</span>
 test_points &lt;-<span class="st"> </span><span class="kw">over</span>(crime_df, chicago_union)
 <span class="co"># From 1 and NA to T and F (F means not in Chicago)</span>
-test_points &lt;-<span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(test_points)
-crime_df &lt;-<span class="st"> </span>crime_df[<span class="kw">which</span>(test_points <span class="op">==</span><span class="st"> </span>T), ]</code></pre></div>
+test_points &lt;-<span class="st"> </span>!<span class="kw">is.na</span>(test_points)
+crime_df &lt;-<span class="st"> </span>crime_df[<span class="kw">which</span>(test_points ==<span class="st"> </span>T), ]</code></pre></div>
 <p>Now we use <code>extract()</code> again, this time applying it so that we get a value from the raster at each of our crime-based points in <code>crime_df</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract &lt;-<span class="st"> </span>raster::<span class="kw">extract</span>(
   <span class="dt">x =</span> chi_lights,
   <span class="dt">y =</span> crime_df,
   <span class="dt">fun =</span> mean,
@@ -624,16 +627,16 @@ crime_df &lt;-<span class="st"> </span>crime_df[<span class="kw">which</span>(te
 <h2>Rasters in <code>ggplot2</code></h2>
 <p>So how does one plot a raster with <code>ggplot2</code>? As with spatial vector data, the problem is that <code>ggplot()</code> wants a data-frame-like object, and the raster is not a data-frame-like object. Lucky for us, <code>raster</code> provides the function <code>rasterToPoints()</code>, which does exactly what its name suggests: it creates a matrix of coordinates and values from a raster.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> Let’s create a data frame from the night lights data and then plot it in <code>ggplot2</code> using the <code>geom_raster()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert raster to matrix and then to data frame</span>
-lights_df &lt;-<span class="st"> </span>chi_lights <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rasterToPoints</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tbl_df</span>()
+lights_df &lt;-<span class="st"> </span>chi_lights %&gt;%<span class="st"> </span><span class="kw">rasterToPoints</span>() %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
 <span class="co"># Plot with ggplot</span>
 <span class="kw">ggplot</span>(<span class="dt">data =</span> lights_df,
-  <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> chicagoNightLights)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span>
+  <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> chicagoNightLights)) +
+<span class="st">  </span><span class="kw">geom_raster</span>() +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Lights at night in Chicago&quot;</span>,
-    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;D&quot;</span>) <span class="op">+</span>
-<span class="st">  </span>theme_ed <span class="op">+</span>
+    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;D&quot;</span>) +
+<span class="st">  </span>theme_ed +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">axis.text =</span> <span class="kw">element_blank</span>())</code></pre></div>
 <p><img src="section13_files/figure-html/df%20from%20raster-1.png" width="672" /></p>
 </div>
@@ -646,45 +649,45 @@ lights_df &lt;-<span class="st"> </span>chi_lights <span class="op">%&gt;%</span
 lights_masked &lt;-<span class="st"> </span><span class="kw">mask</span>(<span class="dt">x =</span> chi_lights, <span class="dt">mask =</span> chicago_union)</code></pre></div>
 <p>Now let’s plot our masked raster to see the result.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert raster to matrix and then to data frame</span>
-masked_df &lt;-<span class="st"> </span>lights_masked <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rasterToPoints</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tbl_df</span>()
+masked_df &lt;-<span class="st"> </span>lights_masked %&gt;%<span class="st"> </span><span class="kw">rasterToPoints</span>() %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
 <span class="co"># Plot with ggplot</span>
 <span class="kw">ggplot</span>(<span class="dt">data =</span> masked_df,
-  <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> chicagoNightLights)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span>
+  <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> chicagoNightLights)) +
+<span class="st">  </span><span class="kw">geom_raster</span>() +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Lights at night in Chicago, masked&quot;</span>,
-    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;D&quot;</span>) <span class="op">+</span>
-<span class="st">  </span>theme_ed <span class="op">+</span>
+    <span class="dt">subtitle =</span> <span class="st">&quot;January 2017&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">option =</span> <span class="st">&quot;D&quot;</span>) +
+<span class="st">  </span>theme_ed +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">axis.text =</span> <span class="kw">element_blank</span>())</code></pre></div>
 <p><img src="section13_files/figure-html/ggplot%20masked%20raster-1.png" width="672" /></p>
 <p>Using this masked night lights data, let’s compare the (approximate) densities of (logged) light for (1) all of Chicago, (2) homicide locations, and (3) narcotics offenses’ locations.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert crime_extract to a data frame</span>
-crime_extract <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">tbl_df</span>()
+crime_extract %&lt;&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
 <span class="co"># Density plots</span>
-<span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="kw">ggplot</span>() +
 <span class="st">  </span><span class="kw">geom_density</span>(
     <span class="dt">data =</span> masked_df,
     <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(chicagoNightLights), <span class="dt">color =</span> <span class="st">&quot;All of Chicago&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;All of Chicago&quot;</span>),
-    <span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">+</span>
+    <span class="dt">alpha =</span> <span class="fl">0.6</span>) +
 <span class="st">  </span><span class="kw">geom_density</span>(
-    <span class="dt">data =</span> <span class="kw">filter</span>(crime_extract, primary_offense <span class="op">==</span><span class="st"> &quot;HOMICIDE&quot;</span>),
+    <span class="dt">data =</span> <span class="kw">filter</span>(crime_extract, primary_offense ==<span class="st"> &quot;HOMICIDE&quot;</span>),
     <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(chicagoNightLights), <span class="dt">color =</span> <span class="st">&quot;Homicide&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Homicide&quot;</span>),
-    <span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">+</span>
+    <span class="dt">alpha =</span> <span class="fl">0.6</span>) +
 <span class="st">  </span><span class="kw">geom_density</span>(
-    <span class="dt">data =</span> <span class="kw">filter</span>(crime_extract, primary_offense <span class="op">==</span><span class="st"> &quot;NARCOTICS&quot;</span>),
+    <span class="dt">data =</span> <span class="kw">filter</span>(crime_extract, primary_offense ==<span class="st"> &quot;NARCOTICS&quot;</span>),
     <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">log</span>(chicagoNightLights), <span class="dt">color =</span> <span class="st">&quot;Narcotics&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Narcotics&quot;</span>),
-    <span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Log(Light radiance)&quot;</span>) <span class="op">+</span>
-<span class="st">  </span>theme_ed <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="st">&quot;&quot;</span>, <span class="dt">discrete =</span> T) <span class="op">+</span>
+    <span class="dt">alpha =</span> <span class="fl">0.6</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Log(Light radiance)&quot;</span>) +
+<span class="st">  </span>theme_ed +
+<span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="st">&quot;&quot;</span>, <span class="dt">discrete =</span> T) +
 <span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;&quot;</span>, <span class="dt">discrete =</span> T)</code></pre></div>
 <p><img src="section13_files/figure-html/density%20comparison-1.png" width="672" /></p>
 <p>It actually looks like the crimes occur in locations with a bit more light.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> We can also check out the summary statistics for each group:<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compare means</span>
-masked_df <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(chicagoNightLights) <span class="op">%&gt;%</span>
+masked_df %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(chicagoNightLights) %&gt;%
 <span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
 <pre><code>##  chicagoNightLights
 ##  Min.   :  8.418   
@@ -693,9 +696,9 @@ masked_df <span class="op">%&gt;%</span>
 ##  Mean   : 87.474   
 ##  3rd Qu.:105.267   
 ##  Max.   :434.602</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(primary_offense <span class="op">==</span><span class="st"> &quot;HOMICIDE&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(chicagoNightLights) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(primary_offense ==<span class="st"> &quot;HOMICIDE&quot;</span>) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(chicagoNightLights) %&gt;%
 <span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
 <pre><code>##  chicagoNightLights
 ##  Min.   : 13.36    
@@ -704,9 +707,9 @@ masked_df <span class="op">%&gt;%</span>
 ##  Mean   : 99.05    
 ##  3rd Qu.:109.40    
 ##  Max.   :434.60</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(primary_offense <span class="op">==</span><span class="st"> &quot;NARCOTICS&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(chicagoNightLights) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crime_extract %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(primary_offense ==<span class="st"> &quot;NARCOTICS&quot;</span>) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(chicagoNightLights) %&gt;%
 <span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
 <pre><code>##  chicagoNightLights
 ##  Min.   : 10.25    
@@ -721,11 +724,12 @@ masked_df <span class="op">%&gt;%</span>
 <h2>NetCDFs</h2>
 <p>As you travel through the world of geospatial data, you will likely encounter netCDF data (file extension: <code>.nc</code>). NetCDF is a file type common to more (physical) scientific datasets (<em>e.g.</em>, temperature and atmospheric modeling). It’s actually <a href="https://www.unidata.ucar.edu/software/netcdf/">more than <em>just</em> a file type</a>, but for our purposes, we’ll treat it as a filetype. NetCDFs contain raster data—gridded latitudes and longitudes paired with values. Lucky for us, the <code>raster</code> package and its <code>raster()</code> function can typically handle netCDF data, so long as you have installed the <code>ncdf4</code> package. The <code>ncdf4</code> package has a bunch of tools for working with (reading, creating, and manipulating) netCDFs, but for our purposes today, we can use <code>raster()</code>.</p>
 <p>Let’s load two netCDFs from the <a href="http://fizz.phys.dal.ca/~atmos/martin/?page_id=140">Atomspheric Composition Analysis Group at Dalhousie Univeristy</a>. The two files contain estimates for annual mean PM2.5 levels for 2010 and 2016.<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pm_<span class="dv">2010</span> &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_<span class="dv">13</span>, <span class="st">&quot;GlobalGWRc_PM25_GL_201001_201012-RH35.nc&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">raster</span>()
-pm_<span class="dv">2016</span> &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_<span class="dv">13</span>, <span class="st">&quot;GlobalGWRc_PM25_GL_201601_201612-RH35.nc&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">raster</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pm_2010 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_13, <span class="st">&quot;GlobalGWRc_PM25_GL_201001_201012-RH35.nc&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">raster</span>()</code></pre></div>
+<pre><code>## Loading required namespace: ncdf4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pm_2016 &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_13, <span class="st">&quot;GlobalGWRc_PM25_GL_201601_201612-RH35.nc&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">raster</span>()</code></pre></div>
 <p><em>Note</em>: If you get an error, make sure you’ve installed <code>ncdf4</code> on your computer.</p>
 <p>So what do we have?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pm_<span class="dv">2010</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pm_2010</code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 1246, 3600, 4485600  (nrow, ncol, ncell)
 ## resolution  : 0.1, 0.1  (x, y)
@@ -734,7 +738,7 @@ pm_<span class="dv">2016</span> &lt;-<span class="st"> </span><span class="kw">p
 ## data source : /Users/edwardarubin/Dropbox/Teaching/ARE212/Section13/GlobalGWRc_PM25_GL_201001_201012-RH35.nc 
 ## names       : PM25 
 ## zvar        : PM25</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pm_<span class="dv">2016</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pm_2016</code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 1246, 3600, 4485600  (nrow, ncol, ncell)
 ## resolution  : 0.1, 0.1  (x, y)
@@ -745,10 +749,10 @@ pm_<span class="dv">2016</span> &lt;-<span class="st"> </span><span class="kw">p
 ## zvar        : PM25</code></pre>
 <p>If we want, we can load both of the files into a raster stack. This feature works for all rasters and can help you when you are performing operations on a bunch of rasters.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load</span>
-pm_stack &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_<span class="dv">13</span>, <span class="kw">c</span>(
+pm_stack &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_13, <span class="kw">c</span>(
   <span class="st">&quot;GlobalGWRc_PM25_GL_201001_201012-RH35.nc&quot;</span>,
   <span class="st">&quot;GlobalGWRc_PM25_GL_201601_201612-RH35.nc&quot;</span>)
-) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">stack</span>()
+) %&gt;%<span class="st"> </span><span class="kw">stack</span>()
 <span class="co"># Check</span>
 pm_stack</code></pre></div>
 <pre><code>## class       : RasterStack 
@@ -760,18 +764,18 @@ pm_stack</code></pre></div>
 <p>Notice that we now have a fourth dimension: the layers of the raster stack.</p>
 <p>We can quickly plot the raster, as before:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Quick plots of the loaded ncdfs</span>
-<span class="kw">plot</span>(pm_<span class="dv">2010</span>, <span class="dt">col =</span> <span class="kw">inferno</span>(<span class="fl">1e3</span>), <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
+<span class="kw">plot</span>(pm_2010, <span class="dt">col =</span> <span class="kw">inferno</span>(<span class="fl">1e3</span>), <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
 <p><img src="section13_files/figure-html/plot%20netcdf%20raster-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pm_<span class="dv">2016</span>, <span class="dt">col =</span> <span class="kw">inferno</span>(<span class="fl">1e3</span>), <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pm_2016, <span class="dt">col =</span> <span class="kw">inferno</span>(<span class="fl">1e3</span>), <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
 <p><img src="section13_files/figure-html/plot%20netcdf%20raster-2.png" width="672" /></p>
 <p>However, it’s hard to compare across these two maps, since the color scales are different. One option would be to create a constant color scale (<code>ggplot2</code> has a fairlystraightforward way of accomplishing this task using the <a href="http://ggplot2.tidyverse.org/reference/scale_gradient.html"><code>scale_*_gradient*</code> functions</a> and the <a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html"><code>guide_colorbar</code></a>), but we’re going to g a different route…</p>
 <p>Another great thing about rasters is that you can perform mathematic operations on them (since they are essentially fancy matrices). So to compare the two years—meaning we want to see how PM2.5 changed (as estimated by the authors) between 2010 and 2016—we just use subtraction (<code>-</code>):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pm_<span class="dv">2016</span> <span class="op">-</span><span class="st"> </span>pm_<span class="dv">2010</span>, <span class="dt">col =</span> <span class="kw">inferno</span>(<span class="fl">1e3</span>), <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pm_2016 -<span class="st"> </span>pm_2010, <span class="dt">col =</span> <span class="kw">inferno</span>(<span class="fl">1e3</span>), <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
 <p><img src="section13_files/figure-html/raster%20subtraction-1.png" width="672" /></p>
 <p>Interesting, but the color scale is still not super informative: zero is stuck in a arbitrary dark purple region. Enter: the <code>fields</code> package. We basically need to know the minimum and maximum values and the colors we want to assign to the minimum, the maximum, and any other points in the color scale (for us: the number zero). The <code>getValues()</code> function from the <code>raster</code> package is helpful here. Keep in the mind that there are a lot of <code>NA</code>s because our PM2.5 estimates are only for land, while the raster field is defined for the whole globe.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Min and max values of PM difference (2016 - 2010)</span>
-diff_min &lt;-<span class="st"> </span><span class="kw">getValues</span>(pm_<span class="dv">2016</span> <span class="op">-</span><span class="st"> </span>pm_<span class="dv">2010</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">min</span>(<span class="dt">na.rm =</span> T)
-diff_max &lt;-<span class="st"> </span><span class="kw">getValues</span>(pm_<span class="dv">2016</span> <span class="op">-</span><span class="st"> </span>pm_<span class="dv">2010</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max</span>(<span class="dt">na.rm =</span> T)</code></pre></div>
+diff_min &lt;-<span class="st"> </span><span class="kw">getValues</span>(pm_2016 -<span class="st"> </span>pm_2010) %&gt;%<span class="st"> </span><span class="kw">min</span>(<span class="dt">na.rm =</span> T)
+diff_max &lt;-<span class="st"> </span><span class="kw">getValues</span>(pm_2016 -<span class="st"> </span>pm_2010) %&gt;%<span class="st"> </span><span class="kw">max</span>(<span class="dt">na.rm =</span> T)</code></pre></div>
 <p>We can create a color scale that spans from the global minimum to the global maximum, giving us a constant color scale for reasonable visual comparison. We will use the <code>designer.colors()</code> function from the <code>fields</code> package, which wants (as arguments) the number of colors we want to generate for the color scale (<code>n</code>), a set of colors for the color scale (<code>col</code>, which can be names or hex values), and the positions of the colors on a numeric scale.<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create the color scale</span>
 c_scale &lt;-<span class="st"> </span><span class="kw">designer.colors</span>(
@@ -781,10 +785,10 @@ c_scale &lt;-<span class="st"> </span><span class="kw">designer.colors</span>(
   <span class="dt">alpha =</span> <span class="dv">1</span>
 )
 <span class="co"># Plot again</span>
-<span class="kw">plot</span>(pm_<span class="dv">2016</span> <span class="op">-</span><span class="st"> </span>pm_<span class="dv">2010</span>, <span class="dt">col =</span> c_scale, <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
+<span class="kw">plot</span>(pm_2016 -<span class="st"> </span>pm_2010, <span class="dt">col =</span> c_scale, <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
 <p><img src="section13_files/figure-html/plot%20ncdf%20constant%20color-1.png" width="672" /></p>
 <p>Finally, if we want to zoom in a bit, we can use the <code>crop()</code> function (from the <code>raster</code> package). Usually you crop one object to the <em>extent</em> of another object, but we can also create our own extent (it’s pretty much just a box based upon <code>xmin</code>, <code>xmax</code>, <code>ymin</code>, <code>ymax</code>). Let’s zoom in on some of the PM2.5 action (changes) in Asia.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">crop</span>(pm_<span class="dv">2016</span> <span class="op">-</span><span class="st"> </span>pm_<span class="dv">2010</span>, <span class="kw">extent</span>(<span class="dv">25</span>, <span class="dv">150</span>, <span class="op">-</span><span class="dv">25</span>, <span class="dv">50</span>)) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">crop</span>(pm_2016 -<span class="st"> </span>pm_2010, <span class="kw">extent</span>(<span class="dv">25</span>, <span class="dv">150</span>, -<span class="dv">25</span>, <span class="dv">50</span>)) %&gt;%
 <span class="st">  </span><span class="kw">plot</span>(<span class="dt">col =</span> c_scale, <span class="dt">axes =</span> F, <span class="dt">box =</span> F)</code></pre></div>
 <p><img src="section13_files/figure-html/crop%20raster%20subtraction-1.png" width="672" /></p>
 </div>
@@ -793,9 +797,9 @@ c_scale &lt;-<span class="st"> </span><span class="kw">designer.colors</span>(
 <p>As we’ve discussed thus far, rasters are really just grids with values assigned to the grid cells. Thus, they are fairly simple to create.</p>
 <p>First, we need a grid. The function <code>expand.grid()</code> is a very nice function for creating a grid—it takes all possible combinations of the given variables and then returns an (ordered) matrix. Let’s create an 11-by-11 grid by taking all combinations of [-5, 5] and [-5, 5] (by 1).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Creating an 11-by-11 grid</span>
-our_mat &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">x =</span> <span class="op">-</span><span class="dv">5</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">y =</span> <span class="op">-</span><span class="dv">5</span><span class="op">:</span><span class="dv">5</span>)
+our_mat &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">x =</span> -<span class="dv">5</span>:<span class="dv">5</span>, <span class="dt">y =</span> -<span class="dv">5</span>:<span class="dv">5</span>)
 <span class="co"># Check out the head</span>
-our_mat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)</code></pre></div>
+our_mat %&gt;%<span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>##     x  y
 ## 1  -5 -5
 ## 2  -4 -5
@@ -809,22 +813,22 @@ our_mat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">
 ## 10  4 -5</code></pre>
 <p>Let’s now convert the matrix to a data frame and then add a column of random numbers (standard normal).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert to data frame</span>
-our_df &lt;-<span class="st"> </span>our_mat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tbl_df</span>()
+our_df &lt;-<span class="st"> </span>our_mat %&gt;%<span class="st"> </span><span class="kw">tbl_df</span>()
 <span class="co"># Set seed</span>
 <span class="kw">set.seed</span>(<span class="dv">12345</span>)
 <span class="co"># Add random numbers</span>
-our_df <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">rnorm</span>(<span class="kw">nrow</span>(our_df)))</code></pre></div>
+our_df %&lt;&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">rnorm</span>(<span class="kw">nrow</span>(our_df)))</code></pre></div>
 <p>Because <code>ggplot2</code> actually wants a data frame—rather than a raster—we can check our soon-to-be raster before it is finished.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plotting our raster data</span>
-<span class="kw">ggplot</span>(our_df, <span class="kw">aes</span>(x, y, <span class="dt">fill =</span> value)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Our (random) raster data&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Value&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span>
-<span class="st">  </span>theme_ed <span class="op">+</span>
+<span class="kw">ggplot</span>(our_df, <span class="kw">aes</span>(x, y, <span class="dt">fill =</span> value)) +
+<span class="st">  </span><span class="kw">geom_raster</span>() +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Our (random) raster data&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="st">&quot;Value&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_equal</span>() +
+<span class="st">  </span>theme_ed +
 <span class="st">  </span><span class="kw">theme</span>(
     <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>),
-    <span class="dt">legend.key.height =</span> <span class="kw">unit</span>(<span class="dv">3</span><span class="op">/</span><span class="dv">4</span>, <span class="st">&quot;cm&quot;</span>),
+    <span class="dt">legend.key.height =</span> <span class="kw">unit</span>(<span class="dv">3</span>/<span class="dv">4</span>, <span class="st">&quot;cm&quot;</span>),
     <span class="dt">panel.grid.major =</span> <span class="kw">element_blank</span>(),
     <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</code></pre></div>
 <p><img src="section13_files/figure-html/ggplotting%20our%20raster-1.png" width="672" /></p>
@@ -844,7 +848,7 @@ our_raster</code></pre></div>
 ## values      : -2.380358, 2.477111  (min, max)</code></pre>
 <p>It worked! A final check:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(our_raster, <span class="dt">col =</span> <span class="kw">viridis</span>(<span class="fl">1e3</span>),
-  <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>))</code></pre></div>
+  <span class="dt">xlim =</span> <span class="kw">c</span>(-<span class="dv">5</span>,<span class="dv">5</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">5</span>,<span class="dv">5</span>))</code></pre></div>
 <p><img src="section13_files/figure-html/plot%20our%20raster%20again-1.png" width="672" /></p>
 </div>
 </div>
@@ -891,28 +895,28 @@ geo_dsk &lt;-<span class="st"> </span><span class="kw">geocode</span>(
 ## 1 34.51508 34.09528 -83.60658 -84.03168     USA</code></pre>
 <p>It’s hard to tell from this print out, but it seems as though Google did well. You can at least see that Google stayed inside of the city that we gave them and identified the location as an ‘establishment.’</p>
 <p>Let’s zoom in on Google’s geocoding.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_google<span class="op">$</span>lon, <span class="dt">lat =</span> geo_google<span class="op">$</span>lat, <span class="dt">popup =</span> <span class="st">&quot;Google&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_dsk<span class="op">$</span>lon, <span class="dt">lat =</span> geo_dsk<span class="op">$</span>lat, <span class="dt">popup =</span> <span class="st">&quot;DSK&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>OpenStreetMap.HOT)</code></pre></div>
-<div id="htmlwidget-8a3d3f77d53bc68555c7" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8a3d3f77d53bc68555c7">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[37.8735349,-122.2622986,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Google",null,null,null,null,null,null]},{"method":"addMarkers","args":[34.31689,-83.81968,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"DSK",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[34.31689,37.8735349],"lng":[-122.2622986,-83.81968]}},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_google$lon, <span class="dt">lat =</span> geo_google$lat, <span class="dt">popup =</span> <span class="st">&quot;Google&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_dsk$lon, <span class="dt">lat =</span> geo_dsk$lat, <span class="dt">popup =</span> <span class="st">&quot;DSK&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">addProviderTiles</span>(providers$OpenStreetMap.HOT)</code></pre></div>
+<div id="htmlwidget-e8c8a0acef8856ca1ff5" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e8c8a0acef8856ca1ff5">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[37.8735349,-122.2622986,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Google",null,null,null,null,null,null]},{"method":"addMarkers","args":[34.31689,-83.81968,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"DSK",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[34.31689,37.8735349],"lng":[-122.2622986,-83.81968]}},"evals":[],"jsHooks":[]}</script>
 <p>Interesting. Let’s map the two geocodings individually to see where they ended up.</p>
 <p>First up: Google.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_google<span class="op">$</span>lon, <span class="dt">lat =</span> geo_google<span class="op">$</span>lat, <span class="dt">popup =</span> <span class="st">&quot;Google&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>OpenStreetMap.HOT) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> geo_google<span class="op">$</span>lon, <span class="dt">lat =</span> geo_google<span class="op">$</span>lat, <span class="dt">zoom =</span> <span class="dv">17</span>)</code></pre></div>
-<div id="htmlwidget-3c566cb2a7b82a0c921d" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3c566cb2a7b82a0c921d">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[37.8735349,-122.2622986,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Google",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[37.8735349,37.8735349],"lng":[-122.2622986,-122.2622986]},"setView":[[37.8735349,-122.2622986],17,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_google$lon, <span class="dt">lat =</span> geo_google$lat, <span class="dt">popup =</span> <span class="st">&quot;Google&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">addProviderTiles</span>(providers$OpenStreetMap.HOT) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> geo_google$lon, <span class="dt">lat =</span> geo_google$lat, <span class="dt">zoom =</span> <span class="dv">17</span>)</code></pre></div>
+<div id="htmlwidget-0842e0d8042f1d7af3d3" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0842e0d8042f1d7af3d3">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[37.8735349,-122.2622986,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Google",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[37.8735349,37.8735349],"lng":[-122.2622986,-122.2622986]},"setView":[[37.8735349,-122.2622986],17,[]]},"evals":[],"jsHooks":[]}</script>
 <p>Impressive. Not quite the correct building, but quite close. (Note: Last year Google did better.)</p>
 <p>Now for the data science toolkit.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_dsk<span class="op">$</span>lon, <span class="dt">lat =</span> geo_dsk<span class="op">$</span>lat, <span class="dt">popup =</span> <span class="st">&quot;DSK&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>OpenStreetMap.HOT) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> geo_dsk<span class="op">$</span>lon, <span class="dt">lat =</span> geo_dsk<span class="op">$</span>lat, <span class="dt">zoom =</span> <span class="dv">12</span>)</code></pre></div>
-<div id="htmlwidget-04c644ae38f9adc8b302" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-04c644ae38f9adc8b302">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[34.31689,-83.81968,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"DSK",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[34.31689,34.31689],"lng":[-83.81968,-83.81968]},"setView":[[34.31689,-83.81968],12,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">leaflet</span>() %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> geo_dsk$lon, <span class="dt">lat =</span> geo_dsk$lat, <span class="dt">popup =</span> <span class="st">&quot;DSK&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">addProviderTiles</span>(providers$OpenStreetMap.HOT) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> geo_dsk$lon, <span class="dt">lat =</span> geo_dsk$lat, <span class="dt">zoom =</span> <span class="dv">12</span>)</code></pre></div>
+<div id="htmlwidget-cfeab3151ecbfeb02551" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cfeab3151ecbfeb02551">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[34.31689,-83.81968,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"DSK",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[34.31689,34.31689],"lng":[-83.81968,-83.81968]},"setView":[[34.31689,-83.81968],12,[]]},"evals":[],"jsHooks":[]}</script>
 <p>A bit less impressive. The DSK geocoded Giannini Hall as somewhere near Gainesville, Georgia.</p>
 <p>An important point for geocoding: You will not always get quality results, and it is really helpful to have a way to “check” your work. One way is to use several geocoding services to see if you are getting consistent results—though they may all make the same mistake.</p>
 </div>
@@ -922,46 +926,46 @@ geo_dsk &lt;-<span class="st"> </span><span class="kw">geocode</span>(
 <p>If you are interested in learning more about the <code>leaflet</code> package, I recommend <a href="https://rstudio.github.io/leaflet/">this tutorial</a> published by its creators. You will see that it covers many of the spatial data topicsl we have covered—rasters, polygons, choropleths, <em>etc</em>.</p>
 <p>As you saw above, <code>leaflet</code> makes use of piping in a way similar to <code>ggplot2</code>’s pluses (<code>+</code>). The syntax has a few other things in common, <em>i.e.</em>, you begin with the <code>leaflet()</code> function and then continue to add (pipe) layers/objects. If you want to add markers, as I did, you use <code>addMarkers()</code> and provide a longitude <code>lng</code>, a latitude <code>lat</code>, and a character label for the marker <code>popup</code>. In order to have actual map, you need to load some map tiles. To add map tiles to your map, use <code>addTiles()</code>, which uses the default map tiles,<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a> or <code>addProviderTiles()</code>, which accesses map tiles from a bunch of mapping services. There are many other options, like where the map is centered, how far you want to zoom, which projections you use, <em>etc</em>.</p>
 <p>As with <code>ggplot2</code>, you can also define your map as an object in R’s environment. I’ll leave you with six maps of the same place (Lincoln, Nebraska!) with different providers’ map tiles. I will first define a basic map without tiles, and then in each map, I will use a different set of tiles.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">leaflet</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> <span class="op">-</span><span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">popup =</span> <span class="st">&quot;Lincoln, NE&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> <span class="op">-</span><span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">12</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">leaflet</span>() %&gt;%
+<span class="st">  </span><span class="kw">addMarkers</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">popup =</span> <span class="st">&quot;Lincoln, NE&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">12</span>)</code></pre></div>
 <p>CartoDB’s standard map:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>CartoDB)</code></pre></div>
-<div id="htmlwidget-81bb54d2e2db74788329" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-81bb54d2e2db74788329">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["CartoDB",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$CartoDB)</code></pre></div>
+<div id="htmlwidget-27febf648d0756db20ca" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-27febf648d0756db20ca">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["CartoDB",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
 <p>CartoDB’s <em>dark-matter</em> map (zoomed out):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>CartoDB.DarkMatter) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> <span class="op">-</span><span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
-<div id="htmlwidget-e233a20b5e9af3372ddd" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e233a20b5e9af3372ddd">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["CartoDB.DarkMatter",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$CartoDB.DarkMatter) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
+<div id="htmlwidget-1904466911cb8184b4d4" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1904466911cb8184b4d4">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["CartoDB.DarkMatter",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
 <p>OpenMapSurfer’s roads map:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>OpenMapSurfer.Roads)</code></pre></div>
-<div id="htmlwidget-773ae8f8f58cfc59606b" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-773ae8f8f58cfc59606b">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenMapSurfer.Roads",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$OpenMapSurfer.Roads)</code></pre></div>
+<div id="htmlwidget-0f56cd48d0378e030d99" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0f56cd48d0378e030d99">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenMapSurfer.Roads",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
 <p>OpenStreeMap’s “HOT” map:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>OpenStreetMap.HOT)</code></pre></div>
-<div id="htmlwidget-4811146efd1c3838a582" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4811146efd1c3838a582">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$OpenStreetMap.HOT)</code></pre></div>
+<div id="htmlwidget-b5a793ad353c7457666e" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b5a793ad353c7457666e">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["OpenStreetMap.HOT",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
 <p>ESRI’s “World Imagery” map:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>Esri.WorldImagery)</code></pre></div>
-<div id="htmlwidget-ba50d881aef10385d353" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ba50d881aef10385d353">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$Esri.WorldImagery)</code></pre></div>
+<div id="htmlwidget-f4385de1869541de50ac" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f4385de1869541de50ac">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],12,[]]},"evals":[],"jsHooks":[]}</script>
 <p>ESRI’s “World Terrain” map (zoomed out):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>Esri.WorldTerrain) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> <span class="op">-</span><span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
-<div id="htmlwidget-ae9ea6f43b54d625ec16" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ae9ea6f43b54d625ec16">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["Esri.WorldTerrain",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$Esri.WorldTerrain) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
+<div id="htmlwidget-9e6767f65004293a63d9" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9e6767f65004293a63d9">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["Esri.WorldTerrain",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
 <p>Stamen’s <em>water color</em> map (zoomed out):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>Stamen.Watercolor) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> <span class="op">-</span><span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
-<div id="htmlwidget-aff7a26bce42a895a406" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-aff7a26bce42a895a406">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["Stamen.Watercolor",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$Stamen.Watercolor) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
+<div id="htmlwidget-bcac1b0ff6ba7de194b1" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bcac1b0ff6ba7de194b1">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["Stamen.Watercolor",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
 <p>And to go full circle…</p>
 <p>NASA’s “Viirs Earth At Night, 2012” map (zoomed out):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addProviderTiles</span>(providers<span class="op">$</span>NASAGIBS.ViirsEarthAtNight2012) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> <span class="op">-</span><span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
-<div id="htmlwidget-10fbf032b154ad12fb20" style="width:768px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-10fbf032b154ad12fb20">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["NASAGIBS.ViirsEarthAtNight2012",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m %&gt;%<span class="st"> </span><span class="kw">addProviderTiles</span>(providers$NASAGIBS.ViirsEarthAtNight2012) %&gt;%
+<span class="st">  </span><span class="kw">setView</span>(<span class="dt">lng =</span> -<span class="fl">96.6852</span>, <span class="dt">lat =</span> <span class="fl">40.8258</span>, <span class="dt">zoom =</span> <span class="dv">4</span>)</code></pre></div>
+<div id="htmlwidget-e9d683a0cbf10bc0af9f" style="width:768px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e9d683a0cbf10bc0af9f">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addMarkers","args":[40.8258,-96.6852,null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Lincoln, NE",null,null,null,null,null,null]},{"method":"addProviderTiles","args":["NASAGIBS.ViirsEarthAtNight2012",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}],"limits":{"lat":[40.8258,40.8258],"lng":[-96.6852,-96.6852]},"setView":[[40.8258,-96.6852],4,[]]},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="footnotes">
 <hr />

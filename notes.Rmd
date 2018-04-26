@@ -105,6 +105,13 @@ Spatial data. Rasters, geocoding, and mapping in R.
 [pdf](Section13/section13.pdf) | [R script](Section13/section13.R) | [zip](Section13.zip)
 <br><br>
 
+#### [__Section 14__](section14.html): Simultaneous-equation models
+
+Simultaneous equations—theory, identification, estimation, and simulation.
+
+[pdf](Section14/section14.pdf) | [R script](Section14/section14.R) | [zip](Section14.zip)
+<br><br>
+
 <!-- #### [__Section 14__](section13.html): Introduction to `data.table`
 
 An introduction to the `data.table` package (useful for working with large datasets).
