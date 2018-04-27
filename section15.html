@@ -441,7 +441,7 @@ div.tocify {
 </div>
 <div id="what-you-will-need" class="section level2">
 <h2>What you will need</h2>
-<p>The <code>rpart</code> package!</p>
+<p>The <code>rpart</code>, <code>rpart.plot</code>, and <code>RColorBrewer</code> packages!</p>
 </div>
 <div id="r-setup" class="section level2">
 <h2>R setup</h2>
@@ -739,7 +739,7 @@ tree1 &lt;-<span class="st"> </span><span class="kw">rpart</span>(
   <span class="dt">data =</span> train_df,
   <span class="dt">method =</span> <span class="st">&quot;class&quot;</span>
 )</code></pre></div>
-<p>We can now plot the fitted tree using the <code>rpart.plot()</code> function from the <code>rpart.plot</code> package.</p>
+<p>We can now plot the fitted tree using the <code>rpart.plot()</code> function from the <a href="http://www.milbo.org/rpart-plot/prp.pdf"><code>rpart.plot</code> package</a>.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot tree1</span>
 <span class="kw">rpart.plot</span>(
   tree1,
@@ -750,7 +750,7 @@ tree1 &lt;-<span class="st"> </span><span class="kw">rpart</span>(
 </div>
 <div id="lasso" class="section level2">
 <h2>Lasso</h2>
-<p>In empirical economics, you will likely came across <em>lasso</em> regressions. Besides having a pretty awesome name<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>, lasso provides a nice stepping point for social scientists who are used to linear regression models.</p>
+<p>In empirical economics, you will likely came across <em>lasso</em> regressions. Besides having a pretty awesome name<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a>, lasso provides a nice stepping point for social scientists who are used to linear regression models.</p>
 </div>
 </div>
 <div class="footnotes">
@@ -763,7 +763,8 @@ tree1 &lt;-<span class="st"> </span><span class="kw">rpart</span>(
 <li id="fn5"><p>It’s probably no accident that these two attributes are found together.<a href="#fnref5">↩</a></p></li>
 <li id="fn6"><p><em>e.g.</em>, a <em>decision</em> between ‘yes’ and ‘no’.<a href="#fnref6">↩</a></p></li>
 <li id="fn7"><p>We get a training dataset and a testing dataset, but to test the data, we need to upload our predictions to Kaggle’s website.<a href="#fnref7">↩</a></p></li>
-<li id="fn8"><p>Much cooler than <em>ordinary least squares</em>.<a href="#fnref8">↩</a></p></li>
+<li id="fn8"><p>The <a href="http://www.milbo.org/rpart-plot/prp.pdf">documentation</a> for <code>rpart.plot</code> is really helpful.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>Much cooler than <em>ordinary least squares</em>.<a href="#fnref9">↩</a></p></li>
 </ol>
 </div>
 

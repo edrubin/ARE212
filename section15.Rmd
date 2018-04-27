@@ -40,7 +40,7 @@ And... both books have free PDFs available on their websites! Hurray for open sc
 
 ## What you will need
 
-The `rpart` package!
+The `rpart`, `rpart.plot`, and `RColorBrewer` packages!
 
 ## R setup
 
@@ -280,7 +280,7 @@ tree1 <- rpart(
 )
 ```
 
-We can now plot the fitted tree using the `rpart.plot()` function from the `rpart.plot` package.
+We can now plot the fitted tree using the `rpart.plot()` function from the [`rpart.plot` package](http://www.milbo.org/rpart-plot/prp.pdf).^[The [documentation](http://www.milbo.org/rpart-plot/prp.pdf) for `rpart.plot` is really helpful.]
 ```{R, dt plot1}
 # Plot tree1
 rpart.plot(
