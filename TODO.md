@@ -24,3 +24,4 @@
 
 - Update R file for sec. 13
 - Add PDF for sec. 13
+- Add web-scraping and data.table notes

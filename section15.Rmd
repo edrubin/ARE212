@@ -18,6 +18,9 @@ output:
 
 <br>
 
+<!-- https://www.analyticsvidhya.com/blog/2016/04/complete-tutorial-tree-based-modeling-scratch-in-python/
+http://trevorstephens.com/kaggle-titanic-tutorial/r-part-3-decision-trees/ -->
+
 # Admin
 
 ## Announcements

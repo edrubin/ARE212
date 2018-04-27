@@ -1,5 +1,5 @@
 ---
-title: "Section 14: Simultaneous Equations Models"
+title: "Section 14: Simultaneous-equations models"
 header-includes:
 output:
   html_document:
