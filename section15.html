@@ -361,6 +361,9 @@ div.tocify {
       <a href="section13.html">Section 13</a>
     </li>
     <li>
+      <a href="section14.html">Section 14</a>
+    </li>
+    <li>
       <a href="latexKnitr.html">LaTeX and knitr</a>
     </li>
     <li class="divider"></li>
@@ -414,12 +417,18 @@ div.tocify {
 
 <p><a href="Section15.zip"><span class="fa-stack fa-4x"> <i class="fa fa-folder fa-stack-2x"></i> <i class="fa fa-arrow-down fa-inverse fa-stack-1x"></i> </span></a></p>
 <p><br></p>
-<div id="this-week" class="section level1">
-<h1>This week</h1>
-<p>Prediction, cross validation, and machine learning!</p>
-<div id="what-you-need" class="section level2">
-<h2>What you need</h2>
-<!-- TODO -->
+<div id="admin" class="section level1">
+<h1>Admin</h1>
+<div id="announcements" class="section level2">
+<h2>Announcements</h2>
+<ul>
+<li>Today is our last section! Thank you so much for a fantastic semester.</li>
+<li>I’ve posted <a href="section14.html">another section</a> that covers simultaneous-equation models.</li>
+</ul>
+</div>
+<div id="this-week" class="section level2">
+<h2>This week</h2>
+<p>Today we are going to take a very brief and general walk through the world of prediction, cross validation, and machine learning! These topics get their own classes, books, conferences, and careers, so there is no way that I am going to be able to teach you everything in less than 50 minutes. I am going to show you a few examples, introduce you to a couple of the bigger concepts, and then leave you hungry for more. You are at the greatest public university in the world and are here to learn. Go take a class in machine learning if these topics interest you at all—they are all over campus (Statistics, Computer Science, I School, Electrical Engineering, BIDS, just to name a few). There are some <a href="http://dlab.berkeley.edu/working-groups">working groups</a> too!</p>
 </div>
 <div id="r-setup" class="section level2">
 <h2>R setup</h2>
@@ -460,21 +469,200 @@ dir_15 &lt;-<span class="st"> &quot;/Users/edwardarubin/Dropbox/Teaching/ARE212/
 <p>For this exercise:</p>
 <ol style="list-style-type: decimal">
 <li>Generate 2,000 observations with this DGP, where <span class="math inline">\(\varepsilon\)</span> and <span class="math inline">\(x\)</span> are both drawn from the standard normal distribution.</li>
-<li>Generate 100 other variables <span class="math inline">\(\mathbf{Z}\)</span>.</li>
+<li>Generate 100 other variables <span class="math inline">\(\mathbf{Z}\)</span>. Standard normal distribution again.</li>
 <li>Split the sample into two 1,000-member samples. Call these samples <span class="math inline">\(\mathbf{S}_1\)</span> and <span class="math inline">\(\mathbf{S}_2\)</span>.</li>
 <li>Fit two competing models on <span class="math inline">\(\mathbf{S}_1\)</span>:
 <ul>
 <li><span class="math inline">\(\mathbf{y}\)</span> regressed on <span class="math inline">\(\mathbf{x}\)</span></li>
-<li><span class="math inline">\(\mathbf{y}\)</span> regressed on <span class="math inline">\(\mathbf{x}\)</span> and the 100 variables in <span class="math inline">\(\mathbf{Z}\)</span></li>
+<li><span class="math inline">\(\mathbf{y}\)</span> regressed on <span class="math inline">\(\mathbf{x}\)</span> and the 100 noise variables of <span class="math inline">\(\mathbf{Z}\)</span></li>
 </ul></li>
 <li>Test how well the two competing models perform in predicting <span class="math inline">\(\mathbf{y}\)</span> in <span class="math inline">\(\mathbf{S}_2\)</span>.</li>
 </ol>
+</div>
+<div id="model-fit" class="section level2">
+<h2>Model fit</h2>
+<p>Up to this point, we typically stuck with inferential statistics to (1) evaluate the <em>fit</em> of a model or (2) test competing models. However, because we not are currently focusing on estimating structural parameters and determining whether they differ significantly from zero, we need to shift how we evaluate models/fit.</p>
+<p>There are many ways to evaluate models. Sometimes your application will help you determine which measure of model performance is best. For instance, if you really need to avoid false positives and are less concerned about false negatives, then you want a measure of model performance that really penalizes false positives.</p>
+<p>For now, we are going to stick with three simple measures of model fit (that are particularly relevant for continuous/count outcome, as opposed to binary/categorical outcomes):</p>
+<ol style="list-style-type: decimal">
+<li>Mean absolute error <span class="math display">\[\text{MAE} = \dfrac{1}{N} \sum_{i = 1}^N \left|y_i - \hat{y}_i\right|\]</span></li>
+<li>Mean squared error <span class="math display">\[\text{MSE} = \dfrac{1}{N} \sum_{i = 1}^N \left(y_i - \hat{y}_i\right)^2\]</span></li>
+<li>Mean absolute percentage error <span class="math display">\[\text{MAPE} = \dfrac{1}{N} \sum_{i = 1}^N \left|\dfrac{y_i - \hat{y}_i}{y_i}\right|\]</span></li>
+</ol>
+</div>
+<div id="overfitting-exercise" class="section level2">
+<h2>Overfitting exercise</h2>
+<p>First, we bake some data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The population size</span>
+n &lt;-<span class="st"> </span><span class="fl">2e3</span>
+<span class="co"># Set a seed</span>
+<span class="kw">set.seed</span>(<span class="dv">12345</span>)
+<span class="co"># Create the population</span>
+s_df &lt;-<span class="st"> </span><span class="kw">data_frame</span>(
+  <span class="dt">x =</span> <span class="kw">rnorm</span>(n),
+  <span class="dt">j =</span> 1L,
+  <span class="dt">e =</span> <span class="kw">rnorm</span>(n)
+) %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="dv">3</span> +<span class="st"> </span><span class="dv">7</span> *<span class="st"> </span>x +<span class="st"> </span>e)
+<span class="co"># Create the 100 noise variables</span>
+z_df &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="kw">rnorm</span>(n *<span class="st"> </span><span class="dv">100</span>), <span class="dt">nrow =</span> n) %&gt;%
+<span class="st">  </span><span class="kw">as_data_frame</span>()
+<span class="co"># Change the names of z_df</span>
+<span class="kw">names</span>(z_df) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;z&quot;</span>, <span class="dv">1</span>:<span class="dv">100</span>)
+<span class="co"># Merge the datasets</span>
+s_df &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(<span class="kw">select</span>(s_df, -e), z_df)
+<span class="co"># Split the datasets into two</span>
+s1 &lt;-<span class="st"> </span>s_df[<span class="dv">1</span>:<span class="fl">1e3</span>,]
+s2 &lt;-<span class="st"> </span>s_df[<span class="dv">1001</span>:<span class="fl">2e3</span>,]</code></pre></div>
+<p>Now we train the two models (I’ll refer to them <em>a</em> and <em>b</em>) on <span class="math inline">\(\mathbf{S}_1\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The dependent variable from sample 1</span>
+y1 &lt;-<span class="st"> </span>s1 %&gt;%<span class="st"> </span><span class="kw">select</span>(y) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+<span class="co"># Create the data matrices for each model</span>
+X1_a &lt;-<span class="st"> </span>s1 %&gt;%<span class="st"> </span><span class="kw">select</span>(j, x) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+X1_b &lt;-<span class="st"> </span>s1 %&gt;%<span class="st"> </span><span class="kw">select</span>(j, x, <span class="kw">starts_with</span>(<span class="st">&quot;z&quot;</span>)) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+<span class="co"># Model 1: Regress y on x</span>
+est_a &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">crossprod</span>(X1_a)) %*%<span class="st"> </span><span class="kw">crossprod</span>(X1_a, y1)
+est_b &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">crossprod</span>(X1_b)) %*%<span class="st"> </span><span class="kw">crossprod</span>(X1_b, y1)</code></pre></div>
+<p>And now we predict the outcome variable <span class="math inline">\(y\)</span> in sample <span class="math inline">\(\mathbf{S}_2\)</span> using the models we trained on <span class="math inline">\(\mathbf{S}_1\)</span> (<code>est_a</code> and <code>est_b</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The dependent variable from sample 2</span>
+y2 &lt;-<span class="st"> </span>s2 %&gt;%<span class="st"> </span><span class="kw">select</span>(y) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+<span class="co"># Create the data matrices for each model for sample 2</span>
+X2_a &lt;-<span class="st"> </span>s2 %&gt;%<span class="st"> </span><span class="kw">select</span>(j, x) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+X2_b &lt;-<span class="st"> </span>s2 %&gt;%<span class="st"> </span><span class="kw">select</span>(j, x, <span class="kw">starts_with</span>(<span class="st">&quot;z&quot;</span>)) %&gt;%<span class="st"> </span><span class="kw">as.matrix</span>()
+<span class="co"># The models&#39; predictions for sample 2</span>
+pred_a &lt;-<span class="st"> </span>X2_a %*%<span class="st"> </span>est_a
+pred_b &lt;-<span class="st"> </span>X2_b %*%<span class="st"> </span>est_b</code></pre></div>
+<p>Finally, let’s evaluate the two models’ predictions! We will calculate (1) mean absolute error (MAE), (2) mean squared error (MSE), and (3) mean absolute percentage error (MAPE).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the error</span>
+error_a &lt;-<span class="st"> </span>y2 -<span class="st"> </span>pred_a
+error_b &lt;-<span class="st"> </span>y2 -<span class="st"> </span>pred_b
+error_mat &lt;-<span class="st"> </span><span class="kw">cbind</span>(error_a, error_b)
+<span class="kw">colnames</span>(error_mat) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)
+<span class="co"># Mean abs. error</span>
+mae &lt;-<span class="st"> </span><span class="kw">apply</span>(
+  <span class="dt">X =</span> error_mat,
+  <span class="dt">FUN =</span> . %&gt;%<span class="st"> </span><span class="kw">abs</span>() %&gt;%<span class="st"> </span><span class="kw">mean</span>(),
+  <span class="dt">MARGIN =</span> <span class="dv">2</span>
+)
+<span class="co"># Mean squared error</span>
+mse &lt;-<span class="st"> </span><span class="kw">apply</span>(
+  <span class="dt">X =</span> error_mat,
+  <span class="dt">FUN =</span> . %&gt;%<span class="st"> </span><span class="kw">raise_to_power</span>(<span class="dv">2</span>) %&gt;%<span class="st"> </span><span class="kw">mean</span>(),
+  <span class="dt">MARGIN =</span> <span class="dv">2</span>
+)
+<span class="co"># Mean absolute percentage error</span>
+mape &lt;-<span class="st"> </span><span class="kw">apply</span>(
+  <span class="dt">X =</span> error_mat,
+  <span class="dt">FUN =</span> . %&gt;%<span class="st"> </span><span class="kw">divide_by</span>(y2) %&gt;%<span class="st"> </span><span class="kw">abs</span>() %&gt;%<span class="st">  </span><span class="kw">mean</span>(),
+  <span class="dt">MARGIN =</span> <span class="dv">2</span>
+)
+<span class="co"># Print a table of results</span>
+res_mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="kw">c</span>(mae, mse, mape), <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> T)
+<span class="kw">rownames</span>(res_mat) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;MAE&quot;</span>, <span class="st">&quot;MSE&quot;</span>, <span class="st">&quot;MAPE&quot;</span>)
+res_mat %&gt;%<span class="st"> </span>knitr::<span class="kw">kable</span>(
+  <span class="dt">digits =</span> <span class="dv">3</span>,
+  <span class="dt">row.names =</span> T,
+  <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Model a&quot;</span>, <span class="st">&quot;Model b&quot;</span>),
+  <span class="dt">caption =</span> <span class="st">&quot;Evaluating the two models&#39; out-of-sample prediction performances&quot;</span>
+)</code></pre></div>
+<table>
+<caption>Evaluating the two models’ out-of-sample prediction performances</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Model a</th>
+<th align="right">Model b</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MAE</td>
+<td align="right">0.755</td>
+<td align="right">0.802</td>
+</tr>
+<tr class="even">
+<td>MSE</td>
+<td align="right">0.908</td>
+<td align="right">1.020</td>
+</tr>
+<tr class="odd">
+<td>MAPE</td>
+<td align="right">0.608</td>
+<td align="right">0.643</td>
+</tr>
+</tbody>
+</table>
+<p>So what’s the point here? Across three standard measures of prediction performance, as simple regression model with an intercept and a single covariate outperforms a model with the same intercept and covariate plus 100 other variables. What if we used within-sample R<sup>2</sup> as a way to assess model performance?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(y1 ~<span class="st"> </span>-<span class="dv">1</span> +<span class="st"> </span>X1_a) %&gt;%<span class="st"> </span><span class="kw">summary</span>() %$%<span class="st"> </span><span class="kw">c</span>(r.squared, adj.r.squared)</code></pre></div>
+<pre><code>## [1] 0.9848760 0.9848457</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(y1 ~<span class="st"> </span>-<span class="dv">1</span> +<span class="st"> </span>X1_b) %&gt;%<span class="st"> </span><span class="kw">summary</span>() %$%<span class="st"> </span><span class="kw">c</span>(r.squared, adj.r.squared)</code></pre></div>
+<pre><code>## [1] 0.9864762 0.9849401</code></pre>
+<p>Within-sample, both the R<sup>2</sup> and the adjusted R<sup>2</sup> are higher for model <em>b</em> relative to model <em>a</em>.</p>
+<p>We’re overfitting, and some of the classic econometric tools (measures of fit) did not help us avoid the problem. To be fair, we might avoid this problem by choosing a different measure of fit—for instance, instead of R<sup>2</sup> we could choose AIC or BIC. However, AIC and BIC are just two ways we can try to avoid overfitting a model, so why not check out the full suite? This setting is where cross validation shines.</p>
+</div>
+<div id="train-validate-test" class="section level2">
+<h2>Train, validate, test</h2>
+<p>At the heart of cross validation are <em>train, validate, test</em>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> We’ve actually already started applying these principles<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> above when we split our dataset in half, <em>trained</em> the two competing models on half the data (<span class="math inline">\(\mathbf{S}_1\)</span>) and then <em>validated</em> the models on the hold-out (or validation) dataset <span class="math inline">\(\mathbf{S}_2\)</span>. Let’s define these concepts a bit more.</p>
+<p>Let’s imagine we have a dataset. In the train-validate-test cross-validation paradigm, we will split our dataset into three subsets, corresponding to training, validating, and testing.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Train</strong>: Generally the largest share (<em>e.g.</em>, 70–80%) of your full dataset goes into the training dataset. The essence: You have a bunch of data and a few models; you fit (train) your models using the training data.</li>
+<li><strong>Validate</strong>: Once you fit your models on the training data, you evaluate (validate) their performance using data the models have never seen before—the <em>validation</em> dataset. You can iterate here—moving back and forth between the training and validation datasets, tuning your models (hyperparameters). But as you iterate between your training and validation datasets, you can also return to the world of overfitting—this time overfitting your validation dataset.</li>
+<li><strong>Test</strong>: The testing dataset sits locked away<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>, waiting for you to finish training, tuning, and validating your model. Once you settle on an implementation/specification of your model, you train it one last time, unlock the testing dataset, and test your model’s performance on the testing dataset—your model has never seen these data, so you get a nice out-of-sample, not-overfit evaluation of your model’s performance.</li>
+</ol>
+<p>The discussion above treats the training and validation sets as mutually exclusive, but this need not be the case. There are several methods—for instance leave-one-out cross validation (LOOCV) and k-fold cross validation—that allow observations (or sets of observation) to “take turns” being in each groups. Our example above was essentially 2-fold cross validation.</p>
+</div>
+<div id="training-and-testing-errors" class="section level2">
+<h2>Training and testing errors</h2>
+<p>You might hear the distinction between <em>training</em> error (rate) and <em>testing</em> error (rate). These error rates emphasize the effect of overfitting and are (unsurprisingly) related to cross validation. The training error (rate) tells you how well your model performs when predicting the data on which the model was trained. The testing error (rate) tells you how well your model performs when predicting data it has never seen. The former can clearly suffer from overfitting, while the latter does not.</p>
+<p>Let’s check the training and testing error for the two models in the previous empirical example. We’ll stick with mean absolute error for now.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the MAE of the training and testing errors</span>
+cv_errors &lt;-<span class="st"> </span><span class="kw">matrix</span>(
+  <span class="dt">data =</span> <span class="kw">c</span>(
+    <span class="kw">abs</span>(y1 -<span class="st"> </span>X1_a %*%<span class="st"> </span>est_a) %&gt;%<span class="st"> </span><span class="kw">mean</span>(),
+    <span class="kw">abs</span>(y1 -<span class="st"> </span>X1_b %*%<span class="st"> </span>est_b) %&gt;%<span class="st"> </span><span class="kw">mean</span>(),
+    <span class="kw">abs</span>(y2 -<span class="st"> </span>X2_a %*%<span class="st"> </span>est_a) %&gt;%<span class="st"> </span><span class="kw">mean</span>(),
+    <span class="kw">abs</span>(y2 -<span class="st"> </span>X2_b %*%<span class="st"> </span>est_b) %&gt;%<span class="st"> </span><span class="kw">mean</span>()
+  ), <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> T
+)
+<span class="kw">rownames</span>(cv_errors) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Training error&quot;</span>, <span class="st">&quot;Testing error&quot;</span>)
+<span class="co"># Print a nice table</span>
+cv_errors %&gt;%<span class="st"> </span>knitr::<span class="kw">kable</span>(
+  <span class="dt">digits =</span> <span class="dv">3</span>,
+  <span class="dt">row.names =</span> T,
+  <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Model a&quot;</span>, <span class="st">&quot;Model b&quot;</span>),
+  <span class="dt">caption =</span> <span class="st">&quot;Comparing the training and testing mean abs. error for the two models&quot;</span>
+)</code></pre></div>
+<table>
+<caption>Comparing the training and testing mean abs. error for the two models</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Model a</th>
+<th align="right">Model b</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Training error</td>
+<td align="right">0.769</td>
+<td align="right">0.725</td>
+</tr>
+<tr class="even">
+<td>Testing error</td>
+<td align="right">0.755</td>
+<td align="right">0.802</td>
+</tr>
+</tbody>
+</table>
+<p>Unsurprisingly, the training error of model b is lower than the training error of model a—model b uses 100 more degrees of freedom to fit the data. However, as a result of overfitting, the testing error of model b is higher than the testing error of model a. This tradeoff is central to much of the statistical/machine learning literature: when do we want to add some more flexibility to our model (increasing the potential better fit but also increasing the potential for overfitting) and when do we just keep things simple? There are actually a lot of similar tradeoffs in the land of prediction.</p>
 </div>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>We also made similar restrictions in the land of asymptopia.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Or sometimes just train and test.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Albeit somewhat haphazardly.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Sometimes literally.<a href="#fnref4">↩</a></p></li>
 </ol>
 </div>
 

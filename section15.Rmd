@@ -18,11 +18,18 @@ output:
 
 <br>
 
-# This week
+# Admin
 
-Prediction, cross validation, and machine learning!
+## Announcements
 
-## What you need
+- Today is our last section! Thank you so much for a fantastic semester.
+- I've posted [another section](section14.html) that covers simultaneous-equation models.
+
+## This week
+
+Today we are going to take a very brief and general walk through the world of prediction, cross validation, and machine learning! These topics get their own classes, books, conferences, and careers, so there is no way that I am going to be able to teach you everything in less than 50 minutes. I am going to show you a few examples, introduce you to a couple of the bigger concepts, and then leave you hungry for more. You are at the greatest public university in the world and are here to learn. Go take a class in machine learning if these topics interest you at all—they are all over campus (Statistics, Computer Science, I School, Electrical Engineering, BIDS, just to name a few). There are some [working groups](http://dlab.berkeley.edu/working-groups) too!
+
+## What you will need
 
 <!-- TODO -->
 
@@ -81,10 +88,24 @@ For this exercise:
     - $\mathbf{y}$ regressed on $\mathbf{x}$ and the 100 noise variables of $\mathbf{Z}$
 5. Test how well the two competing models perform in predicting $\mathbf{y}$ in $\mathbf{S}_2$.
 
-## A note on model fit
+## Model fit
 
-## The simulation
+Up to this point, we typically stuck with inferential statistics to (1) evaluate the _fit_ of a model or (2) test competing models. However, because we not are currently focusing on estimating structural parameters and determining whether they differ significantly from zero, we need to shift how we evaluate models/fit.
 
+There are many ways to evaluate models. Sometimes your application will help you determine which measure of model performance is best. For instance, if you really need to avoid false positives and are less concerned about false negatives, then you want a measure of model performance that really penalizes false positives.
+
+For now, we are going to stick with three simple measures of model fit (that are particularly relevant for continuous/count outcome, as opposed to binary/categorical outcomes):
+
+1. Mean absolute error
+$$\text{MAE} = \dfrac{1}{N} \sum_{i = 1}^N \left|y_i - \hat{y}_i\right|$$
+2. Mean squared error
+$$\text{MSE} = \dfrac{1}{N} \sum_{i = 1}^N \left(y_i - \hat{y}_i\right)^2$$
+3. Mean absolute percentage error
+$$\text{MAPE} = \dfrac{1}{N} \sum_{i = 1}^N \left|\dfrac{y_i - \hat{y}_i}{y_i}\right|$$
+
+## Overfitting exercise
+
+First, we bake some data:
 ```{R, cv pop, cache = T}
 # The population size
 n <- 2e3
@@ -93,9 +114,133 @@ set.seed(12345)
 # Create the population
 s_df <- data_frame(
   x = rnorm(n),
+  j = 1L,
   e = rnorm(n)
 ) %>% mutate(y = 3 + 7 * x + e)
 # Create the 100 noise variables
 z_df <- matrix(data = rnorm(n * 100), nrow = n) %>%
   as_data_frame()
+# Change the names of z_df
+names(z_df) <- paste0("z", 1:100)
+# Merge the datasets
+s_df <- bind_cols(select(s_df, -e), z_df)
+# Split the datasets into two
+s1 <- s_df[1:1e3,]
+s2 <- s_df[1001:2e3,]
 ```
+
+Now we train the two models (I'll refer to them _a_ and _b_) on $\mathbf{S}_1$.
+```{R, cv train}
+# The dependent variable from sample 1
+y1 <- s1 %>% select(y) %>% as.matrix()
+# Create the data matrices for each model
+X1_a <- s1 %>% select(j, x) %>% as.matrix()
+X1_b <- s1 %>% select(j, x, starts_with("z")) %>% as.matrix()
+# Model 1: Regress y on x
+est_a <- solve(crossprod(X1_a)) %*% crossprod(X1_a, y1)
+est_b <- solve(crossprod(X1_b)) %*% crossprod(X1_b, y1)
+```
+
+And now we predict the outcome variable $y$ in sample $\mathbf{S}_2$ using the models we trained on $\mathbf{S}_1$ (`est_a` and `est_b`).
+```{R, cv predict}
+# The dependent variable from sample 2
+y2 <- s2 %>% select(y) %>% as.matrix()
+# Create the data matrices for each model for sample 2
+X2_a <- s2 %>% select(j, x) %>% as.matrix()
+X2_b <- s2 %>% select(j, x, starts_with("z")) %>% as.matrix()
+# The models' predictions for sample 2
+pred_a <- X2_a %*% est_a
+pred_b <- X2_b %*% est_b
+```
+
+Finally, let's evaluate the two models' predictions! We will calculate (1) mean absolute error (MAE), (2) mean squared error (MSE), and (3) mean absolute percentage error (MAPE).
+```{R, cv eval}
+# Calculate the error
+error_a <- y2 - pred_a
+error_b <- y2 - pred_b
+error_mat <- cbind(error_a, error_b)
+colnames(error_mat) <- c("a", "b")
+# Mean abs. error
+mae <- apply(
+  X = error_mat,
+  FUN = . %>% abs() %>% mean(),
+  MARGIN = 2
+)
+# Mean squared error
+mse <- apply(
+  X = error_mat,
+  FUN = . %>% raise_to_power(2) %>% mean(),
+  MARGIN = 2
+)
+# Mean absolute percentage error
+mape <- apply(
+  X = error_mat,
+  FUN = . %>% divide_by(y2) %>% abs() %>%  mean(),
+  MARGIN = 2
+)
+# Print a table of results
+res_mat <- matrix(data = c(mae, mse, mape), ncol = 2, byrow = T)
+rownames(res_mat) <- c("MAE", "MSE", "MAPE")
+res_mat %>% knitr::kable(
+  digits = 3,
+  row.names = T,
+  col.names = c("Model a", "Model b"),
+  caption = "Evaluating the two models' out-of-sample prediction performances"
+)
+```
+
+So what's the point here? Across three standard measures of prediction performance, as simple regression model with an intercept and a single covariate outperforms a model with the same intercept and covariate plus 100 other variables. What if we used within-sample R^2^ as a way to assess model performance?
+```{R, cv r squareds}
+lm(y1 ~ -1 + X1_a) %>% summary() %$% c(r.squared, adj.r.squared)
+lm(y1 ~ -1 + X1_b) %>% summary() %$% c(r.squared, adj.r.squared)
+```
+Within-sample, both the R^2^ and the adjusted R^2^ are higher for model _b_ relative to model _a_.
+
+We're overfitting, and some of the classic econometric tools (measures of fit) did not help us avoid the problem. To be fair, we might avoid this problem by choosing a different measure of fit—for instance, instead of R^2^ we could choose AIC or BIC. However, AIC and BIC are just two ways we can try to avoid overfitting a model, so why not check out the full suite? This setting is where cross validation shines.
+
+## Train, validate, test
+
+At the heart of cross validation are _train, validate, test_.^[Or sometimes just train and test.] We've actually already started applying these principles^[Albeit somewhat haphazardly.] above when we split our dataset in half, _trained_ the two competing models on half the data ($\mathbf{S}_1$) and then _validated_ the models on the hold-out (or validation) dataset $\mathbf{S}_2$. Let's define these concepts a bit more.
+
+Let's imagine we have a dataset. In the train-validate-test cross-validation paradigm, we will split our dataset into three subsets, corresponding to training, validating, and testing.
+
+1. __Train__: Generally the largest share (_e.g._, 70–80%) of your full dataset goes into the training dataset. The essence: You have a bunch of data and a few models; you fit (train) your models using the training data.
+2. __Validate__: Once you fit your models on the training data, you evaluate (validate) their performance using data the models have never seen before—the _validation_ dataset. You can iterate here—moving back and forth between the training and validation datasets, tuning your models (hyperparameters). But as you iterate between your training and validation datasets, you can also return to the world of overfitting—this time overfitting your validation dataset.
+3. __Test__: The testing dataset sits locked away^[Sometimes literally.], waiting for you to finish training, tuning, and validating your model. Once you settle on an implementation/specification of your model, you train it one last time, unlock the testing dataset, and test your model's performance on the testing dataset—your model has never seen these data, so you get a nice out-of-sample, not-overfit evaluation of your model's performance.
+
+The discussion above treats the training and validation sets as mutually exclusive, but this need not be the case. There are several methods—for instance leave-one-out cross validation (LOOCV) and k-fold cross validation—that allow observations (or sets of observation) to "take turns" being in each groups. Our example above was essentially 2-fold cross validation.
+
+## Training and testing errors
+
+You might hear the distinction between _training_ error (rate) and _testing_ error (rate). These error rates emphasize the effect of overfitting and are (unsurprisingly) related to cross validation. The training error (rate) tells you how well your model performs when predicting the data on which the model was trained. The testing error (rate) tells you how well your model performs when predicting data it has never seen. The former can clearly suffer from overfitting, while the latter does not.
+
+Let's check the training and testing error for the two models in the previous empirical example. We'll stick with mean absolute error for now.
+```{R, cv error rates}
+# Calculate the MAE of the training and testing errors
+cv_errors <- matrix(
+  data = c(
+    abs(y1 - X1_a %*% est_a) %>% mean(),
+    abs(y1 - X1_b %*% est_b) %>% mean(),
+    abs(y2 - X2_a %*% est_a) %>% mean(),
+    abs(y2 - X2_b %*% est_b) %>% mean()
+  ), nrow = 2, byrow = T
+)
+rownames(cv_errors) <- c("Training error", "Testing error")
+# Print a nice table
+cv_errors %>% knitr::kable(
+  digits = 3,
+  row.names = T,
+  col.names = c("Model a", "Model b"),
+  caption = "Comparing the training and testing mean abs. error for the two models"
+)
+```
+
+Unsurprisingly, the training error of model b is lower than the training error of model a—model b uses 100 more degrees of freedom to fit the data. However, as a result of overfitting, the testing error of model b is higher than the testing error of model a. This tradeoff is central to much of the statistical/machine learning literature: when do we want to add some more flexibility to our model (increasing the potential better fit but also increasing the potential for overfitting) and when do we just keep things simple? There are actually a lot of similar tradeoffs in the land of prediction.
+
+# Decision trees
+
+Decision trees are one of the most-common and easiest-to-implement machine learning algorithms.^[It's probably no accident that these two attributes are found together.]
+
+# LASSO
+
+In empirical economics, you will likely came across _lasso_ regressions. Besides having a pretty inspiring name^[Much cooler than _ordinary least squares_.], 
