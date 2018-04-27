@@ -29,9 +29,18 @@ output:
 
 Today we are going to take a very brief and general walk through the world of prediction, cross validation, and machine learning! These topics get their own classes, books, conferences, and careers, so there is no way that I am going to be able to teach you everything in less than 50 minutes. I am going to show you a few examples, introduce you to a couple of the bigger concepts, and then leave you hungry for more. You are at the greatest public university in the world and are here to learn. Go take a class in machine learning if these topics interest you at all—they are all over campus (Statistics, Computer Science, I School, Electrical Engineering, BIDS, just to name a few). There are some [working groups](http://dlab.berkeley.edu/working-groups) too!
 
+## Two books
+
+Two of the most common books in the statistical learning are
+
+- [An Introduction to Statistical Learning with Applications in R](http://www-bcf.usc.edu/~gareth/ISL/)
+- [The Elements of Statistical Learning: Data Mining, Inference, and Prediction](https://web.stanford.edu/~hastie/ElemStatLearn/)
+
+And... both books have free PDFs available on their websites! Hurray for open science!
+
 ## What you will need
 
-<!-- TODO -->
+The `rpart` package!
 
 ## R setup
 
@@ -39,10 +48,12 @@ Today we are going to take a very brief and general walk through the world of pr
 # General R setup ----
 # Options
 options(stringsAsFactors = F)
-# Load new packages
+# Pacman
 library(pacman)
 # Load old packages
-p_load(dplyr, ggplot2, ggthemes, parallel, magrittr, viridis)
+p_load(readr, dplyr, ggplot2, ggthemes, parallel, magrittr, viridis)
+# Load new packages
+p_load(rpart, rpart.plot, RColorBrewer)
 # My ggplot2 theme
 theme_ed <- theme(
   legend.position = "bottom",
@@ -196,19 +207,19 @@ lm(y1 ~ -1 + X1_b) %>% summary() %$% c(r.squared, adj.r.squared)
 ```
 Within-sample, both the R^2^ and the adjusted R^2^ are higher for model _b_ relative to model _a_.
 
-We're overfitting, and some of the classic econometric tools (measures of fit) did not help us avoid the problem. To be fair, we might avoid this problem by choosing a different measure of fit—for instance, instead of R^2^ we could choose AIC or BIC. However, AIC and BIC are just two ways we can try to avoid overfitting a model, so why not check out the full suite? This setting is where cross validation shines.
+We're overfitting, and some of the classic econometric tools (measures of fit) did not help us avoid the problem. To be fair, we might avoid this problem by choosing a different measure of fit—for instance, instead of R^2^ we could implement some sort of model-selection process based upon AIC(C) or BIC. But why stop there? AIC and BIC are just two ways we can try to avoid overfitting a model, so why not check out the full suite? This setting is where cross validation shines.
 
 ## Train, validate, test
 
 At the heart of cross validation are _train, validate, test_.^[Or sometimes just train and test.] We've actually already started applying these principles^[Albeit somewhat haphazardly.] above when we split our dataset in half, _trained_ the two competing models on half the data ($\mathbf{S}_1$) and then _validated_ the models on the hold-out (or validation) dataset $\mathbf{S}_2$. Let's define these concepts a bit more.
 
-Let's imagine we have a dataset. In the train-validate-test cross-validation paradigm, we will split our dataset into three subsets, corresponding to training, validating, and testing.
+Let's imagine we have a dataset. In the train-validate-test cross-validation paradigm, we will split our dataset into subsets, corresponding to training, validating, and testing.
 
 1. __Train__: Generally the largest share (_e.g._, 70–80%) of your full dataset goes into the training dataset. The essence: You have a bunch of data and a few models; you fit (train) your models using the training data.
 2. __Validate__: Once you fit your models on the training data, you evaluate (validate) their performance using data the models have never seen before—the _validation_ dataset. You can iterate here—moving back and forth between the training and validation datasets, tuning your models (hyperparameters). But as you iterate between your training and validation datasets, you can also return to the world of overfitting—this time overfitting your validation dataset.
 3. __Test__: The testing dataset sits locked away^[Sometimes literally.], waiting for you to finish training, tuning, and validating your model. Once you settle on an implementation/specification of your model, you train it one last time, unlock the testing dataset, and test your model's performance on the testing dataset—your model has never seen these data, so you get a nice out-of-sample, not-overfit evaluation of your model's performance.
 
-The discussion above treats the training and validation sets as mutually exclusive, but this need not be the case. There are several methods—for instance leave-one-out cross validation (LOOCV) and k-fold cross validation—that allow observations (or sets of observation) to "take turns" being in each groups. Our example above was essentially 2-fold cross validation.
+The discussion above treats the training and validation sets as mutually exclusive, but this need not be the case. There are several methods—_e.g._, leave-one-out cross validation (LOOCV) and k-fold cross validation—that allow observations (or sets of observation) to "take turns" being in each groups. Our example above was essentially 2-fold cross validation.
 
 ## Training and testing errors
 
@@ -237,10 +248,48 @@ cv_errors %>% knitr::kable(
 
 Unsurprisingly, the training error of model b is lower than the training error of model a—model b uses 100 more degrees of freedom to fit the data. However, as a result of overfitting, the testing error of model b is higher than the testing error of model a. This tradeoff is central to much of the statistical/machine learning literature: when do we want to add some more flexibility to our model (increasing the potential better fit but also increasing the potential for overfitting) and when do we just keep things simple? There are actually a lot of similar tradeoffs in the land of prediction.
 
-# Decision trees
+# Machines, learning
 
-Decision trees are one of the most-common and easiest-to-implement machine learning algorithms.^[It's probably no accident that these two attributes are found together.]
+The world of machine learning is a vast and rapidly developing place. As with most topics, there are many ways to divide up the space. That said, one of the most common ways to split learning models is between _supervised_ and _unsupervised_ algorithms.
 
-# LASSO
+- __Supervised algorithms__ have an outcome that they try to predict. This outcome can be qualitative (_e.g._, text, categories, logical outcomes) or quantitative (real numbers, integers, binary), but the main point is that supervised learning algorithms need a known outcome variables. These algorithms use an assortment of statistical/mathematical methods, in conjunction with some objective function, to _learn_ the value of the outcome variable from the rest of the data. _Examples_: decision trees, random forests, lasso regression, neural networks.
+- As you might guess, __unsupervised algorithms__ do not have a known outcome variable. Instead, they take data on a set of observations—coupled with some measure of likeness—and then try to _learn_ groupings that best describe the data. _Examples_: k-means (or k-medoids) clustering, hierarchical clustering, spectral clustering.
 
-In empirical economics, you will likely came across _lasso_ regressions. Besides having a pretty inspiring name^[Much cooler than _ordinary least squares_.], 
+Because most of the current machine-learning methods used in applied economics are supervised algorithms, we're going to focus on on supervised algorithms today.
+
+## Decision trees
+
+Decision trees are one of the most-common and easiest-to-implement machine learning algorithms.^[It's probably no accident that these two attributes are found together.] They also (sometimes) provide a more interpretable final model, relative to other learning methods, though this is not always the case.
+
+Let's dive in. First, we need some data. Many of the classic applications of decision trees use binary outcomes,^[_e.g._, a _decision_ between 'yes' and 'no'.] so we're going to load a (tragic) dataset with a binary outcome that has become a pretty standard example for decision trees: the survival passengers on the Titanic. The data come from [Kaggle](https://www.kaggle.com/c/titanic/data), and you can learn more about the variables on the [Kaggle competition website](https://www.kaggle.com/c/titanic/data).^[We get a training dataset and a testing dataset, but to test the data, we need to upload our predictions to Kaggle's website.] Decision trees that choose between categories are classification trees; decision trees that output a number are regression trees.
+```{R, dt read csv}
+# Load the training and testing datasets
+train_df <- paste0(dir_15, "titanicTrain.csv") %>% read_csv()
+test_df <- paste0(dir_15, "titanicTest.csv") %>% read_csv()
+# Check our data
+train_df
+```
+
+I'm going to first fit a fairly simple tree, and then we can work through the basics of decision trees. For fitting a decision tree to a set of data, I will use the `rpart()` function from the `rpart` package. `rpart()` wants a formula—just like you would feed to `lm()`—in addition to a dataset and a method (_e.g._, `"class"` for classification). We will predict a passenger's survival using her sex, age, and class (currently treated as an integer). Note that `rpart()` defaults to dropping observations that have any missing values for the variables included in the formula. This decision can really affect results, and you should think about whether it makes sense in your setting.
+```{R, dt fit1}
+# Fit a tree on sex, age, and class
+tree1 <- rpart(
+  Survived ~ Sex + Age + Pclass,
+  data = train_df,
+  method = "class"
+)
+```
+
+We can now plot the fitted tree using the `rpart.plot()` function from the `rpart.plot` package.
+```{R, dt plot1}
+# Plot tree1
+rpart.plot(
+  tree1,
+  branch.lty = 3,
+  box.palette = viridis(10, alpha = 0.7)
+)
+```
+
+## Lasso
+
+In empirical economics, you will likely came across _lasso_ regressions. Besides having a pretty awesome name^[Much cooler than _ordinary least squares_.], lasso provides a nice stepping point for social scientists who are used to linear regression models.

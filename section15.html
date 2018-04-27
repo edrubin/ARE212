@@ -430,15 +430,30 @@ div.tocify {
 <h2>This week</h2>
 <p>Today we are going to take a very brief and general walk through the world of prediction, cross validation, and machine learning! These topics get their own classes, books, conferences, and careers, so there is no way that I am going to be able to teach you everything in less than 50 minutes. I am going to show you a few examples, introduce you to a couple of the bigger concepts, and then leave you hungry for more. You are at the greatest public university in the world and are here to learn. Go take a class in machine learning if these topics interest you at all—they are all over campus (Statistics, Computer Science, I School, Electrical Engineering, BIDS, just to name a few). There are some <a href="http://dlab.berkeley.edu/working-groups">working groups</a> too!</p>
 </div>
+<div id="two-books" class="section level2">
+<h2>Two books</h2>
+<p>Two of the most common books in the statistical learning are</p>
+<ul>
+<li><a href="http://www-bcf.usc.edu/~gareth/ISL/">An Introduction to Statistical Learning with Applications in R</a></li>
+<li><a href="https://web.stanford.edu/~hastie/ElemStatLearn/">The Elements of Statistical Learning: Data Mining, Inference, and Prediction</a></li>
+</ul>
+<p>And… both books have free PDFs available on their websites! Hurray for open science!</p>
+</div>
+<div id="what-you-will-need" class="section level2">
+<h2>What you will need</h2>
+<p>The <code>rpart</code> package!</p>
+</div>
 <div id="r-setup" class="section level2">
 <h2>R setup</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># General R setup ----</span>
 <span class="co"># Options</span>
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> F)
-<span class="co"># Load new packages</span>
+<span class="co"># Pacman</span>
 <span class="kw">library</span>(pacman)
 <span class="co"># Load old packages</span>
-<span class="kw">p_load</span>(dplyr, ggplot2, ggthemes, parallel, magrittr, viridis)
+<span class="kw">p_load</span>(readr, dplyr, ggplot2, ggthemes, parallel, magrittr, viridis)
+<span class="co"># Load new packages</span>
+<span class="kw">p_load</span>(rpart, rpart.plot, RColorBrewer)
 <span class="co"># My ggplot2 theme</span>
 theme_ed &lt;-<span class="st"> </span><span class="kw">theme</span>(
   <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
@@ -597,18 +612,18 @@ res_mat %&gt;%<span class="st"> </span>knitr::<span class="kw">kable</span>(
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(y1 ~<span class="st"> </span>-<span class="dv">1</span> +<span class="st"> </span>X1_b) %&gt;%<span class="st"> </span><span class="kw">summary</span>() %$%<span class="st"> </span><span class="kw">c</span>(r.squared, adj.r.squared)</code></pre></div>
 <pre><code>## [1] 0.9864762 0.9849401</code></pre>
 <p>Within-sample, both the R<sup>2</sup> and the adjusted R<sup>2</sup> are higher for model <em>b</em> relative to model <em>a</em>.</p>
-<p>We’re overfitting, and some of the classic econometric tools (measures of fit) did not help us avoid the problem. To be fair, we might avoid this problem by choosing a different measure of fit—for instance, instead of R<sup>2</sup> we could choose AIC or BIC. However, AIC and BIC are just two ways we can try to avoid overfitting a model, so why not check out the full suite? This setting is where cross validation shines.</p>
+<p>We’re overfitting, and some of the classic econometric tools (measures of fit) did not help us avoid the problem. To be fair, we might avoid this problem by choosing a different measure of fit—for instance, instead of R<sup>2</sup> we could implement some sort of model-selection process based upon AIC(C) or BIC. But why stop there? AIC and BIC are just two ways we can try to avoid overfitting a model, so why not check out the full suite? This setting is where cross validation shines.</p>
 </div>
 <div id="train-validate-test" class="section level2">
 <h2>Train, validate, test</h2>
 <p>At the heart of cross validation are <em>train, validate, test</em>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> We’ve actually already started applying these principles<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> above when we split our dataset in half, <em>trained</em> the two competing models on half the data (<span class="math inline">\(\mathbf{S}_1\)</span>) and then <em>validated</em> the models on the hold-out (or validation) dataset <span class="math inline">\(\mathbf{S}_2\)</span>. Let’s define these concepts a bit more.</p>
-<p>Let’s imagine we have a dataset. In the train-validate-test cross-validation paradigm, we will split our dataset into three subsets, corresponding to training, validating, and testing.</p>
+<p>Let’s imagine we have a dataset. In the train-validate-test cross-validation paradigm, we will split our dataset into subsets, corresponding to training, validating, and testing.</p>
 <ol style="list-style-type: decimal">
 <li><strong>Train</strong>: Generally the largest share (<em>e.g.</em>, 70–80%) of your full dataset goes into the training dataset. The essence: You have a bunch of data and a few models; you fit (train) your models using the training data.</li>
 <li><strong>Validate</strong>: Once you fit your models on the training data, you evaluate (validate) their performance using data the models have never seen before—the <em>validation</em> dataset. You can iterate here—moving back and forth between the training and validation datasets, tuning your models (hyperparameters). But as you iterate between your training and validation datasets, you can also return to the world of overfitting—this time overfitting your validation dataset.</li>
 <li><strong>Test</strong>: The testing dataset sits locked away<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>, waiting for you to finish training, tuning, and validating your model. Once you settle on an implementation/specification of your model, you train it one last time, unlock the testing dataset, and test your model’s performance on the testing dataset—your model has never seen these data, so you get a nice out-of-sample, not-overfit evaluation of your model’s performance.</li>
 </ol>
-<p>The discussion above treats the training and validation sets as mutually exclusive, but this need not be the case. There are several methods—for instance leave-one-out cross validation (LOOCV) and k-fold cross validation—that allow observations (or sets of observation) to “take turns” being in each groups. Our example above was essentially 2-fold cross validation.</p>
+<p>The discussion above treats the training and validation sets as mutually exclusive, but this need not be the case. There are several methods—<em>e.g.</em>, leave-one-out cross validation (LOOCV) and k-fold cross validation—that allow observations (or sets of observation) to “take turns” being in each groups. Our example above was essentially 2-fold cross validation.</p>
 </div>
 <div id="training-and-testing-errors" class="section level2">
 <h2>Training and testing errors</h2>
@@ -656,6 +671,88 @@ cv_errors %&gt;%<span class="st"> </span>knitr::<span class="kw">kable</span>(
 <p>Unsurprisingly, the training error of model b is lower than the training error of model a—model b uses 100 more degrees of freedom to fit the data. However, as a result of overfitting, the testing error of model b is higher than the testing error of model a. This tradeoff is central to much of the statistical/machine learning literature: when do we want to add some more flexibility to our model (increasing the potential better fit but also increasing the potential for overfitting) and when do we just keep things simple? There are actually a lot of similar tradeoffs in the land of prediction.</p>
 </div>
 </div>
+<div id="machines-learning" class="section level1">
+<h1>Machines, learning</h1>
+<p>The world of machine learning is a vast and rapidly developing place. As with most topics, there are many ways to divide up the space. That said, one of the most common ways to split learning models is between <em>supervised</em> and <em>unsupervised</em> algorithms.</p>
+<ul>
+<li><strong>Supervised algorithms</strong> have an outcome that they try to predict. This outcome can be qualitative (<em>e.g.</em>, text, categories, logical outcomes) or quantitative (real numbers, integers, binary), but the main point is that supervised learning algorithms need a known outcome variables. These algorithms use an assortment of statistical/mathematical methods, in conjunction with some objective function, to <em>learn</em> the value of the outcome variable from the rest of the data. <em>Examples</em>: decision trees, random forests, lasso regression, neural networks.</li>
+<li>As you might guess, <strong>unsupervised algorithms</strong> do not have a known outcome variable. Instead, they take data on a set of observations—coupled with some measure of likeness—and then try to <em>learn</em> groupings that best describe the data. <em>Examples</em>: k-means (or k-medoids) clustering, hierarchical clustering, spectral clustering.</li>
+</ul>
+<p>Because most of the current machine-learning methods used in applied economics are supervised algorithms, we’re going to focus on on supervised algorithms today.</p>
+<div id="decision-trees" class="section level2">
+<h2>Decision trees</h2>
+<p>Decision trees are one of the most-common and easiest-to-implement machine learning algorithms.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> They also (sometimes) provide a more interpretable final model, relative to other learning methods, though this is not always the case.</p>
+<p>Let’s dive in. First, we need some data. Many of the classic applications of decision trees use binary outcomes,<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> so we’re going to load a (tragic) dataset with a binary outcome that has become a pretty standard example for decision trees: the survival passengers on the Titanic. The data come from <a href="https://www.kaggle.com/c/titanic/data">Kaggle</a>, and you can learn more about the variables on the <a href="https://www.kaggle.com/c/titanic/data">Kaggle competition website</a>.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> Decision trees that choose between categories are classification trees; decision trees that output a number are regression trees.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the training and testing datasets</span>
+train_df &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_15, <span class="st">&quot;titanicTrain.csv&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">read_csv</span>()</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   PassengerId = col_integer(),
+##   Survived = col_integer(),
+##   Pclass = col_integer(),
+##   Name = col_character(),
+##   Sex = col_character(),
+##   Age = col_double(),
+##   SibSp = col_integer(),
+##   Parch = col_integer(),
+##   Ticket = col_character(),
+##   Fare = col_double(),
+##   Cabin = col_character(),
+##   Embarked = col_character()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test_df &lt;-<span class="st"> </span><span class="kw">paste0</span>(dir_15, <span class="st">&quot;titanicTest.csv&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">read_csv</span>()</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   PassengerId = col_integer(),
+##   Pclass = col_integer(),
+##   Name = col_character(),
+##   Sex = col_character(),
+##   Age = col_double(),
+##   SibSp = col_integer(),
+##   Parch = col_integer(),
+##   Ticket = col_character(),
+##   Fare = col_double(),
+##   Cabin = col_character(),
+##   Embarked = col_character()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check our data</span>
+train_df</code></pre></div>
+<pre><code>## # A tibble: 891 x 12
+##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket  Fare
+##          &lt;int&gt;    &lt;int&gt;  &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;
+##  1           1        0      3 Braun… male    22.     1     0 A/5 2…  7.25
+##  2           2        1      1 Cumin… fema…   38.     1     0 PC 17… 71.3 
+##  3           3        1      3 Heikk… fema…   26.     0     0 STON/…  7.92
+##  4           4        1      1 Futre… fema…   35.     1     0 113803 53.1 
+##  5           5        0      3 Allen… male    35.     0     0 373450  8.05
+##  6           6        0      3 Moran… male    NA      0     0 330877  8.46
+##  7           7        0      1 McCar… male    54.     0     0 17463  51.9 
+##  8           8        0      3 Palss… male     2.     3     1 349909 21.1 
+##  9           9        1      3 Johns… fema…   27.     0     2 347742 11.1 
+## 10          10        1      2 Nasse… fema…   14.     1     0 237736 30.1 
+## # ... with 881 more rows, and 2 more variables: Cabin &lt;chr&gt;,
+## #   Embarked &lt;chr&gt;</code></pre>
+<p>I’m going to first fit a fairly simple tree, and then we can work through the basics of decision trees. For fitting a decision tree to a set of data, I will use the <code>rpart()</code> function from the <code>rpart</code> package. <code>rpart()</code> wants a formula—just like you would feed to <code>lm()</code>—in addition to a dataset and a method (<em>e.g.</em>, <code>&quot;class&quot;</code> for classification). We will predict a passenger’s survival using her sex, age, and class (currently treated as an integer). Note that <code>rpart()</code> defaults to dropping observations that have any missing values for the variables included in the formula. This decision can really affect results, and you should think about whether it makes sense in your setting.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit a tree on sex, age, and class</span>
+tree1 &lt;-<span class="st"> </span><span class="kw">rpart</span>(
+  Survived ~<span class="st"> </span>Sex +<span class="st"> </span>Age +<span class="st"> </span>Pclass,
+  <span class="dt">data =</span> train_df,
+  <span class="dt">method =</span> <span class="st">&quot;class&quot;</span>
+)</code></pre></div>
+<p>We can now plot the fitted tree using the <code>rpart.plot()</code> function from the <code>rpart.plot</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot tree1</span>
+<span class="kw">rpart.plot</span>(
+  tree1,
+  <span class="dt">branch.lty =</span> <span class="dv">3</span>,
+  <span class="dt">box.palette =</span> <span class="kw">viridis</span>(<span class="dv">10</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>)
+)</code></pre></div>
+<p><img src="section15_files/figure-html/dt%20plot1-1.png" width="672" /></p>
+</div>
+<div id="lasso" class="section level2">
+<h2>Lasso</h2>
+<p>In empirical economics, you will likely came across <em>lasso</em> regressions. Besides having a pretty awesome name<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>, lasso provides a nice stepping point for social scientists who are used to linear regression models.</p>
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol>
@@ -663,6 +760,10 @@ cv_errors %&gt;%<span class="st"> </span>knitr::<span class="kw">kable</span>(
 <li id="fn2"><p>Or sometimes just train and test.<a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>Albeit somewhat haphazardly.<a href="#fnref3">↩</a></p></li>
 <li id="fn4"><p>Sometimes literally.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>It’s probably no accident that these two attributes are found together.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p><em>e.g.</em>, a <em>decision</em> between ‘yes’ and ‘no’.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>We get a training dataset and a testing dataset, but to test the data, we need to upload our predictions to Kaggle’s website.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>Much cooler than <em>ordinary least squares</em>.<a href="#fnref8">↩</a></p></li>
 </ol>
 </div>
 

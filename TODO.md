@@ -1,5 +1,7 @@
 # TODO
 
+## Topics
+
 - Add README about building the course website
 - Update spatial data notes with `sf` package
 - 3SLS and GMM for simultaneous equations
@@ -17,3 +19,8 @@
 - `dplyr` and SQL
 - Data cleaning (`lubridate`, `stringr`, _etc._)
 - Google Earth Engine
+
+## Fixes
+
+- Update R file for sec. 13
+- Add PDF for sec. 13
